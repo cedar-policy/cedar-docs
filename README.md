@@ -1,6 +1,7 @@
 ## Documentation for the Cedar Policy Language
 
 This repository hosts the markdown source files for the Cedar Policy Language Reference Guide.
+Current live site: https://symmetrical-giggle-p1o3q89.pages.github.io/
 
 ## Security
 
