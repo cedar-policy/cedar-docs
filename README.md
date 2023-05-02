@@ -1,11 +1,6 @@
-## My Project
+## Documentation for the Cedar Policy Language
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+This repository hosts the markdown source files for the Cedar Policy Language Reference Guide.
 
 ## Security
 
