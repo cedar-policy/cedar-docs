@@ -1,0 +1,37 @@
+# Site wide configuration
+
+title: Cedar Policy Language Version 2.0 Reference Guide
+locale: en_US
+logo: images/Cedar1-green.png
+
+#remote_theme: pages-themes/modernist@v0.2.0
+remote_theme: just-the-docs/just-the-docs
+plugins:
+- jekyll-remote-theme #
+
+# GitHub edit and feedback links
+gh_edit_link: true # show or hide edit this page link
+gh_edit_link_text: "Edit this page on GitHub."
+gh_edit_repository: "https://github.com/cedar-policy/cedar" # the github URL for your repo
+gh_edit_branch: "docs" # the branch that your docs is served from
+gh_edit_source: "docs" # the source that your files originate from
+gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
+
+# Callouts
+callouts:
+    note:
+        title: Note
+        color: blue
+    important:
+        title: Important
+        color: yellow
+    warning:
+        title: Warning
+        color: red
+
+enable_copy_code_button: true
+
+# Enter the following platform usernames if you would like for them to appear on your site.
+owner:
+  name: Amazon Web Services (AWS)
+  email: cedar-docs@amazon.com
