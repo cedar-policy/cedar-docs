@@ -191,7 +191,7 @@ A collection of the actions that are supported by your application\. An action i
 The high\-level structure of an `actions` entry looks like the following example\.
 
 ```
-"entityTypes": {
+"actions": {
     "ActionName1": {
         "attributes": {},
         "memberOf": [ "ActionGroupName1", "ActionGroupName2", … ],
@@ -209,17 +209,23 @@ The high\-level structure of an `actions` entry looks like the following example
 
 You can add as many actions as your application requires\.
 
-  
+### Action name<a name="schema-actions-name"></a>
 
-### `name`<a name="schema-actions-name"></a>
-
-Specifies the identifier for the action as a string\. This is an entity identifier rather than an entity type, so it can contain anything that would be valid inside a Cedar string\. When combined with the entity type `Action`, this forms the complete entity UID for the action entity\.
+Specifies the identifier for the action as a string\. The name of the action isn't a value but the heading for its own JSON object\. This is an entity identifier rather than an entity type, so it can contain anything that would be valid inside a Cedar string\. When combined with the entity type `Action`, this forms the complete entity UID for the action entity\.
 
 ```
-Action::"ViewPhoto"
+"actions": {
+    "ActionName1": {
+        ...
+    },
+    "ActionName2": {
+        ...
+    },
+    ...
+}
 ```
 
- If the schema declares a namespace, then the entity type `Action` is qualified by that namespace\.
+You can then refer to these actions in your policies by using the following syntax. If the schema declares a namespace, then the entity type `Action` is qualified by that namespace\.
 
 ```
 MyApplicationNamespace::Action::"ViewPhoto"
