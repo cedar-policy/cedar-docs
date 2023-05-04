@@ -5,10 +5,10 @@ parent: Policy syntax
 nav_order: 4
 ---
 
-# Cedar syntax \- operators and functions<a name="syntax-operators"></a>
+# Operators and functions to use in Cedar<a name="syntax-operators"></a>
 {: .no_toc }
 
-This topic describes the built\-in operators and functions that you can use to build your expressions using the Cedar policy language\.
+This topic describes the built-in operators and functions that you can use to build your expressions using the Cedar policy language.
 
 <details open markdown="block">
   <summary>
@@ -22,7 +22,7 @@ This topic describes the built\-in operators and functions that you can use to b
 ## Overview of operators<a name="operators-overview"></a>
 
 The operators use the following syntax structures:
-+ Unary operators – A unary operator takes one operand\. Place the operand after the operator\.
++ **Unary operators** &ndash; A unary operator takes one operand. Place the operand after the operator.
 
   ```
   <operator> operand
@@ -31,7 +31,7 @@ The operators use the following syntax structures:
   // inverse of the value of the Boolean operand
   ! a
   ```
-+ Binary operators – A binary operator takes two operands\. Place one operand before the operator and one after\. Some binary operators are [commutative](https://wikipedia.org/wiki/Commutative_property); see the description of each operator to understand where operand order matters\. 
++ **Binary operators** &ndash; A binary operator takes two operands. Place one operand before the operator and one after. Some binary operators are [commutative](https://wikipedia.org/wiki/Commutative_property). See the description of each operator to understand where operand order matters. 
 
   ```
   firstOperand <operator> secondOperand
@@ -45,7 +45,7 @@ The operators use the following syntax structures:
   ```
 
 Functions use the following syntax:
-+ Functions can support zero or more operands\. Append the function name to the end of the entity name, separating them with a `.` \(period\) character\. Place any operands in parenthesis after the function name, separating them with commas\.
++ Functions can support zero or more operands. Append the function name to the end of the entity name, separating them with a `.` \(period\) character. Place any operands in parentheses after the function name, separating them with commas.
 
   ```
   entity.function(firstOperand, secondOperand, …)
@@ -58,29 +58,29 @@ Functions use the following syntax:
 
 ## String operators and functions<a name="operators-string"></a>
 
-Use these operators and functions to compare strings or convert them to other types\.
+Use these operators and functions to compare strings or convert them to other types.
 
 ### `like` \(string matching with wildcard\)<a name="operators-string-like"></a>
 
 **Usage:** `<string> like <string with wildcards>`
 
-Binary operator that evaluates to `true` if the string in the left operand matches the pattern string in the right operand\. A pattern string can include one or more asterisks \(\*\) as wildcard characters that match 0 or more of any character\.
+Binary operator that evaluates to `true` if the string in the left operand matches the pattern string in the right operand. A pattern string can include one or more asterisks (`*`) as wildcard characters that match 0 or more of any character.
 
-To match a literal asterisk character, use the escaped `\*` sequence in the pattern string\.
+To match a literal asterisk character, use the escaped `\*` sequence in the pattern string.
 
 ### `.decimal()` \(parse string and convert to decimal\)<a name="function-decimal"></a>
 
 **Usage:** `<string>.decimal()`
 
-Function that parses the string and attempts to convert it to type [decimal](syntax-datatypes.md#datatype-decimal)\. If the string doesn't represent a valid decimal value, it generates an error\.
+Function that parses the string and tries to convert it to type [decimal](syntax-datatypes.md#datatype-decimal). If the string doesn't represent a valid decimal value, it generates an error.
 
-To be successfully interpreted as a decimal value, the string must contain a decimal seperator \(`.`\) and at least one digit before and at least one digit after the separator\. There can be no more than 4 digits after the separator\. The value must be within the valid range of the decimal type, from \-922337203685477\.5808 to 922337203685477\.5807
+To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
 ### `.ip()` \(parse string and convert to ipaddr\)<a name="function-ip"></a>
 
 **Usage:** `<string>.ip(<ipaddr>)`
 
-Function that parses the string and attempts to convert it to type ipaddr\. If the string doesn't represent a valid IP address or range, then it generates an error\.
+Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then it generates an error.
 
 ```
 ip("127.0.0.1")
@@ -94,7 +94,7 @@ ip("380.0.0.1")                     //error – invalid IPv4 address
 ip("ab.ab.ab.ab")                   //error – invalid IPv4 address
 ip("127.0.0.1/8/24")                //error – invalid CIDR notation
 ip("fee::/64::1")                   //error – invalid IPv6 address
-ip("foo::1")                        //error – invalid character in address
+ip("fzz::1")                        //error – invalid character in address
 ip([127,0,0,1])                     //error – invalid type 
 "127.0.0.1".ip()                    //error – invalid call style
 
@@ -111,145 +111,145 @@ ip("127.0.0.1") < ip("10.0.0.10")             //error – invalid data types for
 
 ## Comparison operators and functions<a name="operators-comparison"></a>
 
-Use these operators to compare two values as an expression\. An expression that uses one of these operators evaluates to a Boolean `true` or `false`\. You can then combine multiple expressions using the logical operators\.
+Use these operators to compare two values as an expression. An expression that uses one of these operators evaluates to a Boolean `true` or `false`. You can then combine multiple expressions using the logical operators.
 
 ### `==` \(equality\)<a name="operator-equality"></a>
 
 **Usage:** `<any type> == <any type>`
 
-Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value\. 
+Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value. 
 
-If the operands are of different types, the result is always `false`\. For example, Cedar does not consider the number 5 to be equal to the string "5"\. 
+If the operands are of different types, the result is always `false`. For example, Cedar does not consider the number 5 to be equal to the string "5". 
 
 ### `!=` \(inequality\)<a name="operator-inequality"></a>
 
 **Usage:** `<any type> != <any type>`
 
-Binary operator that compares two operands of any type and evaluates to `true` if the are of different types or have different values\.
+Binary operator that compares two operands of any type and evaluates to `true` if the operands have different values or are of different types.
 
 ### `<` \(long integer 'less than'\)<a name="operator-lessthan"></a>
 
 **Usage:** `<long> < <long>`
 
-Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than the right operand\.
+Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than the right operand.
 
 ### `.lessThan()` \(decimal 'less than'\)<a name="function-lessThan"></a>
 
 **Usage:** `<decimal>.lessThan(<decimal>)`
 
-Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than the right operand\.
+Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than the right operand.
 
 ### `<=` \(long integer 'less than or equal'\)<a name="operator-lessthanorequal"></a>
 
 **Usage:** `<long> <= <long>`
 
-Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand\.
+Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
 
 ### `.lessThanOrEqual()` \(decimal 'less than or equal'\)<a name="function-lessThanOrEqual"></a>
 
 **Usage:** `<decimal>.lessThanOrEqual(<decimal>)`
 
-Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand\.
+Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
 
 ### `>` \(long integer 'greater than'\)<a name="operator-greaterthan"></a>
 
 **Usage:** `<long> > <long>`
 
-Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than the right operand\.
+Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than the right operand.
 
 ### `.greaterThan()` \(decimal 'greater than or equal'\)<a name="function-greaterThan"></a>
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
 
-Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than the right operand\.
+Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than the right operand.
 
 ### `>=` \(Long integer 'greater than or equals'\)<a name="operator-greaterthanorequal"></a>
 
 **Usage:** `<long> >= <long>`
 
-Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand\.
+Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
 
 ### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\)<a name="function-greaterThanOrEqual"></a>
 
 **Usage:** `<decimal>.greaterThanOrEqual(<decimal>)`
 
-Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand\.
+Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
 
 ## Logical operators<a name="operators-logical"></a>
 
-Use these operators to logically combine Boolean values or expressions\.
+Use these operators to logically combine Boolean values or expressions.
 
 ### `&&` \(AND\)<a name="operator-and"></a>
 
 **Usage:** `<Boolean> && <Boolean>`
 
-Binary operator that evaluates to `true` only if both arguments are `true`\. 
+Binary operator that evaluates to `true` only if both arguments are `true`. 
 
-This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation)\. If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated\. This is useful when the second argument might result in an error if evaluated\. You can use the first argument to test that the second argument is a valid expression\. For example, consider the following expression\. It evaluates to `true` if the `principal` has the `numberOfLaptops` property and that property is set to a value less than 5:
+This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression. For example, consider the following expression. It evaluates to `true` if the `principal` has the `numberOfLaptops` property and that property is set to a value less than 5:
 
 ```
 principal has numberOfLaptops && principal.numberOfLaptops < 5
 ```
 
-The second comparison in this expression is valid only if the `numberOfLaptops` property for the `principal` entity has a value\. If it doesn't, the less than operator generates an error\. The first expression uses the [**has**](#operator-has) operator to ensure that the `principal` entity does have such a property with a value\. If that evaluates to `false`, there is no test of the second expression\.
+The second comparison in this expression is valid only if the `numberOfLaptops` property for the `principal` entity has a value. If it doesn't, the less than operator generates an error. The first expression uses the [**has**](#operator-has) operator to ensure that the `principal` entity does have such a property with a value. If that evaluates to `false`, there is no test of the second expression.
 
 ### `||` \(OR\)<a name="operator-or"></a>
 
 **Usage:** `<Boolean> || <Boolean>`
 
-Binary operator that evaluates to `true` if either one or both arguments are `true`\.
+Binary operator that evaluates to `true` if either one or both arguments are `true`.
 
-This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation)\. If the first argument is `true`, then the expression immediately evaluates to `true` and the second argument isn't evaluated\. This is useful when the second argument might result in an error if evaluated\. The first argument should be a test that can determine if the second argument is a valid expression\. For example, consider the following expression\. It evaluates to `true` if the principal can't be confirmed to at least 21 years old; `principal` is either missing the `age` property or that property is set to a value less than 21\.
+This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `true`, then the expression immediately evaluates to `true` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. The first argument should be a test that can determine if the second argument is a valid expression. For example, consider the following expression. It evaluates to `true` if the principal can't be confirmed to at least 21 years old and `principal` is either missing the `age` property or that property is set to a value less than 21.
 
 ```
 !(principal has age) || principal.age < 21 
 ```
 
-The second comparison in this expression is valid only if the `age` property for the `principal` entity is present\. If it is missing, the less than operator generates an error\. The first expression uses the [**has**](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property\. If that evaluates to `true`, there is no test of the second expression\.
+The second comparison in this expression is valid only if the `age` property for the `principal` entity is present. If it is missing, the less than operator generates an error. The first expression uses the [**has**](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property. If that evaluates to `true`, there is no test of the second expression.
 
 ### `!` \(NOT\)<a name="operator-not"></a>
 
 **Usage:** ` ! <Boolean>`
 
-Unary operator with only one argument\. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`\. 
+Unary operator with only one argument. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`. 
 
 ## Arithmetic operators<a name="operators-math"></a>
 
-Use these operators to perform arithmetic operations on long integer values\. 
+Use these operators to perform arithmetic operations on long integer values. 
 
 **Notes**  
-The arithmetic operators support ***only*** values of type long integer\. They don't support values of type decimal\.
-There is no operator for arithmetic division\.
-The arithmetic operators generate errors if they overflow out of the long integer range from \-9223372036854775808 to 9223372036854775807\.
+The arithmetic operators support ***only*** values of type `Long`. They don't support values of type `Decimal`.
+There is no operator for arithmetic division.
+The arithmetic operators generate errors if they overflow out of the `Long` integer range from `-9223372036854775808` to `9223372036854775807`.
 
 ### `+` \(Numeric addition\)<a name="operator-add"></a>
 
 **Usage:** `<long> + <long>`
 
-Binary operator that adds the two long integer values and returns a long integer sum\.
+Binary operator that adds the two long integer values and returns a long integer sum.
 
 ### `-` \(Numeric subtraction or negation\)<a name="operator-subtract"></a>
 
 **Usage:** `<long> - <long>`
 
-As a binary operator with two operands, it subtracts the second long integer value from the first and returns a long integer difference\.
+As a binary operator with two operands, it subtracts the second long integer value from the first and returns a long integer difference.
 
 **Usage:** `- <long>`
 
-As a unary operator with one operand, it returns the negative of the value\.
+As a unary operator with one operand, it returns the negative of the value.
 
 ### `*` \(Numeric multiplication\)<a name="operator-multiply"></a>
 
 **Usage:** `<long> * <long>`
 
-Binary operator that multiplies two long integer values and returns a long integer product\. One of the values *must* be an integer literal, the other can be an integer literal or an expression that evaluates to an integer value\. 
+Binary operator that multiplies two long integer values and returns a long integer product. One of the values *must* be an integer literal, the other value can be an integer literal or an expression that evaluates to an integer value. 
 
 {: .note }
->There is no operator for numeric division\.
+>There is no operator for arithmentic division.
 
 ## Hierarchy and set membership operators and functions<a name="functions-set"></a>
 
-Use these functions to test if entities are members of a hierarchy or a set\.
+Use these functions to test if entities are members of a hierarchy or a set.
 
 ### <a name="operators-comparison"></a>
 
@@ -257,27 +257,27 @@ Use these functions to test if entities are members of a hierarchy or a set\.
 
 **Usage:** `<entity> in <entity>`
 
-Boolean operator that evaluates to `true` if the entity in the left operand is a descendant in the hierarchy under the entity in the right operand\.
+Boolean operator that evaluates to `true` if the entity in the left operand is a descendant in the hierarchy under the entity in the right operand.
 
-The `in` operator is transitive\. If `A` is in `B`, and `B` is in `C`, then `A` is also in `C`\. This allows you to model the concept of a multi\-tier hierarchy, for example nesting folders in other folders\.
+The `in` operator is transitive. If `A` is in `B`, and `B` is in `C`, then `A` is also in `C`. This approach allows you to model the concept of a multi-tier hierarchy, for example nesting folders in other folders.
 
-The `in` operator is reflexive; If the right operand is a single entity, then the expression evaluates to `true` if the right entity is the same as the left entity\. In other words, an entity is *always* in its own hierarchy\. `A` is always in `A`\.
+The `in` operator is reflexive; If the right operand is a single entity, then the expression evaluates to `true` if the right entity is the same as the left entity. In other words, an entity is *always* in its own hierarchy. `A` is always in `A`.
 
 **Usage:** `<entity> in set(<entity>, <entity>, ...)`
 
-If the right operand is a set of entities, then the expression is evaluated for each member in the set\. For example, consider the following expression:
+If the right operand is a set of entities, then the expression is evaluated for each member in the set. For example, consider the following expression.
 
 ```
 A in [ B, C, D ]
 ```
 
-That expression is evaluated as component expressions joined by the [logical OR operator](#operator-or), as illustrated here:
+That expression is evaluated as component expressions joined by the [logical OR operator](#operator-or), as shown in the following example.
 
 ```
 A in B || A in C || A in D 
 ```
 
-If any one or more of the component expressions evaluates to `true`, then the overall expression evaluates to `true`\.
+If any one or more of the component expressions evaluates to `true`, then the overall expression evaluates to `true`.
 
 For example, assume that the `principal` in a request is `User::"12345"`
 
@@ -299,7 +299,7 @@ principal in [Group::"67890"]
 
 **Usage:** `<entity> has <attribute>`
 
-Boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute\. Use this to ensure that a value is present before accessing that value\. If you attempt to access a value that isn't defined, then Cedar generates an error\. The following example expression first tests whether the entity `A` has a defined attribute `B`\. Because the [&&](#operator-and) operator uses shortcut logic, the second expression is evaluated and the attribute accessed *only* if the attribute is present\.
+Boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Use this operator to check that a value is present before accessing that value. If you attempt to access a value that isn't defined, then Cedar generates an error. The following example expression first tests whether the entity `A` has a defined attribute `B`. Because the [&&](#operator-and) operator uses shortcut logic, the second expression is evaluated and the attribute accessed *only* if the attribute is present.
 
 ```
 A has B && A.B == 5
@@ -309,13 +309,13 @@ A has B && A.B == 5
 
 **Usage:** `<set>.contains(<entity>)`
 
-Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function\. The receiver must be of type `set`\.
+Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `set`.
 
 ### `.containsAll()` \(all element set membership test\)<a name="function-containsAll"></a>
 
 **Usage:** `<set>.containsAll(<set>)`
 
-Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set\. Both the receiver and the operand must be of type `set`\.
+Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
 ```
 //true
@@ -359,7 +359,7 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 
 **Usage:** `<set>.containsAny(<set>)`
 
-Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set\. Both the receiver and the operand must be of type `set`\.
+Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
 ```
 //true
@@ -395,13 +395,13 @@ Function that evaluates to `true` if *any one or more* members of the operand se
 
 ## IP address functions<a name="functions-ipaddr"></a>
 
-Use these functions to test characteristics of IP addresses and ranges\.
+Use these functions to test characteristics of IP addresses and ranges.
 
 ### `.isIpv4()` \(IPv4 address valid test\)<a name="function-isIpv4"></a>
 
 **Usage:** `<ipaddr>.isIpv4()`
 
-Evaluates to `true` if the receiver is an IPv4 address\. This function takes no operand\.
+Evaluates to `true` if the receiver is an IPv4 address. This function takes no operand.
 
 ```
 ip("127.0.0.1").isIpV4()     //true
@@ -413,7 +413,7 @@ ip("127.0.0.1/24").isIpV4()  //true
 
 **Usage:** `<ipaddr>.isIpv6()`
 
-Function that evaluates to `true` if the receiver is an IPv6 address\. This function takes no operand\.
+Function that evaluates to `true` if the receiver is an IPv6 address. This function takes no operand.
 
 ```
 ip("127.0.0.1/24").isIpV6()  //false
@@ -425,7 +425,7 @@ ip("::1").isIpV6()           //true
 
 **Usage:** `<ipaddr>.isLoopback()`
 
-Function that evaluates to `true` if the receiver is a valid loopback address for its IP version type\. This function takes no operand\.
+Function that evaluates to `true` if the receiver is a valid loopback address for its IP version type. This function takes no operand.
 
 ```
 ip("127.0.0.2").isLoopback()  //true
@@ -437,7 +437,7 @@ ip("::2").isLoopback()        //false
 
 **Usage:** `<ipaddr>.isMulticast()`
 
-Function that evaluates to `true` if the receiver is a multicast address for its IP version type\. This function takes no operand\.
+Function that evaluates to `true` if the receiver is a multicast address for its IP version type. This function takes no operand.
 
 ```
 ip("127.0.0.1").isMulticast()  //false
@@ -448,7 +448,7 @@ ip("ff00::2").isMulticast()    //true
 
 **Usage:** `<ipaddr>.isInRange(<ipaddr>)`
 
-Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand\.
+Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand.
 
 ```
 ip("192.168.0.1").isInRange(ip("192.168.0.1/24"))   //true

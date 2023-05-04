@@ -23,20 +23,16 @@ The policy must end with a semicolon character (`;`).
 When the request exactly matches the scope, and all of the context conditions evaluate to `true`, then that policy evaluates to `true`. This process repeats for all policies that are relevant to the principal and resources referenced by the request.
 
 {: .important }
->This guide includes examples that use simple entity identifiers, such as `jane` or `bob` for the name of an entity of type `User`. This is done to make the examples more readable. However, in a production system it is critical for security reasons that you use unique values that can't be reused. We recommend that you use values like [universally unique identifiers \(UUIDs\)](https://wikipedia.org/wiki/Universally_unique_identifier). For example, if user `jane` leaves the company, and you later let someone else use the name `jane`, then that new user automatically gets access to everything granted by policies that still reference `User::"jane"`. Cedar can't distinguish between the new user and the old. This applies to both principal and resource identifiers. Always use identifiers that are guaranteed unique and never reused to ensure that you don't unintentionally grant access because of the presence of an old identifier in a policy.  
+>This guide includes examples that use simple entity identifiers, such as `jane` or `bob` for the name of an entity of type `User`. This is done to make the examples more readable. However, in a production system it is critical for security reasons that you use unique values that can't be reused. 
+> 
+> We recommend that you use values like [universally unique identifiers \(UUIDs\)](https://wikipedia.org/wiki/Universally_unique_identifier). For example, if user `jane` leaves the company, and you later let someone else use the name `jane`, then that new user automatically gets access to everything granted by policies that still reference `User::"jane"`. 
+> 
+> Cedar can't distinguish between the new user and the old. This applies to both principal and resource identifiers. Always use identifiers that are guaranteed unique and never reused to ensure that you don't unintentionally grant access because of the presence of an old identifier in a policy.  
+>
 >Where you use a UUID for an entity, we recommend that you follow it with the `//` comment specifier and the 'friendly' name of your entity. This helps to make your policies easier to understand. For example:  
 >```
 >principal == User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111", // alice
 >```
-
-<details open markdown="block">
-  <summary>
-    Topics on this page
-  </summary>
-  {: .text-delta }
-- TOC
-{:toc}
-</details>
 
 ## Effect<a name="term-policy-effect"></a>
 
@@ -96,7 +92,7 @@ A request always includes information that Cedar uses to answer the following th
 
 The scope section of a Cedar policy statement defines which values *match* the request.
 
-### Principal<a name="term-parc-principal"></a>
+### `principal`<a name="term-parc-principal"></a>
 
 The `principal` element in a Cedar policy represents a role, user, service, or other identity that can make a request to perform an `action` on a `resource` in your application. If the principal making the request matches the `principal` defined in this policy statement, then this element matches.
 
@@ -116,7 +112,7 @@ principal == User::"alice"
 principal in Group::"alice_friends"
 ```
 
-### Action<a name="term-parc-action"></a>
+### `action`<a name="term-parc-action"></a>
 
 The `action` element in a Cedar policy is a list of the operations in your application for which this policy statement controls access. If the operation in the request matches one of the `action` items defined in this policy statement, then this element matches.
 
@@ -137,7 +133,7 @@ action in [Action::"listAlbums", Action::"listPhotos", Action::"view"]
 action in PhotoFlashRole::"admin"
 ```
 
-### Resource<a name="term-parc-resource"></a>
+### `resource`<a name="term-parc-resource"></a>
 
 The resource element in a Cedar policy is a resource defined by your application that can be accessed or modified by the specified action. 
 
