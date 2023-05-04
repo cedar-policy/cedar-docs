@@ -54,7 +54,8 @@ The following are two key principles to remember that embody the previous two ru
 **Important**  
 An explicit `Deny` for any one policy ***always ***overrides any `Allow` from other policies.
 
-### Policy examples<a name="term-policy-effect-examples"></a>
+### Effect examples<a name="term-policy-effect-examples"></a>
+{: .no_toc }
 
 #### `permit`<a name="term-policy-effect-examples-permit"></a>
 
@@ -102,6 +103,7 @@ The `principal` element in a Cedar policy represents a role, user, service, or o
 The `principal` element must be present. If you specify only `principal` without an expression that constrains its scope, then the policy applies to *any* principal.
 
 #### Examples of the `principal` element<a name="term-parc-principal-examples"></a>
+{: .no_toc }
 
 ```
 //matches any principal entity of any type
@@ -119,6 +121,7 @@ principal in Group::"alice_friends"
 The `action` element in a Cedar policy is a list of the operations in your application for which this policy statement controls access. If the operation in the request matches one of the `action` items defined in this policy statement, then this element matches.
 
 #### Examples of the `action` element<a name="term-parc-action-examples"></a>
+{: .no_toc }
 
 ```
 //matches any action
@@ -143,6 +146,7 @@ The `resource` element must be present. If you specify only `resource` without a
 The `principal`, `action`, and `resource` elements are defined as entities.
 
 #### Examples of the `resource` element<a name="term-parc-resource-examples"></a>
+{: .no_toc }
 
 ```
 //matches any resource
@@ -183,6 +187,7 @@ Context elements take the following two forms:
 The `when` clause causes the policy to match the request only if the embedded expression evaluates to `true`.
 
 #### Examples of the `when` clause<a name="term-parc-context-when-examples"></a>
+{: .no_toc }
 
 The following `when` example matches the request if the principal making the request is a member of the `HardwareEngineering` department and has a `jobLevel` of at least `5`. If either attribute is missing from the principal making the request, then the policy doesn't match.
 
@@ -207,6 +212,7 @@ when {
 The `unless` clause causes the policy to match the request only if the embedded expression evaluates to `false`.
 
 #### Examples of the `unless` clause<a name="term-parc-context-unless-examples"></a>
+{: .no_toc }
 
 The following `unless` clause does ***not*** match the request if the principal making the request is the resource's owner.
 
@@ -228,6 +234,7 @@ unless {
 ## Annotations<a name="term-parc-annotations"></a>
 
 You can attach arbitrary string values to Cedar policies in the form of annotation. An annotation has no impact on policy evaluation. Annotations are stored as part of the policy and are available for use by services that read and process Cedar policies.
+
 You can place annotations only at the very top of the policy before the [effect](#term-policy-effect) element. 
 
 An annotation takes the form of the following string:
