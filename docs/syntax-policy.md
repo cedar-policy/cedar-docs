@@ -8,7 +8,7 @@ nav_order: 1
 # Basic policy construction<a name="syntax-policy"></a>
 {: .no_toc }
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

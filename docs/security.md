@@ -7,7 +7,7 @@ nav_order: 9
 # Cedar security<a name="security"></a>
 {: .no_toc }
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

@@ -14,7 +14,7 @@ An entity in Cedar has the following components\.
 + An entity type – The type determines which attributes are required or supported for entities of that type\. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`\. Define entity types as part of your application's [schema](terminology.md#term-schema)\.
 + An entity identifier \(EID\) – The EID lets you reference a specific entity in your policy\. The combination of entity type and an EID uniquely identifies an object for Cedar\.
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

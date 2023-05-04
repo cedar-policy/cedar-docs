@@ -9,7 +9,7 @@ nav_order: 3
 
 Cedar manages fine-grained permissions to support the authorization requirements for custom applications. To create Cedar policies successfully, you should understand the following concepts.
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

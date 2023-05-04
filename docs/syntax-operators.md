@@ -10,7 +10,7 @@ nav_order: 4
 
 This topic describes the built\-in operators and functions that you can use to build your expressions using the Cedar policy language\.
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

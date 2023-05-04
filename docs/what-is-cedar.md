@@ -13,7 +13,7 @@ Cedar is a language for writing authorization policies and making authorization 
 
 Cedar is the policy language used by [several AWS authorization services](#related-services). By using one of these services in your application, you offload the authorization decisions from your application and separate the business logic behind your authorization decisions from your code. In your application's code, you preface requests made to your operations with a call to the authorization service, asking "Is this request authorized?". Then, the application can either perform the requested operation if the decision is "allow", or return an error message if the decision is "deny".
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

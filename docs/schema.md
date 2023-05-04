@@ -135,7 +135,7 @@ A shape component can be mandatory or optional\. If mandatory, then policies tha
 >             },
 >```
 
-### Record<a name="schema-entitytypes-shape-record"></a>
+#### Record<a name="schema-entitytypes-shape-record"></a>
 
 Use the type `record` when an entity's shape must include multiple attributes that are of different types\. For pieces of a shape that are marked`"type": "record"`, you must also specify an `attributes` element that defines each of the attributes of the entity\. Each attribute is a JSON object that describes one piece of information about entities of this type\. For example, the following describes an entity type that represents an `Employee` in the company\. Each employee entity must have a `jobLevel`, an employee `id`, an email or sign\-in `alias`, and an optional value that tracks the `numberOfLaptops` assigned to the employee\.
 
@@ -157,7 +157,7 @@ Use the type `record` when an entity's shape must include multiple attributes th
 }
 ```
 
-### Set<a name="schema-entitytypes-shape-set"></a>
+#### Set<a name="schema-entitytypes-shape-set"></a>
 
 For pieces of a shape that are marked `"type": "Set"`, you must also specify an `element` that defines the properties of the members of the set\. Each element is a JSON object that describes what each member of the set looks like\.
 
@@ -173,7 +173,7 @@ An `element` must contain the structure with the same rules as a `shape`\. As an
           }
 ```
 
-### Entity<a name="schema-entitytypes-shape-entity"></a>
+#### Entity<a name="schema-entitytypes-shape-entity"></a>
 
 For pieces of a shape that are marked `"type": "Entity"`, you must also specify a `name` that identifies the entity type of this attribute\. The type must be defined in the schema\. For example, a resource entity might require an `Owner` element that specifies a `User`\.
 

@@ -10,7 +10,7 @@ nav_order: 3
 
 The Cedar policy language supports values and expressions of the following data types\.
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>

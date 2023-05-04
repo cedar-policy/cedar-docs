@@ -7,7 +7,7 @@ nav_order: 5
 # Cedar policy validation against schema<a name="validation"></a>
 {: .no_toc }
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>
