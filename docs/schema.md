@@ -7,7 +7,7 @@ nav_order: 6
 # Cedar schema format<a name="schema"></a>
 {: .no_toc }
 
-<details markdown="block">
+<details open markdown="block">
   <summary>
     Topics on this page
   </summary>
