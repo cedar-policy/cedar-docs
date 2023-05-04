@@ -391,9 +391,8 @@ The schema also defines three resource types\. An `Account` can have one `owner`
       }
     }
   ],
-  "actions": [
-    {
-      "name": "photoAction",
+  "actions": {
+    "photoAction": {
       "appliesTo": {
         "principalTypes": [],
         "ResourceTypes": []
@@ -403,8 +402,7 @@ The schema also defines three resource types\. An `Account` can have one `owner`
         "attributes": {}
       }
     },
-    {
-      "name": "viewPhoto",
+    "viewPhoto": {
       "appliesTo": {
         "principalTypes": [
           "User"
@@ -422,8 +420,7 @@ The schema also defines three resource types\. An `Account` can have one `owner`
         }
       }
     },
-    {
-      "name": "listAlbums",
+    "listAlbums": {
       "appliesTo": {
         "principalTypes": [
           "User"
@@ -441,8 +438,7 @@ The schema also defines three resource types\. An `Account` can have one `owner`
         }
       }
     },
-    {
-      "name": "uploadPhoto",
+    "uploadPhoto": {
       "appliesTo": {
         "principalTypes": [
           "User"
