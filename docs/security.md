@@ -55,7 +55,7 @@ Developers must understand how the results of evaluating individual policies are
 
 ### Validating your Cedar policies against your schema<a name="security-validate-against-schema"></a>
 
-Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. Policies that pass validation are guaranteed to not result in runtime errors when they are run against schema-compliant entities and requests. 
+Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. By providing a schema, policies that pass validation don't result in runtime errors when they are run against schema-compliant entities and requests.
 
 The Cedar validator can detect the many types of bugs, including the following:
 + **Detect unrecognized entity types and actions** &ndash; For example, misspelling “Album” as “Albom” or “viewPhoto” as “viewPhoot”.
@@ -81,43 +81,34 @@ Some security best practices for applications that use Cedar are as follows:
 * Use policy templates where applicable to avoid duplicating authorization logic. This approach also provides a single location for future changes. \(*Don’t-Repeat-Yourself*\)
 
 * If you create policies dynamically, avoid using string concatenation. Instead, use policy templates. Creating policies with string concatenation is error-prone and insecure. If an attacker gained control of the inputs to concatenation, they could achieve code injection. 
-
-{: .note }
->Here, "code injection" refers to injection of Cedar code, not arbitrary code execution. It is the responsibility of the Cedar library to prevent arbitrary code injection.
->
->For example, consider a policy dynamically created as shown here:
->
->```
->   let src = "permit(" + input + ", Action::\"view\", resource) when { principal.level > 3 };"let policy = parse(src);addToPolicySet(policy);
->```
-
-   You could provide good value for `input`, such as `User::"alice"`. That works fine and produces the following policy in variable `src`.
-
+   {: .note }
+   >Here, "code injection" refers to injection of Cedar code, not arbitrary code execution. It is the responsibility of the Cedar library to prevent arbitrary code injection.
+   
+   For For example, consider a policy dynamically created as shown here:
+   ```
+   let src = "permit(" + input + ", Action::\"view\", resource) when { principal.level > 3 };"let policy = parse(src);addToPolicySet(policy);
+   ```
+   You could provide a good value for `input`, such as `User::"alice"`. That value works fine and produces the following policy in variable `src`.
    ```
    permit(User::"alice", Action::"view", resource) when { principal.level > 3 };
    ```
-
-   But if an attacker could somehow control the value for `input`, they could achieve `Cedar` code injection. For example, if the attacker set `input` to the following:
-
+   But, if an attacker could somehow control the value for `input`, they could achieve `Cedar` code injection. For example, if the attacker set `input` to the following.
    ```
    "principal,action,resource); //"
    ```
-
    The completed policy in **src** would look like the following example.
-
    ```
    "permit(principal,action,resource); //,Action::{\"view\", resource) when { principal.level > 3 };
    ```
-
    That policy permits all actions on all resources by anyone, regardless of level.
 
-1. Use unique, immutable, and non-recyclable IDs for entity identifiers. An example of a mutable identifier is a user name or group name in a workforce directory, where the value of the name can change. For example, consider the following policy.
+* Use unique, immutable, and non-recyclable IDs for entity identifiers. An example of a mutable identifier is a username or group name in a workforce directory, where the value of the name can change. For example, consider the following policy.
 
    ```
    permit (principal == User::"alice",action in ...,resource in ...);
    ```
 
-   Imagine that Alice leaves the organization, and another user named Alice joins the organization. If the new Alice reuses the "alice" user name, then she would attain the permissions of any lingering policies that hadn’t been removed. 
+   Imagine that Alice leaves the organization, and another user named Alice joins the organization. If the new Alice reuses the "alice" username, then she would attain the permissions of any lingering policies that hadn’t been removed. 
 
    For these reasons, policies must refer to only *unique, normalized, immutable, and non-recyclable* identifiers. We recommend that you use UUIDs or similar formats that meet the same criteria, such as sequence numbers or URNs.
 
@@ -129,6 +120,6 @@ Some security best practices for applications that use Cedar are as follows:
    );
    ```
 
-1. Ensure that data used for authorization decisions, such as policies, entities, or context information, can't be accessed or modified by potential attackers.
+* Ensure that data used for authorization decisions, such as policies, entities, or context information, can't be accessed or modified by potential attackers.
 
-1. Normalize input data prior to invoking the authorization APIs.
+* Normalize input data prior to invoking the authorization APIs.
