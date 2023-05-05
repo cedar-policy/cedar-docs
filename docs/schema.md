@@ -318,8 +318,7 @@ The schema also defines the following three resource types:
 + A `Photo` can be placed in an `Album`, and also has a `Private` attribute and a reference to an `Account`.
 
 ```
-{
-    "namespace": "PhotoFlash",
+"PhotoFlash": {
     "entityTypes": [
         "User": {
             "memberOf": [ "UserGroup" ],
