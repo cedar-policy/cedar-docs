@@ -70,7 +70,7 @@ Cedar policies are designed to be easy to read and understand, making them acces
 
 ## Considerations
 
-While we’ve endeavored to make Cedar a safe environment to evaluate policies, there are always risks when it comes to running arbitrary policies submitted by users. Here are some things to consider if you plan on executing arbitrary Cedar policies provided by end users.
+Although we’ve endeavored to make Cedar a safe environment to evaluate policies, there are always risks when it comes to running arbitrary policies submitted by users. Here are some things to consider if you plan on executing arbitrary Cedar policies provided by end users.
 
 + Cedar has no facilities for input and output operations, so Cedar policies can't do things like read from a file or get information from the network.
 + The evaluation of one Cedar policy can't effect the evaluation of any other policy.
