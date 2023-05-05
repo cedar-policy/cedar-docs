@@ -79,7 +79,7 @@ Specifies the name of the entity type as a string. This type name must be an ide
         "UserGroup": { ... }  // New entity type name
     }
 }    
-'```
+```
 
 This type name is qualified by its [namespace](#schema-namespace) to form a fully qualified entity type which must be used when referencing this type in a policy.
 
