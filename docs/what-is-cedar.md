@@ -68,6 +68,15 @@ Cedar is fast and scalable. The policy structure allows your policies to be inde
 
 Cedar policies are designed to be easy to read and understand, making them accessible to both technical and non-technical stakeholders involved in defining access control policies. This helps facilitate collaboration and communication among different stakeholders in a distributed system.
 
+## Considerations
+
+While we’ve endeavored to make Cedar a safe environment to evaluate policies, there are always risks when it comes to running arbitrary policies submitted by users. Here are some things to consider if you plan on executing arbitrary Cedar policies provided by end users.
+
++ Cedar has no facilities for input and output operations, so Cedar policies can't do things like read from a file or get information from the network.
++ The evaluation of one Cedar policy can't effect the evaluation of any other policy.
++ Although the evaluation of any Cedar policy is guaranteed to terminate, a malicious user could attempt to submit a very lengthy policy, which could incur either storage or performance costs. If you are evaluation arbitrary Cedar policies submitted by user, we recommend enforcing a length limit on them.
++ Cedar performs only authorization. It has no capability to perform authentication.
+
 ## Services that use Cedar<a name="related-services"></a>
 
 The following AWS services use Cedar as their authorization policy language. For more information about how each service uses Cedar, and any service-specific considerations, see the documentation for each service.
