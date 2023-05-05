@@ -70,16 +70,21 @@ Each entry in the entity is a JSON object with the following properties.
 
 ### Entity type name<a name="schema-entitytypes-name"></a>
 
-Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words. 
+Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words.  
 
 ```
-"name": "UserGroup"
-```
+
+"My::Name::Space": {
+    "entityTypes": {
+        "UserGroup": { ... }  // New entity type name
+    }
+}    
+'```
 
 This type name is qualified by its [namespace](#schema-namespace) to form a fully qualified entity type which must be used when referencing this type in a policy.
 
 ```
-MyApplicationNamespace::"UserGroup"
+"My::Name::Space::UserGroup"
 ```
 
 ### `memberOfTypes`<a name="schema-entitytypes-memberOf"></a>
@@ -88,12 +93,10 @@ Specifies a list of entity types that can be direct parents of entities of this 
 
 ```
 "entityTypes": [
-    {
-        "name": "UserGroup",
+    "UserGroup": {
         … 
     },
-    {
-        "name": "User",
+    "User": {
         "memberOfTypes": [ "UserGroup" ],
         …
     }
@@ -116,9 +119,10 @@ Specifies the data type and attributes that are needed to define entities of thi
 A `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). The following example shows a simple shape.
 
 ```
-{
-    "name": "Age",
-    "shape": { "type": "Long" }
+"Age": {
+    "shape": {
+        "type": "Long" 
+    }
 }
 ```
 
@@ -129,19 +133,19 @@ A `shape` element can be mandatory or optional. If mandatory, then policies that
 {: .note }
 >By default, attributes that you define are mandatory. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
 >```
->            "jobLevel": { 
->                "type": "Long",
->                "required": false
->             },
+>"jobLevel": { 
+>    "type": "Long",
+>    "required": false
+>},
 >```
 
 #### `Record`<a name="schema-entitytypes-shape-record"></a>
+{: .no_toc }
 
 Use the type `record` when an entity's shape must include multiple attributes that are of different types. For pieces of a `shape` that are marked `"type": "record"`, you must also specify an `attributes` element that defines each of the attributes of the entity. Each attribute is a JSON object that describes one piece of information about entities of this type. For example, the following describes an entity type that represents an `Employee` in the company. Each employee entity must have a `jobLevel`, an employee `id`, an email or sign-in `alias`, and an optional value that tracks the `numberOfLaptops` assigned to the employee.
 
 ```
-{
-    "name": "Employee",
+"Employee": {
     "shape": {
         "type": "Record",
         "attributes": {
@@ -158,30 +162,32 @@ Use the type `record` when an entity's shape must include multiple attributes th
 ```
 
 #### `Set`<a name="schema-entitytypes-shape-set"></a>
+{: .no_toc }
 
 For pieces of a shape that are marked `"type": "Set"`, you must also specify an `element` that defines the properties of the members of the set. Each element is a JSON object that describes what each member of the set looks like.
 
 An `element` must contain the structure with the same rules as a `shape`. As an example, consider the following `Admins` entry which could be part of the `shape` of an `Account` entity type. This `Admins` element is a set of entities of type `User` and could be used to define which users have administrator permissions in the account.
 
 ```
-          "Admins": {
-            "type": "Set",
-            "element": {
-              "type": "Entity",
-              "name": "User"
-            }
-          }
+"Admins": {
+    "type": "Set",
+    "element": {
+        "type": "Entity",
+        "name": "User"
+    }
+}
 ```
 
 #### `Entity`<a name="schema-entitytypes-shape-entity"></a>
+{: .no_toc }
 
 For pieces of a shape that are marked `"type": "Entity"`, you must also specify a `name` that identifies the entity type of this attribute. The type must be defined in the schema. For example, a resource entity might require an `Owner` element that specifies a `User`.
 
 ```
-          "Owner": {
-              "type": "Entity",
-              "name": "User"
-          }
+"Owner": {
+    "type": "Entity",
+    "name": "User"
+}
 ```
 
 ## `actions`<a name="schema-actions"></a>
@@ -194,16 +200,16 @@ The high-level structure of an `actions` entry looks like the following example.
 "actions": {
     "ActionName1": {
         "attributes": {},
-        "memberOf": [ "ActionGroupName1", "ActionGroupName2", … ],
+        "memberOf": ["ActionGroupName1", "ActionGroupName2"],
         "appliesTo": {
             "principalTypes": [],
-            "ResourceTypes": []
+            "ResourceTypes": [],
             "context": {}
-    },
-    "ActionName2": {
-        ...
-    },
-    ...
+        },
+        "ActionName2": {
+            "something": "something"
+        }
+    }
 }
 ```
 
@@ -283,8 +289,7 @@ Each context entry consists of `type` and `attributes` objects. The `type` objec
 
 ```
 "actions": [
-    {
-        "name": "SomeAction",
+    "SomeAction": {
         "appliesTo": {
             "principalTypes": [ ... ],
             "ResourceTypes": [ ... ]
@@ -314,152 +319,110 @@ The schema also defines the following three resource types:
 
 ```
 {
-  "namespace": "PhotoFlash",
-  "entityTypes": [
-    {
-      "name": "User",
-      "memberOf": [
-        "UserGroup"
-      ],
-      "shape": {
-        "type": "Record",
-        "attributes": {
-          "department": {
-            "type": "String"
-          },
-          "jobLevel": {
-            "type": "Long"
-          }
-        }
-      }
-    },
-    {
-      "name": "UserGroup"
-    },
-    {
-      "name": "Photo",
-      "memberOf": [
-        "Album"
-      ],
-      "shape": {
-        "type": "Record",
-        "attributes": {
-          "private": {
-            "type": "Boolean"
-          },
-          "account": {
-            "type": "Entity",
-            "name": "Account"
-          }
-        }
-      }
-    },
-    {
-      "name": "Album",
-      "memberOf": [
-        "Album"
-      ],
-      "shape": {
-        "type": "Record",
-        "attributes": {
-          "private": {
-            "type": "Boolean"
-          },
-          "account": {
-            "type": "Entity",
-            "name": "Account"
-          }
-        }
-      }
-    },
-    {
-      "name": "Account",
-      "memberOf": [],
-      "shape": {
-        "type": "Record",
-        "attributes": {
-          "owner": {
-            "type": "Entity",
-            "name": "User"
-          },
-          "admins": {
-            "required": false,
-            "type": "Set",
-            "element": {
-              "type": "Entity",
-              "name": "User"
+    "namespace": "PhotoFlash",
+    "entityTypes": [
+        "User": {
+            "memberOf": [ "UserGroup" ],
+            "shape": {
+                "type": "Record",
+                "attributes": {
+                    "department": { "type": "String" },
+                    "jobLevel": { "type": "Long" }
+                }
             }
-          }
-        }
-      }
-    }
-  ],
-  "actions": {
-    "viewPhoto": {
-      "appliesTo": {
-        "principalTypes": [
-          "User"
-        ],
-        "ResourceTypes": [
-          "Photo"
-        ]
-      },
-      "context": {
-        "type": "Record",
-        "attributes": {
-          "authenticated": {
-            "type": "Boolean"
-          }
-        }
-      }
-    },
-    "listAlbums": {
-      "appliesTo": {
-        "principalTypes": [
-          "User"
-        ],
-        "ResourceTypes": [
-          "Account"
-        ]
-      },
-      "context": {
-        "type": "Record",
-        "attributes": {
-          "authenticated": {
-            "type": "Boolean"
-          }
-        }
-      }
-    },
-    "uploadPhoto": {
-      "appliesTo": {
-        "principalTypes": [
-          "User"
-        ],
-        "ResourceTypes": [
-          "Album"
-        ]
-      },
-      "context": {
-        "type": "Record",
-        "attributes": {
-          "authenticated": {
-            "type": "Boolean"
-          },
-          "photo": {
-            "type": "Record",
-            "attributes": {
-              "file_size": {
-                "type": "Long"
-              },
-              "file_type": {
-                "type": "String"
-              }
+        },
+        "UserGroup": { },
+        "Photo": {
+            "memberOf": [ "Album" ],
+            "shape": {
+                "type": "Record",
+                "attributes": {
+                    "private": { "type": "Boolean" },
+                    "account": {
+                        "type": "Entity",
+                        "name": "Account"
+                    }
+                }
             }
-          }
+        },
+        "Album": {
+            "memberOf": [ "Album" ],
+            "shape": {
+                "type": "Record",
+                "attributes": {
+                    "private": { "type": "Boolean" },
+                    "account": {
+                        "type": "Entity",
+                        "name": "Account"
+                    }
+                }
+            }
+        },
+        "Account": {
+            "memberOf": [],
+            "shape": {
+                "type": "Record",
+                "attributes": {
+                    "owner": {
+                        "type": "Entity",
+                        "name": "User"
+                    },
+                    "admins": {
+                        "required": false,
+                        "type": "Set",
+                        "element": {
+                            "type": "Entity",
+                            "name": "User"
+                        }
+                    }
+                }
+            }
         }
-      }
-    }
-  ]
+    ],
+    "actions": {
+        "viewPhoto": {
+            "appliesTo": {
+                "principalTypes": [ "User" ],
+                "ResourceTypes": [ "Photo" ]
+            },
+            "context": {
+                "type": "Record",
+                "attributes": {
+                    "authenticated": { "type": "Boolean" }
+                }
+            }
+        },
+        "listAlbums": {
+            "appliesTo": {
+                "principalTypes": [ "User" ],
+                "ResourceTypes": [ "Account" ]
+            },
+            "context": {
+                "type": "Record",
+                "attributes": {
+                    "authenticated": { "type": "Boolean" }
+                }
+            }
+        },
+        "uploadPhoto": {
+            "appliesTo": {
+                "principalTypes": [ "User" ],
+                "ResourceTypes": [ "Album" ]
+            },
+            "context": {
+                "type": "Record",
+                "attributes": {
+                    "authenticated": { "type": "Boolean" },
+                    "photo": {
+                        "type": "Record",
+                        "attributes": {
+                            "file_size": { "type": "Long" },
+                            "file_type": { "type": "String" }
+                        }
+                    }
+                }
+            }
+        }
+    ]
 }
 ```
