@@ -80,6 +80,7 @@ Although we’ve endeavored to make Cedar a safe environment to evaluate policie
 ## Services that use Cedar<a name="related-services"></a>
 
 The following AWS services use Cedar as their authorization policy language. For more information about how each service uses Cedar, and any service-specific considerations, see the documentation for each service.
-**Amazon Web Services \(AWS\)**
+
+### **Amazon Web Services \(AWS\)**
 + **Amazon Verified Permissions** – Verified Permissions provides authorization and permissions management as a service that you use when you write your own custom applications. You can define a schema that fully describes your principals and resources, and the actions that the principals can perform on the resources. Then, you can define Cedar policies that provide granular permissions, fully controlling which principals can perform which actions against which resources and under which conditions. For more information, see the [Amazon Verified Permissions User Guide](https://docs.aws.amazon.com/verified-permissions/latest/userguide/).
 + **AWS Verified Access** – With AWS Verified Access, you can provide secure access from your devices to your applications without requiring the use of a virtual private network \(VPN\). Verified Access evaluates each incoming application request and helps ensure that users and the devices they use can access each application only when they meet the specified security requirements. For more information, see the [AWS Verified Access User Guide](https://docs.aws.amazon.com/verified-access/latest/ug/).
