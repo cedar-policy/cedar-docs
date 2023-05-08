@@ -21,4 +21,4 @@ nav_order: 1
    + [Cedar syntax &ndash; operators and functions](syntax-operators.md)
    + [Cedar grammar &ndash; putting the elements together](syntax-grammar.md)
 + [Cedar security](security.md)
-+ [Document history for the Cedar Policy Language Reference Guide](doc-history.md)
++ [Document history for the Cedar Policy Language Guide](doc-history.md)
