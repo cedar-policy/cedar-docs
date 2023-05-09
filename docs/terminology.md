@@ -43,7 +43,7 @@ In Cedar, you can create a policy in one of two ways:
 + **Template-linked policies** – Policies created from [a policy template](#term-policy-template). This policy type consists of a template that has placeholders for the principal, resource, or both. The template is completed by replacing the placeholders with specific values. This completed template results in a template-linked policy that can be evaluated at runtime like a static policy.
 
 You can use a variety of strategies to construct the policies. Some of the common strategies are the following:
-+ **[Role-based access control \(RBAC\)](https://wikipedia.org/wiki/Role-based_access_control)** – Cedar lets you define roles that are associated with a set of permissions. These roles can then be assigned to one or more identities. Each assigned identity acquires the permissions associated with the role. If the permissions associated with a role are modified, it automatically impacts any identity assigned to that role. Cedar supports RBAC decisions by using [groups](#term-group) for your principals.
++ **[Role-based access control \(RBAC\)](https://wikipedia.org/wiki/Role-based_access_control)** – Cedar lets you define roles that receive a set of permissions granted by associating policies with the role. These roles can then be assigned to one or more identities. Each assigned identity acquires the permissions granted by the policies associated with the role. If the pollicies associated with a role are modified, it automatically impacts any identity assigned to that role. Cedar supports RBAC decisions by using [groups](#term-group) for your principals.
 + **[Attribute-based access control \(ABAC\)](https://wikipedia.org/wiki/Attribute-based_access_control)** – Cedar uses the attributes attached to the principal and the resource to determine the permissions. For example, a policy can state that all users that are tagged as the owner of a resource automatically have access. A different policy could state that only users that are members of the Human Resources (HR) department can access resources that are tagged as HR resources.
 
 ## Policy evaluation<a name="term-policy-evaluation"></a>
@@ -63,11 +63,10 @@ Cedar combines the intermediate results into a final result as determined by app
 
 1. If no policy evaluates to Allow, then the final result is the default implicit **Deny**. 
 
-Your application must gather all of the relevant information and provide it to Cedar for a decision. You provide this information in the folloiwng two parts:
-+ All of the details about the principal and resource entities must be provided to Cedar as the *slice*. The slice is the set of policies and entity data that are relevant to the request. For example, for a request to authorize a user named Juan to access a shared photo, the slice must include a list of the groups that Juan is a member of, the folder hierarchy where the photo resides, and any other relevant attributes of the user and photo. For example, in Amazon Verified Permissions, you provide this information in the `SliceComplement` parameter of an `[IsAuthorized](https://docs.aws.amazon.com/verified-permissions/latest/apireference/API_IsAuthorized.html)` operation.
-+ Other details that might be useful to the decision, such as the IP address of the requesting computer and the list of valid IP ranges that make up the company's internal network, or whether the user authenticated using a multi-factor authentication \(MFA\) device. This additional information is called the *context*. For Verified Permissions, you provide this information as the `Context` parameter of the `[IsAuthorized](https://docs.aws.amazon.com/verified-permissions/latest/apireference/API_IsAuthorized.html)` operation. These details can be accessed by the `when` and `unless` clauses of a policy.
-
-All of the policies that match any one or more of the principal, action, or resource are called the ***applicable policies***. The applicable policies must be included in the slice, along with all of the relevant entities, for the evaluation to return the expected results. If the request is for `User::"bob"` to perform `Action::"readFile"` on resource `File::"vacationPhoto.jpg"`, then only policies that reference those entities need to be included in the slice provided for evaluation. A policy that allows Alice to write to a different file isn't applicable to the request and therefore doesn't need to be included in the slice.
+Your application must gather all of the relevant information and provide it to Cedar for a decision.
++ All of the details about the principal and resource entities must be provided to Cedar. These details must include all of the entity data that are relevant to the request. For example, for a request to authorize a user named Juan to access a shared photo, the request must include the entities for the groups that Juan is a member of, the folder hierarchy where the photo resides, and any other relevant attributes of the user and photo.
++ Other details that might be useful to the decision, including the transient or session-specific details, such as the IP address of the requesting computer and the list of valid IP ranges that make up the company's internal network, or whether the user authenticated using a multi-factor authentication \(MFA\) device. This additional information is called the *context*.
++ All of the policies that match any one or more of the principal, actions, and the resource specified in the request. We recommend that you include all policies to avoid the risk of missing a relevant policy.
 
 The evaluation results in an ***authorization response*** that consists of the decision \(Allow or Deny\), and the list of ***determining policies*** that resulted in the allow or deny decision returned by Cedar.
 
@@ -122,11 +121,11 @@ With this set of policies, Cedar can evaluate the request "Can the user `jane` p
   +  ***Not*** tagged `Holiday`
   + Tagged `Private`
 
-In this example scenario, P1, P2, and P3 are all considered **relevant** and should be included in the slice provided to Cedar because they all relate to `jane` viewing `vacation.jpg`.
+In this example scenario, P1, P2, and P3 are all considered **relevant** and must be included in the details provided to Cedarwith a request because they all relate to `jane` viewing `vacation.jpg`.
 
-P1 and P3 are **applicable policies** because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **applicable** because the photo is not tagged `Holiday`.
+P1 and P3 are the **applicable** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **applicable** because the photo is not tagged `Holiday`.
 
-Cedar returns P3 as the **determining policy** because it results in an explicit Deny that overrides the Allow from P1. The final response is **Deny**.
+Cedar returns P3 as the **determining** policy because it results in an explicit Deny that overrides the Allow from P1. The final response is **Deny**.
 
 ## Policy template<a name="term-policy-template"></a>
 
