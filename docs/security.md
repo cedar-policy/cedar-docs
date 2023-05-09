@@ -78,7 +78,7 @@ Some security best practices for applications that use Cedar are as follows:
   * Cedar has no facilities for I/O, so Cedar policies are unable to do activities like reading files or talking to the network.
   * The execution of one Cedar policy cannot effect the execution of another policy. 
   * While all Cedar policies are guaranteed to terminate, a malicious user could attempt to submit very lengthy policies, incurring either storage or performance costs. If you are executing arbitrary Cedar policies, we recommend placing a length limit on them.
-  * Cedar provides on authorization &ndash; determining what an authenticated user can do. It does ***not*** perform authentication &ndash; verifying the identity of the users who attempt to access your application. You application must provide authentication services separately and then proceed with authorization only using successfully authenticated users.
+  * Cedar provides on authorization &ndash; determining what an authenticated user can do. However, Cedar does ***not*** perform authentication &ndash; verifying the identity of the users who attempt to access your application. You application must provide authentication services separately and then proceed with authorization only using successfully authenticated users.
 
 * Write a schema and have Cedar validate it to ensure your authorization policies don't encounter runtime errors.
 
