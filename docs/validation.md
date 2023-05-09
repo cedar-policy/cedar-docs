@@ -7,6 +7,8 @@ nav_order: 5
 # Cedar policy validation against schema<a name="validation"></a>
 {: .no_toc }
 
+![\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}](https://latex.codecogs.com/svg.latex?x%3D%5Cfrac%7B-b%5Cpm%5Csqrt%7Bb%5E2-4ac%7D%7D%7B2a%7D)
+
 As with all code, it is possible to make mistakes that result in the code not behaving as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors.
 
 ```
