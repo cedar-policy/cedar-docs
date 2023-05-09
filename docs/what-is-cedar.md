@@ -72,7 +72,7 @@ Cedar policies are designed to be easy to read and understand, making them acces
 
 ## Services that use Cedar<a name="related-services"></a>
 
-The following AWS services use Cedar as their authorization policy language. For more information about how each service uses Cedar, and any service-specific considerations, see the documentation for each service.
+The following services use Cedar as their authorization policy language. For more information about how each service uses Cedar, and any service-specific considerations, see the documentation for each service.
 
 ### **Amazon Web Services \(AWS\)**
 {: .no_toc }
