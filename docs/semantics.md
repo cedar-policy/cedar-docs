@@ -1,5 +1,11 @@
+---
+layout: default
+title: Semantics
+nav_order: 9
+mathjax: true
+---
 
-### Policy semantics
+# Policy semantics
 
 Inline policies and policy instances have the same semantics. A policy *c* may refer to an inline policy or a policy instance. An *authorization request* or query is defined as the tuple `<P, A, R, X>` where `P` is a principal, `A` is an action, `R` is a resource, and `X` is the context.  `P`, `A`, and `R` are entity UIDs, while `X` is a record.  (See [Data model, values, and operations])  Cedar’s authorizer grants the request — that principal `P` is allowed to perform the action `A` on the resource `R` in circumstances described by the context `X` — if that request is *satisfied* by the *authorization relation* for a given application, defined by that application’s policy set.  The authorization relation satisfies the request `<P, A, R, X>` if and only if it satisfies at least one permission (`permit`) policy and no restriction (`forbid`) policies.  We define what it means for a request to satisfy a policy as follows.
 
