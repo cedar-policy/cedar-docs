@@ -11,7 +11,7 @@ nav_order: 4
 In this guide, entity type names are always spelled using *PascalCase*, with the first letter of each word capitalized. For example, `UserGroup`.  
 Individual entity and attribute names are spelled using *camelCase*, with only the first letter of the second and following words capitalized. For example, `janeFriends`.
 
-The examples in this guide use the following hypothetical photo sharing application, called *PhotoFlash*. This application provides users with the ability to store, organize, and share their photos. Users can upload photos to their *PhotoFlash* account and organize them into albums. Albums can be nested in other albums and photos can belong to multiple albums. Users can also add custom metadata, such as the names of people visible, to each photo in the form of tags. Then, users users can search for photos based on the attached metadata, such as searching for any photos that were taken after a certain date or at a certain geographic location.
+The examples in this guide use the following hypothetical photo sharing application, called *PhotoFlash*. This application provides users with the ability to store, organize, and share their photos. Users can upload photos to their *PhotoFlash* account and organize them into albums. Albums can be nested in other albums and photos can belong to multiple albums. Users can also add custom metadata, such as the names of people visible, to each photo in the form of tags. Then, users can search for photos based on the attached metadata, such as searching for any photos that were taken after a certain date or at a certain geographic location.
 
 *PhotoFlash* users can share their photos and albums with other *PhotoFlash* users or user groups. In the previous illustration, a user named **jane** created groups to represent her family \(`janeFamily`\), friends \(`janeFriends`\), and coworkers \(`janeCoworkers`\). She can then populate those groups with other *PhotoFlash* users, and specify how members of those groups can access her photos and albums. User groups are as flexible as albums; they can be nested, and a user can belong to multiple groups.
 
@@ -24,7 +24,7 @@ The examples in this guide use the following hypothetical photo sharing applicat
 > 
 > This warning applies to both principal and resource identifiers. Always use identifiers that are guaranteed unique and never reused to ensure that you don't grant access unintentionally because of the presence of an old identifier in a policy.  
 >
->Where you use a UUID for an entity, we recommend that you follow it with the `//` comment specifier and the 'friendly' name of your entity. This approach helps to make your policies easier to understand. For example:  
+>Where this guide does show a UUID for an entity, it also shows the entity's display name as a comment to make the policies easier to understand. For example:  
 >```
 >principal == User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111", // alice
 >```

@@ -7,6 +7,7 @@ nav_order: 1
 ![\[Cedar Logo\]](images/Cedar1-green.png)
 
 -----
+
 ## In this guide
 + [What is the Cedar policy language?](what-is-cedar.md)
 + [Cedar terms and concepts](terminology.md)

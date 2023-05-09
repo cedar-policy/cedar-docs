@@ -78,7 +78,7 @@ For example, consider the following set of policies:
       principal == User::"jane", 
       action, 
       resource == Photo::"vacation.jpg"
-  )
+  );
   ```
 + **P2** – Kevin has a group `kevinFriends` that can view any of Kevin's photos when they are tagged `Holiday`
 
@@ -90,7 +90,7 @@ For example, consider the following set of policies:
   )
   when {
       resource.tags.contains("Holiday")
-  }
+  };
   ```
 + **P3** – Users are forbidden to view photos tagged `Private`, unless they are the owner of the photo.
 
@@ -101,7 +101,7 @@ For example, consider the following set of policies:
       resource
   )
   when { resource.tags.contains("private") }
-  unless { principal == resource.owner }
+  unless { principal == resource.owner };
   ```
 + **P4** – Users can perform `UpdatePassword` for an `Account` when they are the owner of the account 
 
@@ -111,7 +111,7 @@ For example, consider the following set of policies:
       action == Action::"UpdatePassword",
       resource
   )
-  when { principal == account.owner }
+  when { principal == account.owner };
   ```
 
 With this set of policies, Cedar can evaluate the request "Can the user `jane` perform the action `View` on the photo `vacation.jpg`?" This example assumes that the slice includes the following details about the entities:
@@ -185,12 +185,6 @@ Cedar determinies from the schema that the `Age` attribute is type `Long`, and t
 
 Cedar doesn't require you to define a schema. However, if you don't define a schema, then Cedar doesn't have a way to ensure that the policies adhere to your intentions. If the structure or type of the entity or attribute inferred by a policy doesn't match the structure or type of the entity or attribute inferred by the parameters of an authorization request, then Cedar can generate errors or return incorrect authorization results. Because of this possibility, we recommend that you create schemas for your applications.
 
-When you submit policies to Cedar, validation can be performed in either `Strict` or `Permissive` mode. `Strict` mode is the default. `Strict` mode rejects policies for a wider array of errors than `Permissive` mode. For example, consider the following clause snippet:
-
-```
-if ... then principal else resource
-```
-
-`Strict` mode requires that the `principal` and `resource` must be of the same type, while `Permissive` mode accepts a policy where they are of different types.
+When you submit policies to Cedar, your policies are evaluated by default using `Strict` mode. You can optionally turn validation off.
 
 For details about the syntax required to define a schema, see [Cedar schema format](schema.md).
