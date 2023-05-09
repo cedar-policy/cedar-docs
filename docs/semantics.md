@@ -2,14 +2,13 @@
 layout: default
 title: Semantics
 nav_order: 9
-mathjax: true
 ---
 
 # Policy semantics
 
 Inline policies and policy instances have the same semantics. A policy *c* may refer to an inline policy or a policy instance. An *authorization request* or query is defined as the tuple `<P, A, R, X>` where `P` is a principal, `A` is an action, `R` is a resource, and `X` is the context.  `P`, `A`, and `R` are entity UIDs, while `X` is a record.  (See [Data model, values, and operations])  Cedar’s authorizer grants the request — that principal `P` is allowed to perform the action `A` on the resource `R` in circumstances described by the context `X` — if that request is *satisfied* by the *authorization relation* for a given application, defined by that application’s policy set.  The authorization relation satisfies the request `<P, A, R, X>` if and only if it satisfies at least one permission (`permit`) policy and no restriction (`forbid`) policies.  We define what it means for a request to satisfy a policy as follows.
 
-A request `<P, A, R, X>` satisfies a policy `c` when evaluating `c` on the request produces the value `true`.  More precisely, every policy `c` denotes a function `[[c]]` from entity hierarchies `H` and queries `<P, A, R, X>` to booleans.  We say that `<P, A, R, X>` ***satisfies*** $c$ with respect to the hierarchy $H$ when $[c]_{H}$​`(<P, A, R, X>)` is `true.`
+A request `<P, A, R, X>` satisfies a policy `c` when evaluating `c` on the request produces the value `true`.  More precisely, every policy `c` denotes a function `[[c]]` from entity hierarchies `H` and queries `<P, A, R, X>` to booleans.  We say that `<P, A, R, X>` ***satisfies*** $\`c\`$ with respect to the hierarchy $H$ when $[c]_{H}$​`(<P, A, R, X>)` is `true.`
 
 We define the function $[[c]] by evaluating the policy `c` with respect to `H` and the request `<P, A, R, X>`; the variables `principal`, `action`, `resource`, and `context` that appear in `c` bound to the values `P`, `A`, `R`, and `X`, respectively.  The result of the evaluation is `true` if Principal(`c`), Action(`c`), and Resource(`c`) all evaluate to `true`; every `when` expression in `Conds(c)` evaluates to `true`; and every `unless` expression in `Conds(c)` evaluates to `false`. Cedar policies are total functions, which means that they return `true` or `false` for every input. In particular, a policy returns `false` if its evaluation would error under the standard expression semantics, e.g., because the policy attempts to access an attribute that does not exist for a given entity.   
 
