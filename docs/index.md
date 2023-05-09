@@ -20,5 +20,6 @@ nav_order: 1
    + [Cedar syntax &ndash; data types supported by the policy language](syntax-datatypes.md)
    + [Cedar syntax &ndash; operators and functions](syntax-operators.md)
    + [Cedar grammar &ndash; putting the elements together](syntax-grammar.md)
++ [Cedar semantics](semantics.md)
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
