@@ -22,7 +22,7 @@ Cedar manages fine-grained permissions to support the authorization requirements
 
 *Authorization* is the process of determining if a specific user request to do something is allowed by the defined set of [policies](#term-policy). Authorization works by evaluating each incoming request against the set of policies provided to Cedar.
 
-Authorization is preceded by *authentication*. Authentication is the process of verifying the principal's identity meaning that they are really who they claim to be. Authentication can involve user names, passwords, multi-factor authentication \(MFA\) devices, or other means of proving identity. Once authenticated, a user or device becomes a *principal* that can make a request. 
+Authorization is preceded by *authentication*. Authentication is the process of verifying the principal's identity, meaning that they are really who they claim to be. Authentication can involve user names, passwords, multi-factor authentication \(MFA\) devices, or other means of proving identity. Once authenticated, a user or device becomes a *principal* that can make a request.
 
 Cedar lets you describe permissions by creating [policies](#term-policy) as text documents that describe which principals are allowed to perform which *actions*, on which *resources*, and in a specific *context*. 
 
@@ -167,16 +167,16 @@ You can use the [in](syntax-operators.md#operator-in) operator in a policy condi
 ```
 permit(
     principal in Group::"janeFriends",
-    action in Action::"view",
+    action == Action::"view",
     resource in Album::"janeTrips"
 );
 ```
 
 ## Schema<a name="term-schema"></a>
 
-A schema is a declaration of the structure of the entity types supported by your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. You can use the schema to define the principals, resources, and actions used by your application. Each definition specifies the structure of the entity that your application recognizes. For example, a resource of type `Photo` could be defined to include both a  `Name` attribute that is a [string](syntax-datatypes.md#datatype-string), and a `LocationTaken` attribute that is a [record](syntax-datatypes.md#datatype-record). That record could include `Latitude` and `Longitude` values that are both [decimal](syntax-datatypes.md#datatype-decimal).
+A schema is a declaration of the structure of the entity types supported by your application, and the actions your application may provide in authorization requests. Cedar uses [JSON](https://json.org) to define a schema. You can use the schema to define the principals, resources, and actions used by your application. Each definition specifies the structure of the entity that your application recognizes. For example, a resource of type `Photo` could be defined to include both a  `Name` attribute that is a [string](syntax-datatypes.md#datatype-string), and a `LocationTaken` attribute that is a [record](syntax-datatypes.md#datatype-record). That record could include `Latitude` and `Longitude` values that are both [decimal](syntax-datatypes.md#datatype-decimal).
 
-Cedar can use the schema to validate your authorization policies. Validation helps ensure that you don't create a policy that references an entity or attribute one way, and then reference that entity or attribute in a different way when you make authentication requests later. Validation also ensures that you use the right data types. For example, if the `Age` attribute is defined in your schema as type [Long](syntax-datatypes.md#datatype-long), then the following line in a policy submitted to Cedar for validation generates an error.
+Cedar can use the schema to validate your authorization policies. Validation helps ensure that you don't create a policy that references an entity or attribute one way, and then reference that entity or attribute in a different way when you make authorization requests later. Validation also ensures that you use the right data types. For example, if the `Age` attribute is defined in your schema as type [Long](syntax-datatypes.md#datatype-long), then the following line in a policy submitted to Cedar for validation generates an error.
 
 ```
 unless { principal.Age > "21" }
