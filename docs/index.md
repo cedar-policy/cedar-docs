@@ -23,3 +23,5 @@ nav_order: 1
    + [Cedar grammar &ndash; putting the elements together](syntax-grammar.md)
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
+
+You can also view the [Cedar policy language specification document](Cedar-Language-Spec-v2.0.pdf?raw=true) or [download it as a PDF](https://).
