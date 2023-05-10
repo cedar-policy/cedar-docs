@@ -24,4 +24,4 @@ nav_order: 1
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
 
-You can also view the [Cedar policy language specification document](Cedar-Language-Spec-v2.0.pdf?raw=true) or [download it as a PDF](https://github.com/cedar-policy/cedar-docs/blob/main/docs/Cedar-Language-Spec-v2.0.pdf?raw=true).
+You can also [view the Cedar language specification](Cedar-Language-Spec-v2.0.pdf?raw=true) or [download as a PDF](https://github.com/cedar-policy/cedar-docs/blob/main/docs/Cedar-Language-Spec-v2.0.pdf?raw=true)
