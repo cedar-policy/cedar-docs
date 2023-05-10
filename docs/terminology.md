@@ -121,9 +121,7 @@ With this set of policies, Cedar can evaluate the request "Can the user `jane` p
   +  ***Not*** tagged `Holiday`
   + Tagged `Private`
 
-In this example scenario, P1, P2, and P3 are all considered **relevant** and must be included in the details provided to Cedarwith a request because they all relate to `jane` viewing `vacation.jpg`.
-
-P1 and P3 are the **applicable** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **applicable** because the photo is not tagged `Holiday`.
+P1 and P3 are the **satisifed** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **satisfie** because the photo is not tagged `Holiday`.
 
 Cedar returns P3 as the **determining** policy because it results in an explicit Deny that overrides the Allow from P1. The final response is **Deny**.
 
