@@ -121,7 +121,7 @@ With this set of policies, Cedar can evaluate the request "Can the user `jane` p
   +  ***Not*** tagged `Holiday`
   + Tagged `Private`
 
-P1 and P3 are the **satisifed** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **satisfied** because the photo isn't tagged `Holiday`.
+P1 and P3 are the **satisfied** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **satisfied** because the photo isn't tagged `Holiday`.
 
 Cedar returns P3 as the **determining** policy because it results in an explicit Deny that overrides the Allow from P1. The final response is **Deny**.
 
@@ -179,7 +179,7 @@ Cedar can use the schema to validate your authorization policies. Validation hel
 unless { principal.Age > "21" }
 ```
 
-Cedar determinies from the schema that the `Age` attribute is type `Long`, and that digits with quotes around them are always of type `String`. This line fails validation because the [> comparison operator](syntax-operators.md#operator-greaterthan) works only with `Long` values and can't compare with a `String`. If you remove the quotes from around the `21` and resubmit the policy, Cedar successfully validates the policy.
+Cedar determines from the schema that the `Age` attribute is type `Long`, and that digits with quotes around them are always of type `String`. This line fails validation because the [> comparison operator](syntax-operators.md#operator-greaterthan) works only with `Long` values and can't compare with a `String`. If you remove the quotes from around the `21` and resubmit the policy, Cedar successfully validates the policy.
 
 Cedar doesn't require you to define a schema. However, if you don't define a schema, then Cedar doesn't have a way to ensure that the policies adhere to your intentions. If the structure or type of the entity or attribute inferred by a policy doesn't match the structure or type of the entity or attribute inferred by the parameters of an authorization request, then Cedar can generate errors or return incorrect authorization results. Because of this possibility, we recommend that you create schemas for your applications.
 
