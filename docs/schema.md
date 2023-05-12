@@ -285,7 +285,7 @@ The following example `actions` snippet shows two actions. The first action, `vi
 
 Specifies a JSON object in the same format as an entity `shape` property, which defines the attributes that can be present in the context record in authorization requests made with this action. It enables the validation of policies to 
 
-Each context entry consists of `type` and `attributes` objects. The `type` object is always of type `record`. The `attributes` boject is a JSON collection of attribute names, each containing a `type` specification for that attribute. For example, the following `context` snippet specifies that any request to perform the `SomeAction` operation must include a test for a Boolean attribute named `field1`. The policy can also test an integer `field2` and a string `field3`, though it's OK if they're not referenced in the policy's context section. Any policy that doesn't include a required attribute in the policy's `context` section fails validation.
+Each context entry consists of `type` and `attributes` objects. The `type` object is always of type `record`. The `attributes` object is a JSON collection of attribute names, each containing a `type` specification for that attribute. For example, the following `context` snippet specifies that any request to perform the `SomeAction` operation must include a test for a Boolean attribute named `field1`. The policy can also test an integer `field2` and a string `field3`, though it's OK if they're not referenced in the policy's context section. Any policy that doesn't include a required attribute in the policy's `context` section fails validation.
 
 ```
 "actions": [
