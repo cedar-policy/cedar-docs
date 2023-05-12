@@ -100,7 +100,7 @@ For example, consider the following set of policies:
       action == Action::"ViewPhoto",
       resource
   )
-  when { resource.tags.contains("private") }
+  when { resource.tags.contains("Private") }
   unless { principal == resource.owner };
   ```
 + **P4** – Users can perform `UpdatePassword` for an `Account` when they are the owner of the account 
@@ -114,7 +114,7 @@ For example, consider the following set of policies:
   when { principal == account.owner };
   ```
 
-With this set of policies, Cedar can evaluate the request "Can the user `jane` perform the action `View` on the photo `vacation.jpg`?" This example assumes that the slice includes the following details about the entities:
+With this set of policies, Cedar can evaluate the request "Can the user `jane` perform the action `ViewPhoto` on the photo `vacation.jpg`?" This example assumes that the slice includes the following details about the entities:
 + `jane` is a member of the group `kevinsFriends`.
 + The photo vacation.jpg is:
   + Owned by `kevin`
@@ -129,7 +129,7 @@ Cedar returns P3 as the **determining** policy because it results in an explicit
 
 A policy template is a policy that has a placeholder for either the principal, the resource, or both. A policy template is useful when you have a common pattern for access that you need to apply to many resources, or many principals. You can't use a template in an authorization decision directly. Instead, you first associate a principal and resource with the template to create a template-linked policy that is complete and usable for authorization decisions.
 
-For example, a policy template might allow commenting on any photo in an album unless that photo is tagged "private". Instead of having to manually duplicate such a policy statement in a policy for every user who accesses the album, you can create a policy template. 
+For example, a policy template might allow commenting on any photo in an album unless that photo is tagged "Private". Instead of having to manually duplicate such a policy statement in a policy for every user who accesses the album, you can create a policy template. 
 
 A policy created from a policy template is called a template-linked policy. When you create a template-linked policy, you associate the policy template with the principal who needs access to the resource. Template-linked policies are dynamic. When you change the policy statement in a policy template, all policies created from that policy template use the new policy statement automatically in all authorization decisions from that moment on. This capability is useful when you need to apply the same permissions to many principal and resource pairs.
 
@@ -157,14 +157,14 @@ You can represent a group in Cedar by adding a `parent` attribute to an entity. 
 
 Because a group can include other groups as members, you can use groups to model a multi-tiered hierarchy. You're not limited to the generic concept of a group with a single collection of members. 
 
-In addition to the expected `User` as a member of a `UserGroup` for principals, you can also apply this approach to your resource types. For example, you can mimic the `File` in a `Folder` paradigm, with folders nested in other folders. You can also group actions, where an action like `viewPhoto` can be classified as a member of the `ReadOnly` actions collection.
+In addition to the expected `User` as a member of a `UserGroup` for principals, you can also apply this approach to your resource types. For example, you can mimic the `File` in a `Folder` paradigm, with folders nested in other folders. You can also group actions, where an action like `ViewPhoto` can be classified as a member of the `ReadOnly` actions collection.
 
 You can use the [in](syntax-operators.md#operator-in) operator in a policy condition to check whether one entity has another entity in its hierarchy. For example, the following policy snippet uses the `in` operator twice to allow any user who is a member of `Group::"janeFriends"` to view any photo that is part of `Album::"janeTrips"`.
 
 ```
 permit(
     principal in Group::"janeFriends",
-    action == Action::"view",
+    action == Action::"ViewPhoto",
     resource in Album::"janeTrips"
 );
 ```
@@ -179,7 +179,7 @@ Cedar can use the schema to validate your authorization policies. Validation hel
 unless { principal.Age > "21" }
 ```
 
-Cedar determinies from the schema that the `Age` attribute is type `Long`, and that digits with quotes around them are always of type `String`. This line fails validation because the [> comparison operator](syntax-operators.md#operator-greaterthan) works only with `Long` values and can't compare with a `String`. If you remove the quotes from around the `21` and resubmit the policy, Cedar successfully validates the policy.
+Cedar determines from the schema that the `Age` attribute is type `Long`, and that digits with quotes around them are always of type `String`. This line fails validation because the [> comparison operator](syntax-operators.md#operator-greaterthan) works only with `Long` values and can't compare with a `String`. If you remove the quotes from around the `21` and resubmit the policy, Cedar successfully validates the policy.
 
 Cedar doesn't require you to define a schema. However, if you don't define a schema, then Cedar doesn't have a way to ensure that the policies adhere to your intentions. If the structure or type of the entity or attribute inferred by a policy doesn't match the structure or type of the entity or attribute inferred by the parameters of an authorization request, then Cedar can generate errors or return incorrect authorization results. Because of this possibility, we recommend that you create schemas for your applications.
 

@@ -45,29 +45,29 @@ The following is an example of a basic Cedar schema.
 
 ```
 {
-    "entityTypes ": [
-        {
-            "name": "Employee",
-            "shape": {
-                "type": "Record",
-                "attributes ": {
-                    "jobLevel": { "type": "Long" },
-                    "numberOfLaptops ": { 
-                        "type": "Long",
-                        "required": false
+    "": {
+        "entityTypes": {
+            "Employee": {
+                "shape": {
+                    "type": "Record",
+                    "attributes": {
+                        "jobLevel": { "type": "Long" },
+                        "numberOfLaptops ": {
+                            "type": "Long",
+                            "required": false
+                        }
                     }
                 }
             }
-        }
-    ],
-    "actions ": [
-        {
-            "name": "remoteAccess",
-            "applies To": {
-                "principalTypes ": ["Employee"]
+        },
+        "actions": {
+            "remoteAccess": {
+                "appliesTo": {
+                    "principalTypes": ["Employee"]
+                }
             }
         }
-    ]
+    }
 }
 ```
 
@@ -150,19 +150,19 @@ ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
 Namespaces are declared in schema by including the namespace before the list of entities that are part of the namespace, as shown in the following example.
 
 ```
-"ExampleCo::Database": {
-    "entityTypes": [
-        {
-            "name": "Table"
-            ...
+{
+    "ExampleCo::Database": {
+        "entityTypes": {
+            "Table": {
+                ...
+            }
+        },
+        "actions": {
+            "createTable": {
+                ...
+            }
         }
-    ],
-    "actions": [
-        {
-            "name": "createTable"
-            ...
-        }
-    ]
+    }
 }
 ```
 

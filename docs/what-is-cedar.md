@@ -56,7 +56,7 @@ Cedar policies can use attributes, which are key-value pairs that represent vari
 
 ### Expressive<a name="feature-expressive"></a>
 
-Cedar is a simple yet expressive language that is designed to support common authorization use cases, such as role-based access control \(RBAC\) and attribute-based access control \(ABAC\). The language supports logical operators such as AND, OR, and NOT on Boolean values, in addtition to common operators on other types, such as comparison operators on integers. This broad set of operators helps provide fine-grained control over access decisions.
+Cedar is a simple yet expressive language that is designed to support common authorization use cases, such as role-based access control \(RBAC\) and attribute-based access control \(ABAC\). The language supports logical operators such as AND, OR, and NOT on Boolean values, in addition to common operators on other types, such as comparison operators on integers. This broad set of operators helps provide fine-grained control over access decisions.
 
 ### Policies are separate from your application's code<a name="feature-dynamic"></a>
 
