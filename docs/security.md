@@ -90,7 +90,7 @@ Some security best practices for applications that use Cedar are as follows:
    {: .note }
    >Here, "code injection" refers to injection of Cedar code, not arbitrary code execution. It is the responsibility of the Cedar library to prevent arbitrary code injection.
    
-   For For example, consider a policy dynamically created as shown here:
+   For example, consider a policy dynamically created as shown here:
    ```
    let src = "permit(" + input + ", Action::\"view\", resource) when { principal.level > 3 };"let policy = parse(src);addToPolicySet(policy);
    ```
