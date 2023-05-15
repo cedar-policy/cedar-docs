@@ -63,7 +63,7 @@ A collection of *attributes*. Each attribute consists of a name and an associate
 + `record["attributename"]`
 + `record.attributename`
 
-The following example shows the correct syntax for a `record`.
+The following example shows the correct syntax for a `Record`.
 
 ```
 {"key": "some value", id:"another value" }
