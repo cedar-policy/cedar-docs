@@ -245,7 +245,7 @@ As a unary operator with one operand, it returns the negative of the value.
 Binary operator that multiplies two long integer values and returns a long integer product. One of the values *must* be an integer literal, the other value can be an integer literal or an expression that evaluates to an integer value. 
 
 {: .note }
->There is no operator for arithmentic division.
+>There is no operator for arithmetic division.
 
 ## Hierarchy and set membership operators and functions<a name="functions-set"></a>
 
