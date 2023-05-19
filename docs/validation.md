@@ -24,7 +24,7 @@ when {
 
 Cedar can't know whether this policy is right or wrong by examining it in isolation. For example, Cedar does not know if the policy author meant Uzer or User because both are well-formed names. If the policy were subsequently evaluated during an authorization decision, Cedar would return diagnostic warnings about undefined attributes and invalid comparisons of strings and integers. But, if one weren’t looking for these diagnostics, an end-user would merely observe that the policy had no impact; it was ignored.
 
-From a security perspective, the impact of malformed policies is limited because Cedar ignores them. If no other policy grants access, Cedar returns a default decision of `DENY`. However, it can be frustrating when a policy isn’t behaving as expected. To avoid this frustration, it is better to learn that a policy is invalid when you're creating it, so mistakes can be fixed.
+If no other policy grants access, Cedar returns a default decision of `DENY`. However, it can be frustrating when a policy isn’t behaving as expected. To avoid this frustration, it is better to learn that a policy is invalid when you're creating it, so mistakes can be fixed.
 
 This capability is provided by Cedar validation. To validate a policy, Cedar needs information about the system. It needs to know the correct names of entity types, the attributes they possess, the allowed parent/child relationships, and whether the entities can act as principals, resources, or both. All of this information is provided to Cedar by defining a [schema](terminology.md#term-schema).
 
