@@ -251,9 +251,7 @@ Binary operator that multiplies two long integer values and returns a long integ
 
 Use these functions to test if entities are members of a hierarchy or a set.
 
-### <a name="operators-comparison"></a>
-
-#### `in` \(Hierarchy membership\)<a name="operator-in"></a>
+### `in` \(Hierarchy membership\)<a name="operator-in"></a>
 
 **Usage:** `<entity> in <entity>`
 
