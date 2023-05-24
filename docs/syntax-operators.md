@@ -68,17 +68,17 @@ Binary operator that evaluates to `true` if the string in the left operand match
 
 To match a literal asterisk character, use the escaped `\*` sequence in the pattern string.
 
-### `.decimal()` \(parse string and convert to decimal\)<a name="function-decimal"></a>
+### `decimal()` \(parse string and convert to decimal\)<a name="function-decimal"></a>
 
-**Usage:** `<string>.decimal()`
+**Usage:** `decimal(<string>)`
 
 Function that parses the string and tries to convert it to type [decimal](syntax-datatypes.md#datatype-decimal). If the string doesn't represent a valid decimal value, it generates an error.
 
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
-### `.ip()` \(parse string and convert to ipaddr\)<a name="function-ip"></a>
+### `ip()` \(parse string and convert to ipaddr\)<a name="function-ip"></a>
 
-**Usage:** `<string>.ip(<ipaddr>)`
+**Usage:** `ip(<string>)`
 
 Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then it generates an error.
 
