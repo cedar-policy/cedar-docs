@@ -377,7 +377,7 @@ The schema also defines the following three resource types:
                     }
                 }
             }
-    },
+        },
         "actions": {
             "viewPhoto": {
                 "appliesTo": {
