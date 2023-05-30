@@ -66,10 +66,10 @@ Principal := 'principal' [('in' | '==') (Entity | '?principal')]
 
 ## `Action`<a name="grammar-action"></a>
 
-The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`in`](syntax-operators.md#operator-in) or [`==`](syntax-operators.md#operator-equality) operator, followed by an action entity or a [set](syntax-datatypes.md#datatype-set) of action entities.
+The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](syntax-operators.md#operator-equality) operator and an action entity, or the [`in`](syntax-operators.md#operator-in) followed by an action entity or a [set](syntax-datatypes.md#datatype-set) of action entities.
 
 ```
-Action := 'action' [('in' '[' EntList ']' | '==' Entity)]
+Action := 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
 ```
 
 ## `Resource`<a name="grammar-resource"></a>
