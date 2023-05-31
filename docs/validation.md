@@ -82,7 +82,7 @@ Consider the `when` clause of the following policy.
 ```
 permit (
     principal,
-    action == ExampleCo::Personnel::Action::remoteAccess,
+    action == ExampleCo::Personnel::Action::"remoteAccess",
     resource
 )
 when {
