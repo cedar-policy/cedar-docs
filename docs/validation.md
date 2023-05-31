@@ -7,13 +7,13 @@ nav_order: 5
 # Cedar policy validation against schema<a name="validation"></a>
 {: .no_toc }
 
-As with all code, it is possible to make mistakes that result in the code not behaving as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors.
+As with all code, it is possible to make mistakes that result in the code not behaving as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors. This policy assumes that there is a namespace `ExampleCo` in the schema that defines the valid principals, actions, and resources. 
 
 ```
 permit (
-    principal == Uzer::"12345",   // should be "User", not "Uzer"
-    action == Action::"ReadFile", // should be "readFile", not "ReadFile"
-    resource == User::"67890"     // "readFile" isn't a valid operation on a User
+    principal == ExampleCo::Uzer::"12345",   // should be "User", not "Uzer"
+    action == ExampleCo::Action::"ReadFile", // should be "readFile", not "ReadFile"
+    resource == ExampleCo::User::"67890"     // "readFile" isn't a valid operation on a User
 )
 when {
     principal.isAcctive           // should be "isActive", not "isAcctive"
@@ -45,12 +45,13 @@ The following is an example of a basic Cedar schema.
 
 ```
 {
-    "": {
+    "ExampleCo::Personnel": {
         "entityTypes": {
             "Employee": {
                 "shape": {
                     "type": "Record",
                     "attributes": {
+                        "name": { "type": "String" },
                         "jobLevel": { "type": "Long" },
                         "numberOfLaptops ": {
                             "type": "Long",
@@ -72,7 +73,8 @@ The following is an example of a basic Cedar schema.
 ```
 
 This schema specifies the following:
-+ Every entity of type `Employee` in the store has an attribute `jobLevel` with a value that is a Cedar `Long`, and another optional attribute `numberOfLaptops` that is also a Cedar `Long`.
++ The entities defined in this schema exist in the namespace `ExampleCo::Personnel`.
++ Every entity of type `Employee` in the store has an attribute `name` with a value that is a Cedar `String`, an attribute `jobLevel` with a value that is a Cedar `Long`, and an optional attribute `numberOfLaptops` that is also a Cedar `Long`.
 + Any query that specifies action `Action::"remoteAccess"` can specify only principals that are of type `Employee`.
 
 Consider the `when` clause of the following policy.
@@ -80,7 +82,7 @@ Consider the `when` clause of the following policy.
 ```
 permit (
     principal,
-    action == Action::"remoteAccess",
+    action == ExampleCo::Personnel::Action::remoteAccess,
     resource
 )
 when {
@@ -174,6 +176,8 @@ ExampleCo::Database::Action::"createTable"
 ```
 
 A common convention is for each application team to manage a schema for their namespace, without touching the namespaces owned by other application teams.
+
+Cedar doesn't currently require that you specify a namespace. However, if you define a schema without a namespace and then later choose to add one, you need to update all of your policies to include the correct namespace, or authorization fails. You must also update the authorization requests you send to Cedar to include the namespace as part of the type identifiers.
 
 For more information about using a namespace as part of your schema, see [`namespace`](schema.md#schema-namespace).
 
