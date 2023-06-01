@@ -116,6 +116,27 @@ Function that parses the string and tries to convert it to type [decimal](syntax
 
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
+#### Examples:
+```
+decimal("1.0")
+decimal("-1.0")
+decimal("123.456")
+decimal("0.1234")
+decimal("-0.0123")
+decimal("55.1")
+decimal("00.000")
+decimal("1234")                  //error
+decimal("1.0.")                  //error
+decimal("1.")                    //error
+decimal(".1")                    //error
+decimal("1.a")                   //error
+decimal("-.")                    //error
+decimal("1000000000000000.0")    //overflow
+decimal("922337203685477.5808")  //overflow
+decimal("0.12345")               //error
+decimal("0.00000")               //error
+```
+
 ### `ip()` \(parse string and convert to ipaddr\)<a name="function-ip"></a>
 
 **Usage:** `ip(<string>)`
@@ -218,6 +239,15 @@ false < true          //type error
 
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than the right operand.
 
+#### Examples:
+```
+decimal("1.23").lessThan(decimal("1.24"))     //true
+decimal("1.23").lessThan(decimal("1.23"))     //false
+decimal("123.45").lessThan(decimal("1.23"))   //false
+decimal("-1.23").lessThan(decimal("1.23"))    //true
+decimal("-1.23").lessThan(decimal("-1.24"))   //false
+```
+
 ### `<=` \(long integer 'less than or equal'\)<a name="operator-lessthanorequal"></a>
 
 **Usage:** `<long> <= <long>`
@@ -226,14 +256,14 @@ Binary operator that compares two long integer operands and evaluates to `true` 
 
 #### Examples:
 ```
-3 <= 303               //true
-principal.age <= 21    //true (assume principal.age is 21)
-3 <= "3"               //type error
-false <= true          //type error
-"some" <= "thing"      //type error
-"" <= "zzz"            //type error
-"" <= ""               //type error
-[1, 2] <= [47, 0]      //type error
+3 <= 303               // true
+principal.age <= 21    // true (assume principal.age is 21)
+3 <= "3"               // type error
+false <= true          // type error
+"some" <= "thing"      // type error
+"" <= "zzz"            // type error
+"" <= ""               // type error
+[1, 2] <= [47, 0]      // type error
 ```
 
 ### `.lessThanOrEqual()` \(decimal 'less than or equal'\)<a name="function-lessThanOrEqual"></a>
@@ -241,6 +271,15 @@ false <= true          //type error
 **Usage:** `<decimal>.lessThanOrEqual(<decimal>)`
 
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
+
+#### Examples:
+```
+decimal("1.23").lessThanOrEqual(decimal("1.24"))    // true
+decimal("1.23").lessThanOrEqual(decimal("1.23"))    // true
+decimal("123.45").lessThanOrEqual(decimal("1.23"))  // false
+decimal("-1.23").lessThanOrEqual(decimal("1.23"))   // true
+decimal("-1.23").lessThanOrEqual(decimal("-1.24"))  // false
+```
 
 ### `>` \(long integer 'greater than'\)<a name="operator-greaterthan"></a>
 
@@ -250,20 +289,29 @@ Binary operator that compares two long integer operands and evaluates to `true` 
 
 #### Examples:
 ```
-3 > 303                //false
-principal.age > 22     //false (assume principal.age is 21)
-3 <= "3"               //type error
-false <= true          //type error
-"some" <= "thing"      //type error
-"" <= "zzz"            //type error
-"" <= ""               //type error
-[1, 2] <= [47, 0]      //type error
+3 > 303                // false
+principal.age > 22     // false (assume principal.age is 21)
+3 <= "3"               // type error
+false <= true          // type error
+"some" <= "thing"      // type error
+"" <= "zzz"            // type error
+"" <= ""               // type error
+[1, 2] <= [47, 0]      // type error
 ```
 ### `.greaterThan()` \(decimal 'greater than or equal'\)<a name="function-greaterThan"></a>
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
 
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than the right operand.
+
+#### Examples:
+```
+decimal("1.23").greaterThan(decimal("1.24"))    // false
+decimal("1.23").greaterThan(decimal("1.23"))    // false
+decimal("123.45").greaterThan(decimal("1.23"))  // true
+decimal("-1.23").greaterThan(decimal("1.23"))   // false
+decimal("-1.23").greaterThan(decimal("-1.24"))  // true
+```
 
 ### `>=` \(Long integer 'greater than or equals'\)<a name="operator-greaterthanorequal"></a>
 
@@ -288,6 +336,8 @@ false >= true          //type error
 
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
 
+#### Examples: 
+```
 ## Logical operators<a name="operators-logical"></a>
 
 Use these operators to logically combine Boolean values or expressions.
@@ -620,12 +670,14 @@ Function that evaluates to `true` if the operand is a member of the receiver on 
 
 #### Examples:
 ```
-[1,2,3].contains (1) //true
-[1,"foo",2].contains (1). //true
-[1,"Foo",2].contains ("foo") // false. String comparision is case-sensitive
-["s ome", "us eful", "tags "].contains ("us eful") // true
-[].contains (100) // false
-context.role.contains ("admin") //true if the set `role` contains the string "admin"
+[1,2,3].contains (1)                            // true
+[1,"something",2].contains(1)                   // true
+[1,"something",2].contains("Something")         // false - string comparision is case-sensitive
+["some", "useful", "tags"].contains("useful")   // true
+[].contains (100)                               // false
+context.role.contains ("admin")                 // true if the set `role` contains the string "admin"
+[User::"alice"].contains (principal)            // true if principal == User::"alice"
+"ham and ham".contains ("ham")                  // type error - 'contains' is not allowed on strings
 ```
 
 ### `.containsAll()` \(all element set membership test\)<a name="function-containsAll"></a>
@@ -635,18 +687,18 @@ context.role.contains ("admin") //true if the set `role` contains the string "ad
 Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
 ```
-[1, -22, 34].containsAll([-22, 1])                                //true
-[1, -22, 34].containsAll([-22])                                   //true
-[43, 34].containsAll([34, 43])                                    //true
-[1, -2, 34].containsall([1, -22])                                 //false
-[1, 34].containsAll [1, 101, 34]                                  //false
-[false, 3, [47, 0], "some"].containsAll([3, "some"])              //true
-[false, 3, [47, 0], {"2": "ham"}].containsAll([3, {"2": "ham"}])  //true
-[2, 43].containsAll([])                                           //true
-[].containsAll([2, 43])                                           //false
-[false, 3, [47, 0], "thing"].containsAll("thing")                 //type error - operand a string
-"ham and eggs".containsAll("ham")                                 //type error - prefix and operand are strings
-{"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})              //type error - prefix and operand are records
+[1, -22, 34].containsAll([-22, 1])                           // true
+[1, -22, 34].containsAll([-22])                              // true
+[43, 34].containsAll([34, 43])                               // true
+[1, -2, 34].containsall([1, -22])                            // false
+[1, 34].containsAll [1, 101, 34]                             // false
+[false, 3, [47, 0], "some"].containsAll([3, "some"])         // true
+[false, 3, [47, 0], {"2": "ham"}].containsAll([3, {"2": "ham"}])  // true
+[2, 43].containsAll([])                                      // true
+[].containsAll([2, 43])                                      // false
+[false, 3, [47, 0], "thing"].containsAll("thing")            // type error - operand a string
+"ham and eggs".containsAll("ham")                            // type error - prefix and operand are strings
+{"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})         // type error - prefix and operand are records
 ```
 
 ### `.containsAny()` \(any element set membership test\)<a name="function-containsAny"></a>
@@ -656,16 +708,16 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
 ```
-[1, -22, 34].containsAny([1, -22])                             //true
-[1, -22].containsAny([1, -22, 34])                             //true
-[-22].containsAny([1, -22, 34])                                //true
-[1, 101].containsAny([1, -22, 34])                             //true
-[1, 101].containsAny([-22, 34])                                //false
-["alice","bob","charlie"].containsAny(["david","bob","juan"])  //true
-[].containsAny(["bob"])                                        //false
-["bob"].containsAny([])                                        //false
-"ham".containsAny("ham and eggs")                              //type error - operand is a string
-{"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           //type error - prefix and operands are records
+[1, -22, 34].containsAny([1, -22])                             // true
+[1, -22].containsAny([1, -22, 34])                             // true
+[-22].containsAny([1, -22, 34])                                // true
+[1, 101].containsAny([1, -22, 34])                             // true
+[1, 101].containsAny([-22, 34])                                // false
+["alice","bob","charlie"].containsAny(["david","bob","juan"])  // true
+[].containsAny(["bob"])                                        // false
+["bob"].containsAny([])                                        // false
+"ham".containsAny("ham and eggs")                              // type error - operand is a string
+{"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           // type error - prefix and operands are records
 ```
 
 ## IP address functions<a name="functions-ipaddr"></a>
