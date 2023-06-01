@@ -338,6 +338,12 @@ Function that compares two decimal operands and evaluates to `true` if the left 
 
 #### Examples: 
 ```
+decimal("1.23").greaterThanOrEqual(decimal("1.24"))    //false
+decimal("1.23").greaterThanOrEqual(decimal("1.23"))    //true
+decimal("123.45").greaterThanOrEqual(decimal("1.23"))  //true
+decimal("-1.23").greaterThanOrEqual(decimal("1.23"))   //false
+decimal("-1.23").greaterThanOrEqual(decimal("-1.24"))  //true
+```
 ## Logical operators<a name="operators-logical"></a>
 
 Use these operators to logically combine Boolean values or expressions.
