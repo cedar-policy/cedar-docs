@@ -30,7 +30,7 @@ The grammar ignores whitespace and comments.
 
 ## `Policy`<a name="grammar-policy"></a>
 
-A policy consists of an `Effect`, a `Scope` in parentheses `( )`, and an optional set of `Conditions` in braces `{ }`.
+A policy consists of optional 'Annotation' entries, an `Effect`, a `Scope` in parentheses `( )`, and an optional set of `Conditions` in braces `{ }`.
 
 A policy must always end with a semicolon `;`.
 
@@ -142,6 +142,12 @@ Unary := ['!' | '-']x4 Member
 
 ```
 Member := Primary {Access}
+```
+
+## `Annotation`<a name="grammar-annotation"></a>
+
+```
+Annotation := '@'IDENT'('STR')'
 ```
 
 ## `Access`<a name="grammar-access"></a>
