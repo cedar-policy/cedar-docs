@@ -35,7 +35,7 @@ A policy consists of optional 'Annotation' entries, an `Effect`, a `Scope` in pa
 A policy must always end with a semicolon `;`.
 
 ```
-Policy := Effect '(' Scope ')' [ {Conditions} ] ';'
+Policy := {Annotation} Effect '(' Scope ')' {Conditions} ';'
 ```
 
 ## `Effect`<a name="grammar-effect"></a>
@@ -46,7 +46,7 @@ The `Effect` element of a policy is either the word `permit` or `forbid`.
 Effect := 'permit' | 'forbid'
 ```
 
-## Scope<a name="grammar-scope"></a>
+## `Scope`<a name="grammar-scope"></a>
 
 The `Scope` element of a policy must include a `Principal` entity, an `Action` entity, and a `Resource` entity.
 
@@ -66,7 +66,7 @@ Principal := 'principal' [('in' | '==') (Entity | '?principal')]
 
 ## `Action`<a name="grammar-action"></a>
 
-The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](syntax-operators.md#operator-equality) operator and an action entity, or the [`in`](syntax-operators.md#operator-in) followed by an action entity or a [set](syntax-datatypes.md#datatype-set) of action entities.
+The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](syntax-operators.md#operator-equality) operator and an action entity, or [`in`](syntax-operators.md#operator-in) followed by an action entity or a [set](syntax-datatypes.md#datatype-set) of action entities.
 
 ```
 Action := 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
@@ -82,12 +82,12 @@ Resource := 'resource' [('in' | '==') (Entity | '?resource')]
 
 ## `Condition`<a name="grammar-condition"></a>
 
-A `Condition` consist of either the `when` or `unless` keyword followed by a Boolean expression surrounded by braces `{ }`. A `when` clause matches the request when the expression evaluates to `true`. An `unless` clause matches the request when the expression \(an [Expr](#grammar-expr) element\) evaluates to `false`. 
+A `Condition` consists of either the `when` or `unless` keyword followed by a Boolean expression surrounded by braces `{ }`. A `when` clause matches the request when the expression evaluates to `true`. An `unless` clause matches the request when the expression \(an [Expr](#grammar-expr) element\) evaluates to `false`. 
 
 The parent [Policy](#grammar-policy) element can have zero or more `when` or `unless` clauses.
 
 ```
-Conditions := ('when' | 'unless') '{' Expr '}'
+Condition := ('when' | 'unless') '{' Expr '}'
 ```
 
 ## `Expr`<a name="grammar-expr"></a>
