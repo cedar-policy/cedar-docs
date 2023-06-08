@@ -305,6 +305,92 @@ Each context entry consists of `type` and `attributes` objects. The `type` objec
 }
 ```
 
+## commonTypes - Reuse of common user-defined types
+
+Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a `commonTypes` contruct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that inludes a data type specification and a set of attributes.
+
+For example, consider the following example set of action entities:
+
+```
+"actions": {
+    "view": {
+        "appliesTo": {
+            "context": { 
+                "type": "Record",
+                "attributes": {
+                    "ip": { "type": "Extension", "name": "ipaddr" },
+                    "is_authenticated": { "type": "Boolean" },
+                    "timestamp": { "type": "Long" }
+                }
+            }
+        }
+    },
+    "upload": {
+        "appliesTo": {
+            "context": { 
+                "type": "Record",
+                "attributes": {
+                    "ip": { "type": "Extension", "name": "ipaddr" },
+                    "is_authenticated": { "type": "Boolean" },
+                    "timestamp": { "type": "Long" }
+                }
+            }
+        }
+    }
+}
+```
+In that example, the `context` element in the `view` and `appliesTo` action is identical.
+
+You can use the `commonTypes` structure in a schema to define one or more blocks of reused elements. You place the `commonTypes` entry in your schema at the same level as the `entityTypes` and `actions` entries.  For example, the following example shows a block of elements called `ReusedContext`. The actions can then use any entries under `commonTypes` by reference, as shown in the following example actions.
+```
+"commonTypes": {
+    "ReusedContext": {
+        "type": "Record",
+        "attributes": {
+            "ip": { "type": "Extension", "name": "ipaddr" },
+            "is_authenticated": { "type": "Boolean" },
+            "timestamp": { "type": "Long" }
+        }
+    }
+}
+
+"actions": {
+    "view": {
+          "appliesTo": {
+                "context": { "type": "ReusedContext" }
+          }
+    },
+    "upload": {
+        "appliesTo": {
+            "context": { "type": "ReusedContext" }
+        }
+    }
+}
+```
+For this scenarion, you can test for `context.ip`, `context.is_authenticated`, and `context.timestamp` in the `when` and `unless` clauses in policies that reference the `view` and `upload` actions.
+
+As another example, consider a set of attributes that all need to be associated with a type that represents a `Person`. First, collect all of the attributes under a `Person` element in the `commonType` structure.
+
+```
+"commonTypes": {
+    "Person": {
+        "type": "Record",
+        "attributes": {
+            "age": {"type": "Long"},
+            "name": {"type": "String"}
+        }
+    }
+}
+```
+Then, in the `entityTypes` section, you can add each of these attributes to a new entity type by reference.
+```
+"entityTypes": {
+    "Employee": { "shape": { "type": "Person" } },
+    "Customer": { "shape": { "type": "Person" } }
+}
+```
+If you then send an `Employee` entity as the principal in an authorization request, you could evaluate the attributes of that principal by using syntax similar to this example: `principal.age`.
+
 ## Example schema<a name="schema-examples"></a>
 
 The following schema is for a hypothetical application called PhotoFlash. 
