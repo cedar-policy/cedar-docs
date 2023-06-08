@@ -44,7 +44,7 @@ The value can range from -922337203685477.5808 to 922337203685477.5807
 >```
 >decimal("12345.1234")
 >```
-> For more information, see [decimal() operator](syntax-operators.md#function-decimal).
+> For more information, see [decimal() operator](syntax-operators.md#decimal-parse-string-and-convert-to-decimal).
  
 ## Set<a name="datatype-set"></a>
 
@@ -131,7 +131,7 @@ A value that represents an IP address. It can be either IPv4 or IPv6. The value 
 >```
 >ip("192.168.1.100")
 >```
-> For more information, see [ip() operator](syntax-operators.md#function-ip).
+> For more information, see [ip() operator](syntax-operators.md#ip-parse-string-and-convert-to-ipaddr).
 
 ```
 ip("192.168.1.100")    // a single IPv4 address
