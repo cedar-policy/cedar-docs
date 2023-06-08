@@ -40,11 +40,11 @@ A value with both a whole number part and a decimal part of no more than four di
 The value can range from -922337203685477.5808 to 922337203685477.5807
 
 {: .note }
->You must specify values of type `Decimal` by using the `decimal()` function. You can't specify it as a simple literal.  
+>You must specify values of type `Decimal` by using the `decimal()` operator. You can't specify the value as a simple literal.  
 >```
 >decimal("12345.1234")
 >```
-> For more information, see [decimal() operator].(syntax-operators.md#function-decimal)
+> For more information, see [decimal() operator](syntax-operators.md#function-decimal).
  
 ## Set<a name="datatype-set"></a>
 
@@ -127,11 +127,11 @@ User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111"
 A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
 
 {: .note }
->You must specify values of type `IPaddr` by using the `ip()` operator. You can't specify it as a simple literal.  
+>You must specify values of type `IPaddr` by using the `ip()` operator. You can't specify the value as a simple literal.  
 >```
 >ip("192.168.1.100")
 >```
-> For more information, see [ip() operator].(syntax-operators.md#function-ip)
+> For more information, see [ip() operator](syntax-operators.md#function-ip).
 
 ```
 ip("192.168.1.100")    // a single IPv4 address
