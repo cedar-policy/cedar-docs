@@ -39,6 +39,13 @@ A value with both a whole number part and a decimal part of no more than four di
 
 The value can range from -922337203685477.5808 to 922337203685477.5807
 
+{: .note }
+>You must specify values of type `Decimal` by using the `decimal()` function. You can't specify it as a simple literal.  
+>```
+>decimal("12345.1234")
+>```
+> For more information, see [decimal() operator].(syntax-operators.md#function-decimal)
+ 
 ## Set<a name="datatype-set"></a>
 
 A collection of elements that can be of the same or different types. A set is constructed using bracket characters `[ ]` and separating the elements with commas. The following examples show a few sets.
@@ -118,8 +125,16 @@ User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111"
 ## IPaddr<a name="datatype-ipaddr"></a>
 
 A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
+
+{: .note }
+>You must specify values of type `IPaddr` by using the `ip()` operator. You can't specify it as a simple literal.  
+>```
+>ip("192.168.1.100")
+>```
+> For more information, see [ip() operator].(syntax-operators.md#function-ip)
+
 ```
-192.168.1.100    // a single IPv4 address
-10.50.0.0/24     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
-1:2:3:4::/48     // an IPv6 range with a 48-bit subnet mask
+ip("192.168.1.100")    // a single IPv4 address
+ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
+ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
 ```

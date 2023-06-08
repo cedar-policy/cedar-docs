@@ -296,7 +296,7 @@ Each context entry consists of `type` and `attributes` objects. The `type` objec
                 "type": "Record",
                 "attributes": {
                     "field1": { "type": "Boolean", "required": true },
-                    "field2": { "type": "Integer" },
+                    "field2": { "type": "Long" },
                     "field3": { "type": "String" }
                 }
             }
