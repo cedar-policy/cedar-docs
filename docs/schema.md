@@ -125,18 +125,18 @@ Each attribute defined in a `shape` must include a `type` specification, with a 
 }
 ```
 
-If an entity type needs to be a more complex structure instead of a simple value, then you can define the element as being of one of the types [Record](#schema-entitytypes-shape-record), [Set](#schema-entitytypes-shape-set), or [Entity](#schema-entitytypes-shape-entity).
+Each attribute in a `shape` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception.
 
-A `shape` element can be mandatory or optional. If mandatory, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception.
+By default, attributes that you define are required. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
 
-{: .note }
->By default, attributes that you define are mandatory. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
->```
->"jobLevel": { 
->    "type": "Long",
->    "required": false
->},
->```
+```
+"jobLevel": { 
+    "type": "Long",
+    "required": false
+},
+```
+
+If the entity type for an attribute in the shape needs to be a more complex structure instead of a simple value, then you can define the element as being of one of the types [Record](#schema-entitytypes-shape-record), [Set](#schema-entitytypes-shape-set), or [Entity](#schema-entitytypes-shape-entity).
 
 #### `Record`<a name="schema-entitytypes-shape-record"></a>
 {: .no_toc }
