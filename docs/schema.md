@@ -115,7 +115,7 @@ If the parent type is part of the same namespace as the child type, then you can
 
 Specifies the data type and attributes that are needed to define entities of this type. 
 
-A `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). The following example shows a simple shape.
+Each attribute defined in a `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). The following example shows a simple shape.
 
 ```
 "Age": {
