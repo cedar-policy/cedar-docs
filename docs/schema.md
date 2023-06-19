@@ -47,6 +47,8 @@ A namespace can contain two child elements:
 
 You define all of your principal types, resource types, and actions that apply to your application in these elements. Principals and resources are separated from actions into different elements because the `principal` and `resource` entities are defined as categories, or *types*. Later, you can instantiate these types as individual principals and resources. Actions are already individual discrete elements rather than types.
 
+You can remove a namespace from the schema. If you do, you must also remove that namespace from the fully qualified names of the former namespace's types. If you don't, then Cedar can't resolve those types because the name is no longer valid.
+
 ## `entityTypes`<a name="schema-entityTypes"></a>
 
 A collection of the `principal` and `resource` entity types supported by your application. The `entityTypes` element contains a comma-separated list of JSON objects.
