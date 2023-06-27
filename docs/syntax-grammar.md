@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Grammar
+title: Policy grammar
 parent: Policy syntax
 nav_order: 5
 ---
 
-# Grammar specification for Cedar<a name="syntax-grammar"></a>
+# Grammar specification for Cedar policy syntax<a name="syntax-grammar"></a>
 {: .no_toc }
 
 This topic describes the grammar specification for the Cedar Policy Language. This grammar uses the following symbols:
