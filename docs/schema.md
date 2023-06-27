@@ -117,7 +117,7 @@ If the parent type is part of the same namespace as the child type, then you can
 
 Specifies the data type and attributes that are needed to define entities of this type. 
 
-The top level `shape` of an entity must have type `Record`. The following example shows a simple specification of the `User` entity type.
+The top level `shape` of an entity must have type `Record`, which is accompanied by a description of the entity's attributes. The following example shows a simple specification of the `User` entity type.
 
 ```
 "User" : {
@@ -135,9 +135,26 @@ The top level `shape` of an entity must have type `Record`. The following exampl
 }
 ```
 
-Each attribute defined in a `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). 
+Each attribute in the `attributes` portion must follow a particular format, as we describe next.
 
-By default, attributes that you define are required. Each attribute in a `Record` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
+### Attribute specifications<a name="schema-attributes-specs"></a>
+
+Each attribute in a `Record` is a JSON object that describes one piece of information about entities of this type. It has the form
+```
+    "name" : {
+        "type" : "Type"
+    },
+```
+where `name` is the name of the attribute, and `Type` is one of the [Cedar supported data types](syntax-datatypes.md), discussed in detail below.
+
+You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the attribute description, i.e.,
+```
+    "name" : {
+        "type" : "Type",
+        "required": true
+    },
+```
+You can make an attribute optional by adding `"required": false` to the attribute description. In this case, a policy should check for the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. The validator will flag the potential for such errors to occur. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. 
 
 ```
 "jobLevel": { 
@@ -145,25 +162,55 @@ By default, attributes that you define are required. Each attribute in a `Record
     "required": false
 },
 ```
+### Attribute types<a name="schema-attributes-types"></a>
 
-Some attributes types require further description as to the values they contain:
+Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, or `"Entity"`. The first three require no further information to be specified. The latter three are described below.
 
 #### `Record`<a name="schema-entitytypes-shape-record"></a>
 {: .no_toc }
 
-Pieces of a `shape` that are marked `"type": "Record"` must also specify an `attributes` element that defines each of the attributes of the entity. Each attribute is a JSON object that describes one piece of information about entities of this type. For example, the following describes an entity type that represents an `Employee` in the company. Each employee entity must have a `jobLevel`, an employee `id`, an email or sign-in `alias`, and an optional value that tracks the `numberOfLaptops` assigned to the employee.
+A record attribute has the same JSON format as the [entity `shape`'s record's attributes](#schema-attributes-specs). As an example, the following refactors the `User` entity specification above to have a `features` attribute that is a `Record` containing some of the user's physical features.
 
 ```
-"Employee": {
-    "shape": {
-        "type": "Record",
-        "attributes": {
-            "jobLevel": { "type": "Long" },
-            "id": { "type": "Long" },
-            "alias": { "type": "String" },
-            "numberOfLaptops": {
-                "required": false,
-                "type": "Long"
+"User" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes" : {
+            "name" : {
+                "type" : "String"
+            },
+            "features" : {
+                "type": "Record",
+                "attributes": {
+                    "age" : {
+                        "type" : "Long"
+                    },
+                    "height": {
+                        "type" : "Long"
+                    },
+                    "eyecolor": {
+                        "type": "String"
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+#### `Entity`<a name="schema-entitytypes-shape-entity"></a>
+{: .no_toc }
+
+For attributes of `"type": "Entity"`, you must also specify a `name` that identifies the entity type of this attribute. The type must be defined in the schema. For example, a resource entity might require an `Owner` element that specifies a `User`.
+
+```
+"Document" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes" : {
+            "Owner": {
+                "type": "Entity",
+                "name": "User"
             }
         }
     }
@@ -173,9 +220,9 @@ Pieces of a `shape` that are marked `"type": "Record"` must also specify an `att
 #### `Set`<a name="schema-entitytypes-shape-set"></a>
 {: .no_toc }
 
-For pieces of a shape that are marked `"type": "Set"`, you must also specify an `element` that defines the properties of the members of the set. Each element is a JSON object that describes what each member of the set looks like.
+For attributes with `"type": "Set"`, you must also specify an `element` that defines the properties of the members of the set. Each element is a JSON object that describes what each member of the set looks like.
 
-An `element` must contain the structure with the same rules as a `shape`. As an example, consider the following `Admins` entry which could be part of the `shape` of an `Account` entity type. This `Admins` element is a set of entities of type `User` and could be used to define which users have administrator permissions in the account.
+An `element` must contain the structure with the same rules as an attribute. As an example, consider the following `Admins` entry which could be part of the `shape` record of an `Account` entity type. This `Admins` element is a set of entities of type `User` and could be used to define which users have administrator permissions in the account.
 
 ```
 "Group" : {
@@ -188,25 +235,6 @@ An `element` must contain the structure with the same rules as a `shape`. As an 
                     "type": "Entity",
                     "name": "User"
                 }
-            }
-        }
-    }
-}
-```
-
-#### `Entity`<a name="schema-entitytypes-shape-entity"></a>
-{: .no_toc }
-
-For pieces of a shape that are marked `"type": "Entity"`, you must also specify a `name` that identifies the entity type of this attribute. The type must be defined in the schema. For example, a resource entity might require an `Owner` element that specifies a `User`.
-
-```
-"Document" : {
-    "shape" : {
-        "type" : "Record",
-        "attributes" : {
-            "Owner": {
-                "type": "Entity",
-                "name": "User"
             }
         }
     }
