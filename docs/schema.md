@@ -164,7 +164,7 @@ You can make an attribute optional by adding `"required": false` to the attribut
 ```
 ### Attribute types<a name="schema-attributes-types"></a>
 
-Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, or `"Entity"`. The first three require no further information to be specified. The latter three are described below.
+Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, or `"Extension"`. The first three require no further information to be specified. The latter four are described below.
 
 #### `Record`<a name="schema-entitytypes-shape-record"></a>
 {: .no_toc }
@@ -235,6 +235,29 @@ An `element` must contain the structure with the same rules as an attribute. As 
                     "type": "Entity",
                     "name": "User"
                 }
+            }
+        }
+    }
+}
+```
+
+#### `Extension`<a name="schema-entitytypes-shape-extension"></a>
+{: .no_toc }
+
+For attributes of `"type": "Extension"`, you must also specify the `name` of the specific extension type.
+There are two extension types: `ipaddr` for IP address values, and `decimal` for decimal values.
+For example, an action may include an IP address in it's context.
+
+```
+"view": {
+    "appliesTo": {
+        "context": {
+            "type": "Record",
+            "attributes": {
+                "ip": {
+                    "type": "Extension",
+                    "name": "ipaddr"
+                },
             }
         }
     }
