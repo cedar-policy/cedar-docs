@@ -117,7 +117,7 @@ If the parent type is part of the same namespace as the child type, then you can
 
 Specifies the data type and attributes that are needed to define entities of this type. 
 
-The top level `shape` of an entity must have type `Record`. The follwoing example shows a simple Entity specification with a shape:
+The top level `shape` of an entity must have type `Record`. The following example shows a simple specification of the `User` entity type.
 
 ```
 "User" : {
@@ -137,7 +137,7 @@ The top level `shape` of an entity must have type `Record`. The follwoing exampl
 
 Each attribute defined in a `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). 
 
-Each attribute in a `Record` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
+By default, attributes that you define are required. Each attribute in a `Record` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
 
 ```
 "jobLevel": { 
