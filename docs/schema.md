@@ -205,7 +205,6 @@ The high-level structure of an `actions` entry looks like the following example.
         "appliesTo": {
             "principalTypes": [],
             "resourceTypes": [],
-            "context": {}
         },
         "ActionName2": {
             "something": "something"
@@ -286,7 +285,7 @@ The following example `actions` snippet shows two actions. The first action, `vi
 
 Specifies a JSON object in the same format as an entitie's `shape` property, which defines the attributes that can be present in the context record in authorization requests made with this action. Specifying a `context` enables Cedar to validate policies that attempt to reference those attributes.
 
-Each context entry consists of `type` and `attributes` objects. The `type` object is always of type `Record`. The `attributes` object is a JSON collection of attribute names, each containing a `type` specification for that attribute. For example, the following `context` snippet specifies that any request to perform the `SomeAction` operation must include a test for a Boolean attribute named `field1`. The policy can also test an integer `field2` and a string `field3`, though it's OK if they're not referenced in the policy's context section. Any policy that doesn't include a required attribute in the policy's `context` section fails validation.
+Each context entry consists of `type` and `attributes` objects. The `type` object is always of type `Record`. The `attributes` object is a JSON collection of attribute names, each containing a `type` specification for that attribute. For example, the following `context` snippet specifies that any request to perform the `SomeAction` operation must include a test for a Boolean attribute named `field1`. The policy can also test an integer `field2` and a string `field3`, though it's OK if they're not referenced in the policy's context section. Any policy that doesn't include a required attribute in the policy's `context` section fails validation. The `context` entry is optional, and if excluded it is assumed to be an empty `Record`.
 
 ```
 "actions": {
