@@ -117,19 +117,27 @@ If the parent type is part of the same namespace as the child type, then you can
 
 Specifies the data type and attributes that are needed to define entities of this type. 
 
-Each attribute defined in a `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). The following example shows a simple shape.
+The top level `shape` of an entity must have type `Record`. The follwoing example shows a simple Entity specification with a shape:
 
 ```
-"Age": {
-    "shape": {
-        "type": "Long" 
+"User" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes" : {
+            "name" : {
+                "type" : "String"
+            },
+            "age" : {
+                "type" : "Long"
+            }
+        }
     }
 }
 ```
 
-Each attribute in a `shape` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception.
+Each attribute defined in a `shape` must include a `type` specification, with a value that names one of the [Cedar supported data types](syntax-datatypes.md). 
 
-By default, attributes that you define are required. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
+Each attribute in a `Record` can be required or optional. If required, then policies that reference this type can assume that the attribute is always present. If optional, then a policy should check or the attribute's presence by using the [has](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. You can make an attribute optional by adding `"required": false` to the attribute. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the shape.
 
 ```
 "jobLevel": { 
