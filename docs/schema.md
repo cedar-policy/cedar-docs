@@ -64,7 +64,7 @@ The high-level structure of an `entityTypes` entry looks like the following exam
     "EntityTypeName2": {
         "memberOfTypes": [ "parentGroupTypeName1", "parentGroupTypeName2", … ],
         "shape": { … }
-    }https://github.com/cedar-policy/cedar-docs/pulls
+    }
 }
 ```
 
