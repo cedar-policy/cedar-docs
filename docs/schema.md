@@ -64,7 +64,7 @@ The high-level structure of an `entityTypes` entry looks like the following exam
     "EntityTypeName2": {
         "memberOfTypes": [ "parentGroupTypeName1", "parentGroupTypeName2", … ],
         "shape": { … }
-    }
+    }https://github.com/cedar-policy/cedar-docs/pulls
 }
 ```
 
@@ -146,12 +146,12 @@ By default, attributes that you define are required. Each attribute in a `Record
 },
 ```
 
-If the entity type for an attribute in the shape needs to be a more complex structure instead of a simple value, then you can define the element as being of one of the types [Record](#schema-entitytypes-shape-record), [Set](#schema-entitytypes-shape-set), or [Entity](#schema-entitytypes-shape-entity).
+Some attributes types require further description as to the values they contain:
 
 #### `Record`<a name="schema-entitytypes-shape-record"></a>
 {: .no_toc }
 
-Use the type `Record` when an entity's shape must include multiple attributes that are of different types. For pieces of a `shape` that are marked `"type": "Record"`, you must also specify an `attributes` element that defines each of the attributes of the entity. Each attribute is a JSON object that describes one piece of information about entities of this type. For example, the following describes an entity type that represents an `Employee` in the company. Each employee entity must have a `jobLevel`, an employee `id`, an email or sign-in `alias`, and an optional value that tracks the `numberOfLaptops` assigned to the employee.
+Pieces of a `shape` that are marked `"type": "Record"` must also specify an `attributes` element that defines each of the attributes of the entity. Each attribute is a JSON object that describes one piece of information about entities of this type. For example, the following describes an entity type that represents an `Employee` in the company. Each employee entity must have a `jobLevel`, an employee `id`, an email or sign-in `alias`, and an optional value that tracks the `numberOfLaptops` assigned to the employee.
 
 ```
 "Employee": {
@@ -178,11 +178,18 @@ For pieces of a shape that are marked `"type": "Set"`, you must also specify an 
 An `element` must contain the structure with the same rules as a `shape`. As an example, consider the following `Admins` entry which could be part of the `shape` of an `Account` entity type. This `Admins` element is a set of entities of type `User` and could be used to define which users have administrator permissions in the account.
 
 ```
-"Admins": {
-    "type": "Set",
-    "element": {
-        "type": "Entity",
-        "name": "User"
+"Group" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes": {
+            "Admins": {
+                "type": "Set",
+                "element": {
+                    "type": "Entity",
+                    "name": "User"
+                }
+            }
+        }
     }
 }
 ```
@@ -193,9 +200,16 @@ An `element` must contain the structure with the same rules as a `shape`. As an 
 For pieces of a shape that are marked `"type": "Entity"`, you must also specify a `name` that identifies the entity type of this attribute. The type must be defined in the schema. For example, a resource entity might require an `Owner` element that specifies a `User`.
 
 ```
-"Owner": {
-    "type": "Entity",
-    "name": "User"
+"Document" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes" : {
+            "Owner": {
+                "type": "Entity",
+                "name": "User"
+            }
+        }
+    }
 }
 ```
 
@@ -377,7 +391,7 @@ You can use the `commonTypes` structure in a schema to define one or more blocks
     }
 }
 ```
-For this scenarion, you can test for `context.ip`, `context.is_authenticated`, and `context.timestamp` in the `when` and `unless` clauses in policies that reference the `view` and `upload` actions.
+For this scenario, you can test for `context.ip`, `context.is_authenticated`, and `context.timestamp` in the `when` and `unless` clauses in policies that reference the `view` and `upload` actions.
 
 As another example, consider a set of attributes that all need to be associated with a type that represents a `Person`. First, collect all of the attributes under a `Person` element in the `commonType` structure.
 
