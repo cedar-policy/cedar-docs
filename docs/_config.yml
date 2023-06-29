@@ -1,10 +1,9 @@
 # Site wide configuration
 
-title: Cedar Policy Language Version 2.2 Reference Guide
+title: Cedar Policy Language Version 2.3 Reference Guide
 locale: en_US
 logo: images/Cedar1-green.png
 
-#remote_theme: pages-themes/modernist@v0.2.0
 remote_theme: just-the-docs/just-the-docs
 plugins:
 - jekyll-remote-theme #

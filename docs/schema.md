@@ -31,7 +31,12 @@ A schema contains a declaration of a namespace and two JSON objects: `entityType
 
 ## `namespace`<a name="schema-namespace"></a>
 
-A [namespace](validation.md#validation-namespaces) identifies and defines a scope for all entity types and actions declared within it. The `namespace` is a string that uses double colons \(`::`\) as separators between its elements. A namespace is mandatory and consists of a comma-separated list of JSON objects within braces `{ }`. The following is an example of a `namespace`:
+A [namespace](validation.md#validation-namespaces) identifies and defines a scope for all entity types and actions declared within it. The `namespace` is a string that uses double colons \(`::`\) as separators between its elements. 
+
+{: .important }
+>The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
+
+A namespace is mandatory and consists of a comma-separated list of JSON objects within braces `{ }`. The following is an example of a `namespace`:
 
 ```
 "My::Namespace": {
@@ -73,6 +78,9 @@ Each entry in the entity is a JSON object with the following properties.
 ### Entity type name<a name="schema-entitytypes-name"></a>
 
 Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words.  
+
+{: .important }
+>The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
 
 ```
 "My::Name::Space": {
