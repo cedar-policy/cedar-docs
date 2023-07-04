@@ -26,16 +26,18 @@ You can use a schema to define each of the following entities used by your appli
 
 Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](validation.md).
 
-A schema contains a declaration of a namespace and two mandatory JSON objects, `entityTypes` and `actions`. The namespace can optionally include a third object, `commonTypes`, which defines types that can be referenced by the other two objects.
+## Schema format<a name="schema-format"></a>
 
-## `namespace`<a name="schema-namespace"></a>
+A schema contains a declaration of one or more namespaces, each of which contains two mandatory JSON objects, `entityTypes` and `actions`. A namespace declaration can optionally include a third object, `commonTypes`, which defines types that can be referenced by the other two objects. We consider the format of namespaces and these three objects next.
 
-A [namespace](validation.md#validation-namespaces) identifies and defines a scope for all entity types and actions declared within it. The `namespace` is a string that uses double colons \(`::`\) as separators between its elements. 
+## Namespace<a name="schema-namespace"></a>
+
+A [namespace](terminology.md#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
 
 {: .important }
 >The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
 
-A namespace is mandatory and consists of a comma-separated list of JSON objects within braces `{ }`. The following is an example of a `namespace`:
+A namespace declaration contains a comma-separated list of JSON objects within braces `{ }`. The following is an example of a namespace declaration:
 
 ```
 "My::Namespace": {
@@ -45,14 +47,32 @@ A namespace is mandatory and consists of a comma-separated list of JSON objects 
 }
 ```
 
-A namespace must contain two child elements, and may contain a third, appearing in any order:
+A namespace declaration must contain two child elements, and may contain a third, appearing in any order:
 + ``entityTypes``
 + ``actions``
 + ``commonTypes`` (optional)
 
-You define the types of your application's principal and resource entities within the `entityTypes` element, and the specific actions in the `actions` element. Principals and resources are separated from actions because the `principal` and `resource` entities are defined as categories, or *types*. In your entity store you create individual principal and resource entities that have these types. Actions are defined in the schema as individual discrete elements directly (each of which has type `Action`). Optionally, you can define type names in `commonTypes` and reference those names as types in the `entityTypes` and `actions` elements of your schema.
+You define the types of your application's principal and resource entities within the `entityTypes` element, and the specific actions in the `actions` element. Principals and resources are separated from actions because actions are defined in the schema as individual discrete elements (each of which has type `Action`), whereas only the `principal` and `resource` entities' *types* are defined. In your entity store you create individual principal and resource entities that have these types. Optionally, you can define type names in `commonTypes` and reference those names as types in the `entityTypes` and `actions` elements of your schema.
 
-Note that if you change the namespace of your schema you will need to change the fully qualified types (like `My::Namespace::User`) that reference the namespace. If you don't, then the validator won't properly resolve those types because their names are no longer valid.
+The declared namespace is automatically prepended to all types defined within the associated scope. For example, consider the following schema:
+
+```
+{
+    "ExampleCo::Database": {
+        "entityTypes": {
+            "Table": {
+                ...
+            }
+        },
+        "actions": {
+            "createTable": {
+                ...
+            }
+        }
+    }
+}
+```
+Here, the schema is effectively defining the action entity `ExampleCo::Database::Action::"createTable"` and the entity type `ExampleCo::Database::Table`. If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
 ## `entityTypes`<a name="schema-entityTypes"></a>
 
@@ -147,7 +167,7 @@ Note that if the `shape` element is omitted, then entities of the type being def
 
 ### Attribute specifications<a name="schema-attributes-specs"></a>
 
-Each attribute in a `Record` is a JSON object that describes one piece of information about entities of this type. It has the form
+Each attribute in a `Record` is a JSON object that describes one attribute in the record associated with entities of this type. It has the form
 ```
     "name" : {
         "type" : "Type"
@@ -155,21 +175,17 @@ Each attribute in a `Record` is a JSON object that describes one piece of inform
 ```
 where `name` is the name of the attribute, and `Type` is one of the [Cedar supported data types](syntax-datatypes.md), discussed in detail below.
 
-You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present. You can also explicitly declare that an attribute is mandatory by including `"required": true` to the attribute description, i.e.,
-```
-    "name" : {
-        "type" : "Type",
-        "required": true
-    },
-```
-You can make an attribute optional by adding `"required": false` to the attribute description. A policy should check for an optional attribute's presence by using the [`has`](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. The validator will flag the potential for such errors to occur. The following example shows an attribute called `jobLevel` that is an optional attribute for whatever entity it's part of.
-
+You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present. You can make an attribute optional by adding `"required": false` to the attribute description. Here is an example:
 ```
 "jobLevel": { 
     "type": "Long",
     "required": false
 },
 ```
+A policy should check for an optional attribute's presence by using the [`has`](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. The validator will flag the potential for such errors to occur.
+
+You can choose to explicitly declare that an attribute is mandatory by including `"required": true` (but this is unnecessary as mandatory attributes are the default).
+
 ### Attribute types<a name="schema-attributes-types"></a>
 
 Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, or `"Extension"`. The first three require no further information to be specified. The latter four are described below.
@@ -316,7 +332,7 @@ MyApplicationNamespace::Action::"ViewPhoto"
 
 ### `memberOf`<a name="schema-actions-memberOf"></a>
 
-Specifies a list of identifiers for groups the action is a member of. The `memberOf` component is optional. If omitted, it means the action is a member of no action groups.
+Specifies a list of action entity groups the action is a member of. The `memberOf` component is optional. If omitted, it means the action is a member of no action groups.
 
 The following schema snippet shows an action named `viewAlbum` that is a member of the action group called `viewImages`.
 
@@ -342,7 +358,7 @@ Specifies a JSON object containing two lists, `principalTypes` and `resourceType
 + If the `principalTypes` component is omitted from the `appliesTo` element, then an authorization request with this action can have a principal entity of *any* type, or the unspecified entity. The same is true for `resourceTypes`, for a request's resource component. If the `appliesTo` component is omitted entirely, it's the same as if it were present with both `princpalTypes` and `resourceTypes` components omitted (i.e., a request can have both principal and resource entities of any type, or leave them unspecified).
 + If either the `principalTypes` or `resourceTypes` components is given with an empty list `[]`, the associated action is not permitted in an authorization request with *any* entities of that category. This effectively means that the action will not be used in an authorization request at all. This makes sense for actions that act as groups for other actions.
 
-The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It cannot appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership requires the action name be fully qualified with its namespace; here, `My::Namespace` is assumed to be the namespace in which this `actions` component is being defined.
+The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It should not appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership requires the action name be fully qualified with its namespace; here, `My::Namespace` is assumed to be the namespace in which this `actions` component is being defined.
 
 ```
 "actions": {
