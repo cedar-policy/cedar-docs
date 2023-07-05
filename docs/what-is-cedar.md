@@ -13,7 +13,7 @@ Cedar is a language for writing authorization policies and making authorization 
 
 Using Cedar, you can decouple your business logic from the authorization logic. In your application's code, you preface requests made to your operations with a call to Cedar's authorization engine, asking "Is this request authorized?". Then, the application can either perform the requested operation if the decision is "allow", or return an error message if the decision is "deny".
 
-In addition to supporting the authorization requirements for your own custom applications, Cedar has been chosen as the policy language for [other authorization services](#related-services). These services take the separation of business logic and authorization logic one step further: The services host the Cedar policies, and provide APIs for managing those policies and carrying out authorization decisions on behalf of all of your applications. They handle the heavy lifting so your applications don't have to. 
+In addition to supporting the authorization requirements for your own custom applications directly, Cedar is the policy language for several [authorization services](#related-services). These services take the separation of business logic and authorization logic one step further: The services host the Cedar policies, and provide APIs for managing those policies and carrying out authorization decisions on behalf of all of your applications. They handle the heavy lifting so your applications don't have to.
 
 <details open markdown="block">
   <summary>
@@ -72,4 +72,4 @@ Cedar policies are designed to be easy to read and understand, making them acces
 
 ## Services that use Cedar<a name="related-services"></a>
 
-For a list of some of the services that use Cedar as their authorization engine, see [Cedar Integrations](https://www.cedarpolicy.com/en/integrations)
+For a list of some of the services that use Cedar as their policy language, see [Cedar Integrations](https://www.cedarpolicy.com/en/integrations)

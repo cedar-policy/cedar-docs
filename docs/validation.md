@@ -7,7 +7,7 @@ nav_order: 5
 # Cedar policy validation against schema<a name="validation"></a>
 {: .no_toc }
 
-As with all code, it is possible to make mistakes that result in the code not behaving as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors. This policy assumes that there is a namespace `ExampleCo` in the schema that defines the valid principals, actions, and resources. 
+Cedar policies are code, and as with all code it is possible to make mistakes that mean the code will not behave as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors.
 
 ```
 permit (
@@ -22,11 +22,11 @@ when {
 };
 ```
 
-Cedar can't know whether this policy is right or wrong by examining it in isolation. For example, Cedar does not know if the policy author meant Uzer or User because both are well-formed names. If the policy were subsequently evaluated during an authorization decision, Cedar would return diagnostic warnings about undefined attributes and invalid comparisons of strings and integers. But, if one weren’t looking for these diagnostics, an end-user would merely observe that the policy had no impact; it was ignored.
+Cedar can't know whether this policy is right or wrong by examining it in isolation. For example, Cedar does not know if the policy author meant `Uzer` or `User` because both are well-formed names. If the policy were subsequently evaluated during an authorization decision, it either would not match at all due to the mistakes in the policy scope (e.g., if there are no entities of type `Uzer` then the first comparison would always be false), or if the scope's errors were corrected the evaluator would return diagnostics about accessing undefined attributes and performing invalid comparisons of strings and integers. Ultimately, the policy will have no impact: policies that always evaluate to `false` or exhibit errors during evaluation are ignored.
 
-If no other policy grants access, Cedar returns a default decision of `DENY`. However, it can be frustrating when a policy isn’t behaving as expected. To avoid this frustration, it is better to learn that a policy is invalid when you're creating it, so mistakes can be fixed.
+If no policy grants access, Cedar returns a default decision of `DENY`. However, it can be frustrating when a policy isn’t behaving as expected. To avoid this frustration, it is better to learn that a policy is invalid when you're creating it, so mistakes can be fixed before they have an impact on your application's operation.
 
-This capability is provided by Cedar validation. To validate a policy, Cedar needs information about the system. It needs to know the correct names of entity types, the attributes they possess, the allowed parent/child relationships, and whether the entities can act as principals, resources, or both. All of this information is provided to Cedar by defining a [schema](terminology.md#term-schema).
+This capability is provided by Cedar **validation**. To validate a policy, Cedar needs information about the application. It needs to know the correct names of entity types, the attributes they possess, and the allowed parent/child relationships. It also needs to know which actions are allowed, and the expected types of the principal, resource, and context components that are part of requests made with this action. All of this information is provided to Cedar by defining a [**schema**](terminology.md#term-schema).
 
 This topic provides a brief overview of schemas and how they work to provide validation. For a full description of the schema format with a sample schema, see [Cedar schema format](schema.md). 
 
@@ -39,7 +39,7 @@ This topic provides a brief overview of schemas and how they work to provide val
 {:toc}
 </details>
 
-## Introduction to the schema<a name="schema-intro"></a>
+## Example of schema-based validation<a name="schema-intro"></a>
 
 The following is an example of a basic Cedar schema.
 
@@ -53,7 +53,7 @@ The following is an example of a basic Cedar schema.
                     "attributes": {
                         "name": { "type": "String" },
                         "jobLevel": { "type": "Long" },
-                        "numberOfLaptops ": {
+                        "numberOfLaptops": {
                             "type": "Long",
                             "required": false
                         }
@@ -73,11 +73,11 @@ The following is an example of a basic Cedar schema.
 ```
 
 This schema specifies the following:
-+ The entities defined in this schema exist in the namespace `ExampleCo::Personnel`.
++ The entities defined in this schema exist in the namespace `ExampleCo::Personnel`. References to those entities _within policies_ require the namespace prefix, e.g., `ExampleCo::Personnel::Employee`. References to those entities _within the schema_, within the namespace declaration, need no namespace prefix, e.g., we write just `Employee` in the `principalTypes` part, rather than `ExampleCo::Personnel::Employee`.
 + Every entity of type `Employee` in the store has an attribute `name` with a value that is a Cedar `String`, an attribute `jobLevel` with a value that is a Cedar `Long`, and an optional attribute `numberOfLaptops` that is also a Cedar `Long`.
-+ Any query that specifies action `Action::"remoteAccess"` can specify only principals that are of type `Employee`.
++ Any authorization request from the application that specifies action `Action::"remoteAccess"` is expected to specify only principals that are of type `Employee` (with no restriction on the type of a request's resource).
 
-Consider the `when` clause of the following policy.
+Consider the following policy.
 
 ```
 permit (
@@ -87,18 +87,18 @@ permit (
 )
 when {
     principal.numberOfLatpops < 5 &&        // (1)
-    principal.jobLevel > "something" &&     // (2)
+    principal.name > 3 &&                   // (2)
     principal.jobLevel == "somethingelse"   // (3)
 };
 ```
 
-Based on the previous sample schema, the Cedar validator can infer that the principal is an `Employee`; therefore, it must have a `jobLevel` attribute. With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 for the following reasons:
+The Cedar validator knows that any request that triggers evaluation of this policy must have action `Action::"remoteAccess"`. According to our example schema, such a request must have a principal of type `Employee` (the resource can be anything, or unspecified). With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 in the `when` clause for the following reasons:
 
-1. **Validation error** &ndash; The policy contains an attribute that isn’t present in the schema. In this case, the error is because of a typo (`Latpop` instead of `Laptop`).
+1. **Validation error** &ndash; The policy tries to access an attribute that isn’t defined for `Employee` types. In this case, the error is because of a typo (`numberOfLatpops` instead of `numberOfLaptops`).
 
-1. **Validation error** &ndash; The right operand of `>` is a `String`. However, `>` only accepts values of type `Long`, so this policy always raises a runtime error.
+1. **Validation error** &ndash; The left operand of `>` is of type `String`. However, `>` only accepts operands of type `Long`, so this policy always raises a runtime error.
 
-1. The left operand of `==` is always a `Long` and the right operand is always a `String`. Because the `==` operator returns false if its operands have different runtime types, this comparison always returns false. Although this comparison doesn't raise a runtime error, it probably isn’t what the policy author intended.
+1. **Validation error** &ndash; The left operand of `==` is always of type `Long` and the right operand is always a `String`. Because the `==` operator always returns false if its operands have different runtime types, this comparison always returns false. Although this comparison won't raise a runtime error during evaluation, it probably isn’t what the policy author intended and so is flagged as a validation error.
 
 ## Supported validation checks<a name="validation-supported-checks"></a>
 
@@ -109,81 +109,55 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Improper use of in or ==** &ndash; For example, stating `principal in Folder::"folder-name"` when a principal can't be a `File`.
 + **Unrecognized attributes** &ndash; For example, `principal.jobbLevel` has a typo and should be `jobLevel`.
 + **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `"required": false`. Such tests should be guarded by including a [`has`](syntax-operators.md#operator-has) check as the left side of the shortcut [&&](syntax-operators.md#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
-+ **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` has an illegal comparison of a `Long` with a `String`.
-+ **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { ["hello"].contains (1) }` always evaluates to `false` so the policy can never apply.
++ **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an illegal comparison with a `String`.
++ **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply.
 
 The schema can also specify the expected format of the context record for each `Action`. Making this specification lets Cedar also flag errors on references to context.
 
-## Enforcement of validation rules<a name="validation-enforcement"></a>
+## Enforcement of validation rules: Expectations<a name="validation-enforcement"></a>
 
-When a schema is provided to Cedar, the service automatically performs validation against that schema whenever you create or edit a policy or policy template. If a newly submitted policy doesn't comply with the schema, Cedar returns an error message that contains a list of the validation failures.
+As implied by the discussion above, we expect validation to be performed _before_ a policy is used by the authorization engine to decide authorization requests. Indeed, the Cedar authorization APIs do not perform validation at the same time that a request is evaluated. Rather, validation is an entirely separate API which can be invoked when policies are loaded or created.
 
-{: .note }
->Schemas don't impact the runtime behavior of authorization for existing static policies and policy templates. Validation occurs *only* when initially creating or updating a static policy or policy template. After Verified Permissions accepts a policy, that policy continues to behave the same even if the schema changes over time. You can revalidate against an updated schema by editing the policy in some way and saving that change.   
->Validation is intended only as a debugging and diagnostic mechanism inside the administrative tools for policy creation and editing.
+We expect that **all authorization requests adhere to the rules given in the schema** used to validate the policies. In particular:
++ For a request with components _PARC_ (principal, action, resource, context), the _A_ component must be an action enumerated in the `actions` part of the schema, and the _PRC_ components will have the types given with _A_ in the schema. Our example schema above states that _A_ must always be `ExampleCo::Personnel::Action::"remoteAccess"` (since it's the only action given in the schema), and for this action _P_ must be an entity of type `ExampleCo::Personnel::Employee`, _R_ can be any entity (or omitted entirely), and _C_ must be the empty record `{}` (since no information about the context is given).
++ The entities used when evaluating the request must have the structure given in the `entityTypes` part of the schema. Our example schema above states that `ExampleCo::Personnel::Employee` entities have at least two attributes (`name` and `jobLevel`) and optionally have a third (`numberOfLaptops`), each with the types given (`String`, `Long`, and `Long`, respectively). Schemas may also specify the expected hierarhical relationships among entities (not shown in the example).
 
-## Namespaces<a name="validation-namespaces"></a>
-
-As software products increase in size and organizations grow, multiple services can be added to contribute to the overall implementation of an application or product portfolio. You can see this outcome happening when vendors offer several products to customers, or alternatively, in service meshes where multiple services contribute portions of an application.
-
-When this situation occurs, Cedar entity definitions can become ambiguous. For example, consider a vendor that offers both a hosted database product and a hosted furniture design service. In this environment, a Cedar expression such as `Action::"createTable"` is ambiguous; it could be creating a database table or a new piece of furniture. Similarly, an entity UID such as `Table::"0d6169ca-b246-43a7-94b9-8a68a9e8f8b3"` could refer to either product.
-
-This ambiguity can become an issue in circumstances such as the following:
-* When both services store their Cedar policies in a single policy store.
-* If policies are later aggregated into a central repository to explore cross-cutting questions about a customer’s access permissions throughout the portfolio of services.
-
-To resolve this ambiguity, you can add *namespaces* to Cedar entities and actions. A namespace is a string prefix for a type, separated by a pair of colons \(`::`\) as a delimiter.
-
+If these expectations are not met then a policy that the validator accepts as valid may fail with an error when evaluated, causing it to be ignored. To see why, consider the following policy, which passes validation when using our example schema.
 ```
-Database::Action::"createTable"
-Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-Furniture::Action::"createTable"
-Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
+permit(principal, action, resource)
+when {
+    principal.name == "superuser" ||
+    principal.jobLevel > 8
+};
 ```
+This policy states that any principal whose `name` is `"superuser"` or whose `jobLevel` is greater than 8 can perform any action on any resource. According to our example schema, all principals are expected to have type `Employee`, which is the only principal type given for the sole action listed.
 
-Namespaces can also be nested to arbitrary depth.
+Now suppose we submitted the following authorization request:
++ _P_ = `ExampleCo::Personnel::Employee::"Rick"`
++ _A_ = `ExampleCo::Personnel::Action::"remoteAccess"`
++ _R_ = _omitted_
++ _C_ = `{}`
++ The attributes of entity `ExampleCo::Personnel::Employee::"Rick"` are the record `{ "firstName": "Rick", "jobLevel" : "admin" }`
 
-```
-ExampleCo::Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-ExampleCo::Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
-```
+For this request the _PARC_ components conform to the schema, but the attributes of entity `ExampleCo::Personnel::Employee::"Rick"` do not: The schema prescribes that attributes `name` and `jobLevel` must be present, and the latter is mapped to value of type `Long`, but neither is true of the entity given in the request. If we evaluated the policy on this request the policy's `when`-condition expression `principal.name == "superuser"` would fail with a message like _ExampleCo::Personnel::Employee::"Rick" does not have the required attribute: name_. If we changed the entity in the request so that `firstName` was instead `name` as required by the schema, evaluation would fail on `principal.jobLevel > 8` with a message like _type error: expected long, got string_.
 
-Namespaces are declared in schema by including the namespace before the list of entities that are part of the namespace, as shown in the following example.
+By default, it is entirely up to the application to make sure that authorization requests are well-formed according to the schema's expectations. However, a future feature (described in [RFC 11](https://github.com/cedar-policy/rfcs/pull/11)) will allow applications to _optionally_ validate that the _PAR_ parts of a _PARC_ request adhere to the expectations given in the schema. Applications can also choose to use schema-based parsing to ensure that JSON data used to describe entities and/or a request's context _C_ match the prescriptions of the schema. If an application writer is sure that requests will always match the schema's expectations by construction, they can elect to skip these steps.
 
-```
-{
-    "ExampleCo::Database": {
-        "entityTypes": {
-            "Table": {
-                ...
-            }
-        },
-        "actions": {
-            "createTable": {
-                ...
-            }
-        }
-    }
-}
-```
+You can think of a schema as a contract between the application and the policies: If the application provides requests and data that follow the prescriptions in the schema, then evaluating policies validated against that schema will surely avoid several classes of error. (The [end of this section](#validation-benefits-of-schema) discusses in detail what errors are and are not precluded by validation.)
 
-Namespaces are automatically prepended to all types defined within the schema file. As a result, the previous schema causes the Cedar validator to expect the following types:
+Note that this contract implies that if an application's schema changes then so has its authorization model, i.e., the actions and/or entities it may submit to the Cedar authorization engine, and their structure. Policies still in effect may need to be revalidated to make sure they are consistent with these changes.
 
-```
-ExampleCo::Database::Table::"some_identifier"
-ExampleCo::Database::Action::"createTable"
-```
+## Benefits of validation and schemas<a name="validation-benefits-of-schema"></a>
 
-A common convention is for each application team to manage a schema for their namespace, without touching the namespaces owned by other application teams.
+Performing validation before using your policies gives you a significant benefit, called _validation soundness_: If your policies are deemed valid, they are sure not to exhibit most errors that could arise during request evaluation, for requests that adhere to the expectations defined by the schema. We have formally _proved_ validation soundness as part of the novel [verification guided development](https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing) process we used to build Cedar. In particular, we implemented a version of the validator in the [Dafny verification-aware programming language](https://dafny.org), and used [automated reasoning](https://www.amazon.science/blog/a-gentle-introduction-to-automated-reasoning) to prove the validation soundness property. Then we performed extensive _differential testing_ to make sure that our Rust implementation of the validator behaves the same as the Dafny version does.
 
-Cedar doesn't currently require that you specify a namespace. However, if you define a schema without a namespace and then later choose to add one, you need to update all of your policies to include the correct namespace, or authorization fails. You must also update the authorization requests you send to Cedar to include the namespace as part of the type identifiers.
+Validation soundness ensures the absence of most, but not all errors that could arise during policy evaluation. The only errors that are not precluded are the following:
++ **Errors due to integer overflow**. In Cedar when you add two large `Long` numbers together the result may be too big to fit in 64 bits. Rather than wrap around (e.g., producing a negative number) as in many languages, Cedar throws an error. Validation does not currently attempt to detect this possibility, but we are developing such detection as a future feature.
++ **Errors due to missing entities**. If a policy references an entity that does not exist in the entities used to evaluate the policy, any attempt to access that entity's attributes will fail. This could happen with an entity literal (e.g., `User::"Rick".name == "rick"`) or with an entity passed in as a principal or resource (e.g., `principal.name == "rick"`, or `principal.manager.name == "Vijay"` where `principal.manager` should be an entity). Request validation ([RFC 11](https://github.com/cedar-policy/rfcs/pull/11)) and schema-based JSON parsing do not confirm the existence of entities.
 
-For more information about using a namespace as part of your schema, see [`namespace`](schema.md#schema-namespace).
+All other errors (as enumerated [earlier](#supported-validation-checks)) will never happen.
 
-## Benefits of defining a schema<a name="validation-benefits-of-schema"></a>
-
-Defining a schema is useful for purposes other than validation.
+We close by noting that defining a schema is useful for purposes other than validation.
 
 * Because a schema describes the properties of an authorization system, they can serve as an input to other tooling, such as documentation generators.
 * Use a schema to generate policy editor interfaces in situations where end-users manage fine-grained rules through point-and-click selections.
