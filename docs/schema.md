@@ -72,7 +72,36 @@ The declared namespace is automatically prepended to all types defined within th
     }
 }
 ```
-Here, the schema is effectively defining the action entity `ExampleCo::Database::Action::"createTable"` and the entity type `ExampleCo::Database::Table`. If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
+Here, the schema is effectively defining the action entity `ExampleCo::Database::Action::"createTable"` and the entity type `ExampleCo::Database::Table`.
+
+You can reference entity types and actions defined in other namespaces of the same schema by using their fully qualified names. For example, here is a schema that declares two namespaces, `ExampleCo::Clients` and `ExampleCo::Furniture`, where the second namespace's entity type `Table` references the first's entity type `Manufacturer`.
+```
+{
+    "ExampleCo::Clients": {
+        "entityTypes": {
+            "Manufacturer": { ... }
+        },
+        "actions": { ... }
+    },
+    "ExampleCo::Furniture": {
+        "entityTypes": {
+            "Table": {
+                "shape": {
+                    "type": "Record",
+                    "attributes": {
+                        "manufacturer": {
+                            "type": "Entity",
+                            "name": "ExampleCo::Clients::Manufacturer"
+                        }
+                    }
+                }
+            }
+        },
+        "actions": { ... }
+    }
+}
+```
+If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
 ## `entityTypes`<a name="schema-entityTypes"></a>
 
@@ -182,7 +211,7 @@ You can choose to specify whether an attribute is required or optional. By defau
     "required": false
 },
 ```
-A policy should check for an optional attribute's presence by using the [`has`](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, Cedar generates an exception. The validator will flag the potential for such errors to occur.
+A policy should check for an optional attribute's presence by using the [`has`](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
 
 You can choose to explicitly declare that an attribute is mandatory by including `"required": true` (but this is unnecessary as mandatory attributes are the default).
 
@@ -355,7 +384,7 @@ Action groups are themselves actions, and thus must also be defined in the schem
 ### `appliesTo`<a name="schema-actions-appliesTo"></a>
 
 Specifies a JSON object containing two lists, `principalTypes` and `resourceTypes`, which contain the principal and resources entity types, respectively, that can accompany the action in an authorization request.
-+ If the `principalTypes` component is omitted from the `appliesTo` element, then an authorization request with this action can have a principal entity of *any* type, or the unspecified entity. The same is true for `resourceTypes`, for a request's resource component. If the `appliesTo` component is omitted entirely, it's the same as if it were present with both `princpalTypes` and `resourceTypes` components omitted (i.e., a request can have both principal and resource entities of any type, or leave them unspecified).
++ If the `principalTypes` component is omitted from the `appliesTo` element, then an authorization request with this action can have a principal entity of *any* type, or the unspecified entity. The same is true for `resourceTypes`, for a request's resource component. If the `appliesTo` component is omitted entirely, it's the same as if it were present with both `principalTypes` and `resourceTypes` components omitted (i.e., a request can have both principal and resource entities of any type, or leave them unspecified).
 + If either the `principalTypes` or `resourceTypes` components is given with an empty list `[]`, the associated action is not permitted in an authorization request with *any* entities of that category. This effectively means that the action will not be used in an authorization request at all. This makes sense for actions that act as groups for other actions.
 
 The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It cannot appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership only requires giving the ID of the action -- `"read"` -- and not the type. This is because the validator knows that all action groups must have type `Action`, and by default the action will be within the current namespace. To declare membership in an action group in a different namespace you need to include `"type": "My::Namespace::Action"` alongside the `"id"` portion, where `My::Namespace` is the different namespace.
@@ -534,7 +563,7 @@ As another example, we can use a defined record type for the `shape` of multiple
 ```
 If you then send an `Employee` entity as the principal in an authorization request, you could evaluate the attributes of that principal by using syntax similar to this example: `principal.age`.
 
-Note that definitions of types appearing in `commonTypes` cannot refer to one another. For example, if both `name` and `Person` from the above example were in the same `commonTypes` section, I could not change `Person`'s define to refer to objects of type `name`.
+Note that definitions of types appearing in `commonTypes` cannot refer to one another. For example, if both `name` and `Person` from the above example were in the same `commonTypes` section, you could not change `Person`'s define to refer to objects of type `name`.
 
 ## Example schema<a name="schema-examples"></a>
 
