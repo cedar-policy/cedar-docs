@@ -358,7 +358,7 @@ Specifies a JSON object containing two lists, `principalTypes` and `resourceType
 + If the `principalTypes` component is omitted from the `appliesTo` element, then an authorization request with this action can have a principal entity of *any* type, or the unspecified entity. The same is true for `resourceTypes`, for a request's resource component. If the `appliesTo` component is omitted entirely, it's the same as if it were present with both `princpalTypes` and `resourceTypes` components omitted (i.e., a request can have both principal and resource entities of any type, or leave them unspecified).
 + If either the `principalTypes` or `resourceTypes` components is given with an empty list `[]`, the associated action is not permitted in an authorization request with *any* entities of that category. This effectively means that the action will not be used in an authorization request at all. This makes sense for actions that act as groups for other actions.
 
-The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It should not appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership requires the action name be fully qualified with its namespace; here, `My::Namespace` is assumed to be the namespace in which this `actions` component is being defined.
+The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It cannot appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership only requires giving the ID of the action -- `"read"` -- and not the type. This is because the validator knows that all action groups must have type `Action`, and by default the action will be within the current namespace. To declare membership in an action group in a different namespace you need to include `"type": "My::Namespace::Action"` alongside the `"id"` portion, where `My::Namespace` is the different namespace.
 
 ```
 "actions": {
@@ -371,8 +371,7 @@ The following example `actions` snippet shows three actions. The first action, `
     "viewPhoto": {
         "memberOf": [
             {
-                "id": "read",
-                "type": "My::Namespace::Action"
+                "id": "read"
             }
         ],
         "appliesTo": {
@@ -383,8 +382,7 @@ The following example `actions` snippet shows three actions. The first action, `
     "listAlbums": {
         "memberOf": [
             {
-                "id": "read",
-                "type": "My::Namespace::Action"
+                "id": "read"
             }
         ],
         "appliesTo": {
