@@ -73,7 +73,7 @@ The following is an example of a basic Cedar schema.
 ```
 
 This schema specifies the following:
-+ The entities defined in this schema exist in the namespace `ExampleCo::Personnel`.
++ The entities defined in this schema exist in the namespace `ExampleCo::Personnel`. References to those entities _within policies_ require the namespace prefix, e.g., `ExampleCo::Personnel::Employee`. References to those entities _within the schema_, within the namespace declaration, need no namespace prefix, e.g., we write just `Employee` in the `principalTypes` part, rather than `ExampleCo::Personnel::Employee`.
 + Every entity of type `Employee` in the store has an attribute `name` with a value that is a Cedar `String`, an attribute `jobLevel` with a value that is a Cedar `Long`, and an optional attribute `numberOfLaptops` that is also a Cedar `Long`.
 + Any authorization request from the application that specifies action `Action::"remoteAccess"` is expected to specify only principals that are of type `Employee` (with no restriction on the type of a request's resource).
 
@@ -146,65 +146,6 @@ By default, it is entirely up to the application to make sure that authorization
 You can think of a schema as a contract between the application and the policies: If the application provides requests and data that follow the prescriptions in the schema, then evaluating policies validated against that schema will surely avoid several classes of error. (The [end of this section](#validation-benefits-of-schema) discusses in detail what errors are and are not precluded by validation.)
 
 Note that this contract implies that if an application's schema changes then so has its authorization model, i.e., the actions and/or entities it may submit to the Cedar authorization engine, and their structure. Policies still in effect may need to be revalidated to make sure they are consistent with these changes.
-
-## Namespaces<a name="validation-namespaces"></a>
-
-As software products increase in size and organizations grow, multiple services can be added to contribute to the overall implementation of an application or product portfolio. You can see this outcome happening when vendors offer several products to customers, or alternatively, in service meshes where multiple services contribute portions of an application.
-
-When this situation occurs, Cedar entity definitions can become ambiguous. For example, consider a vendor that offers both a hosted database product and a hosted furniture design service. In this environment, a Cedar expression such as `Action::"createTable"` is ambiguous; it could be creating a database table or a new piece of furniture. Similarly, an entity UID such as `Table::"0d6169ca-b246-43a7-94b9-8a68a9e8f8b3"` could refer to either product.
-
-This ambiguity can become an issue in circumstances such as the following:
-* When both services store their Cedar policies in a single policy store.
-* If policies are later aggregated into a central repository to explore cross-cutting questions about a customer’s access permissions throughout the portfolio of services.
-
-To resolve this ambiguity, you can add *namespaces* to Cedar entities and actions. A namespace is a string prefix for a type, separated by a pair of colons \(`::`\) as a delimiter.
-
-```
-Database::Action::"createTable"
-Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-Furniture::Action::"createTable"
-Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-```
-
-Namespaces can also be nested to arbitrary depth.
-
-```
-ExampleCo::Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-ExampleCo::Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
-ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
-```
-
-Namespaces are declared in schema by including the namespace before the list of entities that are part of the namespace, as shown in the following example.
-
-```
-{
-    "ExampleCo::Database": {
-        "entityTypes": {
-            "Table": {
-                ...
-            }
-        },
-        "actions": {
-            "createTable": {
-                ...
-            }
-        }
-    }
-}
-```
-
-Namespaces are automatically prepended to all types defined within the schema file. As a result, the previous schema causes the Cedar validator to expect the following types:
-
-```
-ExampleCo::Database::Table::"some_identifier"
-ExampleCo::Database::Action::"createTable"
-```
-
-A common convention is for each application team to manage a schema for their namespace, without touching the namespaces owned by other application teams.
-
-Cedar doesn't currently require that you specify a namespace. However, if you define a schema without a namespace and then later choose to add one, you need to update all of your policies to include the correct namespace, or authorization fails. You must also update the authorization requests you send to Cedar to include the namespace as part of the type identifiers.
-
-For more information about using a namespace as part of your schema, see [`namespace`](schema.md#schema-namespace).
 
 ## Benefits of validation and schemas<a name="validation-benefits-of-schema"></a>
 

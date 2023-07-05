@@ -139,7 +139,7 @@ For more information about creating and using policy templates, see [Cedar polic
 
 A [principal](syntax-policy.md#term-parc-principal), an [action](syntax-policy.md#term-parc-action), or a [resource](syntax-policy.md#term-parc-resource) that is part of your application are all represented in Cedar as *entities*. 
 
-An entity in Cedar specifies a type, such as `User`, `Photo`, `Album`, `Group`, or `Account`. You can define whatever entity types that are required by your application scenario.
+Entities are referenced by their type and identifier, together called the entity's _unique identifier_ (UID). In the example policies P1 and P2 above, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario. 
 
 Entities have attributes that describe the entity in some way. For example, an entity of type `Photo` might contain attributes like the following:
 + A `name` \(a [string](syntax-datatypes.md#datatype-string)\)
@@ -150,6 +150,33 @@ Entities have attributes that describe the entity in some way. For example, an e
 Define the attributes that are useful to your scenario.
 
 For more details about entities, see [Entity](syntax-entity.md) in [Cedar syntax - elements of the policy language](syntax.md).
+
+## Namespaces<a name="term-namespaces"></a></a>
+
+As software products increase in size and organizations grow, multiple services can be added to contribute to the overall implementation of an application or product portfolio. You can see this outcome happening when vendors offer several products to customers, or alternatively, in service meshes where multiple services contribute portions of an application.
+
+When this situation occurs, Cedar entity definitions can become ambiguous. For example, consider a vendor that offers both a hosted database product and a hosted furniture design service. In this environment, a Cedar action entity such as `Action::"createTable"` is ambiguous; it could be about creating a database table or a new piece of furniture. Similarly, an entity UID such as `Table::"0d6169ca-b246-43a7-94b9-8a68a9e8f8b3"` could refer to either product.
+
+This ambiguity can become an issue in circumstances such as the following:
+* When both services store their Cedar policies in a single policy store.
+* If policies are later aggregated into a central repository to explore cross-cutting questions about a customer’s access permissions throughout the portfolio of services.
+
+To resolve this ambiguity, you can add *namespaces* to Cedar entities, including actions. A namespace is a string prefix for a type, separated by a pair of colons \(`::`\) as a delimiter.
+
+```
+Database::Action::"createTable"
+Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
+Furniture::Action::"createTable"
+Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
+```
+
+Namespaces can also be nested to arbitrary depth.
+
+```
+ExampleCo::Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
+ExampleCo::Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
+ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
+```
 
 ## Groups and hierarchies<a name="term-group"></a>
 
