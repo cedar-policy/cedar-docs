@@ -139,7 +139,7 @@ For more information about creating and using policy templates, see [Cedar polic
 
 A [principal](syntax-policy.md#term-parc-principal), an [action](syntax-policy.md#term-parc-action), or a [resource](syntax-policy.md#term-parc-resource) that is part of your application are all represented in Cedar as *entities*. 
 
-Entities are referenced by their type and identifier, together called the entity's _unique identifier_ (UID). In the example policies P1 and P2 above, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario. 
+Entities are referenced by their type and identifier, together called the entity's _unique identifier_ (UID). In the example policies P1 and P2 above, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario.
 
 Entities have attributes that describe the entity in some way. For example, an entity of type `Photo` might contain attributes like the following:
 + A `name` \(a [string](syntax-datatypes.md#datatype-string)\)
@@ -151,7 +151,7 @@ Define the attributes that are useful to your scenario.
 
 For more details about entities, see [Entity](syntax-entity.md) in [Cedar syntax - elements of the policy language](syntax.md).
 
-## Namespaces<a name="term-namespaces"></a></a>
+## Namespaces<a name="term-namespaces"></a>
 
 As software products increase in size and organizations grow, multiple services can be added to contribute to the overall implementation of an application or product portfolio. You can see this outcome happening when vendors offer several products to customers, or alternatively, in service meshes where multiple services contribute portions of an application.
 
