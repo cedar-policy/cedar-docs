@@ -26,7 +26,7 @@ Authorization is preceded by *authentication*. Authentication is the process of 
 
 Cedar lets you describe permissions by creating [policies](#term-policy) as text documents that describe which principals are allowed to perform which *actions*, on which *resources*, and in a specific *context*. 
 
-When a principal attempts to do something in an application, the application generates an authorization request. Cedar [evaluates](#term-policy-evaluation) requests against the set of defined policies. Each evaluation results in a decision to **allow** or **deny** the request. 
+When a principal attempts to do something in an application, the application generates an authorization request. Cedar [evaluates](#term-policy-evaluation) requests against the set of defined policies, producing a decision to **allow** or **deny** the request. 
 
 ## Policy<a name="term-policy"></a>
 
@@ -48,82 +48,14 @@ You can use a variety of strategies to construct the policies. Some of the commo
 
 ## Policy evaluation<a name="term-policy-evaluation"></a>
 
-An authorization request is a request by an application for an authorization decision, asking the question "*Can this principal take this action on this resource in this context?*". To reach the decision, Cedar evaluates a request against each [policy](#term-policy). That evaluation produces one of the following intermediate results:
-+ **Allow** – The evaluated policy is a `Permit` policy. All elements in the scope matched the request. All `when` conditions evaluated to `true` and all `unless` conditions evaluated to `false`. This is an *explicit* Allow.
-+ **Deny** – The evaluated policy is a `Forbid` policy. All elements in the scope matched the request. All `when` conditions evaluated to `true` and all `unless` conditions evaluated to `false`. This is an *explicit* Deny.
-+ **No result** – Either one or more elements in the scope or one or more context conditions failed to match the request. In this case, this policy doesn't contribute to the final, overall decision. Other policies that exist in the policy store determine whether the final result of the evaluation is allow or deny.
+An authorization request is a request by an application for an authorization decision, asking the question "*Can this principal take this action on this resource in this context?*". To reach the decision, Cedar's authorization engine evaluates a request against each [policy](#term-policy), and combines the results. It ultimately produces an ***authorization response*** that consists of the decision (`Allow` or `Deny`), and the list of ***determining policies*** that are the reasons for that decision.
 
-Cedar combines the intermediate results into a final result as determined by applying the following rules:
-
-1. The evaluation begins with a default implicit Deny. If nothing overrides this in steps 2 or 3, Deny becomes the final result in step 4.
-
-1. If ***any*** matching policy evaluates to an *explicit* Deny, then the final result is **Deny**. A single explicit Deny result ***always*** overrides any number of Allow results.
-
-1. If ***at least one*** matching policy evaluates to an explicit Allow ***AND*** ***no*** policy evaluates to an explicit Deny, then the final result is **Allow**. An explicit Allow overrides the default implicit Deny.
-
-1. If no policy evaluates to Allow, then the final result is the default implicit **Deny**. 
-
-Your application must gather all of the relevant information and provide it to Cedar for a decision.
+Your application must gather all of the relevant information and provide it to Cedar's authorization engine when making the request.
 + All of the details about the principal and resource entities must be provided to Cedar. These details must include all of the entity data that are relevant to the request. For example, for a request to authorize a user named Juan to access a shared photo, the request must include the entities for the groups that Juan is a member of, the folder hierarchy where the photo resides, and any other relevant attributes of the user and photo.
 + Other details that might be useful to the decision, including the transient or session-specific details, such as the IP address of the requesting computer and the list of valid IP ranges that make up the company's internal network, or whether the user authenticated using a multi-factor authentication \(MFA\) device. This additional information is called the *context*.
 + All of the policies that match any one or more of the principal, actions, and the resource specified in the request. We recommend that you include all policies to avoid the risk of missing a relevant policy.
 
-The evaluation results in an ***authorization response*** that consists of the decision \(Allow or Deny\), and the list of ***determining policies*** that resulted in the allow or deny decision returned by Cedar.
-
-For example, consider the following set of policies:
-+ **P1** – Jane can perform any action on photo `vacation.jpg`.
-
-  ```
-  permit( 
-      principal == User::"jane", 
-      action, 
-      resource == Photo::"vacation.jpg"
-  );
-  ```
-+ **P2** – Kevin has a group `kevinFriends` that can view any of Kevin's photos when they are tagged `Holiday`
-
-  ```
-  permit(
-      principal in UserGroup::"kevinFriends",
-      action == Action::"ViewPhoto",
-      resource
-  )
-  when {
-      resource.tags.contains("Holiday")
-  };
-  ```
-+ **P3** – Users are forbidden to view photos tagged `Private`, unless they are the owner of the photo.
-
-  ```
-  forbid(
-      principal,
-      action == Action::"ViewPhoto",
-      resource
-  )
-  when { resource.tags.contains("Private") }
-  unless { principal == resource.owner };
-  ```
-+ **P4** – Users can perform `UpdatePassword` for an `Account` when they are the owner of the account 
-
-  ```
-  permit(
-      principal,
-      action == Action::"UpdatePassword",
-      resource
-  )
-  when { principal == account.owner };
-  ```
-
-With this set of policies, Cedar can evaluate the request "Can the user `jane` perform the action `ViewPhoto` on the photo `vacation.jpg`?" This example assumes that the slice includes the following details about the entities:
-+ `jane` is a member of the group `kevinsFriends`.
-+ The photo vacation.jpg is:
-  + Owned by `kevin`
-  +  ***Not*** tagged `Holiday`
-  + Tagged `Private`
-
-P1 and P3 are the **satisfied** policies in this example because the policy scopes match, and the `when` and `unless` clauses match the context of the authorization request. P2 is not **satisfied** because the photo isn't tagged `Holiday`.
-
-Cedar returns P3 as the **determining** policy because it results in an explicit Deny that overrides the Allow from P1. The final response is **Deny**.
+The algorithmic details for how authorization decisions are made, and how individual policies are evaluated, are discussed in the [authorization](authorization.md) section of these docs.
 
 ## Policy template<a name="term-policy-template"></a>
 

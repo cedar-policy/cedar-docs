@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Policy validation
-nav_order: 5
+nav_order: 6
 ---
 
 # Cedar policy validation against schema<a name="validation"></a>
