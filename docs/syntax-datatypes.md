@@ -129,7 +129,7 @@ A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
 
 ### ipaddr<a name="datatype-ipaddr"></a>
 
-A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
+A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
 
 You specify values of extension type `ipaddr` using the [ip() operator](syntax-operators.md#ip-parse-string-and-convert-to-ipaddr). Here are some examples:
 ```
