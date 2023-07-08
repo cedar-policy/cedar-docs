@@ -7,7 +7,8 @@ nav_order: 5
 # How Cedar authorization works<a name="how-cedar-authorization-works"></a>
 {: .no_toc }
 
-Each time your application wants to perform an action that is subject to authorization, it needs to invoke the Cedar authorization engine (or _authorizer_, for short). The authorizer will consider the request against the application's store of policies in order to make a decision, `Allow` or `Deny`. Here we discuss the Cedar authorizer's nuts and bolts, to see how it decides the answer to a particular request.
+Each time a user of your application wants to perform an action on a protected resource, the application needs to invoke the Cedar authorization engine (or _authorizer_, for short) to check if this request is allowed.
+The authorizer will consider the request against the application's store of policies in order to make a decision, `Allow` or `Deny`. Here we discuss the Cedar authorizer's nuts and bolts, to see how it decides the answer to a particular request.
 
 ## Request creation<a name="request-creation"></a>
 
@@ -17,17 +18,17 @@ A Cedar _authorization request_ asks the question "*Can this principal take this
 + _R_ is the resource, and 
 + _C_ is the request context. 
 
-_P_, _A_, and _R_ are [entity UIDs](terminology.md#term-entity), while _C_ is a record. 
+_P_, _A_, and _R_ are [entity references](terminology.md#term-entity), while _C_ is a record.
 
 Conceptually, you should imagine that the authorizer is able to consider _all_ of your application's policies and entity data while evaluating a request. As a practical matter, making all policies and entity data available may be too difficult or too expensive. In that case, your application will need to determine which policies and entity data are _relevant_ to properly handling the request.
 
 ## Request authorization<a name="request-authorization"></a>
 
-Given an authorization request, Cedar’s authorizer will return `Allow` if the request is granted or `Deny` if it is rejected, along with some diagnostics. How does it make this decision?
+Given an authorization request, Cedar’s authorizer returns `Allow` if the request is granted or `Deny` if it is rejected, along with some diagnostics. How does it make this decision?
 
 ### Algorithm<a name="request-authorization-algorithm"></a>
 
-First, the authorizer _evaluates_ each of the policies, and for each it logs whether the policy _satisfies_ the request. We discuss the details of evaluation below, but for now we just need to know what the evaluator could return:
+First, the authorizer _evaluates_ each of the policies to determine if the policy _satisfies_ the request. We discuss the details of evaluation below, but for now we just need to know what the evaluator could return:
 + `true`, when the policy satisfies the request;
 + `false`, when the policy does not satisfy the request; or
 + `error`, when there is an error when evaluating the policy on the request data.
@@ -40,7 +41,7 @@ After evaluating each policy, the authorizer combines the results to make an aut
 
 3. Otherwise (i.e., no policy is satisfied), the final result is `Deny`.
 
-The authorizer returns an _authorization response_, which includes its decision along with some diagnostics. These diagnostics include the _determining policies_ and any _error conditions_. In the case the decision is `Deny`, the determining policies include any `forbid` policies that satisfy the request (rule 1). In the case the decision is `Allow`, the determining policies are the `permit` policies that satisfy the request (rule 2). If no policy is satisfied, the determining policies will be empty. Whatever the final result, if the evaluation of any policies resulted in `error`, then the IDs of the erroneous policies are included in the diagnostics, too, along with the particulars of the errors.
+The authorizer returns an _authorization response_, which includes its decision along with some diagnostics. These diagnostics include the _determining policies_ and any _error conditions_. If the decision is `Allow`, the determining policies are the `permit` policies that satisfy the request (rule 2). Otherwise, the determining policies are the `forbid` policies, if any, that satisfy the request (rules 1 and 3). Whatever the final result, if the evaluation of any policies resulted in `error`, then the IDs of the erroneous policies are included in the diagnostics, too, along with the particulars of the errors.
 
 ### Discussion<a name="request-authorization-discussion"></a>
 
@@ -62,18 +63,18 @@ As just discussed, to reach its decision the Cedar authorizer's algorithm _evalu
 
 The key component of policy evaluation is _expression_ evaluation. Each constraint in the policy scope is an expression. Each `when` clause also contains an expression, as does each `unless` clause. Evaluating a policy requires evaluating its constituent expressions. Example expressions include `resource.tags.contains("private")`, `action == Action::"viewPhoto"`, `principal in Team::"admin"`, and `resource in principal.account`. 
 
-As with a typical programming language, evaluating an expression simplifies, or "executes", the expression until no further simplification is possible. The final result is either a Cedar _value_ -- like `true`, `1`, `User::"Alice"`, or `"blue"` -- or it is an `error`. Evaluating an expression with no variables is straightforward. The expression `2+2` evaluates to `4`. Expression `Action::"viewPhoto" == Action::"viewPhoto"` evaluates to `true`. Expression `if false then "blue" else "green"` evaluates to `"green"`. The various operators you can use in Cedar expressions and what they do are described [in detail elsewhere in these docs](syntax-operators.md#syntax-operators).
+As with a typical programming language, evaluating an expression simplifies, or "executes", the expression until no further simplification is possible. The final result is either a Cedar _value_ -- like `true`, `1`, `User::"Alice"`, or `"blue"` -- or it is an `error`. Evaluating an expression with no variables is straightforward. The expression `2+2` evaluates to `4`. Expression `Action::"viewPhoto" == Action::"viewPhoto"` evaluates to `true`. Expression `if false then "blue" else "green"` evaluates to `"green"`. See [here](syntax-operators.md#syntax-operators) for complete descriptions of the various operators you can use in Cedar expressions.
 
 What about expressions that have variables `principal`, `action`, `resource`, and `context` in them? To evaluate such expressions we must first _bind_ any variables that appear in them to values of the appropriate type. Then we evaluate the expressions with those values in place of the variables. 
 
-For example, if for expression `action == Action::"viewPhoto"` we bind the `action` variable to the entity `Action::"viewPhoto"`, then the result is `true`. That's because replacing `action` with `Action::"viewPhoto"` gives expression `Action::"viewPhoto" == Action::"viewPhoto"` which is obviously `true`. 
+For example, consider the expression `action == Action::"viewPhoto"`. If we bind the `action` variable to the entity `Action::"viewPhoto"`, then the result is `true`. That's because replacing `action` with `Action::"viewPhoto"` gives expression `Action::"viewPhoto" == Action::"viewPhoto"` which is obviously `true`.
 
 As another example, consider the expression `resource.tags.contains("Private")`. If we bind variable `resource` to the entity `Photo::"vacation94.jpg"` we get `Photo::"vacation94.jpg".tags.contains("Private")`. Evaluating further, we need to look up `Photo::"vacation94.jpg"` in our entities data, and then extract its `tags` attribute. If that attribute contains a set with the string `"Private"` in it, we'll get `true`; if it's a set without `"Private"` we'll get `false`; otherwise `tags` is either not a valid attribute or contains a non-set, so we will get `error`.
 
 ### Policy satisfaction<a name="policy-satisfaction"></a>
 
 Determining whether a policy satsifies a request is a straightforward use of expression evaluation. To explain it, let's introduce some notation. For a policy _c_:
-+ _Principal(c)_ is the constraint involving `principal` in _c_'s policy scope. If there is no constraint on `principal`, then _Principal(c)_ is just `true`
++ _Principal(c)_ is the constraint involving `principal` in _c_'s [policy scope](terminology.md#term-policy). If there is no constraint on `principal`, then _Principal(c)_ is just `true`
 + _Action(c)_ is the constraint involving `action` in _c_'s policy scope, or `true` if there is no constraint
 + _Resource(c)_ is the constraint involving `resource` in _c_'s policy scope, or `true` if there is no constraint
 + _Conds(c)_ is the list of `when` and `unless` expressions in _c_
@@ -89,51 +90,7 @@ If _c_ matches the request, we evaluate its conditions _Conds(c)_ in order. We b
 
 ## Detailed Example<a name="policy-evaluation-example"></a>
 
-To illustrate policy evaluation, let's consider the following set of policies:
-+ **P1** – Jane can perform any action on photo `vacation.jpg`.
-
-  ```
-  permit( 
-      principal == User::"jane", 
-      action, 
-      resource == Photo::"vacation.jpg"
-  );
-  ```
-+ **P2** – Kevin has a group `kevinFriends` that can view any of Kevin's photos when they are tagged `Holiday`
-
-  ```
-  permit(
-      principal in UserGroup::"kevinFriends",
-      action == Action::"viewPhoto",
-      resource
-  )
-  when {
-      resource.tags.contains("Holiday")
-  };
-  ```
-+ **P3** – Users are forbidden to view photos tagged `Private` unless they are the owner of the photo.
-
-  ```
-  forbid(
-      principal,
-      action == Action::"viewPhoto",
-      resource
-  )
-  when { resource.tags.contains("Private") }
-  unless { principal == resource.owner };
-  ```
-+ **P4** – Users can perform `updateTags` on a resource, like a `Photo` or `Album`, when they are the owner of the resource 
-
-  ```
-  permit(
-      principal,
-      action == Action::"updateTags",
-      resource
-  )
-  when { principal == resource.owner };
-  ```
-
-With this set of policies, suppose we wish to authorize the request "Can the user `jane` perform the action `viewPhoto` on the photo `vacation.jpg`?" Precisely, the request is:
+To illustrate policy evaluation, let's consider whether a set of four policies authorizes the following request: "Can the user `jane` perform the action `viewPhoto` on the photo `vacation.jpg`?" Precisely, the request is:
 + _P_ = `User::"jane"`
 + _A_ = `Action::"viewPhoto"`
 + _R_ = `Photo::"vacation.jpg"`
@@ -145,22 +102,74 @@ Let's assume that the entities data includes the following details:
   + `.owner` is `User::"kevin"`
   + `.tags` is `["Private","Work"]` (i.e., a set containing the strings `"Private"` and `"Work"`)
 
-Now consider each of the policies in turn:
-+ Policy P1 is **satisfied**. 
+Now let's evaluate each of the four policies against this request.
+
++ **P1** – Jane can perform any action on photo `vacation.jpg`.
+
+  ```
+  permit( 
+      principal == User::"jane", 
+      action, 
+      resource == Photo::"vacation.jpg"
+  );
+  ```
+  This policy is **satisfied**.
     - _Principal_(P1) is `principal == User::"jane"`, so after binding `principal` to `User::"jane"` (the _P_ in the request), the expression evaluates to `true`
     - _Action_(P1) is simply `true` since there is no action constraint
     - _Resource_(P1) is `resource == Photo::"vacation.jpg"`, so after binding `resource` to `Photo::"vacation.jpg"` (the _R_ in the request), the expression evaluates to `true`
     - _Conds(c)_ is empty, so they are trivially `true`
-+ Policy P2 is **not satisfied**: While it matches the request, its **_condition evaluates to `false`_**.
+
++ **P2** – A member of group `kevinFriends` can view any of Kevin's photos when they are tagged `Holiday`
+
+  ```
+  permit(
+      principal in UserGroup::"kevinFriends",
+      action == Action::"viewPhoto",
+      resource
+  )
+  when {
+      resource.tags.contains("Holiday")
+  };
+  ```
+  This policy is **not satisfied**: While it matches the request, its **_condition evaluates to `false`_**.
     - _Principal_(P1) is `principal in UserGroup::"kevinFriends"`, so after binding `principal` to `User::"jane"` (the _P_ in the request), the expression evaluates to `true` because `User::"jane"` is a member of `Group::"kevinsFriends"`
     - _Action_(P1) is `action == Action::"viewPhoto"`, so after binding `action` to `Action::"viewPhoto"` the expression evaluates to `true`
     - _Resource_(P1) is simply `true` since there is no resource constraint
-    - _Conds(c)_ is the list containing `when` expression `resource.tags.contains("Holiday")`. After binding `resource` to `Photo::"vacation.jpg"` (the _R_ in the request), the expression evaluates to `false` because the `.tags` attribute of `Photo::"vacation.jpg"` is `["Private","Work"]`, i.e., it does not contain `"Holiday"`. 
-+ Policy P3 is **satisfied**.
-    - The policy matches the request: `principal` and `resource` are unconstrained, and _Action(c)_ evaluates to `true` because _A_ is `Action::"viewPhoto"`; 
-    - its `when` condition is `true` due to the `.tags` attribute of `Photo::"vacation.jpg"` containing `"Private"`; and 
-    - its `unless` condition is `false` due to the `.owner` attribute of `Photo::"vacation.jpg"` being equal to _P_.
-+ Policy P4 is **not satisfied**.
+    - _Conds(c)_ is the list containing `when` expression `resource.tags.contains("Holiday")`. After binding `resource` to `Photo::"vacation.jpg"` (the _R_ in the request), the expression evaluates to `false` because the `.tags` attribute of `Photo::"vacation.jpg"` is `["Private","Work"]`, i.e., it does not contain `"Holiday"`.
+
++ **P3** – Users are forbidden from viewing any photos tagged `Private` unless they are the owner of the photo.
+
+  ```
+  forbid(
+      principal,
+      action == Action::"viewPhoto",
+      resource
+  )
+  when { resource.tags.contains("Private") }
+  unless { principal == resource.owner };
+  ```
+  This policy is **satisfied**.
+    - The policy matches the request: `principal` and `resource` are unconstrained, and _Action(c)_ evaluates to `true` because _A_ is `Action::"viewPhoto"`;
+    - the policy's `when` condition is `true` because the `.tags` attribute of `Photo::"vacation.jpg"` contains `"Private"`; and
+    - its `unless` condition is `false` because the `.owner` attribute of `Photo::"vacation.jpg"` (which is `User::"kevin"`) is not equal to _P_ (which is `User::"jane"`).
+
++ **P4** – Users can perform `updateTags` on a resource, like a `Photo` or `Album`, when they are the owner of the resource
+
+  ```
+  permit(
+      principal,
+      action == Action::"updateTags",
+      resource
+  )
+  when { principal == resource.owner };
+  ```
+  This policy is **not satisfied**.
     - The policy **_fails to match the request_** because while `principal` and `resource` are unconstrained, _Action(c)_ evaluates to `false` because binding `action` to _A_ yields expression `Action::"viewPhoto" == Action::"updatePassword"`.
 
-Combining these policy evaluation results, the Cedar authorizer returns a decision of `Deny`, where the determining policy is P3. This result follows from rule 1 of our authorization logic: "If any forbid policy evaluates to `true`, then the final result is `Deny`" (and the determining policies are the satisfied `forbid` policies).
+In sum:
++ `permit` policy P1 evaluates to `true`
++ `permit` policy P2 evaluates to `false`
++ `forbid` policy P3 evaluates to `true`
++ `permit` policy P4 evaluates to `false`
+
+Combining these policy evaluation results, the Cedar authorizer returns a decision of `Deny`, where the determining policy is P3. This result follows from rule 1 of our [authorization logic](#request-authorization-algorithm): "If any forbid policy evaluates to `true`, then the final result is `Deny`" (and the determining policies are the satisfied `forbid` policies).
