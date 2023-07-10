@@ -1,6 +1,6 @@
 ---
 layout: default
-title: How Cedar authorization works
+title: Authorization
 nav_order: 5
 ---
 
