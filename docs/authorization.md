@@ -5,7 +5,7 @@ nav_order: 5
 ---
 
 # How Cedar authorization works<a name="how-cedar-authorization-works"></a>
-{: .no*toc }
+{: .no_toc }
 
 Each time a user of your application wants to perform an action on a protected resource, the application needs to invoke the Cedar authorization engine (or *authorizer*, for short) to check if this request is allowed.
 The authorizer considers the request against the application's store of policies in order to make a decision, `Allow` or `Deny`. This topic discusses how the Cedar authorizer decides the answer to a particular request.
