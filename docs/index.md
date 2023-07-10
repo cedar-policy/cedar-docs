@@ -12,7 +12,7 @@ nav_order: 1
 + [What is the Cedar policy language?](what-is-cedar.md)
 + [Cedar terms and concepts](terminology.md)
 + [Cedar example scenario used in this guide](scenario.md)
-+ [Cedar authorization](validation.md)
++ [Cedar authorization](authorization.md)
 + [Cedar policy validation against schema](validation.md)
 + [Cedar schema format](schema.md)
 + [Cedar policy templates](templates.md)
