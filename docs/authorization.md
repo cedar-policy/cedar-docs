@@ -1,7 +1,7 @@
 ---
 layout: default
 title: How Cedar authorization works
-nav*order: 5
+nav_order: 5
 ---
 
 # How Cedar authorization works<a name="how-cedar-authorization-works"></a>
