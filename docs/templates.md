@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Policy templates
-nav_order: 7
+nav_order: 8
 ---
 
 # Cedar policy templates<a name="templates"></a>
