@@ -81,7 +81,7 @@ The value of this object must be either the string `permit` or the string `forbi
 
 # `principal`
 The `principal` object is required.
-The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity`.
+The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
 ## `op`
 The `op` key is mandatory. The `op` object must have one of the following string values:
