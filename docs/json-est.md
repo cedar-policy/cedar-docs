@@ -99,7 +99,7 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
     If present, then the `principal` object must also have one of the following:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"principal" == User::"12UA45"`
     JSON representation: 
@@ -110,7 +110,7 @@ The `op` key is mandatory. The `op` object must have one of the following string
     }
      ```
   
-  * `[slot](#slot)`
+  * [`slot`](#slot)
     Example Cedar policy line:
     `"principal" == "?principal"`
     JSON representation: 
@@ -123,7 +123,7 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `in`
 If present, then the `principal` object must also have one of the following:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"principal" in Group::"Admins"`
     JSON representation:
@@ -133,7 +133,7 @@ If present, then the `principal` object must also have one of the following:
             "entity": { "type": "Group", "id": "Admins" }
         }
     ```
-  * `[slot](#slot)`
+  * [`slot`](#slot)
     Example Cedar policy line:
     `"principal" in "?principal"`
     JSON representation
@@ -164,7 +164,7 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
 If present, then the `action` object must also have the following object:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"action" == Action::"readFile"`
     JSON representation: 
@@ -177,7 +177,7 @@ If present, then the `action` object must also have the following object:
 
 * `in`
 If present, then the `action` object must also have one of the following:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"action" in Action::"readOnly"`
     JSON representation:
@@ -187,7 +187,7 @@ If present, then the `action` object must also have one of the following:
             "entity": { "type": "Action", "id": "readOnly" }
         }
     ```
-  * `[entities](#entities)`
+  * [`entities`](#entities)
     Example Cedar policy line:
     `"action" in [ Action::"readFile", Action::"writeFile", Action::"deleteFile"]`
     JSON representation
@@ -222,7 +222,7 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
 If this operator is present, then the `resource` object must also have one of the following:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"resource" == file::"vacationphoto.jpg"`
     JSON representation: 
@@ -233,7 +233,7 @@ If this operator is present, then the `resource` object must also have one of th
     }
      ```
   
-  * `[slot](#slot)`
+  * [`slot`](#slot)
     Example Cedar policy line:
     `"resource" == "?resource"`
     JSON representation: 
@@ -246,7 +246,7 @@ If this operator is present, then the `resource` object must also have one of th
 
 * `in`
 If present, then the `resource` object must also have one of the following:
-  * `[entity](#entity)`
+  * [`entity`](#entity)
     Example Cedar policy line:
     `"resource" in folder::"Public"`
     JSON representation:
@@ -256,7 +256,7 @@ If present, then the `resource` object must also have one of the following:
             "entity": { "type": "folder", "id": "Public" }
         }
     ```
-  * `[slot](#slot)`
+  * [`slot`](#slot)
     Example Cedar policy line:
     `"resource" in "?resource"`
     JSON representation
@@ -267,21 +267,21 @@ If present, then the `resource` object must also have one of the following:
         },
     ```
 
-# `conditions`
+# conditions
 The `conditions` object is mandatory, and is a JSON array of objects.  Each object in the array must have exactly two keys, `kind` and `body`.  The kind key must be either the string `when` or the string `unless`.
 
 The `body` key must be an [ESTExpr object](#ESTExpr-objects).
 
-# `annotations`
+# annotations
 annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
 
-# `entity`
+# entity
 This object has a value that specifies the Cedar `type` and unique `id` of a single entity.
 ```
     "entity": { "type": "User", "id": "12UA45" }
 ```
 
-# `entities`
+# entities
 This object is a JSON array or list of objects. Each entry in the list is a  each with a value that specifies the `type` and `id` of the entity.
 ```
     "entity": [
@@ -290,7 +290,7 @@ This object is a JSON array or list of objects. Each entry in the list is a  eac
     ]
 ```
 
-# `slot`
+# slot
 This key is mandatory only if the policy being rendered is a template that uses a placeholder and the `principal` or `resource` object uses the `==` or `in` operator. 
   ```
     "slot": "?principal"
