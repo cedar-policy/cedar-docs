@@ -42,37 +42,37 @@
 }
 </code></pre></div></div> <blockquote> <p>In this topic, the term policy refers to both static policies and policy templates.</p> </blockquote> <p>The JSON representation of a policy contains the following keys:</p> <ul> <li><a href="#effect">effect</a></li> <li><a href="#principal">principal</a></li> <li><a href="#action">action</a></li> <li><a href="#resource">resource</a></li> <li><a href="#conditions">conditions</a></li> <li><a href="#annotations">annotations</a></li> </ul> <h1 id="effect"> <a href="#effect" class="anchor-heading" aria-labelledby="effect"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">effect</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">effect</code> object is required.</p> <p>The value of this object must be either the string <code class="language-plaintext highlighter-rouge">permit</code> or the string <code class="language-plaintext highlighter-rouge">forbid</code>.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "effect": "permit",
     "effect": "forbid",
-</code></pre></div></div> <h1 id="principal"> <a href="#principal" class="anchor-heading" aria-labelledby="principal"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">principal</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">principal</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">entity</code> or <code class="language-plaintext highlighter-rouge">slot</code>.</p> <h2 id="op"> <a href="#op" class="anchor-heading" aria-labelledby="op"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li><code class="language-plaintext highlighter-rouge">All</code> If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">principal</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">principal</code> object doesn’t require any additional objects. Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "principal": {
+</code></pre></div></div> <h1 id="principal"> <a href="#principal" class="anchor-heading" aria-labelledby="principal"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">principal</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">principal</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">entity</code> or <code class="language-plaintext highlighter-rouge">slot</code>.</p> <h2 id="op"> <a href="#op" class="anchor-heading" aria-labelledby="op"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li> <p><code class="language-plaintext highlighter-rouge">All</code> If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">principal</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">principal</code> object doesn’t require any additional objects.</p> <p><strong>Example</strong> Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "principal": {
       "op": "All" 
   }
-</code></pre></div> </div> </li> <li><code class="language-plaintext highlighter-rouge">==</code><br /> If present, then the <code class="language-plaintext highlighter-rouge">principal</code> object must also have one of the following: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" == User::"12UA45"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> <li><code class="language-plaintext highlighter-rouge">==</code><br /> If present, then the <code class="language-plaintext highlighter-rouge">principal</code> object must also have one of the following: <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" == User::"12UA45"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "==",
     "entity": { "type": "User", "id": "12UA45" }
 }
-</code></pre></div> </div> </li> <li><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" == "?principal"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> <li> <p><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" == "?principal"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "==",
     "slot": { "?principal" }
 },
-</code></pre></div> </div> </li> </ul> </li> <li><code class="language-plaintext highlighter-rouge">in</code> If present, then the <code class="language-plaintext highlighter-rouge">principal</code> object must also have one of the following: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" in Group::"Admins"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> </ul> </li> <li><code class="language-plaintext highlighter-rouge">in</code></li> </ul> <p>If present, then the <code class="language-plaintext highlighter-rouge">principal</code> object must also have one of the following:</p> <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" in Group::"Admins"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "in",
     "entity": { "type": "Group", "id": "Admins" }
 }
-</code></pre></div> </div> </li> <li><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" in "?principal"</code> JSON representation <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> <li> <p><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"principal" in "?principal"</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "in",
     "slot": { "?principal" }
 },
-</code></pre></div> </div> </li> </ul> </li> </ul> <h1 id="action"> <a href="#action" class="anchor-heading" aria-labelledby="action"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">action</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">action</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">[entity](#entity)</code> or <code class="language-plaintext highlighter-rouge">[entities](#entities)</code>.</p> <h2 id="op-1"> <a href="#op-1" class="anchor-heading" aria-labelledby="op-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li><code class="language-plaintext highlighter-rouge">All</code> If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">action</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">action</code> object doesn’t require any additional objects. Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"action"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "action": {
+</code></pre></div> </div> </li> </ul> <h1 id="action"> <a href="#action" class="anchor-heading" aria-labelledby="action"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">action</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">action</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">[entity](#entity)</code> or <code class="language-plaintext highlighter-rouge">[entities](#entities)</code>.</p> <h2 id="op-1"> <a href="#op-1" class="anchor-heading" aria-labelledby="op-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li> <p><code class="language-plaintext highlighter-rouge">All</code></p> <p>If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">action</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">action</code> object doesn’t require any additional objects.</p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"action"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "action": {
       "op": "All" 
   }
-</code></pre></div> </div> </li> <li><code class="language-plaintext highlighter-rouge">==</code><br /> If present, then the <code class="language-plaintext highlighter-rouge">action</code> object must also have the following object: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" == Action::"readFile"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"action": {
+</code></pre></div> </div> </li> <li> <p><code class="language-plaintext highlighter-rouge">==</code></p> </li> </ul> <p>If present, then the <code class="language-plaintext highlighter-rouge">action</code> object must also have the following object:</p> <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a></p> <p><strong>Example</strong></p> <p>Cedar Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" == Action::"readFile"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"action": {
     "op": "==",
     "entity": { "type": "Action", "id": "readFile" }
 }
-</code></pre></div> </div> </li> </ul> </li> <li><code class="language-plaintext highlighter-rouge">in</code> If present, then the <code class="language-plaintext highlighter-rouge">action</code> object must also have one of the following: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" in Action::"readOnly"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> <li> <p><code class="language-plaintext highlighter-rouge">in</code></p> </li> </ul> <p>If present, then the <code class="language-plaintext highlighter-rouge">action</code> object must also have one of the following:</p> <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" in Action::"readOnly"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "in",
     "entity": { "type": "Action", "id": "readOnly" }
 }
-</code></pre></div> </div> </li> <li><a href="#entities"><code class="language-plaintext highlighter-rouge">entities</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" in [ Action::"readFile", Action::"writeFile", Action::"deleteFile"]</code> JSON representation <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
+</code></pre></div> </div> </li> <li> <p><a href="#entities"><code class="language-plaintext highlighter-rouge">entities</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"action" in [ Action::"readFile", Action::"writeFile", Action::"deleteFile"]</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"principal": {
     "op": "in",
     "entities": [
         { "type": "Action", "id": "readFile" },
@@ -80,26 +80,26 @@
         { "type": "Action", "id": "deleteFile" }
     ]
 }
-</code></pre></div> </div> </li> </ul> </li> </ul> <h1 id="resource"> <a href="#resource" class="anchor-heading" aria-labelledby="resource"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">resource</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">resource</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">entity</code> or <code class="language-plaintext highlighter-rouge">slot</code>.</p> <h2 id="op-2"> <a href="#op-2" class="anchor-heading" aria-labelledby="op-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li><code class="language-plaintext highlighter-rouge">All</code> If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">resource</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">resource</code> object doesn’t require any additional objects. Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "resource": {
+</code></pre></div> </div> </li> </ul> <h1 id="resource"> <a href="#resource" class="anchor-heading" aria-labelledby="resource"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">resource</code> </h1> <p>The <code class="language-plaintext highlighter-rouge">resource</code> object is required. The value of this object must include an object with the key <code class="language-plaintext highlighter-rouge">op</code>, and depending on the value of <code class="language-plaintext highlighter-rouge">op</code>, an object with the key <code class="language-plaintext highlighter-rouge">entity</code> or <code class="language-plaintext highlighter-rouge">slot</code>.</p> <h2 id="op-2"> <a href="#op-2" class="anchor-heading" aria-labelledby="op-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">op</code> </h2> <p>The <code class="language-plaintext highlighter-rouge">op</code> key is mandatory. The <code class="language-plaintext highlighter-rouge">op</code> object must have one of the following string values:</p> <ul> <li> <p><code class="language-plaintext highlighter-rouge">All</code></p> <p>If present, then the original policy contains only the key word <code class="language-plaintext highlighter-rouge">resource</code> with no constraints. In this case, the <code class="language-plaintext highlighter-rouge">resource</code> object doesn’t require any additional objects.</p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "resource": {
       "op": "All" 
   }
-</code></pre></div> </div> </li> <li><code class="language-plaintext highlighter-rouge">==</code><br /> If this operator is present, then the <code class="language-plaintext highlighter-rouge">resource</code> object must also have one of the following: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" == file::"vacationphoto.jpg"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
+</code></pre></div> </div> </li> <li> <p><code class="language-plaintext highlighter-rouge">==</code></p> </li> </ul> <p>If this operator is present, then the <code class="language-plaintext highlighter-rouge">resource</code> object must also have one of the following:</p> <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> <strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" == file::"vacationphoto.jpg"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
     "op": "==",
     "entity": { "type": "file", "id": "vacationphoto.jpg" }
 }
-</code></pre></div> </div> </li> <li><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" == "?resource"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
+</code></pre></div> </div> </li> <li> <p><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" == "?resource"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
     "op": "==",
     "slot": { "?resource" }
 },
-</code></pre></div> </div> </li> </ul> </li> <li><code class="language-plaintext highlighter-rouge">in</code> If present, then the <code class="language-plaintext highlighter-rouge">resource</code> object must also have one of the following: <ul> <li><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" in folder::"Public"</code> JSON representation: <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
+</code></pre></div> </div> </li> <li> <p><code class="language-plaintext highlighter-rouge">in</code></p> </li> </ul> <p>If present, then the <code class="language-plaintext highlighter-rouge">resource</code> object must also have one of the following:</p> <ul> <li> <p><a href="#entity"><code class="language-plaintext highlighter-rouge">entity</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" in folder::"Public"</code></p> <p>JSON representation:</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
     "op": "in",
     "entity": { "type": "folder", "id": "Public" }
 }
-</code></pre></div> </div> </li> <li><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" in "?resource"</code> JSON representation <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
+</code></pre></div> </div> </li> <li> <p><a href="#slot"><code class="language-plaintext highlighter-rouge">slot</code></a></p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">"resource" in "?resource"</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"resource": {
     "op": "in",
     "slot": { "?resource" }
 }
-</code></pre></div> </div> </li> </ul> </li> </ul> <h1 id="conditions"> <a href="#conditions" class="anchor-heading" aria-labelledby="conditions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> conditions </h1> <p>The <code class="language-plaintext highlighter-rouge">conditions</code> object is mandatory, and is a JSON array of objects. Each object in the array must have exactly two keys, <code class="language-plaintext highlighter-rouge">kind</code> and <code class="language-plaintext highlighter-rouge">body</code>. The <code class="language-plaintext highlighter-rouge">kind</code> key must be either the string <code class="language-plaintext highlighter-rouge">when</code> or the string <code class="language-plaintext highlighter-rouge">unless</code>.</p> <p>The <code class="language-plaintext highlighter-rouge">body</code> key must be an <a href="#ESTExpr-objects">ESTExpr object</a>. <strong>Example for <code class="language-plaintext highlighter-rouge">conditions</code></strong> Cedar policy lines <code class="language-plaintext highlighter-rouge">when { ... }</code> JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+</code></pre></div> </div> </li> </ul> <h1 id="conditions"> <a href="#conditions" class="anchor-heading" aria-labelledby="conditions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> conditions </h1> <p>The <code class="language-plaintext highlighter-rouge">conditions</code> object is mandatory, and is a JSON array of objects. Each object in the array must have exactly two keys, <code class="language-plaintext highlighter-rouge">kind</code> and <code class="language-plaintext highlighter-rouge">body</code>. The <code class="language-plaintext highlighter-rouge">kind</code> key must be either the string <code class="language-plaintext highlighter-rouge">when</code> or the string <code class="language-plaintext highlighter-rouge">unless</code>.</p> <p>The <code class="language-plaintext highlighter-rouge">body</code> key must be an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <p><strong>Example</strong></p> <p>Cedar policy lines <code class="language-plaintext highlighter-rouge">when { ... }</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
     {
         "kind": "when",
         "body": {
@@ -107,11 +107,251 @@
         }
     }
 ]
-</code></pre></div></div> <h1 id="annotations"> <a href="#annotations" class="anchor-heading" aria-labelledby="annotations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> annotations </h1> <p>annotations, if present, must be a JSON object. The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.</p> <h1 id="entity"> <a href="#entity" class="anchor-heading" aria-labelledby="entity"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> entity </h1> <p>This object has a value that specifies the Cedar <code class="language-plaintext highlighter-rouge">type</code> and unique <code class="language-plaintext highlighter-rouge">id</code> of a single entity.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "entity": { "type": "User", "id": "12UA45" }
-</code></pre></div></div> <h1 id="entities"> <a href="#entities" class="anchor-heading" aria-labelledby="entities"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> entities </h1> <p>This object is a JSON array or list of objects. Each entry in the list is a each with a value that specifies the <code class="language-plaintext highlighter-rouge">type</code> and <code class="language-plaintext highlighter-rouge">id</code> of the entity.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "entities": [
-        { "type": "User", "id": "12UA45" },
-        { "type": "Group", "id": "67VB89" }
+</code></pre></div></div> <h1 id="annotations"> <a href="#annotations" class="anchor-heading" aria-labelledby="annotations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> annotations </h1> <p>annotations, if present, must be a JSON object. The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.</p> <h1 id="entity"> <a href="#entity" class="anchor-heading" aria-labelledby="entity"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> entity </h1> <p>This object has a value that specifies the Cedar <code class="language-plaintext highlighter-rouge">type</code> and unique <code class="language-plaintext highlighter-rouge">id</code> of a single entity.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"entity": { "type": "User", "id": "12UA45" }
+</code></pre></div></div> <h1 id="entities"> <a href="#entities" class="anchor-heading" aria-labelledby="entities"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> entities </h1> <p>This object is a JSON array or list of objects. Each entry in the list is a each with a value that specifies the <code class="language-plaintext highlighter-rouge">type</code> and <code class="language-plaintext highlighter-rouge">id</code> of the entity.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"entities": [
+    { "type": "User", "id": "12UA45" },
+    { "type": "Group", "id": "67VB89" }
+]
+</code></pre></div></div> <h1 id="slot"> <a href="#slot" class="anchor-heading" aria-labelledby="slot"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> slot </h1> <p>This key is mandatory only if the policy being rendered is a template that uses a placeholder and the <code class="language-plaintext highlighter-rouge">principal</code> or <code class="language-plaintext highlighter-rouge">resource</code> object uses the <code class="language-plaintext highlighter-rouge">==</code> or <code class="language-plaintext highlighter-rouge">in</code> operator.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"slot": "?principal"
+"slot": "?resource"
+</code></pre></div></div> <h2 id="estexpr-objects"> <a href="#estexpr-objects" class="anchor-heading" aria-labelledby="estexpr-objects"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ESTExpr objects </h2> <p>An ESTExpr object is an object with a single key that is any of the following.</p> <h3 id="value"> <a href="#value" class="anchor-heading" aria-labelledby="value"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Value</code> </h3> <p>The value of this key is a Cedar value in the same syntax as expected for entity attribute values in Cedar’s entity format. This can include entity reference literals, set literals, and record literals.</p> <p><strong>Example using numeric literals</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">when { 1 == 2 };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "==": {
+                "left": {
+                    "Value": 1
+                },
+                "right": {
+                    "Value": 2
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <p><strong>Example using entity literals</strong></p> <p>Cedar policy line <code class="language-plaintext highlighter-rouge">when { User::"alice" == Namespace::Type::"SomePrincipal" };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "==": {
+                "left": {
+                    "Value": {
+                        "__entity": {
+                            "type": "User",
+                            "id": "alice"
+                        }
+                    }
+                },
+                "right": {
+                    "Value": {
+                        "__entity": {
+                            "type": "Namespace::Type",
+                            "id": "SomePrincipal"
+                        }
+                    }
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <p><strong>Example using set literals</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">when { [1, 2, "something"] == [4, 5, "otherthing"] };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "==": {
+                "left": {
+                    "Set": [
+                        { "Value": 1 },
+                        { "Value": 2 },
+                        { "Value": "something" },
+                    ]
+                },
+                "right": {
+                    "Set": [
+                        { "Value": 4 },
+                        { "Value": 5 },
+                        { "Value": "otherthing" },
+                    ]
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <p><strong>Example using record literals</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">when { {something: "spam", otherthing: false} == {} };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "==": {
+                "left": {
+                    "Record": {
+                        "something": { "Value": "spam" },
+                        "otherthing": { "Value": false },
+                    }
+                },
+                "right": {
+                    "Record": {}
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <h3 id="var"> <a href="#var" class="anchor-heading" aria-labelledby="var"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Var</code> </h3> <p>The value of this key is one of the strings <code class="language-plaintext highlighter-rouge">principal</code>, <code class="language-plaintext highlighter-rouge">action</code>, <code class="language-plaintext highlighter-rouge">resource</code>, or <code class="language-plaintext highlighter-rouge">context</code>.</p> <p><strong>Example</strong></p> <p>Cedar policy line: <code class="language-plaintext highlighter-rouge">when { principal == action &amp;&amp; resource == context.something };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "&amp;&amp;": {
+                "left": {
+                    "==": {
+                        "left": {
+                            "Var": "principal"
+                        },
+                        "right": {
+                            "Var": "action"
+                        }
+                    }
+                },
+                "right": {
+                    "==": {
+                        "left": {
+                            "Var": "resource"
+                        },
+                        "right": {
+                            ".": {
+                                "left": {
+                                    "Var": "context"
+                                },
+                                "attr": "something"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <h3 id="slot-1"> <a href="#slot-1" class="anchor-heading" aria-labelledby="slot-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Slot</code> </h3> <p>The value of this key is one of the strings <code class="language-plaintext highlighter-rouge">?principal</code> or <code class="language-plaintext highlighter-rouge">?resource</code>. Currently, policies containing this are not valid Cedar</p> <h3 id="unknown"> <a href="#unknown" class="anchor-heading" aria-labelledby="unknown"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Unknown</code> </h3> <p>The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation. In particular, these values may appear in the ESTs of residuals.</p> <h3 id="-or-neg"> <a href="#-or-neg" class="anchor-heading" aria-labelledby="-or-neg"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">!</code> or <code class="language-plaintext highlighter-rouge">neg</code> </h3> <p>The value of this key is an object with a single key argument, whose value is itself an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <p><strong>Example using <code class="language-plaintext highlighter-rouge">.</code> and <code class="language-plaintext highlighter-rouge">!</code></strong></p> <p>Example Cedar policy line: <code class="language-plaintext highlighter-rouge">when { !context.something };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+        "!": {
+            "arg": {
+                ".": {
+                    "left": {
+                        "Var": "context"
+                    },
+                    "attr": "something"
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <h3 id="--in-----------contains-containsall-containsany"> <a href="#--in-----------contains-containsall-containsany" class="anchor-heading" aria-labelledby="--in-----------contains-containsall-containsany"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, <code class="language-plaintext highlighter-rouge">in</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&lt;=</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code>, <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>, <code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code>, <code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">contains</code>, <code class="language-plaintext highlighter-rouge">containsAll</code>, <code class="language-plaintext highlighter-rouge">containsAny</code> </h3> <p>The value for any of these keys is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">right</code>, which are each themselves an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <p><strong>Example for <code class="language-plaintext highlighter-rouge">contains</code></strong></p> <p>Cedar policy line <code class="language-plaintext highlighter-rouge">when { principal.owners.contains("something") };</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "contains": {
+                "left": {
+                    ".": {
+                        "left": {
+                            "Var": "principal"
+                        },
+                        "attr": "owners"
+                    }
+                },
+                "right": {
+                    "Value": "something"
+                }
+            }
+        }
+    }
+]
+</code></pre></div></div> <h3 id="-has"> <a href="#-has" class="anchor-heading" aria-labelledby="-has"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">.</code>, <code class="language-plaintext highlighter-rouge">has</code> </h3> <p>The value of one of these keys is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">attr</code>. The left key is itself an <a href="#ESTExpr-objects">ESTExpr object</a>, while the <code class="language-plaintext highlighter-rouge">attr</code> key is a string.</p> <p><strong>Example for <code class="language-plaintext highlighter-rouge">.</code></strong></p> <p>Cedar policy line <code class="language-plaintext highlighter-rouge">context.something</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>".": {
+    "left": {
+        "Var": "context"
+    },
+    "attr": "something"
+}
+</code></pre></div></div> <h3 id="like"> <a href="#like" class="anchor-heading" aria-labelledby="like"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">like</code> </h3> <p>The value of this key is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">pattern</code>. The left key is itself an <a href="#ESTExpr-objects">ESTExpr object</a>, while the <code class="language-plaintext highlighter-rouge">pattern</code> key is any string.</p> <h3 id="if-then-else"> <a href="#if-then-else" class="anchor-heading" aria-labelledby="if-then-else"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">if-then-else</code> </h3> <p>The value of this key is an object with keys <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">then</code>, and <code class="language-plaintext highlighter-rouge">else</code>, each of which are themselves an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <p><strong>Example for if-then-else</strong></p> <p>Cedar policy line</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>when {
+    if context.something
+    then principal has "-78/%$!"
+    else resource.email like "*@amazon.com"
+};
+</code></pre></div></div> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "if-then-else": {
+                "if": {
+                    ".": {
+                        "left": {
+                            "Var": "context"
+                        },
+                        "attr": "something"
+                    }
+                },
+                "then": {
+                    "has": {
+                        "left": {
+                            "Var": "principal"
+                        },
+                        "attr": "-78/%$!"
+                    }
+                },
+                "else": {
+                    "like": {
+                        "left": {
+                            ".": {
+                                "left": {
+                                    "Var": "resource"
+                                },
+                                "attr": "email"
+                            }
+                        },
+                        "pattern": "*@amazon.com"
+                    }
+                }
+            }
+        }
+    }
+]        
+</code></pre></div></div> <h3 id="set"> <a href="#set" class="anchor-heading" aria-labelledby="set"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Set</code> </h3> <p>The value of this key is a JSON array of values, each of which is itself an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <h3 id="record"> <a href="#record" class="anchor-heading" aria-labelledby="record"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Record</code> </h3> <p>The value of this key is a JSON object whose keys are arbitrary strings and values are themselves <a href="#ESTExpr-objects">ESTExpr objects</a>.</p> <p><strong>Example for record</strong></p> <p>Cedar policy line <code class="language-plaintext highlighter-rouge">{something: "spam", somethingelse: false}</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "Record": {
+        "foo": { "Value": "spam" },
+        "bar": { "Value": false },
+    }
+}        
+</code></pre></div></div> <h3 id="any-other-key"> <a href="#any-other-key" class="anchor-heading" aria-labelledby="any-other-key"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Any other key </h3> <p>This key is treated as the name of an extension function or method. The value must be a JSON array of values, each of which is itself an <a href="#ESTExpr-objects">ESTExpr object</a>. Note that for method calls, the method receiver is the first argument. For example, for <code class="language-plaintext highlighter-rouge">a.isInRange(b)</code>, the first argument is for <code class="language-plaintext highlighter-rouge">a</code> and the second argument is for <code class="language-plaintext highlighter-rouge">b</code>.</p> <p><strong>Example for decimal</strong></p> <p>Cedar policy line <code class="language-plaintext highlighter-rouge">decimal("10.0")</code></p> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+    "decimal": [
+        {
+            "Value": "10.0"
+        }
     ]
-</code></pre></div></div> <h1 id="slot"> <a href="#slot" class="anchor-heading" aria-labelledby="slot"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> slot </h1> <p>This key is mandatory only if the policy being rendered is a template that uses a placeholder and the <code class="language-plaintext highlighter-rouge">principal</code> or <code class="language-plaintext highlighter-rouge">resource</code> object uses the <code class="language-plaintext highlighter-rouge">==</code> or <code class="language-plaintext highlighter-rouge">in</code> operator.</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    "slot": "?principal"
-    "slot": "?resource"
-</code></pre></div></div> <h2 id="estexpr-objects"> <a href="#estexpr-objects" class="anchor-heading" aria-labelledby="estexpr-objects"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> ESTExpr objects </h2> <p>An ESTExpr object is an object with a single key that is any of the following.</p> <h3 id="value"> <a href="#value" class="anchor-heading" aria-labelledby="value"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Value</code> </h3> <p>The value of this key is a Cedar value in the same syntax as expected for entity attribute values in Cedar’s entity format. This can include entity reference literals, set literals, and record literals. <strong>Example using numeric literals</strong> Cedar policy line: <code class="language-plaintext highlighter-rouge">when { 1 == 2 };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "==": { "left": { "Value": 1 }, "right": { "Value": 2 } } } } ] </code> <strong>Example using entity literals</strong> Cedar policy line <code class="language-plaintext highlighter-rouge">when { User::"alice" == Namespace::Type::"SomePrincipal" };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "==": { "left": { "Value": { "__entity": { "type": "User", "id": "alice" } } }, "right": { "Value": { "__entity": { "type": "Namespace::Type", "id": "SomePrincipal" } } } } } } ] </code> <strong>Example using set literals</strong> Cedar policy line: <code class="language-plaintext highlighter-rouge">when { [1, 2, "something"] == [4, 5, "otherthing"] };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "==": { "left": { "Set": [ { "Value": 1 }, { "Value": 2 }, { "Value": "something" }, ] }, "right": { "Set": [ { "Value": 4 }, { "Value": 5 }, { "Value": "otherthing" }, ] } } } } ] </code> <strong>Example using record literals</strong> Cedar policy line: <code class="language-plaintext highlighter-rouge">when { {something: "spam", otherthing: false} == {} };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "==": { "left": { "Record": { "something": { "Value": "spam" }, "otherthing": { "Value": false }, } }, "right": { "Record": {} } } } } ] </code></p> <h3 id="var"> <a href="#var" class="anchor-heading" aria-labelledby="var"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Var</code> </h3> <p>The value of this key is one of the strings <code class="language-plaintext highlighter-rouge">principal</code>, <code class="language-plaintext highlighter-rouge">action</code>, <code class="language-plaintext highlighter-rouge">resource</code>, or <code class="language-plaintext highlighter-rouge">context</code>. <strong>Example</strong> Cedar policy line: <code class="language-plaintext highlighter-rouge">when { principal == action &amp;&amp; resource == context.something };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "&amp;&amp;": { "left": { "==": { "left": { "Var": "principal" }, "right": { "Var": "action" } } }, "right": { "==": { "left": { "Var": "resource" }, "right": { ".": { "left": { "Var": "context" }, "attr": "something" } } } } } } } ] </code></p> <h3 id="slot-1"> <a href="#slot-1" class="anchor-heading" aria-labelledby="slot-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Slot</code> </h3> <p>The value of this key is one of the strings <code class="language-plaintext highlighter-rouge">?principal</code> or <code class="language-plaintext highlighter-rouge">?resource</code>. Currently, policies containing this are not valid Cedar</p> <h3 id="unknown"> <a href="#unknown" class="anchor-heading" aria-labelledby="unknown"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Unknown</code> </h3> <p>The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation. In particular, these values may appear in the ESTs of residuals.</p> <h3 id="-or-neg"> <a href="#-or-neg" class="anchor-heading" aria-labelledby="-or-neg"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">!</code> or <code class="language-plaintext highlighter-rouge">neg</code> </h3> <p>The value of this key is an object with a single key argument, whose value is itself an <a href="#ESTExpr-objects">ESTExpr object</a>. <strong>Example using <code class="language-plaintext highlighter-rouge">.</code> and <code class="language-plaintext highlighter-rouge">!</code></strong> Example Cedar policy line: <code class="language-plaintext highlighter-rouge">when { !context.something };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "!": { "arg": { ".": { "left": { "Var": "context" }, "attr": "something" } } } } ] </code></p> <h3 id="--in-----------contains-containsall-containsany"> <a href="#--in-----------contains-containsall-containsany" class="anchor-heading" aria-labelledby="--in-----------contains-containsall-containsany"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">==</code>, <code class="language-plaintext highlighter-rouge">!=</code>, <code class="language-plaintext highlighter-rouge">in</code>, <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&lt;=</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">&gt;=</code>, <code class="language-plaintext highlighter-rouge">&amp;&amp;</code>, <code class="language-plaintext highlighter-rouge">||</code>, <code class="language-plaintext highlighter-rouge">+</code>, <code class="language-plaintext highlighter-rouge">-</code>, <code class="language-plaintext highlighter-rouge">*</code>, <code class="language-plaintext highlighter-rouge">contains</code>, <code class="language-plaintext highlighter-rouge">containsAll</code>, <code class="language-plaintext highlighter-rouge">containsAny</code> </h3> <p>The value for any of these keys is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">right</code>, which are each themselves an <a href="#ESTExpr-objects">ESTExpr object</a>. <strong>Example for <code class="language-plaintext highlighter-rouge">contains</code></strong> Cedar policy line <code class="language-plaintext highlighter-rouge">when { principal.owners.contains("something") };</code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "contains": { "left": { ".": { "left": { "Var": "principal" }, "attr": "owners" } }, "right": { "Value": "something" } } } } ] </code></p> <h3 id="-has"> <a href="#-has" class="anchor-heading" aria-labelledby="-has"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">.</code>, <code class="language-plaintext highlighter-rouge">has</code> </h3> <p>The value of one of these keys is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">attr</code>. The left key is itself an <a href="#ESTExpr-objects">ESTExpr object</a>, while the <code class="language-plaintext highlighter-rouge">attr</code> key is a string. <strong>Example for <code class="language-plaintext highlighter-rouge">.</code></strong> Cedar policy line <code class="language-plaintext highlighter-rouge">context.something</code> JSON representation <code class="language-plaintext highlighter-rouge"> ".": { "left": { "Var": "context" }, "attr": "something" } </code></p> <h3 id="like"> <a href="#like" class="anchor-heading" aria-labelledby="like"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">like</code> </h3> <p>The value of this key is an object with keys <code class="language-plaintext highlighter-rouge">left</code> and <code class="language-plaintext highlighter-rouge">pattern</code>. The left key is itself an <a href="#ESTExpr-objects">ESTExpr object</a>, while the <code class="language-plaintext highlighter-rouge">pattern</code> key is any string.</p> <h3 id="if-then-else"> <a href="#if-then-else" class="anchor-heading" aria-labelledby="if-then-else"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">if-then-else</code> </h3> <p>The value of this key is an object with keys <code class="language-plaintext highlighter-rouge">if</code>, <code class="language-plaintext highlighter-rouge">then</code>, and <code class="language-plaintext highlighter-rouge">else</code>, each of which are themselves an <a href="#ESTExpr-objects">ESTExpr object</a>. <strong>Example for if-then-else</strong> Cedar policy line <code class="language-plaintext highlighter-rouge"> when { if context.something then principal has "-78/%$!" else resource.email like "*@amazon.com" }; </code> <br /> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "if-then-else": { "if": { ".": { "left": { "Var": "context" }, "attr": "something" } }, "then": { "has": { "left": { "Var": "principal" }, "attr": "-78/%$!" } }, "else": { "like": { "left": { ".": { "left": { "Var": "resource" }, "attr": "email" } }, "pattern": "*@amazon.com" } } } } } ] </code></p> <h3 id="set"> <a href="#set" class="anchor-heading" aria-labelledby="set"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Set</code> </h3> <p>The value of this key is a JSON array of values, each of which is itself an <a href="#ESTExpr-objects">ESTExpr object</a>.</p> <h3 id="record"> <a href="#record" class="anchor-heading" aria-labelledby="record"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Record</code> </h3> <p>The value of this key is a JSON object whose keys are arbitrary strings and values are themselves <a href="#ESTExpr-objects">ESTExpr objects</a>. <strong>Example for record</strong> Cedar policy line <code class="language-plaintext highlighter-rouge">{something: "spam", somethingelse: false}</code> JSON representation <code class="language-plaintext highlighter-rouge"> { "Record": { "foo": { "Value": "spam" }, "bar": { "Value": false }, } } </code></p> <h3 id="any-other-key"> <a href="#any-other-key" class="anchor-heading" aria-labelledby="any-other-key"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Any other key </h3> <p>This key is treated as the name of an extension function or method. The value must be a JSON array of values, each of which is itself an <a href="#ESTExpr-objects">ESTExpr object</a>. Note that for method calls, the method receiver is the first argument. For example, for <code class="language-plaintext highlighter-rouge">a.isInRange(b)</code>, the first argument is for <code class="language-plaintext highlighter-rouge">a</code> and the second argument is for <code class="language-plaintext highlighter-rouge">b</code>. <strong>Example for decimal</strong> Cedar policy line <code class="language-plaintext highlighter-rouge">decimal("10.0")</code> JSON representation <code class="language-plaintext highlighter-rouge"> { "decimal": [ { "Value": "10.0" } ] } </code> <strong>Example for IP address and method isInRange</strong> Cedar policy line <code class="language-plaintext highlighter-rouge"> when { context.source_ip.isInRange(ip("222.222.222.0/24")) }; </code> JSON representation <code class="language-plaintext highlighter-rouge"> "conditions": [ { "kind": "when", "body": { "isInRange": [ { ".": { "left": { "Var": "context" }, "attr": "source_ip" } }, { "ip": [ { "Value": "222.222.222.0/24" } ] } ] } } ] </code></p> </main> <hr> <footer> <div class="d-flex mt-2"> <p class="text-small text-grey-dk-000 mb-0"> <a href="https://github.com/cedar-policy/cedar-docs/tree/main/docs/json-est.md" id="edit-this-page">We welcome your feedback. You can edit this page on GitHub.</a> </p> </div> </footer> </div> </div> <div class="search-overlay"></div> </div> </body> </html>
+}
+</code></pre></div></div> <p><strong>Example for IP address and method isInRange</strong> Cedar policy line</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>when {
+    context.source_ip.isInRange(ip("222.222.222.0/24"))
+};    
+</code></pre></div></div> <p>JSON representation</p> <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>"conditions": [
+    {
+        "kind": "when",
+        "body": {
+            "isInRange": [
+                {
+                    ".": {
+                        "left": {
+                            "Var": "context"
+                        },
+                        "attr": "source_ip"
+                    }
+                },
+                {
+                    "ip": [
+                        {
+                            "Value": "222.222.222.0/24"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
+</code></pre></div></div> </main> <hr> <footer> <div class="d-flex mt-2"> <p class="text-small text-grey-dk-000 mb-0"> <a href="https://github.com/cedar-policy/cedar-docs/tree/main/docs/json-est.md" id="edit-this-page">We welcome your feedback. You can edit this page on GitHub.</a> </p> </div> </footer> </div> </div> <div class="search-overlay"></div> </div> </body> </html>
