@@ -11,7 +11,9 @@ has_children: false
 When you want to retrieve and programmatically parse a policy, you can use the `to_json` method. This returns the policy formatted as a JSON structure, as described in this topic.
 
 ***Example***
+
 A standard Cedar policy looks like the following:
+
 ```
 permit(
     principal == User::"12UA45",
@@ -21,7 +23,9 @@ permit(
     context.tls_version == "1.3"
 };
 ```
+
 When you retrieve the JSON representation of this policy, it looks like the following:
+
 ```
 {
     "effect": "permit",
@@ -58,7 +62,9 @@ When you retrieve the JSON representation of this policy, it looks like the foll
         }
     ]
 }
+
 ```
+
 {: .note }
 >In this topic, the term policy refers to both static policies and policy templates. 
 
@@ -71,29 +77,37 @@ The JSON representation of a policy contains the following keys:
 * [annotations](#annotations)
 
 # `effect`
+
 The `effect` object is required.
 
 The value of this object must be either the string `permit` or the string `forbid`.
+
 ```
-    "effect": "permit",
-    "effect": "forbid",
+"effect": "permit",
+"effect": "forbid",
 ```
 
 # `principal`
+
 The `principal` object is required.
+
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
 ## `op`
-The `op` key is mandatory. The `op` object must have one of the following string values:
+
+The `op` key is required. The `op` object must have one of the following string values:
 
 * `All` 
+
     If present, then the original policy contains only the key word `principal` with no constraints. In this case, the `principal` object doesn't require any additional objects.
 
     **Example**
+
     Cedar policy line:
     `"principal"`
 
     JSON representation:
+
     ```
     "principal": {
         "op": "All" 
@@ -102,15 +116,18 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
     If present, then the `principal` object must also have one of the following:
+
   * [`entity`](#entity)
 
     **Example** 
 
     Cedar policy line:
+
     `"principal" == User::"12UA45"`
 
     JSON representation: 
-     ```
+
+    ```
     "principal": {
         "op": "==",
         "entity": { "type": "User", "id": "12UA45" }
@@ -122,9 +139,11 @@ The `op` key is mandatory. The `op` object must have one of the following string
     **Example** 
 
     Cedar policy line:
+
     `"principal" == "?principal"`
 
     JSON representation: 
+    
     ```
     "principal": {
         "op": "==",
@@ -141,9 +160,11 @@ If present, then the `principal` object must also have one of the following:
     **Example**
 
     Cedar policy line:
+
     `"principal" in Group::"Admins"`
 
     JSON representation:
+    
     ```
     "principal": {
         "op": "in",
@@ -156,9 +177,11 @@ If present, then the `principal` object must also have one of the following:
     **Example**
 
     Cedar policy line:
+    
     `"principal" in "?principal"`
 
     JSON representation
+    
     ```
     "principal": {
         "op": "in",
@@ -167,11 +190,16 @@ If present, then the `principal` object must also have one of the following:
     ```
 
 # `action`
+
 The `action` object is required.
+
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
 
 ## `op`
-The `op` key is mandatory. The `op` object must have one of the following string values:
+
+The `op` key is required. 
+
+The `op` object must have one of the following string values:
 
 * `All` 
 
@@ -180,9 +208,11 @@ The `op` key is mandatory. The `op` object must have one of the following string
     **Example**
     
     Cedar policy line:
+
     `"action"`
     
     JSON representation:
+    
     ```
     "action": {
         "op": "All" 
@@ -191,16 +221,18 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
 
-If present, then the `action` object must also have the following object:
+    If present, then the `action` object must also have the following object:
 
   * [`entity`](#entity)
 
     **Example**
     
-     Cedar  Cedar policy line:
+    Cedar policy line:
+    
     `"action" == Action::"readFile"`
     
     JSON representation: 
+    
     ```
     "action": {
         "op": "==",
@@ -210,16 +242,18 @@ If present, then the `action` object must also have the following object:
 
 * `in`
 
-If present, then the `action` object must also have one of the following:
+  If present, then the `action` object must also have one of the following:
 
   * [`entity`](#entity)
 
     **Example**
     
     Cedar policy line:
+    
     `"action" in Action::"readOnly"`
     
     JSON representation:
+    
     ```
     "principal": {
         "op": "in",
@@ -232,9 +266,11 @@ If present, then the `action` object must also have one of the following:
     **Example**
      
     Cedar policy line:
+    
     `"action" in [ Action::"readFile", Action::"writeFile", Action::"deleteFile"]`
     
     JSON representation
+    
     ```
     "principal": {
         "op": "in",
@@ -247,11 +283,16 @@ If present, then the `action` object must also have one of the following:
     ```
 
 # `resource`
+
 The `resource` object is required.
+
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
 ## `op`
-The `op` key is mandatory. The `op` object must have one of the following string values:
+
+The `op` key is required. 
+
+The `op` object must have one of the following string values:
 
 * `All`
 
@@ -260,9 +301,11 @@ The `op` key is mandatory. The `op` object must have one of the following string
     **Example**
 
     Cedar policy line:
+    
     `"resource"`
 
     JSON representation:
+    
     ```
     "resource": {
         "op": "All" 
@@ -271,49 +314,56 @@ The `op` key is mandatory. The `op` object must have one of the following string
 
 * `==`  
 
-If this operator is present, then the `resource` object must also have one of the following:
+  If this operator is present, then the `resource` object must also have one of the following:
 
   * [`entity`](#entity)
+
     **Example**
 
     Cedar policy line:
+    
     `"resource" == file::"vacationphoto.jpg"`
 
     JSON representation: 
-     ```
+    
+    ```
     "resource": {
         "op": "==",
         "entity": { "type": "file", "id": "vacationphoto.jpg" }
     }
-     ```
+    ```
   
   * [`slot`](#slot)
 
     **Example**
     
     Cedar policy line:
+    
     `"resource" == "?resource"`
     
     JSON representation: 
-      ```
+    
+    ```
     "resource": {
         "op": "==",
         "slot": { "?resource" }
     },
-      ```
+    ```
 
 * `in`
 
-If present, then the `resource` object must also have one of the following:
+  If present, then the `resource` object must also have one of the following:
 
   * [`entity`](#entity)
 
     **Example** 
 
     Cedar policy line:
+    
     `"resource" in folder::"Public"`
     
     JSON representation:
+    
     ```
     "resource": {
         "op": "in",
@@ -326,9 +376,11 @@ If present, then the `resource` object must also have one of the following:
     **Example**
     
     Cedar policy line:
+    
     `"resource" in "?resource"`
     
     JSON representation
+    
     ```
     "resource": {
         "op": "in",
@@ -337,16 +389,23 @@ If present, then the `resource` object must also have one of the following:
     ```
 
 # conditions
-The `conditions` object is mandatory, and is a JSON array of objects.  Each object in the array must have exactly two keys, `kind` and `body`.  The `kind` key must be either the string `when` or the string `unless`.
+
+The `conditions` object is required.
+
+The value of this object is a JSON array of objects.  Each object in the array must have exactly two keys: `kind` and `body`.  
+
+The `kind` key must be either the string `when` or the string `unless`.
 
 The `body` key must be an [ESTExpr object](#ESTExpr-objects).
 
 **Example**
 
 Cedar policy lines
+
 `when { ... }`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -357,17 +416,20 @@ JSON representation
     }
 ]
 ```
-# annotations
-annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
+# `annotations`
 
-# entity
+Annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
+
+# `entity`
+
 This object has a value that specifies the Cedar `type` and unique `id` of a single entity.
 
 ```
 "entity": { "type": "User", "id": "12UA45" }
 ```
 
-# entities
+# `entities`
+
 This object is a JSON array or list of objects. Each entry in the list is a  each with a value that specifies the `type` and `id` of the entity.
 
 ```
@@ -377,8 +439,8 @@ This object is a JSON array or list of objects. Each entry in the list is a  eac
 ]
 ```
 
-# slot
-This key is mandatory only if the policy being rendered is a template that uses a placeholder and the `principal` or `resource` object uses the `==` or `in` operator. 
+# `slot`
+This key is required only if the policy being rendered is a template that uses a placeholder and the `principal` or `resource` object uses the `==` or `in` operator. 
 
 ```
 "slot": "?principal"
@@ -392,12 +454,14 @@ An ESTExpr object is an object with a single key that is any of the following.
 
 The value of this key is a Cedar value in the same syntax as expected for entity attribute values in Cedar’s entity format. This can include entity reference literals, set literals, and record literals.
 
-**Example using numeric literals**
+**Example with numeric literals**
     
 Cedar policy line:
+
 `when { 1 == 2 };`
     
 JSON representation
+
 ```
 "conditions": [
     {
@@ -416,12 +480,14 @@ JSON representation
 ]
 ```
     
-**Example using entity literals**
+**Example with entity literals**
     
 Cedar policy line
+
 `when { User::"alice" == Namespace::Type::"SomePrincipal" };`
     
 JSON representation
+
 ```
 "conditions": [
     {
@@ -450,12 +516,14 @@ JSON representation
 ]
 ```
     
-**Example using set literals**
+**Example with set literals**
 
 Cedar policy line:
+
 `when { [1, 2, "something"] == [4, 5, "otherthing"] };`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -482,12 +550,14 @@ JSON representation
 ]
 ```
 
-**Example using record literals**
+**Example with record literals**
 
 Cedar policy line:
+
 `when { {something: "spam", otherthing: false} == {} };`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -516,9 +586,11 @@ The value of this key is one of the strings `principal`, `action`, `resource`, o
 **Example**
     
 Cedar policy line:
-`when { principal == action && resource == context.something };`
+
+`when { principal == action && resource == context };`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -541,12 +613,7 @@ JSON representation
                             "Var": "resource"
                         },
                         "right": {
-                            ".": {
-                                "left": {
-                                    "Var": "context"
-                                },
-                                "attr": "something"
-                            }
+                            "Var": "context"
                         }
                     }
                 }
@@ -555,6 +622,7 @@ JSON representation
     }
 ]
 ```
+
 ### `Slot`
 
 The value of this key is one of the strings `?principal` or `?resource`. Currently, policies containing this are not valid Cedar
@@ -563,16 +631,18 @@ The value of this key is one of the strings `?principal` or `?resource`. Current
 
 The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the ESTs of residuals.
 
-### `!` or `neg`
+### `!` or `neg` operators
 
 The value of this key is an object with a single key argument, whose value is itself an [ESTExpr object](#ESTExpr-objects).
 
 **Example using `.` and `!`**
 
 Example Cedar policy line:
+
 `when { !context.something };`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -592,16 +662,18 @@ JSON representation
 ]
 ```
 
-### `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`
+### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`
 
 The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [ESTExpr object](#ESTExpr-objects).
 
 **Example for `contains`**
 
 Cedar policy line
+
 `when { principal.owners.contains("something") };`
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -632,9 +704,11 @@ The value of one of these keys is an object with keys `left` and `attr`.  The le
 **Example for `.`**
 
 Cedar policy line
+
 `context.something`
 
 JSON representation
+
 ```
 ".": {
     "left": {
@@ -655,6 +729,7 @@ The value of this key is an object with keys `if`, `then`, and `else`, each of w
 **Example for if-then-else**
 
 Cedar policy line
+
 ```
 when {
     if context.something
@@ -664,6 +739,7 @@ when {
 ```    
 
 JSON representation
+
 ```
 "conditions": [
     {
@@ -709,13 +785,31 @@ JSON representation
 
 The value of this key is a JSON array of values, each of which is itself an [ESTExpr object](#ESTExpr-objects).
 
+**Example**
+
+Cedar policy element
+
+`[1, 2, "something"]`
+
+JSON representation
+
+```
+{
+    "Set": [
+        { "Value": 1 },
+        { "Value": 2 },
+        { "Value": "something" },
+    ]
+}    
+```
+
 ### `Record`
 
 The value of this key is a JSON object whose keys are arbitrary strings and values are themselves [ESTExpr objects](#ESTExpr-objects).
 
 **Example for record**
 
-Cedar policy line
+Cedar policy element
 `{something: "spam", somethingelse: false}`
 
 JSON representation
@@ -732,12 +826,14 @@ JSON representation
 
 This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself an [ESTExpr object](#ESTExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
 
-**Example for decimal**
+**Example for `decimal` function**
 
 Cedar policy line
+
 `decimal("10.0")`
 
 JSON representation
+
 ```
 {
     "decimal": [
@@ -747,14 +843,19 @@ JSON representation
     ]
 }
 ```
-**Example for IP address and method isInRange**
+
+**Example for `ip` function and `isInRange` method**
+
 Cedar policy line
+
 ```
 when {
     context.source_ip.isInRange(ip("222.222.222.0/24"))
 };    
 ```
+
 JSON representation
+
 ```
 "conditions": [
     {
