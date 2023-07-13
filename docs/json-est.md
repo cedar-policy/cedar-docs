@@ -2,7 +2,7 @@
 layout: default
 title: JSON External Syntax Tree
 nav_order: 10
-has_children: true
+has_children: false
 ---
 
 # JSON External Syntax Tree representation of policies<a name="json-est"></a>
