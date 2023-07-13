@@ -153,7 +153,7 @@ The `op` key is required. The `op` object must have one of the following string 
 
 * `in`
 
-If present, then the `principal` object must also have one of the following:
+  If present, then the `principal` object must also have one of the following:
 
   * [`entity`](#entity)
 
