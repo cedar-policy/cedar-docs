@@ -641,29 +641,33 @@ The attribute name `role` can be written as an identifier (as in the previious e
 ```
 context has "role" && context.role.contains("admin")     //true
 ```
-If the attribute name is not valid as an identifier, then the string literal syntax must be used for `has` and attribute values must be accessed with the `[]` operator instead of using dot syntax.
+You must check for presence of optional attributes that are nested multiple layers one at a time. For example, to check for the presence of `principal.custom.project`, you must first check if `principal` has a `custom` attribute. You can then check to see if that `custom` attribute has a `project` attribute.  To do this, you could use the following syntax.
+```
+principal has custom && principal.custom has project 
+```
+If the attribute name is not valid as an identifier, then the string literal syntax must be used for `has` and attribute values must be accessed with the `[]` operator instead of using dot syntax. For example, to check if `context` has an attribute called `owner info` (with an embedded space), then you could use the following syntax.
 ```
 context has "owner info" && context["owner info"].name == "Alice"    //true
 ```
-The following expression returns false because the context does not have an attribute `tag`.
+The following expression returns false because `context` doesn't have an attribute `tag`.
 ```
 context has tag      //false
 ```
-The following expression returns a type error because the left-hand side of the `has` operator must be an entity or a record, but in this example `role` is a set, not a record or an entity reference.
+The following expression returns a type error because the left-hand side of the `has` operator must be an entity or a record. In this example, because `role` is a set, Cedar generates a type error.
 ```
 context.role has admin     //type error
 ```
-The following expression returns `false` because the `addr` sub-record does not have an attribute `country`:
+The following expression returns `false` because the `addr` sub-record does not have an attribute `country`. The second expression is not evaluated.
 ```
 context.addr has country && context.addr.country == "US "    //false
 ```
-However, consider the context does not have the `addr` sub-record at all:
+However, consider the case where `context` does not have the `addr` sub-record at all:
 ```
 "context": {
     "role": ["admin", "user"]
 }
 ```
-In that case, then the previous expression raises a missing-attribute error on `context.addr` before the `has` operator is even evaluated, and the entire policy is skipped. If the `addr` sub-record is optional, you can avoid this error by checking whether addr is present before accessing it with the `.` operator:
+In that case, then the previous expression that checks for `context.addr has country` raises a missing-attribute error on `context.addr` before the `has` operator is even evaluated, and the entire policy is skipped. If the `addr` sub-record is optional, you can avoid this error by checking whether `addr` is present before accessing it with the `.` operator:
 ```
 context has addr && context.addr has country && context.addr.country == "US"  // false, with no error
 ```
