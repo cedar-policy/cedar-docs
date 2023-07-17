@@ -8,33 +8,12 @@ nav_order: 1
 # Grammar specification for Cedar schema<a name="schema-grammar"></a>
 {: .no_toc }
 
-A Cedar schema is a JSON object. It has a namespace property, which is a
-sequence of strings separated by double colons ::. It maps this property to a
-json value, which in turns consists of EntityTypes followed by Actions.
-EntityTypes defines a number of entitytype properties, mapping the name of
-the entitytype to a JSON value defining that property.
-Actions defines a number action properties, mapping the name of the property
-to a JSON value defining that property.
-Each entitytype property maps the name of the entity type to two pieces of
-information:
-1) a memberOfTypes array that specifies the parents of this type
-2) a shape property that defines the “shape” of the entity, simply as a type,
-which in turn is specified as a JSON value, including primitive types such
-as long, string, and boolean and compound types consisting of sets and
-records of attributes.
-An action property defines the name of the action and the appliesTo property,
-which in turn may define the following properties
-1) “principalTypes”, if present, defines the entity types that can participate
-in this action as a principal. If “principalTypes” property is missing then
-an entity of any entity type may perform this action as principal. If
-principalTypes is an empty list, then it means that this action does not
-apply to any principal.
-2) “resourceTypes”, if present, defines the entity types that can participate
-in this action as a resource. If “resourceTypes” property is missing then
-entities of any entity type serve as a resource for this action. If resourceTypes is the empty list, then it means that this action does not apply to
-any resources
 
-This topic describes the grammar specification for the Cedar schema. This grammar uses the following symbols:
+
+This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](schema.md).
+
+This grammar uses the following symbols:
+
 + A vertical bar `|` designates alternatives. Only one alternative can be used.
 + Brackets `[ ]` designate an optional element. 
 + Parentheses `( )` designate grouping
@@ -59,7 +38,7 @@ The grammar ignores whitespace and comments.
 A schema consists of a [`NameSpace`](#grammar-schema-NameSpace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
 
 ```
-Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions '}' '}'
+Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [(',' commonTypes )] '}' '}'
 ```
 
 ## `NameSpace`<a name="grammar-schema-NameSpace"></a>
@@ -101,7 +80,7 @@ Actions ::= '"actions"' ':' Action*
 The `Action` element describes one action supported by your application. An action begins with a name string, and includes an `appliesTo` element. The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
  
 ```
-Action ::= STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context '}'
+Action ::= STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}'
 ```
 
 ## `PrincipalTypes`<a name="grammar-schema-PrincipalTypes"></a>

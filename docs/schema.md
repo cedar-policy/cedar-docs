@@ -17,6 +17,8 @@ has_children: true
 {:toc}
 </details>
 
+This topic describes the structure of a Cedar schema. To view the formal grammar, see [Schema grammar](schema-grammar.md).
+
 ## Overview<a name="schema-overview"></a>
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. It bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences.
 
@@ -32,10 +34,6 @@ Services that use Cedar can use the information provided in the schema to valida
 
 A schema contains a declaration of one or more namespaces, each of which contains two mandatory JSON objects, `entityTypes` and `actions`. A namespace declaration can optionally include a third object, `commonTypes`, which defines types that can be referenced by the other two objects. We consider the format of namespaces and these three objects next.
 
-```
-Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions ' [ ', CommonTypes ] }'
-```
-
 ## NameSpace<a name="schema-namespace"></a>
 
 A [namespace](terminology.md#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
@@ -44,12 +42,6 @@ A [namespace](terminology.md#term-namespaces) declaration identifies and defines
 >The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
 
 A namespace declaration contains a comma-separated list of JSON objects within braces `{ }`. The following is an example of a namespace declaration:
-
-```
-NameSpace ::= STR ('::' STR)*
-
-STR := Fully-escaped Unicode surrounded by '"'s
-```
 
 A namespace declaration must contain two child elements, and may contain a third, appearing in any order:
 + [`entityTypes`](#schema-entityTypes)
@@ -113,13 +105,6 @@ If you change a declared namespace in your schema you will need to change the en
 ## `entityTypes`<a name="schema-entityTypes"></a>
 
 A collection of the `principal` and `resource` entity types supported by your application. The `entityTypes` element contains a comma-separated list of JSON objects.
-
-```
-EntityTypes ::= '{' EntityType ( ',' EntityType )* '}'
-
-EntityType ::= IDENT ':' '{' 'memberOfTypes' ':' '[' (EntityType ( ',' EntityType ))? ']'
-                             'shape': TypeJson '}'
-```
 
 The high-level structure of an `entityTypes` entry looks like the following example.
 
@@ -332,15 +317,6 @@ For example, a `Network` entity may include the IP address of its gateway.
 ## `actions`<a name="schema-actions"></a>
 
 A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The `actions` element contains a comma-separated list of one or more JSON objects.
-
-```
-Actions ::= '[' Action ( ',' Action )* ']'
-
-Action ::= STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context '}'
-```
-
-+ [`appliesTo`](#schema-actions-appliesTo)
-+ [`context`](#schema-actions-context)
 
 The high-level structure of an `actions` entry looks like the following.
 
