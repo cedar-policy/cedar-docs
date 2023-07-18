@@ -1,18 +1,18 @@
 ---
 layout: default
-title: JSON External Syntax Tree
+title: JSON format for policies
 nav_order: 10
 has_children: false
 ---
 
-# JSON External Syntax Tree representation of policies<a name="json-est"></a>
+# Programmatic creation of policies using JSON<a name="json-est"></a>
 {: .no_toc }
 
-When you want to retrieve and programmatically parse a policy, you can use the Cedar `Policy::to_json()` method. This retrieves the specified policy formatted as a JSON structure, as described in this topic.
+You can use the Cedar `Policy::to_json()` method to retrieves the specified policy formatted as a [JSON](https://json.org) structure. You can also use the `Policy::from_json()` method to construct a policy. This gives you another option for programmatically constructing or parsing your policies. The JSON format used by these methods is described in this topic.
 
 ***Example***
 
-A standard Cedar policy looks like the following:
+A "standard" Cedar policy looks like the following:
 
 ```
 permit(
@@ -67,8 +67,12 @@ When you retrieve the JSON representation of this policy, it looks like the foll
 
 {: .note }
 >In this topic, the term policy refers to both static policies and policy templates. 
+ 
+{: .note }
+>The JSON representation of a Cedar policy does not preserve comments, whitespace, or newline characters. 
 
 The JSON representation of a policy contains the following keys:
+
 * [effect](#effect)
 * [principal](#principal)
 * [action](#action)
@@ -396,7 +400,7 @@ The value of this object is a JSON array of objects.  Each object in the array m
 
 The `kind` key must be either the string `when` or the string `unless`.
 
-The `body` key must be an [ESTExpr object](#ESTExpr-objects).
+The `body` key must be an [JsonExpr object](#JsonExpr-objects).
 
 **Example**
 
@@ -447,10 +451,23 @@ This key is required only if the policy being rendered is a template that uses a
 "slot": "?resource"
 ```
 
-## ESTExpr objects
-An ESTExpr object is an object with a single key that is any of the following.
+## JsonExpr objects<a name="JsonExpr-objects">
+An JsonExpr object is an object with a single key that is any of the following.
 
-### `Value`
++ [`Value`](#JsonExpr-Value)
++ [`Var`](#JsonExpr-Var)
++ [`Slot`](#JsonExpr-Slot)
++ [`Unknown`](#JsonExpr-Unknown)
++ [`!` or `neg` operators](#JsonExpr-neg)
++ [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`](#JsonExpr-binary)
++ [`.`, `has`](#JsonExpr-has)
++ [`like`](#JsonExpr-like)
++ [`if-then-else`](#JsonExpr-if-then-else)
++ [`Set`](#JsonExpr-Set)
++ [`Record`](#JsonExpr-Record)
++ [`Any other key`](#JsonExpr-any-other-key)
+
+### `Value`<a name="JsonExpr-Value">
 
 The value of this key is a Cedar value in the same syntax as expected for entity attribute values in Cedar’s entity format. This can include entity reference literals, set literals, and record literals.
 
@@ -579,7 +596,7 @@ JSON representation
 ]
 ```
 
-### `Var`
+### `Var`<a name="JsonExpr-Var">
 
 The value of this key is one of the strings `principal`, `action`, `resource`, or `context`.
 
@@ -623,17 +640,17 @@ JSON representation
 ]
 ```
 
-### `Slot`
+### `Slot`<a name="JsonExpr-Slot">
 
 The value of this key is one of the strings `?principal` or `?resource`. Currently, policies containing this are not valid Cedar
 
-### `Unknown`
+### `Unknown`<a name="JsonExpr-Unknown">
 
-The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the ESTs of residuals.
+The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the JSON rendering of residuals.
 
-### `!` or `neg` operators
+### `!` or `neg` operators<a name="JsonExpr-neg">
 
-The value of this key is an object with a single key argument, whose value is itself an [ESTExpr object](#ESTExpr-objects).
+The value of this key is an object with a single key argument, whose value is itself an [JsonExpr object](#JsonExpr-objects).
 
 **Example using `.` and `!`**
 
@@ -662,9 +679,9 @@ JSON representation
 ]
 ```
 
-### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`
+### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`<a name="JsonExpr-binary">
 
-The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [ESTExpr object](#ESTExpr-objects).
+The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [JsonExpr object](#JsonExpr-objects).
 
 **Example for `contains`**
 
@@ -697,9 +714,9 @@ JSON representation
 ]
 ```
 
-### `.`, `has`
+### `.`, `has`<a name="JsonExpr-has">
 
-The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [ESTExpr object](#ESTExpr-objects), while the `attr` key is a string.
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
 
 **Example for `.`**
 
@@ -718,13 +735,13 @@ JSON representation
 }
 ```
 
-### `like`
+### `like`<a name="JsonExpr-like">
 
-The value of this key is an object with keys `left` and `pattern`.  The left key is itself an [ESTExpr object](#ESTExpr-objects), while the `pattern` key is any string.
+The value of this key is an object with keys `left` and `pattern`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is any string.
 
-### `if-then-else`
+### `if-then-else`<a name="JsonExpr-if-then-else">
 
-The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [ESTExpr object](#ESTExpr-objects).
+The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [JsonExpr object](#JsonExpr-objects).
 
 **Example for if-then-else**
 
@@ -781,9 +798,9 @@ JSON representation
 ]        
 ```
 
-### `Set`
+### `Set`<a name="JsonExpr-Set">
 
-The value of this key is a JSON array of values, each of which is itself an [ESTExpr object](#ESTExpr-objects).
+The value of this key is a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).
 
 **Example**
 
@@ -803,9 +820,9 @@ JSON representation
 }    
 ```
 
-### `Record`
+### `Record`<a name="JsonExpr-Record">
 
-The value of this key is a JSON object whose keys are arbitrary strings and values are themselves [ESTExpr objects](#ESTExpr-objects).
+The value of this key is a JSON object whose keys are arbitrary strings and values are themselves [JsonExpr objects](#JsonExpr-objects).
 
 **Example for record**
 
@@ -822,9 +839,9 @@ JSON representation
 }        
 ```
 
-### Any other key
+### Any other key<a name="JsonExpr-any-other-key">
 
-This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself an [ESTExpr object](#ESTExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
+This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
 
 **Example for `decimal` function**
 

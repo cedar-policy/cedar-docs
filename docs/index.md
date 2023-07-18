@@ -34,7 +34,7 @@ nav_order: 1
    + [Naming conventions](bp-naming-conventions.md)
    + [Every resource lives in a container](bp-resource-lives-in-container.md)
    + [Separate principals from resources](bp-separate-principals-from-resource-containers.md)
-+ [JSON External Syntax Tree](json-est.md)
++ [JSON format for pollicies](json-format.md)
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
 
