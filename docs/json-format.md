@@ -834,7 +834,7 @@ JSON representation
 {
     "Record": {
         "foo": { "Value": "spam" },
-        "bar": { "Value": false },
+        "somethingelse": { "Value": false },
     }
 }        
 ```
