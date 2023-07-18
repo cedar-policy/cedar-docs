@@ -5,7 +5,7 @@ nav_order: 10
 has_children: false
 ---
 
-# Programmatic creation of policies using JSON<a name="json-est"></a>
+# Programmatic creation of policies using JSON<a name="json-format"></a>
 {: .no_toc }
 
 You can use the Cedar `Policy::to_json()` method to retrieves the specified policy formatted as a [JSON](https://json.org) structure. You can also use the `Policy::from_json()` method to construct a policy. This gives you another option for programmatically constructing or parsing your policies. The JSON format used by these methods is described in this topic.
