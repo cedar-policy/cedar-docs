@@ -36,6 +36,7 @@ nav_order: 1
    + [Separate principals from resources](bp-separate-principals-from-resource-containers.md)
 + [JSON format for pollicies](json-format.md)
 + [Cedar security](security.md)
++ [Partial evaluation](partial-evaluation.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
 
 You can also [view the Cedar language specification](Cedar-Language-Spec-v2.3.pdf?raw=true) or [download as a PDF](https://github.com/cedar-policy/cedar-docs/blob/main/docs/Cedar-Language-Spec-v2.3.pdf?raw=true)
