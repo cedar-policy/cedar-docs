@@ -22,6 +22,7 @@ nav_order: 1
    + [Syntax &ndash; data types supported by the policy language](syntax-datatypes.md)
    + [Syntax &ndash; operators and functions](syntax-operators.md)
    + [Grammar &ndash; putting the elements together](syntax-grammar.md)
++ [Entities syntax](entities-syntax.md)
 + [Best Practices](best-practices.md)
    + [Naming conventions](bp-naming-conventions.md)
    + [Normalize data input](bp-normalize-data-input.md)
@@ -29,7 +30,7 @@ nav_order: 1
    + [Populate the policy scope](bp-populate-policy-scope.md)
    + [Consider meta-permissions](bp-transitive-attributes.md)
    + [Avoid mutable identifiers](bp-mutable-identifiers.md)
-+ [JSON format for pollicies](json-format.md)
++ [JSON format for policies](json-format.md)
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
 
