@@ -1,11 +1,11 @@
 ---
 layout: default
-title: JSON format for policies
+title: Programmatic policy creation using JSON
 nav_order: 10
 has_children: false
 ---
 
-# Programmatic creation of policies using JSON<a name="json-format"></a>
+# Programmatic policy creation using JSON<a name="json-format"></a>
 {: .no_toc }
 
 You can use the Cedar `Policy::to_json()` method to convert the specified policy into a [JSON](https://json.org) document. 

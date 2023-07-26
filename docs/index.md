@@ -29,7 +29,7 @@ nav_order: 1
    + [Populate the policy scope](bp-populate-policy-scope.md)
    + [Consider meta-permissions](bp-transitive-attributes.md)
    + [Avoid mutable identifiers](bp-mutable-identifiers.md)
-+ [JSON format for pollicies](json-format.md)
++ [Programmatic policy creation using JSON](json-format.md)
 + [Cedar security](security.md)
 + [Document history for the Cedar Policy Language Guide](doc-history.md)
 
