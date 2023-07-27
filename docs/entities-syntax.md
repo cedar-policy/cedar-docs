@@ -1,19 +1,19 @@
 ---
 layout: default
-title: Entities syntax
-nav_order: 10
+title: Entities & Context JSON syntax
+nav_order: 12
 has_children: false
 ---
 
 
-# Entities syntax<a name="entities-syntax"></a>
+# Entities and context syntax<a name="entities-syntax"></a>
 {: .no_toc }
 
-When you want to authorization a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires both a list of policies and a list of entities that Cedar can evaluate against the request. 
+When you want to authorize a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires a list of policies along with the list of entities and a list of other context information that Cedar uses in its evaluation of the request. 
 
-To construct that list of entities, the Cedar public API provides functions such as  [Entities::from_json_value()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Entities.html#method.from_json_value) that you can use to construct the required list ofCedar entities from a JSON representation. This topic describes that JSON representation.
+To construct that list of entities or context information, the Cedar public API provides functions such as  [Entities::from_json_value()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Entities.html#method.from_json_value) and [Context::from_json_str()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Context.html#method.from_json_str) that you can use to construct the required lists from a JSON representation. This topic describes that JSON representation.
 
-At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. Each object represents a single entity, and should have three attributes:
+At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. Each object represents a single entity or context element, and should have three attributes:
 
 + [`uid`](#uid)
 + [`parents`](#parents)
@@ -22,13 +22,11 @@ At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. E
 ```
 [
     {
-        \\ First entity    
         "uid": {},
         "parents": {},
         "attrs": {}
     },
     {
-        \\ Second entity    
         ...
     }
 ]
