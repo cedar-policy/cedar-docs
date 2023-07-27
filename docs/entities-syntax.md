@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Entities & Context JSON syntax
+title: Entities & context JSON syntax
 nav_order: 12
 has_children: false
 ---
@@ -11,9 +11,21 @@ has_children: false
 
 When you want to authorize a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires a list of policies along with the list of entities and a list of other context information that Cedar uses in its evaluation of the request. 
 
-To construct that list of entities or context information, the Cedar public API provides functions such as  [Entities::from_json_value()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Entities.html#method.from_json_value) and [Context::from_json_str()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Context.html#method.from_json_str) that you can use to construct the required lists from a JSON representation. This topic describes that JSON representation.
+To construct that list of entities or context information, the Cedar public API provides functions such as:
 
-At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. Each object represents a single entity or context element, and should have three attributes:
++ [Entities::from_json_value()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Entities.html#method.from_json_value)
++ [Context::from_json_str()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Context.html#method.from_json_str)
+
+You can use these to construct the required lists from a JSON representation. This topic describes the JSON representation for these lists.
+
++ [Entities](#entities)
++ [Context](#context)
+
+At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. 
+
+## Entities
+
+Each entry in this list represents a single entity, and should have three attributes:
 
 + [`uid`](#uid)
 + [`parents`](#parents)
@@ -34,7 +46,7 @@ At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. E
 
 This topic discusses the `attrs` object first.
 
-## `attrs`
+### `attrs`
 
 Use the `attrs` object to specify the keys and values of attributes attached to the associated entity. For example, if the schema for type `User` defines `department` and `jobLevel` attributes, then for an individual entity of type `User`, you can specify the values as shown here.
 
@@ -91,7 +103,9 @@ The `fn` attribute names a specific Cedar extension function, which is called wi
 }
 ```
 
-## `uid`
+You can specify the `__extn` and `__entity` escapes explicitly, or leave them implicit. For more information, see [Schema-based parsing](#schema-based-parsing). 
+
+### `uid`
 
 The `uid` object specifies the Cedar type and unique identifier for the entity. You can explicitly include the `__entity` escape, or leave it implicit. You should reference a Cedar type defined in the schema, and provide a unique, immutable, and non-reusable identifier for the entity. Both of the following are valid and equivalent, and specify an entity of type `User` with the unique identifier of `12UA45`.
 
@@ -110,7 +124,7 @@ The `uid` object specifies the Cedar type and unique identifier for the entity. 
   }
   ```  
 
-## `parents` 
+### `parents` 
 
 The `parents` object identifies other entities that represent containers in a heirarchy, such as a group that can contain users. This object's value is a JSON list that contains entity references. Those entity references take either of the two forms defined for `uid`, with `__entity` either explicitly specified or implied. The following example could be the `parents` entry for a user that is a member of two user groups.
 
@@ -128,36 +142,7 @@ Example:
 ]
 ```
 
-## Schema-based parsing
-
-Cedar supports “schema-based parsing” for entity data and contexts. This allows customers to omit the `__entity` and `__extn` escapes as long as the schema indicates to Cedar that the corresponding attribute values are entity references or extension values, respectively. For example:
-
-```
-"attrs": {
-    "department": "HardwareEngineering",
-    "jobLevel": 5,
-    "manager": {
-       "type": "User",
-       "id": "78EF12"
-    },
-    "home_ip": {
-       "fn": "ip",
-       "arg": "222.222.222.101"
-    }
-}
-```
-
-For extension values, the `fn` can be implicit as well. The following example is valid, as long as the schema indicates that `home_ip` is an IP address.
-
-```
-"attrs": {
-    "department": "HardwareEngineering",
-    "jobLevel": 5,
-    "home_ip": "222.222.222.101"
-}
-```
-
-## Example
+### Example
 
 This example pulls together many of the features discussed in the previous sections. It uses `uid`, `attrs`, and `parents`.
 
@@ -191,11 +176,65 @@ This example also demonstrates attribute values with entity types (`User`) and e
 ]
 ```
 
-## Final notes
+## Context
 
-The portion of the just-described format for entity attribute values is also used by some functions for constructing the authorization request context from JSON. For example, by using [Context::from_json_value())](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Context.html#method.from_json_value).
+The `context` input parameter is used to provide details specific to a request, such as the date and time the request was sent, the IP address the request originated from, or whether the user was authenticated using a multi-factor authentication device.
 
-Alternatives to JSON exist for both Entities and Context. For example, you can construct entities and context programmatically using functions such as [Entities::from_entities()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Entities.html#method.from_entities).
+Each entry in this list represents a single piece of context information for the request. Construct each entry in this list using the same syntax as the [`attrs`](#attrs) for entities documented previously in this topic. Context is a record with key and value pairs for each entry. 
 
-In any case, entities and context are ultimately passed to
-[Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) for your authorization requests.
+Just as in `attrs`, the `__entity` and `__extn` escapes can be explicitly shown or left implicit, as shown in the following example. 
+
+```
+{
+    "source_ip": "ip(\"10.0.1.101\")",
+    "expire_time_epoch": \"1690482960\",
+    "authn_mfa": True
+}
+```
+
+When you need to reference one of the context details in a policy, reference each context entry's key by using dot notation as part of the `context` object, as shown in the following examples that reference the previous three context values.
+
+```
+when {
+    context.source_ip.isInRange(ip("222.222.222.0/24")) 
+}
+```
+```
+when {
+    context.expire_time_epoch > currentTime
+}
+```
+```
+when {
+    context.authn_mfa
+}    
+```
+
+## Schema-based parsing
+
+Cedar supports “schema-based parsing” for entity and context parameters. This allows you to omit the `__entity` and `__extn` escapes as long as the schema indicates to Cedar that the corresponding attribute values are entity references or extension values, respectively. For example:
+
+```
+"attrs": {
+    "department": "HardwareEngineering",
+    "jobLevel": 5,
+    "manager": {
+       "type": "User",
+       "id": "78EF12"
+    },
+    "home_ip": {
+       "fn": "ip",
+       "arg": "222.222.222.101"
+    }
+}
+```
+
+For extension values, the `fn` can be implicit as well. The following example is valid, as long as the schema indicates that `home_ip` is an IP address.
+
+```
+"attrs": {
+    "department": "HardwareEngineering",
+    "jobLevel": 5,
+    "home_ip": "222.222.222.101"
+}
+```
