@@ -21,11 +21,10 @@ You can use these to construct the required lists from a JSON representation. Th
 + [Entities](#entities)
 + [Context](#context)
 
-At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. 
 
 ## Entities
 
-Each entry in this list represents a single entity, and should have three attributes:
+At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. Each object in this list represents a single entity, and should have three attributes:
 
 + [`uid`](#uid)
 + [`parents`](#parents)
@@ -48,7 +47,7 @@ This topic discusses the `attrs` object first.
 
 ### `attrs`
 
-Use the `attrs` object to specify the keys and values of attributes attached to the associated entity. For example, if the schema for type `User` defines `department` and `jobLevel` attributes, then for an individual entity of type `User`, you can specify the values as shown here.
+Use the `attrs` object to specify the key name and value of each attribute attached to the associated entity. For example, if the schema for type `User` defines `department` and `jobLevel` attributes, then for an individual entity of type `User`, you can specify those attributes as shown here.
 
 ```
 "attrs": {
@@ -57,7 +56,7 @@ Use the `attrs` object to specify the keys and values of attributes attached to 
 },
 ```
 
-Notice that the `department` attribute has a string value, and the `jobLevel` attribute has an integer value, but this is not explicitly marked in the JSON format. Cedar automatically converts these primitive JSON types to their Cedar equivalents.
+Notice that the `department` attribute has a string value, and the `jobLevel` attribute has an integer value, but these types are not explicitly declared in the JSON format. Cedar automatically converts these primitive JSON types to their Cedar equivalents.
 
 + JSON string --> [Cedar String](https://docs.cedarpolicy.com/syntax-datatypes.html#string)
 + JSON integer --> [Cedar Long](https://docs.cedarpolicy.com/syntax-datatypes.html#long)
@@ -79,6 +78,8 @@ For entity references, Cedar JSON format supports an `__entity` escape, whose va
     }
 },
 ```
+
+You can specify the `__entity` escape explicitly, or leave it implicit. For more information, see [Schema-based parsing](#schema-based-parsing). 
 
 The type must be a normalized entity type, i.e., without whitespace or Cedar comments. For instance, the following is not valid:
 ```
@@ -103,26 +104,26 @@ The `fn` attribute names a specific Cedar extension function, which is called wi
 }
 ```
 
-You can specify the `__extn` and `__entity` escapes explicitly, or leave them implicit. For more information, see [Schema-based parsing](#schema-based-parsing). 
+You can specify the `__extn` escape explicitly, or leave it implicit. For more information, see [Schema-based parsing](#schema-based-parsing). 
 
 ### `uid`
 
 The `uid` object specifies the Cedar type and unique identifier for the entity. You can explicitly include the `__entity` escape, or leave it implicit. You should reference a Cedar type defined in the schema, and provide a unique, immutable, and non-reusable identifier for the entity. Both of the following are valid and equivalent, and specify an entity of type `User` with the unique identifier of `12UA45`.
 
-+ ```
-  "uid": {
-      "__entity": {
-          "type": "User",
-          "id": "12UA45" 
-      }
-  }
-  ```  
-+ ```
-  "uid": {
-      "type": "User",
-      "id": "12UA45" 
-  }
-  ```  
+```
+"uid": {
+    "__entity": {
+        "type": "User",
+        "id": "12UA45" 
+    }
+}
+```  
+```
+"uid": {
+    "type": "User",
+    "id": "12UA45" 
+}
+```  
 
 ### `parents` 
 
@@ -182,7 +183,7 @@ The `context` input parameter is used to provide details specific to a request, 
 
 Each entry in this list represents a single piece of context information for the request. Construct each entry in this list using the same syntax as the [`attrs`](#attrs) for entities documented previously in this topic. Context is a record with key and value pairs for each entry. 
 
-Just as in `attrs`, the `__entity` and `__extn` escapes can be explicitly shown or left implicit, as shown in the following example. 
+Just as in [`attrs`](#attrs), the `__entity` and `__extn` escapes can be explicitly shown or left implicit, as shown in the following example. 
 
 ```
 {
