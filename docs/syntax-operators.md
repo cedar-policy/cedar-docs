@@ -80,6 +80,8 @@ context.location like "s 3:*"         //true
 ```
 
 #### More Examples:
+{: .no_toc }
+
 ```
 "eggs" like "ham*"                                             //false
 "eggs" like "*ham"                                             //false
@@ -117,6 +119,8 @@ Function that parses the string and tries to convert it to type [decimal](syntax
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
 #### Examples:
+{: .no_toc }
+
 ```
 decimal("1.0")
 decimal("-1.0")
@@ -181,6 +185,8 @@ Use these operators to compare two values as an expression. An expression that u
 Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value. If the operands are of different types, the result is always `false`. 
 
 #### Examples:
+{: .no_toc }
+
 ```
 1 == 1                          //true
 5 == "5"                        //false
@@ -208,6 +214,8 @@ User::"alice" == Admin::"alice" //false -- objects of two different types
 Binary operator that compares two operands of any type and evaluates to `true` if the operands have different values or are of different types. You can use `!=` ***only*** in `when` and `unless` clauses.
 
 #### Example:
+{: .no_toc }
+
 ```
 forbid(principal, action, resource)
 when{
@@ -222,6 +230,8 @@ when{
 Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 3 < 303               //true
 principal.age < 22    //true (assume principal.age is 21)
@@ -240,6 +250,8 @@ false < true          //type error
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 decimal("1.23").lessThan(decimal("1.24"))     //true
 decimal("1.23").lessThan(decimal("1.23"))     //false
@@ -255,6 +267,8 @@ decimal("-1.23").lessThan(decimal("-1.24"))   //false
 Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 3 <= 303               // true
 principal.age <= 21    // true (assume principal.age is 21)
@@ -273,6 +287,8 @@ false <= true          // type error
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 decimal("1.23").lessThanOrEqual(decimal("1.24"))    // true
 decimal("1.23").lessThanOrEqual(decimal("1.23"))    // true
@@ -288,6 +304,8 @@ decimal("-1.23").lessThanOrEqual(decimal("-1.24"))  // false
 Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 3 > 303                // false
 principal.age > 22     // false (assume principal.age is 21)
@@ -305,6 +323,7 @@ false <= true          // type error
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than the right operand.
 
 #### Examples:
+{: .no_toc }
 ```
 decimal("1.23").greaterThan(decimal("1.24"))    // false
 decimal("1.23").greaterThan(decimal("1.23"))    // false
@@ -320,6 +339,8 @@ decimal("-1.23").greaterThan(decimal("-1.24"))  // true
 Binary operator that compares two long integer operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
 
 #### Examples:
+{: .no_toc }
+
 ```
 3 >= 303               //false
 principal.age >= 21    //true (assume principal.age is 21)
@@ -336,7 +357,9 @@ false >= true          //type error
 
 Function that compares two decimal operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
 
-#### Examples: 
+#### Examples:
+{: .no_toc }
+
 ```
 decimal("1.23").greaterThanOrEqual(decimal("1.24"))    //false
 decimal("1.23").greaterThanOrEqual(decimal("1.23"))    //true
@@ -373,7 +396,10 @@ when {
 };
 ````
 The second comparison in this expression is valid only if the `numberOfLaptops` property for the `principal` entity has a value. If it doesn't, the less than operator generates an error. The first expression uses the [**has**](#operator-has) operator to ensure that the `principal` entity does have such a property with a value. If that evaluates to `false`, then the second expression isn't evaluated.
+
 #### More Examples:
+{: .no_toc }
+
 ```
 false && 3          //false
 (false && 3) == 3   //false, short-circuiting
@@ -405,6 +431,8 @@ when {
 ```
 
 #### More Examples:
+{: .no_toc }
+
 ```
 true || 3                  //true, short-circuiting
 false || 3                 //type error
@@ -420,6 +448,8 @@ false || 3                 //type error
 Unary operator with only one argument. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`. 
 
 #### Example:
+{: .no_toc }
+
 The following policy forbids if the principal does not belong to Group::"family".
 ```
 forbid(principal, action, resource)
@@ -435,6 +465,8 @@ unless {
 };
 ```
 #### More Examples:
+{: .no_toc }
+
 ```
 ! true                                // false
 ! false                               // true
@@ -449,7 +481,9 @@ Use these operators to perform arithmetic operations on long integer values.
 **Notes**  
 The arithmetic operators support ***only*** values of type `Long`. They don't support values of type `Decimal`.
 There is no operator for arithmetic division.
-The arithmetic operators generate errors if they overflow out of the `Long` integer range from `-9223372036854775808` to `9223372036854775807`.
+
+{: .warning }
+>If you exceed the range available for the Long data type by using any of the arithmetic operators, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
 ### `+` \(Numeric addition\)<a name="operator-add"></a>
 
@@ -458,6 +492,7 @@ The arithmetic operators generate errors if they overflow out of the `Long` inte
 Binary operator that adds the two long integer values and returns a long integer sum.
 
 #### Example:
+{: .no_toc }
 
 The following policy returns `allow` if the context `budget` minus the context `downloaded` is greater than 100.
 ```
@@ -467,6 +502,8 @@ when {
 };
 ```
 #### Other examples:
+{: .no_toc }
+
 ```
 11 + 0                              // 11
 -1 + 1                              // 0
@@ -483,6 +520,8 @@ when {
 As a binary operator with two operands, it subtracts the second long integer value from the first and returns a long integer difference.
 
 #### Examples:
+{: .no_toc }
+
 ```
 44 - 31                             // 13
 5 - (-3)                            // 8
@@ -492,7 +531,10 @@ As a binary operator with two operands, it subtracts the second long integer val
 **Usage:** `- <long>`
 
 As a unary operator with one operand, it returns the negative of the value.
+
 #### Examples:
+{: .no_toc }
+
 ```
 -3
 ```
@@ -506,9 +548,11 @@ Binary operator that multiplies two long integer values and returns a long integ
 >There is no operator for arithmetic division.
 
 #### Examples:
+{: .no_toc }
+
 ```
 10 * 20                          // 200
-res ource.value * 10             // valid
+resource.value * 10             // valid
 2 * context.budget > 100         // valid
 context.budget * context.limit   // not valid. One operand must be a constant
 9223372036854775807 * 2          // overflow
@@ -534,6 +578,7 @@ The `in` operator is reflexive; If the right operand is a single entity, then th
 **Usage:** `<entity> in set(<entity>, <entity>, ...)`
 
 #### Examples:
+{: .no_toc }
 
 For example, assume that the `principal` in a request is `User::"12345"`
 
@@ -545,6 +590,7 @@ principal in [Group::"67890"]  // true if User::"12345" belongs to Group::"67890
 ```
 
 #### More examples:
+{: .no_toc }
 
 Consider the following set of entities:
 
@@ -610,6 +656,8 @@ Stranger::"jimmy" in [
 ]                                             // true - Stranger::"jimmy" in Stranger::"jimmy" is true
 ```
 #### More Examples:
+{: .no_toc }
+
 ```
 "some" in ["some", "thing"] //type error - these are strings, not entities. For strings, use `contains` for set membership.
 "os" in {"os":"Windows "}   //type error - use `has` operator to check if a key exists
@@ -679,6 +727,8 @@ context has addr && context.addr has country && context.addr.country == "US"  //
 Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `set`.
 
 #### Examples:
+{: .no_toc }
+
 ```
 [1,2,3].contains (1)                            // true
 [1,"something",2].contains(1)                   // true

@@ -33,6 +33,9 @@ Cedar doesn't have a string length limit, but services that use Cedar are likely
 
 A whole number without decimals that can range from -9223372036854775808 to 9223372036854775807.
 
+{: .warning }
+>If you exceed the range available for the Long data type by using the [arithmetic operators](#arithmetic-operators), it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+ 
 ## Set<a name="datatype-set"></a>
 
 A collection of elements that can be of the same or different types. A set is constructed using bracket characters `[ ]` and separating the elements with commas. The following examples show a few sets.
@@ -126,6 +129,9 @@ decimal("12345.1234")
 (You can't specify a `decimal` as a simple literal.)
 
 A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
+
+{: .warning }
+>If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
 ### ipaddr<a name="datatype-ipaddr"></a>
 
