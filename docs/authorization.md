@@ -65,7 +65,7 @@ The key component of policy evaluation is *expression* evaluation. Each constrai
 
 As with a typical programming language, evaluating an expression simplifies, or "executes", the expression until no further simplification is possible. The final result is either a Cedar *value* -- like `true`, `1`, `User::"Alice"`, or `"blue"` -- or it is an `error`. Evaluating an expression with no variables is straightforward. The expression `2+2` evaluates to `4`. Expression `Action::"viewPhoto" == Action::"viewPhoto"` evaluates to `true`. Expression `if false then "blue" else "green"` evaluates to `"green"`. See [here](syntax-operators.md#syntax-operators) for complete descriptions of the various operators you can use in Cedar expressions.
 
-What about expressions that have variables `principal`, `action`, `resource`, and `context` in them? To evaluate such expressions the Cedar authorizer first *binds* any variables that appear in the expressions to values of the appropriate type. Then theh authorizer evaluates the expressions with those values in place of the variables. 
+What about expressions that have variables `principal`, `action`, `resource`, and `context` in them? To evaluate such expressions the Cedar authorizer first *binds* any variables that appear in the expressions to values of the appropriate type. Then the authorizer evaluates the expressions with those values in place of the variables. 
 
 For example, consider the expression `action == Action::"viewPhoto"`. If the authorizer binds the `action` variable to the entity `Action::"viewPhoto"`, then the result is `true`. That's because replacing `action` with `Action::"viewPhoto"` gives expression `Action::"viewPhoto" == Action::"viewPhoto"` which is obviously `true`.
 
