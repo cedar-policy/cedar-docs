@@ -43,7 +43,7 @@ Note the capitalization of `EXAMPLE.COM` and multiple `/` characters at the begi
 ```
 permit (principal, action, resource)
 when {
-  context.url.host == "example.com" &amp;&amp; // Won't match "EXAMPLE.COM"
+  context.url.host == "example.com" && // Won't match "EXAMPLE.COM"
   context.url.path == "/path/to/page"  // Won't match "///path/to/page"
 };
 ```
