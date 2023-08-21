@@ -76,7 +76,7 @@ Consider a query with the following context:
 ```
 In that scenario, the following expression returns `true`.
 ```
-context.location like "s 3:*"         //true
+context.location like "s3:*"         //true
 ```
 
 #### More Examples:
