@@ -12,13 +12,15 @@ The Cedar policy language omits some well-known operators, including those used 
 
 As a result, application owners should format data prior to passing it into the authorization APIs. For example, instead of passing the following data in the context record:
 
-```
+```json
 {
   "url": "https://example.com/path/to/page?name=alice&amp;color=red"
 }
 ```
+
 The information should be pre-formatted into something more accessible by policy authors:
-```
+
+```json
 {
   "url": {
     "transport": "https",
@@ -30,9 +32,10 @@ The information should be pre-formatted into something more accessible by policy
     }
 }
 ```
+
 Special attention should be paid to the normalization of strings. For example, consider the following URL which resolves to the same resource as the example above.
 
-```
+```json
 {
   "url": "https://EXAMPLE.COM////path/to/page?name=alice&amp;color=red"
 }
@@ -40,7 +43,7 @@ Special attention should be paid to the normalization of strings. For example, c
 
 Note the capitalization of `EXAMPLE.COM` and multiple `/` characters at the beginning of the path. All must be normalized into a consistent representation prior to authorization. Otherwise, as shown in the following example policy, the rules may not behave as the author expects.
 
-```
+```cedar
 permit (principal, action, resource)
 when {
   context.url.host == "example.com" && // Won't match "EXAMPLE.COM"
@@ -59,10 +62,10 @@ service.getObject(objectId: "a9edd19b46f3486b887d4c378aced880");
 
 If a service accepts all formats of the identifier, which format can be reliably used in Cedar policies? The service must choose one normalized format and use it consistently during authorization queries. The impacts of doing otherwise can lead to a risk, as illustrated in the following example:
 
-```
+```cedar
 // This policy won't match if the Object ID is provided in a different format.
 // This allows the caller to bypass the forbid rule and retrieve the object.
-forbid(
+forbid (
   principal,
   action == Action::"getObject",
   resource == Object::"a9edd19b-46f3-486b-887d-4c378aced880"

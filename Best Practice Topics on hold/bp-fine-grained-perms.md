@@ -11,7 +11,7 @@ One common regret in designing an application's authorization model is to start 
 
 If fine-grained permissions are not defined upfront, it can require a complicated migration to convert the application code and policy statements to use a different, finer-grained set of permissions. For example, application code that previously authorized against a course-grained action will need to be modified to use the fine-grained actions. In addition, policies must be updated to reflect the migration, for example:
 
-```
+```cedar
 permit (
     principal == User::"6688f676-1aa9-456a-acf4-228340b54e9d",
     action in [Action::"listFolderContents", Action::"viewFile"],
@@ -25,7 +25,7 @@ To avoid this costly migration, it is beneficial to define fine-grained permissi
 
 As an example, the following schema snippet creates an action group that consists of multiple actions in a group called `security`.
 
-```
+```json
 "actions": {
     "unlock": {
         "memberOf": [ { "id": "security" } ]
@@ -39,12 +39,11 @@ As an example, the following schema snippet creates an action group that consist
 
 You can then reference that group of `security` actions as a single element in a policy by using syntax like the following.
 
-```
-permit(
+```cedar
+permit (
     principal,
     action in Action::"security",
     resource
-);    
+);
 
 ```
-</section>

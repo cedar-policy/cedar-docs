@@ -16,10 +16,9 @@ The decision between group-based or attribute-based access controls isn’t alwa
 
 ![\[Entities in a hierarchy automatically inherit the parent entity's attributes.\]](images/transitive-attributes.png)
 
-
 Because the attribute from the parent entity is inherited by the child entity, you can express policies like the following example.
 
-```
+```cedar
 permit (
   principal,
   action == Action::"readFile", 
@@ -32,7 +31,7 @@ when {
 };
 ```
 
-You might then ask the question "How are attribute values propagated across a hierarchy? Who does the propagation, when, and how?" The answer is that this is the role of the code that generates the who provides details about the entites to the authorization API. Recall that the entity information contains extra information about entities needed by the authorization evaluator. The extra information includes the parent-child relationships, the entity attributes, and whether to copy attribute values from a parent and inject them into child entities.
+You might then ask the question "How are attribute values propagated across a hierarchy? Who does the propagation, when, and how?" The answer is that this is the role of the code that generates the who provides details about the entities to the authorization API. Recall that the entity information contains extra information about entities needed by the authorization evaluator. The extra information includes the parent-child relationships, the entity attributes, and whether to copy attribute values from a parent and inject them into child entities.
 
 However, supporting transitive attributes can introduce complexity. One of the situations to watch for is conflicts across the inheritance space, such as nested folders, where one parent overrides the value inherited from its own parent. You have to choose whether to allow inheritance in a situation like this, and set rules that determine which attribute value is ultimately inherited by the child entity.
 

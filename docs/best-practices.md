@@ -5,7 +5,6 @@ nav_order: 10
 has_children: true
 ---
 
-
 # Best practices for Cedar<a name="best-practices"></a>
 {: .no_toc }
 

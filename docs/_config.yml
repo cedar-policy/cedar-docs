@@ -34,3 +34,7 @@ enable_copy_code_button: true
 owner:
   name: Amazon Web Services (AWS)
   email: cedar-docs@amazon.com
+
+kramdown:
+  syntax_highlighter_opts:
+    disable : true

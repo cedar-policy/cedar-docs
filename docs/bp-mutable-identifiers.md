@@ -10,7 +10,7 @@ nav_order: 6
 
 Mutable identifiers can't be used in policy statements. An example of a mutable identifier is a user name or group name in a workforce directory, where the value of the name can change. Usage of such a name in a policy may appear as follows:
 
-```
+```cedar
 permit (
   principal in Group::"TeamExample",
   action in ...,
@@ -22,7 +22,7 @@ If the group name was changed, it would no longer match this policy. If the grou
 
 For these reasons, policies must refer to only unique, normalized, immutable, and non-recyclable identifiers. Use universally unique identifiers (UUIDs) or similar formats that meet the same criteria, such as sequence numbers or uniform resource names (URNs).
 
-```
+```cedar
 permit (
   principal in Group::"fcaf664d4f89fec0cda8", // "TeamExample"
   action in ...,

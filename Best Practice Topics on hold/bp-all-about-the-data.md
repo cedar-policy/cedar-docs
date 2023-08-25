@@ -13,10 +13,12 @@ In contrast, some types of applications, particularly web services, frequently d
 However, there are circumstances in which this API-centric approach is less than optimal. This is because the API operations are merely proxies for what customers truly want to protect: the underlying data and resources. If multiple API operations control access to the same resources, it can become difficult for administrators to reason about the many paths through which users can access the resources, and manage that access accordingly.
 
 To illustrate, consider a user directory holding the members of an organization. Users can be organized into groups, and one of the security goals is to prohibit discovery of group memberships by unauthorized parties. This service provides two API operations:
+
 + `listMembersOfGroup`
 + `listGroupMembershipsForUser`
 
 Both operations enable a user to discover group membership, so the permissions administrator must remember to coordinate access to both of them. Further compounding the difficulty, the service may later decide to release a new API to address more use cases, such as the following:
+
 + `isUserInGroups` &ndash; a new API to quickly test if a user belongs in one or more groups
 
 From a security perspective, this new API has opened a 3rd path to discover group memberships, thereby disrupting the carefully crafted permissions of the administrator.

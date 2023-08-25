@@ -4,24 +4,24 @@ title: Schema grammar
 parent: Schema format
 nav_order: 1
 ---
+<!-- markdownlint-disable-file MD040 -->
 
 # Grammar specification for Cedar schema<a name="schema-grammar"></a>
 {: .no_toc }
-
-
 
 This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](schema.md).
 
 This grammar uses the following symbols:
 
 + A vertical bar `|` designates alternatives. Only one alternative can be used.
-+ Brackets `[ ]` designate an optional element. 
++ Brackets `[ ]` designate an optional element.
 + Parentheses `( )` designate grouping
-+ Braces `{ }` designate repetition of an element zero or more times. 
++ Braces `{ }` designate repetition of an element zero or more times.
 
-Capitalized words represent grammar constructs, and lexical tokens are displayed in all-caps. 
+Capitalized words represent grammar constructs, and lexical tokens are displayed in all-caps.
 
 Tokens are defined using regular expressions:
+
 + Brackets `[ ]` represent a range of characters.
 + A vertical bar `|` designates alternatives.
 + An asterisk `*` represents zero or more occurrences of an element.
@@ -55,7 +55,6 @@ The `EntityTypes` element is identified by the keyword `entityTypes` followed by
 
 ```
 EntityTypes ::= 'entityTypes: {' EntityType ( ',' EntityType )* '}'
-
 ```
 
 ## `EntityType`<a name="grammar-schema-EntityType"></a>
@@ -66,37 +65,34 @@ An `EntityType` element describes one entity type supported by your application.
 EntityType ::= IDENT ':' '{' 'memberOfTypes' ':' '[' (EntityType ( ',' EntityType )*)? '],' 'shape': TypeJson '}'
 ```
 
-
 ## `Actions`<a name="grammar-schema-Actions"></a>
 
 The `Actions` element is a list of the individual actions supported by your application.
+
 ```
 Actions ::= '"actions"' ':' Action*
-
 ```
 
 ## `Action`<a name="grammar-schema-Action"></a>
 
 The `Action` element describes one action supported by your application. An action begins with a name string, and includes an `appliesTo` element. The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
- 
+
 ```
-Action ::= STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}'
+Action : STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}'
 ```
 
 ## `PrincipalTypes`<a name="grammar-schema-PrincipalTypes"></a>
 
-The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated listis an array list of the principal types supported by your application. 
- 
+The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application.
+
 ```
 PrincipalTypes ::= '"principalTypes"': '[' IDENT* ']'
-
 ```
-
 
 ## `ResourceTypes`<a name="grammar-schema-ResourceTypes"></a>
 
 The `ResourceTypes` element describes
- 
+
 ```
 ResourceTypes ::= '"resourceTypes"': '[' IDENT* ']'
 ```
@@ -104,34 +100,31 @@ ResourceTypes ::= '"resourceTypes"': '[' IDENT* ']'
 ## `TypeJson`<a name="grammar-schema-TypeJson"></a>
 
 The `TypeJson` element describes
- 
+
 ```
 TypeJson ::= '{' Type '}'
 ```
 
-
 ## `Type`<a name="grammar-schema-Type"></a>
 
-The `Type` element describes 
- 
+The `Type` element describes
+
 ```
 Type ::= Primitive | Set | EntityRef | Record | Extension
 ```
 
-
 ## `Primitive`<a name="grammar-schema-Primitive"></a>
 
-The `Primitive` element describes 
- 
+The `Primitive` element describes
+
 ```
 Primitive ::= '"type":' ('"long"' | '"string"' | '"boolean"')
 ```
 
-
 ## `Set`<a name="grammar-schema-Set"></a>
 
 The `Set` element describes
- 
+
 ```
 Set ::= '"type": "Set", "element": ' TypeJson
 ```
@@ -139,7 +132,7 @@ Set ::= '"type": "Set", "element": ' TypeJson
 ## `EntityRef`<a name="grammar-schema-EntityRef"></a>
 
 The `EntityRef` element describes
- 
+
 ```
 EntityRef ::= '"type": "Entity", "name": "' Name '"'
 ```
@@ -147,15 +140,15 @@ EntityRef ::= '"type": "Entity", "name": "' Name '"'
 ## `Record`<a name="grammar-schema-Record"></a>
 
 The `Record` element describes
- 
+
 ```
 Record ::= '"type": "Record", "attributes": {' ( RecordAttr (',' RecordAttr )* )? '}'
 ```
 
 ## `RecordAttr`<a name="grammar-schema-RecordAttr"></a>
 
-The `RecordAttr` element describes 
- 
+The `RecordAttr` element describes
+
 ```
 RecordAttr ::= STR ': {' Type (', "required": ' ( true | false ))? '}'
 ```
@@ -163,15 +156,15 @@ RecordAttr ::= STR ': {' Type (', "required": ' ( true | false ))? '}'
 ## `STR`<a name="grammar-schema-STR"></a>
 
 The `STR` element describes
- 
-```
-STR := Fully-escaped Unicode surrounded by '"'s
-```
 
+```
+STR ::= Fully-escaped Unicode surrounded by '"'s
+```
 
 ## `IDENT`<a name="grammar-IDENT"></a>
 
-The `IDENT` element describes 
+The `IDENT` element describes
+
 ```
-IDENT := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
+IDENT ::= ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
 ```
