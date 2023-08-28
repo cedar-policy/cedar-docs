@@ -137,7 +137,9 @@ permit (
 
 A schema is a declaration of the structure of the entity types supported by your application, and the actions your application may provide in authorization requests. Cedar uses [JSON](https://json.org) to define a schema. You can use the schema to define the principals, resources, and actions used by your application. Each definition specifies the structure of the entity that your application recognizes. For example, a resource of type `Photo` could be defined to include both a  `Name` attribute that is a [string](syntax-datatypes.md#datatype-string), and a `LocationTaken` attribute that is a [record](syntax-datatypes.md#datatype-record). That record could include `Latitude` and `Longitude` values that are both [decimal](syntax-datatypes.md#datatype-decimal).
 
-Cedar can use the schema to validate your authorization policies. Validation helps ensure that you don't create a policy that references an entity or attribute one way, and then reference that entity or attribute in a different way when you make authorization requests later. Validation also ensures that you use the right data types. For example, if the `Age` attribute is defined in your schema as type [Long](syntax-datatypes.md#datatype-long), then the following line in a policy submitted to Cedar for validation generates an error.
+Cedar can use the schema to validate your authorization policies. Asking Cedar to validate your policies helps ensure that you don't create policies that reference an entity or attribute one way in the policy, and then reference that entity or attribute in a different way when you make authorization requests later. Validation also ensures that you use the right data types. For more information, see [Cedar policy validation against schema](validation.md).
+
+For example, if the `Age` attribute is defined in your schema as type [Long](syntax-datatypes.md#datatype-long), then the following line in a policy submitted to Cedar for validation generates an error.
 
 ```cedar
 unless { principal.Age > "21" }
@@ -146,7 +148,5 @@ unless { principal.Age > "21" }
 Cedar determines from the schema that the `Age` attribute is type `Long`, and that digits with quotes around them are always of type `String`. This line fails validation because the [> comparison operator](syntax-operators.md#operator-greaterthan) works only with `Long` values and can't compare with a `String`. If you remove the quotes from around the `21` and resubmit the policy, Cedar successfully validates the policy.
 
 Cedar doesn't require you to define a schema. However, if you don't define a schema, then Cedar doesn't have a way to ensure that the policies adhere to your intentions. If the structure or type of the entity or attribute inferred by a policy doesn't match the structure or type of the entity or attribute inferred by the parameters of an authorization request, then Cedar can generate errors or return incorrect authorization results. Because of this possibility, we recommend that you create schemas for your applications.
-
-When you submit policies to Cedar, your policies are evaluated by default using `Strict` mode. You can optionally turn validation off.
 
 For details about the syntax required to define a schema, see [Cedar schema format](schema.md).
