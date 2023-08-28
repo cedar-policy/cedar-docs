@@ -24,9 +24,9 @@ Cedar manages fine-grained permissions to support the authorization requirements
 
 Authorization is preceded by *authentication*. Authentication is the process of verifying the principal's identity, meaning that they are really who they claim to be. Authentication can involve user names, passwords, multi-factor authentication \(MFA\) devices, or other means of proving identity. Once authenticated, a user or device becomes a *principal* that can make a request.
 
-Cedar lets you describe permissions by creating [policies](#term-policy) as text documents that describe which principals are allowed to perform which *actions*, on which *resources*, and in a specific *context*. 
+Cedar lets you describe permissions by creating [policies](#term-policy) as text documents that describe which principals are allowed to perform which *actions*, on which *resources*, and in a specific *context*.
 
-When a principal attempts to do something in an application, the application generates an authorization request. Cedar [evaluates](#term-policy-evaluation) requests against the set of defined policies, producing a decision to **allow** or **deny** the request. 
+When a principal attempts to do something in an application, the application generates an authorization request. Cedar [evaluates](#term-policy-evaluation) requests against the set of defined policies, producing a decision to **allow** or **deny** the request.
 
 ## Policy<a name="term-policy"></a>
 
@@ -34,15 +34,17 @@ A policy is a statement that declares which principals are explicitly permitted,
 
 A policy begins by specifying the ***effect***, to either `permit` or `forbid` any requests that match the scope and conditions specified in the policy.
 
-The ***scope*** identifies the specific *principal* and *resource* to which the policy applies, and the *actions* that the principal can perform on the resource. The scope is mandatory. 
+The ***scope*** identifies the specific *principal* and *resource* to which the policy applies, and the *actions* that the principal can perform on the resource. The scope is mandatory.
 
-Optionally, you can specify ***conditions*** that must be true for the policy to affect the request. These conditions take the form of `when` and `unless` clauses that evaluate the attributes of the principals, resources, and other elements that make up the context of the request. Conditions can check things like the value of tags attached to the principal and resource, the time of day the request is made, or the IP address from which the request is sent. 
+Optionally, you can specify ***conditions*** that must be true for the policy to affect the request. These conditions take the form of `when` and `unless` clauses that evaluate the attributes of the principals, resources, and other elements that make up the context of the request. Conditions can check things like the value of tags attached to the principal and resource, the time of day the request is made, or the IP address from which the request is sent.
 
 In Cedar, you can create a policy in one of two ways:
+
 + **Static policies** – Standalone, complete policies that require no additional processing and are ready to be used in authorization decisions by Cedar. For more information about creating a static policy, see [Basic policy construction](syntax-policy.md).
 + **Template-linked policies** – Policies created from [a policy template](#term-policy-template). This policy type consists of a template that has placeholders for the principal, resource, or both. The template is completed by replacing the placeholders with specific values. This completed template results in a template-linked policy that can be evaluated at runtime like a static policy.
 
 You can use a variety of strategies to construct the policies. Some of the common strategies are the following:
+
 + **[Role-based access control \(RBAC\)](https://wikipedia.org/wiki/Role-based_access_control)** – Cedar lets you define roles that receive a set of permissions granted by associating policies with the role. These roles can then be assigned to one or more identities. Each assigned identity acquires the permissions granted by the policies associated with the role. If the policies associated with a role are modified, it automatically impacts any identity assigned to that role. Cedar supports RBAC decisions by using [groups](#term-group) for your principals.
 + **[Attribute-based access control \(ABAC\)](https://wikipedia.org/wiki/Attribute-based_access_control)** – Cedar uses the attributes attached to the principal and the resource to determine the permissions. For example, a policy can state that all users that are tagged as the owner of a resource automatically have access. A different policy could state that only users that are members of the Human Resources (HR) department can access resources that are tagged as HR resources.
 
@@ -51,6 +53,7 @@ You can use a variety of strategies to construct the policies. Some of the commo
 An authorization request is a request by an application for an authorization decision, asking the question "*Can this principal take this action on this resource in this context?*". To reach the decision, Cedar's authorization engine evaluates a request against each [policy](#term-policy), and combines the results. It ultimately produces an ***authorization response*** that consists of the decision (`Allow` or `Deny`), and the list of ***determining policies*** that are the reasons for that decision.
 
 Your application must gather all of the relevant information and provide it to Cedar's authorization engine when making the request.
+
 + All of the details about the principal and resource entities must be provided to Cedar. These details must include all of the entity data that are relevant to the request. For example, for a request to authorize a user named Juan to access a shared photo, the request must include the entities for the groups that Juan is a member of, the folder hierarchy where the photo resides, and any other relevant attributes of the user and photo.
 + Other details that might be useful to the decision, including the transient or session-specific details, such as the IP address of the requesting computer and the list of valid IP ranges that make up the company's internal network, or whether the user authenticated using a multi-factor authentication \(MFA\) device. This additional information is called the *context*.
 + All of the policies that match any one or more of the principal, actions, and the resource specified in the request. We recommend that you include all policies to avoid the risk of missing a relevant policy.
@@ -61,7 +64,7 @@ The algorithmic details for how authorization decisions are made, and how indivi
 
 A policy template is a policy that has a placeholder for either the principal, the resource, or both. A policy template is useful when you have a common pattern for access that you need to apply to many resources, or many principals. You can't use a template in an authorization decision directly. Instead, you first associate a principal and resource with the template to create a template-linked policy that is complete and usable for authorization decisions.
 
-For example, a policy template might allow commenting on any photo in an album unless that photo is tagged "Private". Instead of having to manually duplicate such a policy statement in a policy for every user who accesses the album, you can create a policy template. 
+For example, a policy template might allow commenting on any photo in an album unless that photo is tagged "Private". Instead of having to manually duplicate such a policy statement in a policy for every user who accesses the album, you can create a policy template.
 
 A policy created from a policy template is called a template-linked policy. When you create a template-linked policy, you associate the policy template with the principal who needs access to the resource. Template-linked policies are dynamic. When you change the policy statement in a policy template, all policies created from that policy template use the new policy statement automatically in all authorization decisions from that moment on. This capability is useful when you need to apply the same permissions to many principal and resource pairs.
 
@@ -69,11 +72,12 @@ For more information about creating and using policy templates, see [Cedar polic
 
 ## Entity<a name="term-entity"></a>
 
-A [principal](syntax-policy.md#term-parc-principal), an [action](syntax-policy.md#term-parc-action), or a [resource](syntax-policy.md#term-parc-resource) that is part of your application are all represented in Cedar as *entities*. 
+A [principal](syntax-policy.md#term-parc-principal), an [action](syntax-policy.md#term-parc-action), or a [resource](syntax-policy.md#term-parc-resource) that is part of your application are all represented in Cedar as *entities*.
 
-Entities are referenced by their type and identifier, together called the entity's _unique identifier_ (UID). In the example policies P1 and P2 above, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario.
+Entities are referenced by their type and identifier, together called the entity's *unique identifier* (UID). In the example policies P1 and P2 above, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario.
 
 Entities have attributes that describe the entity in some way. For example, an entity of type `Photo` might contain attributes like the following:
+
 + A `name` \(a [string](syntax-datatypes.md#datatype-string)\)
 + A `createdDate` \(a string containing a date\)
 + A `location` \(a [set](syntax-datatypes.md#datatype-set) of type [Decimal](syntax-datatypes.md#datatype-decimal) that represent coordinates\)
@@ -90,12 +94,13 @@ As software products increase in size and organizations grow, multiple services 
 When this situation occurs, Cedar entity definitions can become ambiguous. For example, consider a vendor that offers both a hosted database product and a hosted furniture design service. In this environment, a Cedar action entity such as `Action::"createTable"` is ambiguous; it could be about creating a database table or a new piece of furniture. Similarly, an entity UID such as `Table::"0d6169ca-b246-43a7-94b9-8a68a9e8f8b3"` could refer to either product.
 
 This ambiguity can become an issue in circumstances such as the following:
-* When both services store their Cedar policies in a single policy store.
-* If policies are later aggregated into a central repository to explore cross-cutting questions about a customer’s access permissions throughout the portfolio of services.
+
++ When both services store their Cedar policies in a single policy store.
++ If policies are later aggregated into a central repository to explore cross-cutting questions about a customer’s access permissions throughout the portfolio of services.
 
 To resolve this ambiguity, you can add *namespaces* to Cedar entities, including actions. A namespace is a string prefix for a type, separated by a pair of colons \(`::`\) as a delimiter.
 
-```
+```cedar
 Database::Action::"createTable"
 Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
 Furniture::Action::"createTable"
@@ -104,7 +109,7 @@ Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
 
 Namespaces can also be nested to arbitrary depth.
 
-```
+```cedar
 ExampleCo::Database::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
 ExampleCo::Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
 ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
@@ -112,16 +117,16 @@ ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
 
 ## Groups and hierarchies<a name="term-group"></a>
 
-You can represent a group in Cedar by adding a `parent` attribute to an entity. All entities with the same parent can be considered members of that group. If you have an entity "A" that has a parent entity "B", then you can say that A is a member of B. 
+You can represent a group in Cedar by adding a `parent` attribute to an entity. All entities with the same parent can be considered members of that group. If you have an entity "A" that has a parent entity "B", then you can say that A is a member of B.
 
-Because a group can include other groups as members, you can use groups to model a multi-tiered hierarchy. You're not limited to the generic concept of a group with a single collection of members. 
+Because a group can include other groups as members, you can use groups to model a multi-tiered hierarchy. You're not limited to the generic concept of a group with a single collection of members.
 
 In addition to the expected `User` as a member of a `UserGroup` for principals, you can also apply this approach to your resource types. For example, you can mimic the `File` in a `Folder` paradigm, with folders nested in other folders. You can also group actions, where an action like `ViewPhoto` can be classified as a member of the `ReadOnly` actions collection.
 
 You can use the [in](syntax-operators.md#operator-in) operator in a policy condition to check whether one entity has another entity in its hierarchy. For example, the following policy snippet uses the `in` operator twice to allow any user who is a member of `Group::"janeFriends"` to view any photo that is part of `Album::"janeTrips"`.
 
-```
-permit(
+```cedar
+permit (
     principal in Group::"janeFriends",
     action == Action::"ViewPhoto",
     resource in Album::"janeTrips"
@@ -134,7 +139,7 @@ A schema is a declaration of the structure of the entity types supported by your
 
 Cedar can use the schema to validate your authorization policies. Validation helps ensure that you don't create a policy that references an entity or attribute one way, and then reference that entity or attribute in a different way when you make authorization requests later. Validation also ensures that you use the right data types. For example, if the `Age` attribute is defined in your schema as type [Long](syntax-datatypes.md#datatype-long), then the following line in a policy submitted to Cedar for validation generates an error.
 
-```
+```cedar
 unless { principal.Age > "21" }
 ```
 

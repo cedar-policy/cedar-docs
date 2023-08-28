@@ -12,7 +12,7 @@ Authorization systems must contend not only with permissions to resources, but a
 
 One simple approach to meta-permissions is to introduce a new action, such as `editPermissions`, that can be referenced in policies just like any other action.
 
-```
+```cedar
 permit (
   principal == User::"&ExampleToken1;",
   action == Action::"editPermissions",
@@ -24,7 +24,7 @@ The application would then confirm whether a principal has this capability whene
 
 Richer implementations may choose more granular meta-permissions, such as `editReadPermissions` or `editWritePermissions`. Alternatively, an ABAC-style approach can be used in which resources are decorated with an attribute such as `owner`, and a global ABAC rule that allows owners to manage access:
 
-```
+```cedar
 permit (
   principal,
   action == Action::"editPermissions",

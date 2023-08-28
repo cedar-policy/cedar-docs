@@ -10,23 +10,23 @@ nav_order: 4
 
 Attributes are best used as an *input* to the authorization decision. Don't use attributes to represent the permissions themselves, such as by declaring an attribute named “permittedFolders” on a User:
 
-```
-// ANTI-PATTERN: comingling permissions into user attributes
+```json
+// ANTI-PATTERN: commingling permissions into user attributes
 {
     "id": "df82e4ad-949e-44cb-8acf-2d1acda71798",
     "name": "alice",  
     "email": "alice@example.com",
     "permittedFolders": [
-        "Folder::"c943927f-d803-4f40-9a53-7740272cb969",
-        "Folder::"661817a9-d478-4096-943d-4ef1e082d19a",
-        "Folder::"b8ee140c-fa09-46c3-992e-099438930894"
+        "Folder::\"c943927f-d803-4f40-9a53-7740272cb969\"",
+        "Folder::\"661817a9-d478-4096-943d-4ef1e082d19a\"",
+        "Folder::\"b8ee140c-fa09-46c3-992e-099438930894\""
     ]
 }
 ```
 
 And, subsequently using the attribute within a policy:
 
-```
+```cedar
 // ANTI-PATTERN
 permit (
     principal,
@@ -42,7 +42,7 @@ This approach transforms what would otherwise be a simple authorization model, w
 
 Another risk with this approach is the scaling factors when permissions are packed together inside a single `User` record. If the user has access to many things, the cumulative size of their `User` record will grow and perhaps approach the maximum limit of whatever system is storing the data.
 
-Instead, we recommend that you represent this scenario using multiple individual policies, perhaps usin policy templates to minimize repetition.
+Instead, we recommend that you represent this scenario using multiple individual policies, perhaps using policy templates to minimize repetition.
 
 ```//BETTER PATTERN
 permit (

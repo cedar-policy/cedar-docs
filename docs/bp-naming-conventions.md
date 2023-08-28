@@ -38,5 +38,3 @@ To help ensure consistency in your Cedar policies, we recommend that you define 
         <td>&nbsp;context.uploadFileSize&nbsp;<br/>&nbsp;context.http.headers.userAgent&nbsp;</td>
     </tr>
 </table>
-
-

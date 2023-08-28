@@ -4,6 +4,7 @@ title: Operators
 parent: Policy syntax
 nav_order: 4
 ---
+<!-- markdownlint-disable-file MD024 MD026 MD040 -->
 
 # Operators and functions to use in Cedar<a name="syntax-operators"></a>
 {: .no_toc }
@@ -22,18 +23,20 @@ This topic describes the built-in operators and functions that you can use to bu
 ## Overview of operators<a name="operators-overview"></a>
 
 The operators use the following syntax structures:
+
 + **Unary operators** &ndash; A unary operator takes one operand. Place the operand after the operator.
 
-  ```
+  ```cedar
   <operator> operand
   
   // Uses the logical NOT operator and evaluates to the 
   // inverse of the value of the Boolean operand
   ! a
   ```
-+ **Binary operators** &ndash; A binary operator takes two operands. Place one operand before the operator and one after. Some binary operators are [commutative](https://wikipedia.org/wiki/Commutative_property). See the description of each operator to understand where operand order matters. 
 
-  ```
++ **Binary operators** &ndash; A binary operator takes two operands. Place one operand before the operator and one after. Some binary operators are [commutative](https://wikipedia.org/wiki/Commutative_property). See the description of each operator to understand where operand order matters.
+
+  ```cedar
   firstOperand <operator> secondOperand
   
   // Evaluates to true if both operands have the same type and value
@@ -45,16 +48,16 @@ The operators use the following syntax structures:
   ```
 
 Functions use the following syntax:
+
 + Functions can support zero or more operands. Append the function name to the end of the entity name, separating them with a `.` \(period\) character. Place any operands in parentheses after the function name, separating them with commas.
 
-  ```
+  ```cedar
   entity.function(firstOperand, secondOperand, …)
   
   // Evaluates to true if the any of the set member 
   // elements b, c, or d is an element of set a
   a.containsAny([b, c, d])
   ```
-
 
 ## String operators and functions<a name="operators-string"></a>
 
@@ -69,20 +72,23 @@ Binary operator that evaluates to `true` if the string in the left operand match
 To match a literal asterisk character, use the escaped `\*` sequence in the pattern string.
 
 Consider a query with the following context:
-```
+
+```json
 "context": {
     "location": "s3://bucketA/redTeam/some/thing/*"
 }
 ```
+
 In that scenario, the following expression returns `true`.
-```
+
+```cedar
 context.location like "s3:*"         //true
 ```
 
 #### More Examples:
 {: .no_toc }
 
-```
+```cedar
 "eggs" like "ham*"                                             //false
 "eggs" like "*ham"                                             //false
 "eggs" like "*ham*"                                            //false
@@ -121,7 +127,7 @@ To be interpreted successfully as a decimal value, the string must contain a dec
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 decimal("1.0")
 decimal("-1.0")
 decimal("123.456")
@@ -147,7 +153,7 @@ decimal("0.00000")               //error
 
 Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then it generates an error.
 
-```
+```cedar
 ip("127.0.0.1")
 ip("::1")
 ip("127.0.0.1/24")
@@ -182,12 +188,12 @@ Use these operators to compare two values as an expression. An expression that u
 
 **Usage:** `<any type> == <any type>`
 
-Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value. If the operands are of different types, the result is always `false`. 
+Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value. If the operands are of different types, the result is always `false`.
 
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 1 == 1                          //true
 5 == "5"                        //false
 "something" == "something"      //true
@@ -216,8 +222,8 @@ Binary operator that compares two operands of any type and evaluates to `true` i
 #### Example:
 {: .no_toc }
 
-```
-forbid(principal, action, resource)
+```cedar
+forbid (principal, action, resource)
 when{
     resource.tag != "public"
 };
@@ -232,7 +238,7 @@ Binary operator that compares two long integer operands and evaluates to `true` 
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 3 < 303               //true
 principal.age < 22    //true (assume principal.age is 21)
 3 < "3"               //type error
@@ -316,6 +322,7 @@ false <= true          // type error
 "" <= ""               // type error
 [1, 2] <= [47, 0]      // type error
 ```
+
 ### `.greaterThan()` \(decimal 'greater than or equal'\)<a name="function-greaterThan"></a>
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
@@ -324,7 +331,8 @@ Function that compares two decimal operands and evaluates to `true` if the left 
 
 #### Examples:
 {: .no_toc }
-```
+
+```cedar
 decimal("1.23").greaterThan(decimal("1.24"))    // false
 decimal("1.23").greaterThan(decimal("1.23"))    // false
 decimal("123.45").greaterThan(decimal("1.23"))  // true
@@ -341,7 +349,7 @@ Binary operator that compares two long integer operands and evaluates to `true` 
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 3 >= 303               //false
 principal.age >= 21    //true (assume principal.age is 21)
 3 >= "3"               //type error
@@ -351,6 +359,7 @@ false >= true          //type error
 "" >= ""               //type error
 [1, 2] >= [47, 0]      //type error
 ```
+
 ### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\)<a name="function-greaterThanOrEqual"></a>
 
 **Usage:** `<decimal>.greaterThanOrEqual(<decimal>)`
@@ -360,13 +369,14 @@ Function that compares two decimal operands and evaluates to `true` if the left 
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 decimal("1.23").greaterThanOrEqual(decimal("1.24"))    //false
 decimal("1.23").greaterThanOrEqual(decimal("1.23"))    //true
 decimal("123.45").greaterThanOrEqual(decimal("1.23"))  //true
 decimal("-1.23").greaterThanOrEqual(decimal("1.23"))   //false
 decimal("-1.23").greaterThanOrEqual(decimal("-1.24"))  //true
 ```
+
 ## Logical operators<a name="operators-logical"></a>
 
 Use these operators to logically combine Boolean values or expressions.
@@ -375,32 +385,36 @@ Use these operators to logically combine Boolean values or expressions.
 
 **Usage:** `<Boolean> && <Boolean>`
 
-Binary operator that evaluates to `true` only if both arguments are `true`. 
+Binary operator that evaluates to `true` only if both arguments are `true`.
 
-In the following policy, the `when` condition is `true` if both `principal.numberOfLaptops < 5` and p`rincipal.jobLevel > 6` are `true`.
-```
-permit(principal, action == Action::"remoteAcces s ", res ource)
+In the following policy, the `when` condition is `true` if both `principal.numberOfLaptops < 5` and `principal.jobLevel > 6` are `true`.
+
+```cedar
+permit (principal, action == Action::"remoteAccess", resource)
 when {
-    principal.numberO fLaptops < 5 &&
+    principal.numberOfLaptops < 5 &&
     principal.jobLevel > 6
-}
+};
 ```
-The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression. 
+
+The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression.
 
 The following policy allows only if the principal has the attribute `level` and the `level > 5`.
-```
-permit(principal, action == Action:"read", res ource)
+
+```cedar
+permit (principal, action == Action:"read", resource)
 when {
     principal has level &&
     principal.level > 5
 };
-````
+```
+
 The second comparison in this expression is valid only if the `numberOfLaptops` property for the `principal` entity has a value. If it doesn't, the less than operator generates an error. The first expression uses the [**has**](#operator-has) operator to ensure that the `principal` entity does have such a property with a value. If that evaluates to `false`, then the second expression isn't evaluated.
 
 #### More Examples:
 {: .no_toc }
 
-```
+```cedar
 false && 3          //false
 (false && 3) == 3   //false, short-circuiting
 true && 3           //type error
@@ -415,25 +429,26 @@ Binary operator that evaluates to `true` if either one or both arguments are `tr
 
 This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `true`, then the expression immediately evaluates to `true` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. The first argument should be a test that can determine if the second argument is a valid expression. For example, consider the following expression. It evaluates to `true` if the principal can't be confirmed to at least 21 years old and `principal` is either missing the `age` property or that property is set to a value less than 21.
 
-```
+```cedar
 !(principal has age) || principal.age < 21 
 ```
 
 The second comparison in this expression is valid only if the `age` property for the `principal` entity is present. If it is missing, the less than operator generates an error. The first expression uses the [**has**](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property. If that evaluates to `true`, there is no test of the second expression.
 
 The following policy allows if either `resource.owner == principal` or `resource.tag == "public"` is true.
-```
-permit(principal, action == Action:"read", resource)
+
+```cedar
+permit (principal, action == Action:"read", resource)
 when {
     resource.owner == principal ||
     resource.tag == "public"
-}
+};
 ```
 
 #### More Examples:
 {: .no_toc }
 
-```
+```cedar
 true || 3                  //true, short-circuiting
 false || 3                 //type error
 3 || true                  //type error
@@ -443,31 +458,35 @@ false || 3                 //type error
 
 ### `!` \(NOT\)<a name="operator-not"></a>
 
-**Usage:** ` ! <Boolean>`
+**Usage:** `! <Boolean>`
 
-Unary operator with only one argument. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`. 
+Unary operator with only one argument. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`.
 
 #### Example:
 {: .no_toc }
 
 The following policy forbids if the principal does not belong to Group::"family".
-```
-forbid(principal, action, resource)
+
+```cedar
+forbid (principal, action, resource)
 when {
     !(principal in Group::"family")
 };
 ```
+
 You can rewrite the above policy using an `unless` clause as:
-```
-forbid(principal, action, resource)
+
+```cedar
+forbid (principal, action, resource)
 unless {
   principal in Group::"family"
 };
 ```
+
 #### More Examples:
 {: .no_toc }
 
-```
+```cedar
 ! true                                // false
 ! false                               // true
 ! 8                                   // type error
@@ -476,7 +495,7 @@ if !true then "hello" else "goodbye"  // "goodbye"
 
 ## Arithmetic operators<a name="operators-math"></a>
 
-Use these operators to perform arithmetic operations on long integer values. 
+Use these operators to perform arithmetic operations on long integer values.
 
 **Notes**  
 The arithmetic operators support ***only*** values of type `Long`. They don't support values of type `Decimal`.
@@ -495,16 +514,18 @@ Binary operator that adds the two long integer values and returns a long integer
 {: .no_toc }
 
 The following policy returns `allow` if the context `budget` minus the context `downloaded` is greater than 100.
-```
-permit(principal, action, resource)
+
+```cedar
+permit (principal, action, resource)
 when {
     context.budget - context.downloaded > 100
 };
 ```
+
 #### Other examples:
 {: .no_toc }
 
-```
+```cedar
 11 + 0                              // 11
 -1 + 1                              // 0
 9,223,372,036,854,775,807 + 1       //overflow
@@ -522,7 +543,7 @@ As a binary operator with two operands, it subtracts the second long integer val
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 44 - 31                             // 13
 5 - (-3)                            // 8
 -9,223,372,036,854,775,808 - 1 + 3  // overflow
@@ -535,14 +556,15 @@ As a unary operator with one operand, it returns the negative of the value.
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 -3
 ```
+
 ### `*` \(Numeric multiplication\)<a name="operator-multiply"></a>
 
 **Usage:** `<long> * <long>`
 
-Binary operator that multiplies two long integer values and returns a long integer product. One of the values ***must*** be an integer literal, the other value can be an integer literal or an expression that evaluates to an integer value. 
+Binary operator that multiplies two long integer values and returns a long integer product. One of the values ***must*** be an integer literal, the other value can be an integer literal or an expression that evaluates to an integer value.
 
 {: .note }
 >There is no operator for arithmetic division.
@@ -550,7 +572,7 @@ Binary operator that multiplies two long integer values and returns a long integ
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 10 * 20                          // 200
 resource.value * 10             // valid
 2 * context.budget > 100         // valid
@@ -582,7 +604,7 @@ The `in` operator is reflexive; If the right operand is a single entity, then th
 
 For example, assume that the `principal` in a request is `User::"12345"`
 
-```
+```cedar
 principal in User::"12345"     // true - testing if a value is in itself always returns true
 principal in [User::"12345"]   // true - testing if a value is in a set consisting of only itself always returns true
 principal in Group::"67890"    // true if User::"12345" belongs to Group::"67890"
@@ -596,7 +618,7 @@ Consider the following set of entities:
 
 ![Example entities](./images/entities.png)
 
-```
+```cedar
 User::"jane" in User::"jane"           // true - `in` is reflexive
 User::"bob" in Group::"jane_friends"   // true - Group::"jane_friends" is an ancestor of User::"bob".
 User::"john" in Group::"jane_friends"  // false - User::"john"'s only ancestor is Group"jane_coworkers".
@@ -604,19 +626,19 @@ User::"john" in Group::"jane_friends"  // false - User::"john"'s only ancestor i
 
 If the right operand is a set of entities, then the expression is evaluated for each member in the set. For example, consider the following expression.
 
-```
+```cedar
 A in [ B, C, D ]
 ```
 
 That expression is evaluated as component expressions joined by the [logical OR operator](#operator-or), as shown in the following example.
 
-```
+```cedar
 A in B || A in C || A in D 
 ```
 
 If any one or more of the component expressions evaluates to `true`, then the overall expression evaluates to `true`.
 
-```
+```cedar
 User::"bob" in [Group::"jane_friends"] // true
 User::"alice" in [ 
     Group::"jane_family", 
@@ -631,23 +653,31 @@ User::"john" in [
     Group::"jane_friends"
 ]                                      // false - User::"john" isn't a member of any entities in the set
 ```
+
 The right operand of in can be any expression that returns a set of entity references, not just a set literal. For example, suppose the query context contains the following:
-```
+
+```json
 {
     "groups ": [Group::"jane_family", Group::"jane_friends "]
 }
 ```
+
 Then the following two expressions in a policy statement are equivalent:
-```
+
+```cedar
 User::"alice" in context.groups 
 User::"alice" in [Group::"jane_family", Group::"jane_friends"]
 ```
+
 However, the following expression raises a type error because "Team" is a string, not an entity reference.
-```
+
+```cedar
 User::"alice" in [User::"alice", Group::"jane_friends", "Team"]   // type error
 ```
+
 Because the in operator is reflexive, A in A returns true even if the entity A does not exist. The evaluator treats entity references that are not in the hierarchy as a valid entity. For example:
-```
+
+```cedar
 Stranger::"jimmy" in Stranger::"jimmy"        // true by reflexivity.
 Stranger::"jimmy" in Group::"jane_friends"    // false - Stranger::"jimmy" does not refer to an existing entity
 Stranger::"jimmy" in [
@@ -655,10 +685,11 @@ Stranger::"jimmy" in [
     Stranger::"jimmy"
 ]                                             // true - Stranger::"jimmy" in Stranger::"jimmy" is true
 ```
+
 #### More Examples:
 {: .no_toc }
 
-```
+```cedar
 "some" in ["some", "thing"] //type error - these are strings, not entities. For strings, use `contains` for set membership.
 "os" in {"os":"Windows "}   //type error - use `has` operator to check if a key exists
 ```
@@ -667,56 +698,77 @@ Stranger::"jimmy" in [
 
 **Usage:** `<entity> has <attribute>`
 
-Boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Use this operator to check that a value is present before accessing that value. If you attempt to access a value that isn't defined, then Cedar generates an error. 
+Boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Use this operator to check that a value is present before accessing that value. If you attempt to access a value that isn't defined, then Cedar generates an error.
 
 The following example expression first tests whether the entity `A` has a defined attribute `B`. Because the [&&](#operator-and) operator uses shortcut logic, the second expression is evaluated and the attribute accessed *only* if the attribute is present.
-```
+
+```cedar
 A has B && A.B == 5
 ```
+
 In the following example, assume that the request has the following context:
-```
+
+```json
 "context":{
-    "role": ["admin", "us er"],
-    "addr": { "s treet": "main", "city": "DC"}
+    "role": ["admin", "user"],
+    "addr": { "street": "main", "city": "DC"}
     "owner info": { "name": "Alice", "age": 18 }
 }
 ```
+
 The following condition checks if the context has an attribute `role`. If the attribute exists, then it checks if it is a set containing the string `"admin"` as an element.
-```
+
+```cedar
 context has role && context.role.contains("admin")       //true
 ```
-The attribute name `role` can be written as an identifier (as in the previious example) or as a string literal. The following expression is equivalent to the previous one:
-```
+
+The attribute name `role` can be written as an identifier (as in the previous example) or as a string literal. The following expression is equivalent to the previous one:
+
+```cedar
 context has "role" && context.role.contains("admin")     //true
 ```
+
 You must check for presence of optional attributes that are nested multiple layers one at a time. For example, to check for the presence of `principal.custom.project`, you must first check if `principal` has a `custom` attribute. You can then check to see if that `custom` attribute has a `project` attribute.  To do this, you could use the following syntax.
-```
+
+```cedar
 principal has custom && principal.custom has project 
 ```
+
 If the attribute name is not valid as an identifier, then the string literal syntax must be used for `has` and attribute values must be accessed with the `[]` operator instead of using dot syntax. For example, to check if `context` has an attribute called `owner info` (with an embedded space), then you could use the following syntax.
-```
+
+```cedar
 context has "owner info" && context["owner info"].name == "Alice"    //true
 ```
+
 The following expression returns false because `context` doesn't have an attribute `tag`.
-```
+
+```cedar
 context has tag      //false
 ```
+
 The following expression returns a type error because the left-hand side of the `has` operator must be an entity or a record. In this example, because `role` is a set, Cedar generates a type error.
-```
+
+```cedar
 context.role has admin     //type error
 ```
+
 The following expression returns `false` because the `addr` sub-record does not have an attribute `country`. The second expression is not evaluated.
-```
+
+```cedar
 context.addr has country && context.addr.country == "US "    //false
 ```
+
 However, consider the case where `context` does not have the `addr` sub-record at all:
-```
+
+```cedar
 "context": {
     "role": ["admin", "user"]
 }
 ```
+
 In that case, then the previous expression that checks for `context.addr has country` raises a missing-attribute error on `context.addr` before the `has` operator is even evaluated, and the entire policy is skipped. If the `addr` sub-record is optional, you can avoid this error by checking whether `addr` is present before accessing it with the `.` operator:
-```
+
+```cedar
 context has addr && context.addr has country && context.addr.country == "US"  // false, with no error
 ```
 
@@ -729,7 +781,7 @@ Function that evaluates to `true` if the operand is a member of the receiver on 
 #### Examples:
 {: .no_toc }
 
-```
+```cedar
 [1,2,3].contains (1)                            // true
 [1,"something",2].contains(1)                   // true
 [1,"something",2].contains("Something")         // false - string comparision is case-sensitive
@@ -746,12 +798,12 @@ context.role.contains ("admin")                 // true if the set `role` contai
 
 Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
-```
+```cedar
 [1, -22, 34].containsAll([-22, 1])                           // true
 [1, -22, 34].containsAll([-22])                              // true
 [43, 34].containsAll([34, 43])                               // true
-[1, -2, 34].containsall([1, -22])                            // false
-[1, 34].containsAll [1, 101, 34]                             // false
+[1, -2, 34].containsAll([1, -22])                            // false
+[1, 34].containsAll([1, 101, 34])                            // false
 [false, 3, [47, 0], "some"].containsAll([3, "some"])         // true
 [false, 3, [47, 0], {"2": "ham"}].containsAll([3, {"2": "ham"}])  // true
 [2, 43].containsAll([])                                      // true
@@ -767,7 +819,7 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 
 Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
 
-```
+```cedar
 [1, -22, 34].containsAny([1, -22])                             // true
 [1, -22].containsAny([1, -22, 34])                             // true
 [-22].containsAny([1, -22, 34])                                // true
@@ -790,7 +842,7 @@ Use these functions to test characteristics of IP addresses and ranges.
 
 Evaluates to `true` if the receiver is an IPv4 address. This function takes no operand.
 
-```
+```cedar
 ip("127.0.0.1").isIpV4()     //true
 ip("::1").isIpV4()           //false
 ip("127.0.0.1/24").isIpV4()  //true
@@ -802,7 +854,7 @@ ip("127.0.0.1/24").isIpV4()  //true
 
 Function that evaluates to `true` if the receiver is an IPv6 address. This function takes no operand.
 
-```
+```cedar
 ip("127.0.0.1/24").isIpV6()  //false
 ip("ffee::/64").isIpV6()     //true
 ip("::1").isIpV6()           //true
@@ -814,7 +866,7 @@ ip("::1").isIpV6()           //true
 
 Function that evaluates to `true` if the receiver is a valid loopback address for its IP version type. This function takes no operand.
 
-```
+```cedar
 ip("127.0.0.2").isLoopback()  //true
 ip("::1").isLoopback()        //true
 ip("::2").isLoopback()        //false
@@ -826,7 +878,7 @@ ip("::2").isLoopback()        //false
 
 Function that evaluates to `true` if the receiver is a multicast address for its IP version type. This function takes no operand.
 
-```
+```cedar
 ip("127.0.0.1").isMulticast()  //false
 ip("ff00::2").isMulticast()    //true
 ```
@@ -837,7 +889,7 @@ ip("ff00::2").isMulticast()    //true
 
 Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand.
 
-```
+```cedar
 ip("192.168.0.1").isInRange(ip("192.168.0.1/24"))   //true
 ip("192.168.0.1").isInRange(ip("192.168.0.1/28"))   //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/24"))  //true

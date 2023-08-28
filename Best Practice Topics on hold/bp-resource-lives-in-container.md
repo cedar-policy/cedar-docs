@@ -13,7 +13,7 @@ When designing an authorization model, you must associate every action with a pa
 
 This is an example of the generalized problem of resource creation. Resource creation is a bootstrapping problem, in that there must be a way for something to have permission to create resources even when no resources exist yet. The path to solving it is to recognize that every resource must exist within some container, and it is the container itself that acts as the anchor point for permissions. For example, if a folder pre-existed in the system, the ability to create a file can be modeled as a permission on that folder, since that is the location where permissions are necessary to instantiate the new resource.
 
-```
+```cedar
 permit (
   principal == User::"&ExampleGuid1;",
   action == Action::"createFile",
@@ -23,7 +23,7 @@ permit (
 
 However, what if no folder exists yet? Perhaps this is a new customer account in an application where no resources exist yet. In this situation, there is still a context that can be intuitively understood by asking: where can the customer create new files? Most likely, they shouldn’t be able to create files inside any random customer account. Rather, there is an implied context, and that context is the customer’s own account boundary. Therefore, the account represents the container for resource creation, and this can be explicitly modeled in a policy similar to the following example.
 
-```
+```cedar
 // Grants permission to create files within an account,
 // or within any sub-folder inside the account.
 permit (

@@ -13,7 +13,7 @@ Would this be best achieved by labeling each file with an attribute named `fileT
 
 Using an attribute supports policies like the following:
 
-```
+```cedar
 permit (
     principal == User::"5a250ea5-89bb-4b07-9a97-c8632e876124", // "alice"
     action == Action::"readFile",
@@ -26,7 +26,7 @@ when {
 
 Using a group supports policies like the following:
 
-```
+```cedar
 permit (
     principal == User::"5a250ea5-89bb-4b07-9a97-c8632e876124", // "alice"
     action == Action::"readFile",
@@ -38,7 +38,7 @@ In this example, it might not make a significant difference and the choice is do
 
 Attribute-based policies are helpful when the conditional expressions may be more complicated than simply checking equality. Imagine if the goal was to instead grant access to files under a certain size:
 
-```
+```cedar
 permit (
     principal == User::"5a250ea5-89bb-4b07-9a97-c8632e876124", // "alice"
     action == Action::"readFile",
