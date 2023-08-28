@@ -442,7 +442,7 @@ Cedar policy lines
 
 ```cedar
 when { ... }
-`
+```
 
 JSON representation
 
