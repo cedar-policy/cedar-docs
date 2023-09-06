@@ -1,7 +1,6 @@
 ---
 layout: default
-title: Entity
-parent: Policy syntax
+title: Entities
 nav_order: 2
 ---
 

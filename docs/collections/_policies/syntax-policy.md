@@ -1,7 +1,6 @@
 ---
 layout: default
-title: Basic syntax
-parent: Policy syntax
+title: Basic Cedar syntax
 nav_order: 1
 ---
 

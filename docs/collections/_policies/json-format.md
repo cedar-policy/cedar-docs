@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Programmatic policy creation using JSON
-nav_order: 11
-has_children: false
+nav_order: 7
 ---
 <!-- markdownlint-disable-file MD036 -->
 

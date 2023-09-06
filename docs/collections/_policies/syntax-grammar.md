@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Policy grammar
-parent: Policy syntax
-nav_order: 5
+nav_order: 6
 ---
 <!-- markdownlint-disable-file MD040 -->
 

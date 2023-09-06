@@ -8,7 +8,7 @@ nav_order: 2
 
 -----
 
-# What is the Cedar policy language?<a name="what-is-cedar"></a>
+# Welcome to the Cedar policy language<a name="welcome-to-cedar"></a>
 {: .no_toc }
 
 This guide is a reference for [Version 2.3](doc-history.md) of the Cedar policy language.
@@ -52,27 +52,27 @@ If you are a first-time user of Cedar, we recommend that you begin by reading th
 
 Cedar provides several important features.
 
-### Policy-based<a name="policy-based"></a>
+#### Policy-based<a name="policy-based"></a>
 
 Cedar policies are written as rules that specify the conditions under which access to resources is to be allowed or denied. You define a policy as a set of statements that include conditions that evaluate the attributes of the requester, the resource being accessed, and the context of the request.
 
-### Supports attributes on entities and sessions <a name="attribute-based"></a>
+#### Supports attributes on entities and sessions <a name="attribute-based"></a>
 
 Cedar policies can use attributes, which are key-value pairs that represent various aspects of the principal, the resource, and the caller's current session which defines the context of the request. Attributes can include information such as user roles, resource types, time of day, location, and any other relevant contextual information.
 
-### Expressive<a name="feature-expressive"></a>
+#### Expressive<a name="feature-expressive"></a>
 
 Cedar is a simple yet expressive language that is designed to support common authorization use cases, such as role-based access control \(RBAC\) and attribute-based access control \(ABAC\). The language supports logical operators such as AND, OR, and NOT on Boolean values, in addition to common operators on other types, such as comparison operators on integers. This broad set of operators helps provide fine-grained control over access decisions.
 
-### Policies are separate from your application's code<a name="feature-dynamic"></a>
+#### Policies are separate from your application's code<a name="feature-dynamic"></a>
 
 The Cedar evaluation engine evaluates policies dynamically. This design supports making changes in access control requirements that take effect immediately, and without requiring system-wide updates or downtime. This approach helps you to quickly and easily adapt to changing business rules or environmental conditions.
 
-### High performing<a name="feature-performant"></a>
+#### High performing<a name="feature-performant"></a>
 
 Cedar is fast and scalable. The policy structure allows your policies to be indexed for quick retrieval. The design also supports fast, scalable, real-time evaluation with bounded latency.
 
-### Human-readable<a name="feature-readable"></a>
+#### Human-readable<a name="feature-readable"></a>
 
 Cedar policies are designed to be easy to read and understand, making them accessible to both technical and non-technical stakeholders involved in defining access control policies. This helps facilitate collaboration and communication among different stakeholders in a distributed system.
 

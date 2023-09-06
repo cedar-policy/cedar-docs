@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Operators
-parent: Policy syntax
 nav_order: 4
 ---
 <!-- markdownlint-disable-file MD024 MD026 MD040 -->

@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Data types
-parent: Policy syntax
 nav_order: 3
 ---
 
