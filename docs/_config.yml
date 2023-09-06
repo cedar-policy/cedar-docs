@@ -38,3 +38,30 @@ owner:
 kramdown:
   syntax_highlighter_opts:
     disable : true
+
+collections_dir: collections
+
+collections:
+  overview:
+    output: true
+  auth:
+    output: true
+  policies:
+    output: true
+  schema:
+    output: true
+  other:
+    output: true
+
+just_the_docs:
+  collections:
+    overview:
+      name: Overview
+    auth:
+      name: Authorization requests
+    policies:
+      name: Policies
+    schema:
+      name: Schema
+    other:
+      name: Other
