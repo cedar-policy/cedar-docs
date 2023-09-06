@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Schema format
-nav_order: 7
-has_children: true
+nav_order: 1
 ---
 
 # Cedar schema format<a name="schema"></a>

@@ -1,8 +1,7 @@
 ---
 layout: default
 title: Schema grammar
-parent: Schema format
-nav_order: 1
+nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
