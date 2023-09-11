@@ -117,7 +117,7 @@ Type ::= Primitive | Set | EntityRef | Record | Extension
 The `Primitive` element describes
 
 ```
-Primitive ::= '"type":' ('"long"' | '"string"' | '"boolean"')
+Primitive ::= '"type":' ('"Long"' | '"String"' | '"Boolean"')
 ```
 
 ## `Set`<a name="grammar-schema-Set"></a>
