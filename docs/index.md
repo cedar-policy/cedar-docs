@@ -11,7 +11,7 @@ nav_order: 2
 # Welcome to the Cedar policy language<a name="welcome-to-cedar"></a>
 {: .no_toc }
 
-This guide is a reference for [Version 2.3](doc-history.md) of the Cedar policy language.
+This guide is a reference for [Version 2.3](other/doc-history.md) of the Cedar policy language.
 
 Cedar is a language for writing authorization policies and making authorization decisions based on those policies. When you create an application, you need to ensure that only authorized users can access the application, and can do only what each user is authorized to do.
 
