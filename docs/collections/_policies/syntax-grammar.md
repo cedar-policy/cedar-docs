@@ -60,7 +60,7 @@ Scope ::= Principal ',' Action ',' Resource
 
 The `Principal` element consists of the `principal` keyword. If specified by itself, the policy statement matches *any* principal.
 
-Optionally, the keyword can be followed by either the [`in`](syntax-operators.md#operator-in) or [`==`](syntax-operators.md#operator-equality) operator, followed by either an `Entity`, or the `?principal` placeholder when used in a policy template.
+Optionally, the keyword can be followed by either the [`in`](../policies/syntax-operators.html#operator-in) or [`==`](../policies/syntax-operators.html#operator-equality) operator, followed by either an `Entity`, or the `?principal` placeholder when used in a policy template.
 
 ```
 Principal ::= 'principal' [('in' | '==') (Entity | '?principal')]
@@ -68,7 +68,7 @@ Principal ::= 'principal' [('in' | '==') (Entity | '?principal')]
 
 ## `Action`<a name="grammar-action"></a>
 
-The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](syntax-operators.md#operator-equality) operator and an action entity, or [`in`](syntax-operators.md#operator-in) followed by an action entity or a [set](syntax-datatypes.md#datatype-set) of action entities.
+The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](../policies/syntax-operators.html#operator-equality) operator and an action entity, or [`in`](../policies/syntax-operators.html#operator-in) followed by an action entity or a [set](../policies/syntax-datatypes.html#datatype-set) of action entities.
 
 ```
 Action ::= 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
@@ -76,7 +76,7 @@ Action ::= 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
 
 ## `Resource`<a name="grammar-resource"></a>
 
-The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](syntax-operators.md#operator-in) or [`==`](syntax-operators.md#operator-equality) operator, followed by an entity, or the `?resource` placeholder when used in a policy template.
+The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](../policies/syntax-operators.html#operator-in) or [`==`](../policies/syntax-operators.html#operator-equality) operator, followed by an entity, or the `?resource` placeholder when used in a policy template.
 
 ```
 Resource ::= 'resource' [('in' | '==') (Entity | '?resource')]
@@ -104,7 +104,7 @@ Expr ::= Or | 'if' Expr 'then' Expr 'else' Expr
 Or ::= And {'||' And}
 ```
 
-For more details, see [`||` \(OR\)](syntax-operators.md#operator-or).
+For more details, see [`||` \(OR\)](../policies/syntax-operators.html#operator-or).
 
 ## `And`<a name="grammar-and"></a>
 
@@ -112,7 +112,7 @@ For more details, see [`||` \(OR\)](syntax-operators.md#operator-or).
 And ::= Relation {'&&' Relation}
 ```
 
-For more details, see [`&&` \(AND\)](syntax-operators.md#operator-and).
+For more details, see [`&&` \(AND\)](../policies/syntax-operators.html#operator-and).
 
 ## `Relation`<a name="grammar-relation"></a>
 

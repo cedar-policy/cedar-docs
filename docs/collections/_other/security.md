@@ -34,7 +34,7 @@ We, members of the Cedar development team, ensure Cedar’s correctness and secu
 
 1. **A differential testing engine** that can test automatically that \#1 and \#2 have the same semantics.
 
-![\[How Cedar is verified as correct and secure.\]](images/security-of-cedar.png)
+![\[How Cedar is verified as correct and secure.\]](../../images/security-of-cedar.png)
 
 In particular, Cedar provides two properties about authorization queries:
 
@@ -69,7 +69,7 @@ The Cedar validator can detect the many types of bugs, including the following:
 + **Detect optional attributes referenced without an existence check.** &ndash; For example, `principal.optionalValue < 100` instead of `principal has optionalValue && principal.optionalValue < 100`
 + **Detect invalid parameters to the constructors of extension types.** &ndash; For example, `IP("3.45.1111.43")` isn’t a valid IP address.
 
-Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Dafny. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](validation.md).
+Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Dafny. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
 
 ## Security best practices for applications using Cedar<a name="security-best-practices"></a>
 

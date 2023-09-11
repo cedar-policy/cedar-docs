@@ -208,6 +208,14 @@ when {
 }
 ```
 
+The following `when` example matches the request if the principal in the request is a member of the list of entities named `sharedWith` associated with the `Album` entity named `"janeTrips"`.
+
+```cedar
+when {
+    principal in PhotoFlash::Album::"janeTrips".sharedWith
+}
+```
+
 ### `unless`<a name="term-parc-context-unless"></a>
 
 The `unless` clause causes the policy to match the request only if the embedded expression evaluates to `false`.

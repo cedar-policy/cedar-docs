@@ -16,7 +16,7 @@ nav_order: 1
 {:toc}
 </details>
 
-This topic describes the structure of a Cedar schema. To view the formal grammar, see [Schema grammar](schema-grammar.md).
+This topic describes the structure of a Cedar schema. To view the formal grammar, see [Schema grammar](../policies/schema-grammar.html).
 
 ## Overview<a name="schema-overview"></a>
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. It bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences.
@@ -27,7 +27,7 @@ You can use a schema to define each of the following entities used by your appli
 + **Resources** – The entities that your principals can interact with. In the PhotoFlash application, resource entities could include the photo and the album resource types. These resource entities can also include the properties of each resource, such as a photo's name, location where taken, resolution, codec type, and so on.
 + **Actions** – The operations that principals can perform on your resources. These operations include specifying which resource types each action can apply to and which principal types can perform each action. In the PhotoFlash application, actions include viewing photos, sharing photos, and commenting on photos.
 
-Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](validation.md).
+Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](../policies/validation.html).
 
 ## Schema format<a name="schema-format"></a>
 
@@ -35,7 +35,7 @@ A schema contains a declaration of one or more namespaces, each of which contain
 
 ## NameSpace<a name="schema-namespace"></a>
 
-A [namespace](terminology.md#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
+A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
 
 {: .important }
 >The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
@@ -203,7 +203,7 @@ Each attribute in a `Record` is a JSON object that describes one attribute in th
     },
 ```
 
-where `name` is the name of the attribute, and `Type` is one of the [Cedar supported data types](syntax-datatypes.md), discussed in detail below.
+where `name` is the name of the attribute, and `Type` is one of the [Cedar supported data types](../policies/syntax-datatypes.html), discussed in detail below.
 
 You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present. You can make an attribute optional by adding `"required": false` to the attribute description. Here is an example:
 
@@ -214,7 +214,7 @@ You can choose to specify whether an attribute is required or optional. By defau
 },
 ```
 
-A policy should check for an optional attribute's presence by using the [`has`](syntax-operators.md#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
+A policy should check for an optional attribute's presence by using the [`has`](../policies/syntax-operators.html#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
 
 You can choose to explicitly declare that an attribute is mandatory by including `"required": true` (but this is unnecessary as mandatory attributes are the default).
 
@@ -342,7 +342,7 @@ You can add as many actions as your application requires.
 
 ### Action name<a name="schema-actions-name"></a>
 
-Specifies the identifier for the action entity, as a string. The name of the action isn't a value but the heading for its own JSON object. Since this is an [entity identifier](syntax-entity.md#entity-overview) (rather than an entity type, as in the `entityTypes` section) it can contain anything that would be valid inside a Cedar string.
+Specifies the identifier for the action entity, as a string. The name of the action isn't a value but the heading for its own JSON object. Since this is an [entity identifier](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the `entityTypes` section) it can contain anything that would be valid inside a Cedar string.
 
 ```json
 "actions": {

@@ -7,9 +7,9 @@ nav_order: 4
 
 # Best practice: When possible, populate the policy scope
 {: .no_toc }
-The [policy scope](terminology.html#policy) is the portion of a Cedar policy statement after the `permit` or `forbid` keywords and between the opening parenthesis.
+The [policy scope](../overview/terminology.html#policy) is the portion of a Cedar policy statement after the `permit` or `forbid` keywords and between the opening parenthesis.
 
-![\[Illustrates the structure of a &Cedar; policy, including the scope.\]](images/structure-of-policy.png)
+![\[Illustrates the structure of a Cedar policy, including the scope.\]](images/structure-of-policy.png)
 
 We recommend that you populate the values for `principal` and `resource` whenever possible. This lets you index your policies in storage for more efficient retrieval, which can improve performance. If you need to grant the same permissions to many different principals or resources, we recommend that you use a policy template and attach it to each principal and resource pair.
 

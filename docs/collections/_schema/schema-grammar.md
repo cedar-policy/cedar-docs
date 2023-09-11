@@ -8,7 +8,7 @@ nav_order: 2
 # Grammar specification for Cedar schema<a name="schema-grammar"></a>
 {: .no_toc }
 
-This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](schema.md).
+This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](../schema/schema.html).
 
 This grammar uses the following symbols:
 
@@ -42,7 +42,7 @@ Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [(',' commonTypes )] '}
 
 ## `NameSpace`<a name="grammar-schema-NameSpace"></a>
 
-The `NameSpace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](schema.md#schema-namepace).
+The `NameSpace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](../schema/schema.html#schema-namepace).
 
 ```
 NameSpace ::= STR ('::' STR)*
@@ -50,7 +50,7 @@ NameSpace ::= STR ('::' STR)*
 
 ## `EntityTypes`<a name="grammar-schema-EntityTypes"></a>
 
-The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of one or more Entity types supported by your application. For more information see [`entityTypes`](schema.md#schema-entityTypes).
+The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of one or more Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
 ```
 EntityTypes ::= 'entityTypes: {' EntityType ( ',' EntityType )* '}'

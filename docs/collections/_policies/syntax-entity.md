@@ -7,7 +7,7 @@ nav_order: 2
 # Entities in Cedar<a name="syntax-entity"></a>
 {: .no_toc }
 
-An entity in Cedar is a stored object that serves as the representation for [principals](syntax-policy.md#term-parc-principal), [actions](syntax-policy.md#term-parc-action), and [resources](syntax-policy.md#term-parc-resource) that are part of your application.
+An entity in Cedar is a stored object that serves as the representation for [principals](../policies/syntax-policy.html#term-parc-principal), [actions](../policies/syntax-policy.html#term-parc-action), and [resources](../policies/syntax-policy.html#term-parc-resource) that are part of your application.
 <details open markdown="block">
   <summary>
     Topics on this page
@@ -21,7 +21,7 @@ An entity in Cedar is a stored object that serves as the representation for [pri
 
 An entity in Cedar has the following components.
 
-+ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](terminology.md#term-schema).
++ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema).
 + **An entity identifier \(EID\)** &ndash; The EID lets you reference a specific entity in your policy. The combination of entity type and an EID uniquely identifies an object for Cedar.
 
    {: .important }
@@ -37,13 +37,13 @@ An entity in Cedar has the following components.
    >principal == User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111", // alice
    >```
 
-+ **Attributes** &ndash; Zero or more attributes that can be of any [data type supported by Cedar](syntax-datatypes.md). For example, an entity of type `Photo` might contain attributes like a `name` \(a [string](syntax-datatypes.md#datatype-string)\), a `createdDate` \(a string containing a date\), a `location` \(a [set](syntax-datatypes.md#datatype-set) of type [Decimal](syntax-datatypes.md#datatype-decimal) that represent coordinates\), and the `photographer` \(a reference to another entity representing the user who took the photo\). Define the attributes relevant to an entity type as part of your application's schema.
++ **Attributes** &ndash; Zero or more attributes that can be of any [data type supported by Cedar](../policies/syntax-datatypes.html). For example, an entity of type `Photo` might contain attributes like a `name` \(a [string](../policies/syntax-datatypes.html#datatype-string)\), a `createdDate` \(a string containing a date\), a `location` \(a [set](../policies/syntax-datatypes.html#datatype-set) of type [Decimal](../policies/syntax-datatypes.html#datatype-decimal) that represent coordinates\), and the `photographer` \(a reference to another entity representing the user who took the photo\). Define the attributes relevant to an entity type as part of your application's schema.
 
-Entities can be grouped into [logical hierarchies](terminology.md#term-group). You create a hierarchy by specifying a `parent` attribute that points to the group of which the entity is a member. Hierarchies allow you to arrange your entities according to the requirements of your scenario. For example, if your application has an entity that represents a `Photo`, then you can arrange those photos into one or more `Album` groups.
+Entities can be grouped into [logical hierarchies](../overview/terminology.html#term-group). You create a hierarchy by specifying a `parent` attribute that points to the group of which the entity is a member. Hierarchies allow you to arrange your entities according to the requirements of your scenario. For example, if your application has an entity that represents a `Photo`, then you can arrange those photos into one or more `Album` groups.
 
    An entity can have multiple parent entities, and entities can be nested. For example, you could define an `Album` called `trips` that is the parent of another `Album` called `vacations`. That `Album` could then be the parent of several `Photo` entities. A `photo` in the `Vacations` album could at the same time also be in an album named `picturesOfBob`. To do this, you simply designate an additional `parent` attribute to the photo that points to the additional album.
 
-You can use as many types of entities as your scenario requires. We recommend that you define these formally by using a [schema](terminology.md#term-schema).
+You can use as many types of entities as your scenario requires. We recommend that you define these formally by using a [schema](../overview/terminology.html#term-schema).
 
 This general structure lets Cedar support scenarios where a single entity type can perform in multiple roles. For example, consider a user directory, such as an LDAP system. Such a user directory must support fine-grained permissions to restrict who can read and write the contents of the directory. A policy in such a situation might need to express concepts like the following:
 
@@ -72,10 +72,10 @@ Except for action entities, which are prefixed with the reserved keyword `action
 
 Entities support the following operators in a Cedar policy:
 
-+ **Equality** &ndash; Using the `==` operator, you can compare two entities to see if they are the same. Equality in this context means that they are literally the same entity and have the same unique entity identifier. For more information, see [`==` equality operator](syntax-operators.md#operator-equality).
-+ **Hierarchy / membership** &ndash; Using the `in` operator, you can determine if one entity is a descendant of (or a member of) another entity's hierarchy. For more information, see [in operator](syntax-operators.md#operator-in).
-+ **Attribute presence** &ndash; Using the [has operator](syntax-operators.md#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
-+ **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](schema.md).
++ **Equality** &ndash; Using the `==` operator, you can compare two entities to see if they are the same. Equality in this context means that they are literally the same entity and have the same unique entity identifier. For more information, see [`==` equality operator](../policies/syntax-operators.html#operator-equality).
++ **Hierarchy / membership** &ndash; Using the `in` operator, you can determine if one entity is a descendant of (or a member of) another entity's hierarchy. For more information, see [in operator](../policies/syntax-operators.html#operator-in).
++ **Attribute presence** &ndash; Using the [has operator](../policies/syntax-operators.html#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
++ **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
 
 ## Namespaces<a name="entity-namespace"></a>
 
@@ -101,4 +101,4 @@ SomeEmployee["department"]
 SomePhoto["description"]
 ```
 
-An attribute resolves to a value of a [supported datatype](syntax-datatypes.md). The attribute can be referenced anywhere that a value of that datatype is valid.
+An attribute resolves to a value of a [supported datatype](../policies/syntax-datatypes.html). The attribute can be referenced anywhere that a value of that datatype is valid.

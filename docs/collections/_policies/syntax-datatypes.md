@@ -124,7 +124,7 @@ As of now Cedar supports two extension types: [decimal](#datatype-decimal) and [
 
 A value with both a whole number part and a decimal part of no more than four digits.
 
-You specify values of extension type `decimal` by using the [`decimal()` function](syntax-operators.md#decimal-parse-string-and-convert-to-decimal), e.g.,
+You specify values of extension type `decimal` by using the [`decimal()` function](../policies/syntax-operators.html#decimal-parse-string-and-convert-to-decimal), e.g.,
 
 ```cedar
 decimal("12345.1234")
@@ -141,7 +141,7 @@ A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
 
 A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
 
-You specify values of extension type `ipaddr` using the [ip() operator](syntax-operators.md#ip-parse-string-and-convert-to-ipaddr). Here are some examples:
+You specify values of extension type `ipaddr` using the [ip() operator](../policies/syntax-operators.html#ip-parse-string-and-convert-to-ipaddr). Here are some examples:
 
 ```cedar
 ip("192.168.1.100")    // a single IPv4 address

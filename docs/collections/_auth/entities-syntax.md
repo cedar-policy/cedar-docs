@@ -56,11 +56,11 @@ Use the `attrs` object to specify the key name and value of each attribute attac
 
 Notice that the `department` attribute has a string value, and the `jobLevel` attribute has an integer value, but these types are not explicitly declared in the JSON format. Cedar automatically converts these primitive JSON types to their Cedar equivalents.
 
-+ JSON string --> [Cedar String](https://docs.cedarpolicy.com/syntax-datatypes.html#string)
-+ JSON integer --> [Cedar Long](https://docs.cedarpolicy.com/syntax-datatypes.html#long)
-+ JSON boolean --> [Cedar Boolean](https://docs.cedarpolicy.com/syntax-datatypes.html#boolean)
-+ JSON list/array --> [Cedar Set](https://docs.cedarpolicy.com/syntax-datatypes.html#set)
-+ JSON object/map --> [Cedar Record](https://docs.cedarpolicy.com/syntax-datatypes.html#record)
++ JSON string --> [Cedar String](../policies/syntax-datatypes.html#string)
++ JSON integer --> [Cedar Long](../policies/syntax-datatypes.html#long)
++ JSON boolean --> [Cedar Boolean](../policies/syntax-datatypes.html#boolean)
++ JSON list/array --> [Cedar Set](../policies/syntax-datatypes.html#set)
++ JSON object/map --> [Cedar Record](../policies/syntax-datatypes.html#record)
 
 For entity references, Cedar JSON format supports an `__entity` escape, whose value is a JSON object with the attributes `type` and `id`.
 
@@ -85,9 +85,9 @@ The type must be a normalized entity type, i.e., without whitespace or Cedar com
 "type": "User"
 ```
 
-For [Cedar extension](https://docs.cedarpolicy.com/syntax-datatypes.html#extension) types and values, the Cedar JSON format supports an `__extn` escape, whose value is a JSON object with the attributes `fn` and `arg`.
+For [Cedar extension](../policies/syntax-datatypes.html#extension) types and values, the Cedar JSON format supports an `__extn` escape, whose value is a JSON object with the attributes `fn` and `arg`.
 
-The `fn` attribute names a specific Cedar extension function, which is called with the `arg` value to produce the final attribute value. The function name must be normalized, with no whitespace or Cedar comments. The following example shows how to add an IP address attribute using the [Cedar ip extension function](https://docs.cedarpolicy.com/syntax-operators.html#ip-parse-string-and-convert-to-ipaddr).
+The `fn` attribute names a specific Cedar extension function, which is called with the `arg` value to produce the final attribute value. The function name must be normalized, with no whitespace or Cedar comments. The following example shows how to add an IP address attribute using the [Cedar ip extension function](../policies/syntax-operators.html#ip-parse-string-and-convert-to-ipaddr).
 
 ```json
 "attrs": {

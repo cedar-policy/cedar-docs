@@ -19,7 +19,7 @@ A Cedar *authorization request* asks the question "*Can this principal take this
 + *R* is the resource, and
 + *C* is the request context.
 
-*P*, *A*, and *R* are [entity references](terminology.md#term-entity), while *C* is a record.
+*P*, *A*, and *R* are [entity references](../overview/terminology.html#term-entity), while *C* is a record.
 
 Conceptually, you should imagine that the authorizer is able to consider *all* of your application's policies and entity data while evaluating a request. As a practical matter, making all policies and entity data available might be too difficult or too expensive. In that case, your application needs to determine which policies and entity data are *relevant* to properly handling the request.
 
@@ -65,7 +65,7 @@ As just discussed, to reach its decision the Cedar authorizer's algorithm *evalu
 
 The key component of policy evaluation is *expression* evaluation. Each constraint in the policy scope is an expression. Each `when` clause also contains an expression, as does each `unless` clause. Evaluating a policy requires evaluating its constituent expressions. Example expressions include `resource.tags.contains("private")`, `action == Action::"viewPhoto"`, `principal in Team::"admin"`, and `resource in principal.account`.
 
-As with a typical programming language, evaluating an expression simplifies, or "executes", the expression until no further simplification is possible. The final result is either a Cedar *value* -- like `true`, `1`, `User::"Alice"`, or `"blue"` -- or it is an `error`. Evaluating an expression with no variables is straightforward. The expression `2+2` evaluates to `4`. Expression `Action::"viewPhoto" == Action::"viewPhoto"` evaluates to `true`. Expression `if false then "blue" else "green"` evaluates to `"green"`. See [here](syntax-operators.md#syntax-operators) for complete descriptions of the various operators you can use in Cedar expressions.
+As with a typical programming language, evaluating an expression simplifies, or "executes", the expression until no further simplification is possible. The final result is either a Cedar *value* -- like `true`, `1`, `User::"Alice"`, or `"blue"` -- or it is an `error`. Evaluating an expression with no variables is straightforward. The expression `2+2` evaluates to `4`. Expression `Action::"viewPhoto" == Action::"viewPhoto"` evaluates to `true`. Expression `if false then "blue" else "green"` evaluates to `"green"`. See [here](../policies/syntax-operators.html#syntax-operators) for complete descriptions of the various operators you can use in Cedar expressions.
 
 What about expressions that have variables `principal`, `action`, `resource`, and `context` in them? To evaluate such expressions the Cedar authorizer first *binds* any variables that appear in the expressions to values of the appropriate type. Then the authorizer evaluates the expressions with those values in place of the variables.
 
@@ -77,7 +77,7 @@ As another example, consider the expression `resource.tags.contains("Private")`.
 
 Determining whether a policy satisfies a request is a straightforward use of expression evaluation. To explain it, let's introduce some notation. For a policy *c*:
 
-+ *Principal(c)* is the constraint involving the `principal` in *c*'s [policy scope](terminology.md#term-policy). If there is no constraint on `principal`, then *Principal(c)* is `true`.
++ *Principal(c)* is the constraint involving the `principal` in *c*'s [policy scope](../overview/terminology.html#term-policy). If there is no constraint on `principal`, then *Principal(c)* is `true`.
 + *Action(c)* is the constraint involving `action` in *c*'s policy scope. If there is no constraint on `action`, then *Action(c)* is `true`.
 + *Resource(c)* is the constraint involving `resource` in *c*'s policy scope. If there is no constraint on `resource`, then *Resource(c)* is `true`.
 + *Conds(c)* is the list of `when` and `unless` expressions in *c*.

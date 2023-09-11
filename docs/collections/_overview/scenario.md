@@ -15,7 +15,7 @@ The examples in this guide use the following hypothetical photo sharing applicat
 
 *PhotoFlash* users can share their photos and albums with other *PhotoFlash* users or user groups. In the previous illustration, a user named **jane** created groups to represent her family \(`janeFamily`\), friends \(`janeFriends`\), and coworkers \(`janeCoworkers`\). She can then populate those groups with other *PhotoFlash* users, and specify how members of those groups can access her photos and albums. User groups are as flexible as albums; they can be nested, and a user can belong to multiple groups.
 
-![\[A user named Jane has an account that contains her albums and photos, and groups of users that she created.\]](images/AVP-BASICS.jpg)
+![\[A user named Jane has an account that contains her albums and photos, and groups of users that she created.\]](../../images/AVP-BASICS.jpg)
 
 {: .important }
 >This guide includes examples that use simple entity identifiers, such as `jane` or `bob` for the name of an entity of type `User`. This approach makes the examples more readable.
