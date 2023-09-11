@@ -30,6 +30,10 @@ This capability is provided by Cedar **validation**. To validate a policy, Cedar
 
 This topic provides a brief overview of schemas and how they work to provide validation. For a full description of the schema format with a sample schema, see [Cedar schema format](../schema/schema.html).
 
+{: .warning }
+>If you change your schema, any policies that you validated before the change might no longer be valid. Those policies can then generate errors during authorization queries if you include entities that match the updated schema in your request. 
+> Policies that result in errors aren't included in the authorization decision, possibly leading to unexpected results. Therefore, we strongly recommend that you review your policies to see which might be affected by the schema change, and edit those policies so that they accurately reflect the entities that you now include in your evaluation requests.
+
 <details open markdown="block">
   <summary>
     Topics on this page

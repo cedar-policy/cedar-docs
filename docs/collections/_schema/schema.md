@@ -19,7 +19,11 @@ nav_order: 1
 This topic describes the structure of a Cedar schema. To view the formal grammar, see [Schema grammar](../policies/schema-grammar.html).
 
 ## Overview<a name="schema-overview"></a>
-A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. It bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences.
+A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. It bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences. After you define a schema, you can ask Cedar to validate your policies against it to ensure your policies reference the entities and their attributes correctly.
+
+{: .warning }
+>If you change your schema, any policies that you validated before the change might no longer be valid. Those policies can then generate errors during authorization queries if you include entities that match the updated schema in your request. 
+> Policies that result in errors aren't included in the authorization decision, possibly leading to unexpected results. Therefore, we strongly recommend that you review your policies to see which might be affected by the schema change, and edit those policies so that they accurately reflect the entities that you now include in your evaluation requests.
 
 You can use a schema to define each of the following entities used by your application:
 
