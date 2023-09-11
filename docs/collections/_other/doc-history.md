@@ -11,8 +11,8 @@ The following table describes major documentation updates for Cedar.
 
 | Cedar<br/>Version | Description | Date |
 | --- |--- |--- |
-| - | Added [Entities & context syntax](../policies/entities-syntax.html) topic | July 27, 2023 |
-| - | Added [Schema grammar](../policies/schema-grammar.html) topic | July 17, 2023 |
+| - | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
+| - | Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
 | - | Added [Best Practices](../overview/best-practices.html) topics | July 14, 2023 |
 | - | Added [JSON policy format](../policies/json-format.html) reference page | July 14, 2023 |
 | 2.3 | Implements [RFC 9](https://github.com/cedar-policy/rfcs/pull/9) that disallows whitespace in identifiers | June 29, 2023 |
