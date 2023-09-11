@@ -18,4 +18,4 @@ The following table describes major documentation updates for Cedar.
 | 2.3 | Implements [RFC 9](https://github.com/cedar-policy/rfcs/pull/9) that disallows whitespace in identifiers | June 29, 2023 |
 | 2.2 | Changes to Cedar API that don't affect the policy language | May 30, 2023 |
 | 2.1 | Changes to Cedar API that don't affect the policy language | May 25, 2023 |
-| 2.0 | Initial release of the Cedar Policy Language Guide | May 10, 2023 |
+| 2.0 | Initial release of the Cedar Policy Language Guide | May 10, 2023 | 
