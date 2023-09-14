@@ -2,7 +2,7 @@
 layout: default
 grand_parent: Best practices
 parent: Using role-based access control
-title: RBACK with groups and attributes
+title: RBAC with groups and attributes
 nav_order: 2
 has_children: false
 ---
