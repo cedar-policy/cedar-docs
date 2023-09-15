@@ -2,12 +2,12 @@
 layout: default
 grand_parent: Best practices
 parent: Using role-based access control
-title: RBAC with groups
+title: Groups and resource-specific roles
 nav_order: 1
 has_children: false
 ---
 
-# Approach 1a - Role management using groups with resource-specific roles
+# RBAC with groups and resource-specific roles
 
 We can extend the ‘role management using groups’ approach, and create a separate approver group for each set of resources: `Approver-France`, `Approver-Germany`, and `Approver-UK`.
 
@@ -57,7 +57,7 @@ For example, an authorization request to determine whether Alice can approve Jea
 
 If you are building your own authorization engine, using the Cedar SDK, then you must also pass all relevant policies, as part of the request. If you are using a hosted service, such as Amazon Verified Permissions, then the service can select the relevant policies for evaluation from its policy store.
 
-The following is a sample authorization request for Amazon Verified Permissions that uses the [IsAuthorized](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation to illustrate the previous scenario.
+The following is a sample authorization request for Amazon Verified Permissions (one service that uses Cedar). This example uses the [IsAuthorized](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation to illustrate the previous scenario.
 
 ```
 isAuthorized (
@@ -114,8 +114,3 @@ permit (
          resource in TimesheetGrp::"Japanese-timesheets"
 );
 ```
-
-## Listing All Users assigned a Role
-
-You can list all of the users who are assigned to a role by querying your IdP. For example, you can list users in a group in Amazon Cognito by calling the [`ListUsersInGroup`](https://docs.aws.amazon.com/cognito-user-identity-pools/latest/APIReference/API_ListUsersInGroup.html) API. The policy store you develop for your application typically doesn't have access to this information. 
-

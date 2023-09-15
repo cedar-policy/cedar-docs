@@ -2,7 +2,7 @@
 layout: default
 grand_parent: Best practices
 parent: Using role-based access control
-title: RBAC with role hierarchies
+title: Role hierarchies
 nav_order: 5
 has_children: false
 ---
@@ -15,7 +15,7 @@ Let’s assume that we want to create an approver role hierarchy for our timeshe
 
 At the top of that hierarchy is the `Approver-global` role. Anyone assigned to this role can approve any timesheet anywhere. Beneath that are the regional approver roles. `Approver-EMEA`, `Approver-APAC`, and `Approver-AMERICAS`. Principals assigned to these roles can approve all timesheets in only that region. Beneath these regional approver roles are country level approver roles.
 
-## Approach 1a managing roles using groups, with  resource specific roles 
+## Managing roles using groups and resource-based roles 
 
 At first sight, you might think that you’d construct a group hierarchy to represent your role hierarchy, by making `Approver-France`, `Approver-Germany`, `Approver-UK`  all members of `Approver-EMEA`, which is then a member of `Approver-Global`. 
 
@@ -30,7 +30,7 @@ Authorization requests for this scenario must include the set of all groups that
 
 [comment]: <> (For more thoughts on managing permissions across group hierarchies, read ‘Org hierarchies in AVP’.) 
 
-## Approach 1b - Role management using groups - with attributes based conditions
+## Role management using groups with attribute-based conditions
 
 With this approach we replace multiple groups that represent country level roles with an attribute condition in the policy. There are no project or country level roles from which to construct a hierarchy.
 
@@ -50,7 +50,7 @@ One approach could be to extend our attribute-based policy that worked with proj
 
 This approach is confusing and we don't recommended it.
 
-## Approach 2 : Role management using templates
+## Role management using policy templates
 
 This approach represents roles by using templates instead of groups. You assign users to roles by creating policies from the templates.  Constructing a role hierarchy doesn’t require you to define new templates, but it does require you to group your resources into a hierarchy. Fortunately, a resource hierarchy (unlike a principal hierarchy) behaves exactly as you would expect. Therefore, you would construct a hierarchy of timesheet resource groups that might look like this. 
 

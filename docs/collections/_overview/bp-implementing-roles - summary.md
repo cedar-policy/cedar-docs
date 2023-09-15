@@ -2,12 +2,12 @@
 layout: default
 grand_parent: Best practices
 parent: Using role-based access control
-title: RBAC recommendations
+title: RBAC summary
 nav_order: 4
 has_children: false
 ---
 
-# Recommendations for managing resource specific roles
+# Summary: Recommendations for managing resource specific roles
 
 Because it usually results in a simpler strategy, we recommend that you model roles using groups. 
 
