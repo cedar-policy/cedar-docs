@@ -781,14 +781,14 @@ Function that evaluates to `true` if the operand is a member of the receiver on 
 {: .no_toc }
 
 ```cedar
-[1,2,3].contains (1)                            // true
+[1,2,3].contains(1)                             // true
 [1,"something",2].contains(1)                   // true
-[1,"something",2].contains("Something")         // false - string comparision is case-sensitive
+[1,"something",2].contains("Something")         // false - string comparison is case-sensitive
 ["some", "useful", "tags"].contains("useful")   // true
-[].contains (100)                               // false
-context.role.contains ("admin")                 // true if the set `role` contains the string "admin"
-[User::"alice"].contains (principal)            // true if principal == User::"alice"
-"ham and ham".contains ("ham")                  // type error - 'contains' is not allowed on strings
+[].contains(100)                                // false
+context.role.contains("admin")                  // true if the set `role` contains the string "admin"
+[User::"alice"].contains(principal)             // true if principal == User::"alice"
+"ham and ham".contains("ham")                   // type error - 'contains' is not allowed on strings
 ```
 
 ### `.containsAll()` \(all element set membership test\)<a name="function-containsAll"></a>
@@ -842,9 +842,9 @@ Use these functions to test characteristics of IP addresses and ranges.
 Evaluates to `true` if the receiver is an IPv4 address. This function takes no operand.
 
 ```cedar
-ip("127.0.0.1").isIpV4()     //true
-ip("::1").isIpV4()           //false
-ip("127.0.0.1/24").isIpV4()  //true
+ip("127.0.0.1").isIpv4()     //true
+ip("::1").isIpv4()           //false
+ip("127.0.0.1/24").isIpv4()  //true
 ```
 
 ### `.isIpv6()` \(IPv6 address valid test\)<a name="function-isIpv6.title"></a>
@@ -854,9 +854,9 @@ ip("127.0.0.1/24").isIpV4()  //true
 Function that evaluates to `true` if the receiver is an IPv6 address. This function takes no operand.
 
 ```cedar
-ip("127.0.0.1/24").isIpV6()  //false
-ip("ffee::/64").isIpV6()     //true
-ip("::1").isIpV6()           //true
+ip("127.0.0.1/24").isIpv6()  //false
+ip("ffee::/64").isIpv6()     //true
+ip("::1").isIpv6()           //true
 ```
 
 ### `.isLoopback()` \(test for IP loopback address\)<a name="function-isLoopback.title"></a>
