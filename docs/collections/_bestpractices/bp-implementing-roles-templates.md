@@ -1,6 +1,5 @@
 ---
 layout: default
-grand_parent: Best practices
 parent: Using role-based access control
 title: Roles with policy templates
 nav_order: 3

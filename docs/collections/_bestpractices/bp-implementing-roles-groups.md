@@ -1,6 +1,5 @@
 ---
 layout: default
-grand_parent: Best practices
 parent: Using role-based access control
 title: Groups and resource-specific roles
 nav_order: 1

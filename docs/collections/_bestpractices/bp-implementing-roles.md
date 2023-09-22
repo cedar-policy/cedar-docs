@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Using role-based access control
-parent: Best practices
 nav_order: 7
 has_children: true
 ---
