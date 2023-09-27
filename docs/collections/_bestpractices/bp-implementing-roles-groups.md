@@ -56,6 +56,7 @@ For example, an authorization request to determine whether Alice can approve Jea
 
 If you are building your own authorization engine, using the Cedar SDK, then you must also pass all relevant policies, as part of the request. If you are using a hosted service, such as Amazon Verified Permissions, then the service can select the relevant policies for evaluation from its policy store.
 
+<!---
 The following is a sample authorization request for Amazon Verified Permissions (one service that uses Cedar). This example uses the [IsAuthorized](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation to illustrate the previous scenario.
 
 ```
@@ -98,6 +99,7 @@ isAuthorized (
     }
 )
 ```
+-->
 
 ## Expanding to a new country
 

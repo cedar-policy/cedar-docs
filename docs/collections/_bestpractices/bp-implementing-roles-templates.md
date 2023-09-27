@@ -43,10 +43,11 @@ createPolicy (
 
 You can see that each template-linked policy grants permissions to a specified user to perform the actions in the template on the specified resources in the resource group.
 
+
 ## Making an authorization request
 
 The entity data within the authorization request must include the group membership of the resource. However, this approach doesn’t need to include group memberships of the principal, because we created a separate template-linked policy for each assigned principal.
-
+<!---
 ```
 // Authorization request 
 isAuthorized ( 
@@ -70,7 +71,7 @@ isAuthorized (
     } 
 ) 
 
-```
+```-->
 
 ## Expanding to a new country
 
