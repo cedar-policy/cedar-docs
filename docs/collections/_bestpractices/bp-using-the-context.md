@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Using the context
-parent: Best practices
 nav_order: 3
 ---
 

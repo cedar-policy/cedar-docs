@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Meta-permissions
-parent: Best practices
 nav_order: 5
 ---
 

@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Populate the policy scope
-parent: Best practices
 nav_order: 4
 ---
 
