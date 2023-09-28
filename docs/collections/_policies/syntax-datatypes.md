@@ -4,7 +4,7 @@ title: Data types
 nav_order: 3
 ---
 
-# Data types supported by Cedar<a name="syntax-datatypes"></a>
+# Data types supported by Cedar {#syntax-datatypes}
 {: .no_toc }
 
 The Cedar policy language supports values and expressions of the following data types.
@@ -18,24 +18,24 @@ The Cedar policy language supports values and expressions of the following data 
 {:toc}
 </details>
 
-## Boolean<a name="datatype-boolean"></a>
+## Boolean {#datatype-boolean}
 
 A value that is either `true` or `false`.
 
-## String<a name="datatype-string"></a>
+## String {#datatype-string}
 
 A sequence of characters consisting of letters, numbers, or symbols.
 
 Cedar doesn't have a string length limit, but services that use Cedar are likely to have limits for each element with a value of type `String`.
 
-## Long<a name="datatype-long"></a>
+## Long {#datatype-long}
 
 A whole number without decimals that can range from -9223372036854775808 to 9223372036854775807.
 
 {: .warning }
 >If you exceed the range available for the Long data type by using the [arithmetic operators](syntax-operators.html#arithmetic-operators), it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
-## Set<a name="datatype-set"></a>
+## Set {#datatype-set}
 
 A collection of elements that can be of the same or different types. A set is constructed using bracket characters `[ ]` and separating the elements with commas. The following examples show a few sets.
 
@@ -53,7 +53,7 @@ A collection of elements that can be of the same or different types. A set is co
 [3<5, ["nested", "set"], true]
 ```
 
-## Record<a name="datatype-record"></a>
+## Record {#datatype-record}
 
 A collection of *attributes*. Each attribute consists of a name and an associated value. Names are simple strings. Values can be of any type. You can access an attribute's value by referencing its name as an index using either of the following syntax options:
 
@@ -81,7 +81,7 @@ The following are additional examples of records.
 {"foo": 2, bar: [3, 4, -47], ham: "eggs", "hello": true }
 ```
 
-## Entity<a name="datatype-entity"></a>
+## Entity {#datatype-entity}
 
 An entity represents a principal, action, or resource in your authorization model. A principal represents an actor in your application, such as a user, or a service that can perform actions. Your application can define the available actions, such as creating, reading, writing, or deleting. Resources contain your data and are acted upon by the principals using the defined actions.
 
@@ -114,13 +114,13 @@ User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111"
 >principal == User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111", // alice
 >```
 
-## Extension<a name="datatype-extension"></a>
+## Extension {#datatype-extension}
 
 The remaining Cedar data types are introduced as *extension types*. Values of an extension type are introduced by calling a *constructor function* that takes a string as its parameter. Operations on extension types, aside from equality, use a function- or method-call syntax. Equality testing uses `==` as usual.
 
 As of now Cedar supports two extension types: [decimal](#datatype-decimal) and [ipaddr](#datatype-ipaddr).
 
-### decimal<a name="datatype-decimal"></a>
+### decimal {#datatype-decimal}
 
 A value with both a whole number part and a decimal part of no more than four digits.
 
@@ -137,7 +137,7 @@ A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
 {: .warning }
 >If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
-### ipaddr<a name="datatype-ipaddr"></a>
+### ipaddr {#datatype-ipaddr}
 
 A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
 

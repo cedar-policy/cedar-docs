@@ -5,7 +5,7 @@ nav_order: 4
 ---
 <!-- markdownlint-disable-file MD024 MD026 MD040 -->
 
-# Operators and functions to use in Cedar<a name="syntax-operators"></a>
+# Operators and functions to use in Cedar {#syntax-operators}
 {: .no_toc }
 
 This topic describes the built-in operators and functions that you can use to build your expressions using the Cedar policy language.
@@ -19,7 +19,7 @@ This topic describes the built-in operators and functions that you can use to bu
 {:toc}
 </details>
 
-## Overview of operators<a name="operators-overview"></a>
+## Overview of operators {#operators-overview}
 
 The operators use the following syntax structures:
 
@@ -58,11 +58,11 @@ Functions use the following syntax:
   a.containsAny([b, c, d])
   ```
 
-## String operators and functions<a name="operators-string"></a>
+## String operators and functions {#operators-string}
 
 Use these operators and functions to compare strings or convert them to other types.
 
-### `like` \(string matching with wildcard\)<a name="operators-string-like"></a>
+### `like` \(string matching with wildcard\) {#operators-string-like}
 
 **Usage:** `<string> like <string with wildcards>`
 
@@ -115,7 +115,7 @@ context.location like "s3:*"         //true
 "string*with*stars" like "string\*with\*stars"                 //true
 ```
 
-### `decimal()` \(parse string and convert to decimal\)<a name="function-decimal"></a>
+### `decimal()` \(parse string and convert to decimal\) {#function-decimal}
 
 **Usage:** `decimal(<string>)`
 
@@ -146,7 +146,7 @@ decimal("0.12345")               //error
 decimal("0.00000")               //error
 ```
 
-### `ip()` \(parse string and convert to ipaddr\)<a name="function-ip"></a>
+### `ip()` \(parse string and convert to ipaddr\) {#function-ip}
 
 **Usage:** `ip(<string>)`
 
@@ -179,11 +179,11 @@ ip("127.0.0.1") == ip("192.168.0.1/24")       //false - address compared to rang
 ip("127.0.0.1") < ip("10.0.0.10")             //error – invalid data types for < operator
 ```
 
-## Comparison operators and functions<a name="operators-comparison"></a>
+## Comparison operators and functions {#operators-comparison}
 
 Use these operators to compare two values as an expression. An expression that uses one of these operators evaluates to a Boolean `true` or `false`. You can then combine multiple expressions using the logical operators.
 
-### `==` \(equality\)<a name="operator-equality"></a>
+### `==` \(equality\) {#operator-equality}
 
 **Usage:** `<any type> == <any type>`
 
@@ -212,7 +212,7 @@ User::"alice" == Admin::"alice" //false -- objects of two different types
 "alice" == User::"alice         //false -- string versus entity
 ```
 
-### `!=` \(inequality\)<a name="operator-inequality"></a>
+### `!=` \(inequality\) {#operator-inequality}
 
 **Usage:** `<any type> != <any type>`
 
@@ -228,7 +228,7 @@ when{
 };
 ```
 
-### `<` \(long integer 'less than'\)<a name="operator-lessthan"></a>
+### `<` \(long integer 'less than'\) {#operator-lessthan}
 
 **Usage:** `<long> < <long>`
 
@@ -248,7 +248,7 @@ false < true          //type error
 [1, 2] < [47, 0]      //type error
 ```
 
-### `.lessThan()` \(decimal 'less than'\)<a name="function-lessThan"></a>
+### `.lessThan()` \(decimal 'less than'\) {#function-lessThan}
 
 **Usage:** `<decimal>.lessThan(<decimal>)`
 
@@ -265,7 +265,7 @@ decimal("-1.23").lessThan(decimal("1.23"))    //true
 decimal("-1.23").lessThan(decimal("-1.24"))   //false
 ```
 
-### `<=` \(long integer 'less than or equal'\)<a name="operator-lessthanorequal"></a>
+### `<=` \(long integer 'less than or equal'\) {#operator-lessthanorequal}
 
 **Usage:** `<long> <= <long>`
 
@@ -285,7 +285,7 @@ false <= true          // type error
 [1, 2] <= [47, 0]      // type error
 ```
 
-### `.lessThanOrEqual()` \(decimal 'less than or equal'\)<a name="function-lessThanOrEqual"></a>
+### `.lessThanOrEqual()` \(decimal 'less than or equal'\) {#function-lessThanOrEqual}
 
 **Usage:** `<decimal>.lessThanOrEqual(<decimal>)`
 
@@ -302,7 +302,7 @@ decimal("-1.23").lessThanOrEqual(decimal("1.23"))   // true
 decimal("-1.23").lessThanOrEqual(decimal("-1.24"))  // false
 ```
 
-### `>` \(long integer 'greater than'\)<a name="operator-greaterthan"></a>
+### `>` \(long integer 'greater than'\) {#operator-greaterthan}
 
 **Usage:** `<long> > <long>`
 
@@ -322,7 +322,7 @@ false <= true          // type error
 [1, 2] <= [47, 0]      // type error
 ```
 
-### `.greaterThan()` \(decimal 'greater than or equal'\)<a name="function-greaterThan"></a>
+### `.greaterThan()` \(decimal 'greater than or equal'\) {#function-greaterThan}
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
 
@@ -339,7 +339,7 @@ decimal("-1.23").greaterThan(decimal("1.23"))   // false
 decimal("-1.23").greaterThan(decimal("-1.24"))  // true
 ```
 
-### `>=` \(Long integer 'greater than or equals'\)<a name="operator-greaterthanorequal"></a>
+### `>=` \(Long integer 'greater than or equals'\) {#operator-greaterthanorequal}
 
 **Usage:** `<long> >= <long>`
 
@@ -359,7 +359,7 @@ false >= true          //type error
 [1, 2] >= [47, 0]      //type error
 ```
 
-### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\)<a name="function-greaterThanOrEqual"></a>
+### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\) {#function-greaterThanOrEqual}
 
 **Usage:** `<decimal>.greaterThanOrEqual(<decimal>)`
 
@@ -376,11 +376,11 @@ decimal("-1.23").greaterThanOrEqual(decimal("1.23"))   //false
 decimal("-1.23").greaterThanOrEqual(decimal("-1.24"))  //true
 ```
 
-## Logical operators<a name="operators-logical"></a>
+## Logical operators {#operators-logical}
 
 Use these operators to logically combine Boolean values or expressions.
 
-### `&&` \(AND\)<a name="operator-and"></a>
+### `&&` \(AND\) {#operator-and}
 
 **Usage:** `<Boolean> && <Boolean>`
 
@@ -420,7 +420,7 @@ true && 3           //type error
 3 && false          // type error
 ```
 
-### `||` \(OR\)<a name="operator-or"></a>
+### `||` \(OR\) {#operator-or}
 
 **Usage:** `<Boolean> || <Boolean>`
 
@@ -455,7 +455,7 @@ false || 3                 //type error
 (true || 3 || true) == 3   //false, short-circuiting
 ```
 
-### `!` \(NOT\)<a name="operator-not"></a>
+### `!` \(NOT\) {#operator-not}
 
 **Usage:** `! <Boolean>`
 
@@ -492,7 +492,7 @@ unless {
 if !true then "hello" else "goodbye"  // "goodbye"
 ```
 
-## Arithmetic operators<a name="operators-math"></a>
+## Arithmetic operators {#operators-math}
 
 Use these operators to perform arithmetic operations on long integer values.
 
@@ -503,7 +503,7 @@ There is no operator for arithmetic division.
 {: .warning }
 >If you exceed the range available for the Long data type by using any of the arithmetic operators, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
-### `+` \(Numeric addition\)<a name="operator-add"></a>
+### `+` \(Numeric addition\) {#operator-add}
 
 **Usage:** `<long> + <long>`
 
@@ -533,7 +533,7 @@ when {
 "lamp" + "la"                       //type error - no support for string concatenation
 ```
 
-### `-` \(Numeric subtraction or negation\)<a name="operator-subtract"></a>
+### `-` \(Numeric subtraction or negation\) {#operator-subtract}
 
 **Usage:** `<long> - <long>`
 
@@ -559,7 +559,7 @@ As a unary operator with one operand, it returns the negative of the value.
 -3
 ```
 
-### `*` \(Numeric multiplication\)<a name="operator-multiply"></a>
+### `*` \(Numeric multiplication\) {#operator-multiply}
 
 **Usage:** `<long> * <long>`
 
@@ -582,11 +582,11 @@ context.budget * context.limit   // not valid. One operand must be a constant
 "5" * 0                          // type error
 ```
 
-## Hierarchy and set membership operators and functions<a name="functions-set"></a>
+## Hierarchy and set membership operators and functions {#functions-set}
 
 Use these functions to test if entities are members of a hierarchy or a set.
 
-### `in` \(Hierarchy membership\)<a name="operator-in"></a>
+### `in` \(Hierarchy membership\) {#operator-in}
 
 **Usage:** `<entity> in <entity>`
 
@@ -693,7 +693,7 @@ Stranger::"jimmy" in [
 "os" in {"os":"Windows "}   //type error - use `has` operator to check if a key exists
 ```
 
-### `has` \(presence of attribute test\)<a name="operator-has"></a>
+### `has` \(presence of attribute test\) {#operator-has}
 
 **Usage:** `<entity> has <attribute>`
 
@@ -771,7 +771,7 @@ In that case, then the previous expression that checks for `context.addr has cou
 context has addr && context.addr has country && context.addr.country == "US"  // false, with no error
 ```
 
-### `.contains()` \(single element set membership test\)<a name="function-contains"></a>
+### `.contains()` \(single element set membership test\) {#function-contains}
 
 **Usage:** `<set>.contains(<entity>)`
 
@@ -791,7 +791,7 @@ context.role.contains("admin")                  // true if the set `role` contai
 "ham and ham".contains("ham")                   // type error - 'contains' is not allowed on strings
 ```
 
-### `.containsAll()` \(all element set membership test\)<a name="function-containsAll"></a>
+### `.containsAll()` \(all element set membership test\) {#function-containsAll}
 
 **Usage:** `<set>.containsAll(<set>)`
 
@@ -812,7 +812,7 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 {"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})         // type error - prefix and operand are records
 ```
 
-### `.containsAny()` \(any element set membership test\)<a name="function-containsAny"></a>
+### `.containsAny()` \(any element set membership test\) {#function-containsAny}
 
 **Usage:** `<set>.containsAny(<set>)`
 
@@ -831,11 +831,11 @@ Function that evaluates to `true` if *any one or more* members of the operand se
 {"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           // type error - prefix and operands are records
 ```
 
-## IP address functions<a name="functions-ipaddr"></a>
+## IP address functions {#functions-ipaddr}
 
 Use these functions to test characteristics of IP addresses and ranges.
 
-### `.isIpv4()` \(IPv4 address valid test\)<a name="function-isIpv4"></a>
+### `.isIpv4()` \(IPv4 address valid test\) {#function-isIpv4}
 
 **Usage:** `<ipaddr>.isIpv4()`
 
@@ -847,7 +847,7 @@ ip("::1").isIpv4()           //false
 ip("127.0.0.1/24").isIpv4()  //true
 ```
 
-### `.isIpv6()` \(IPv6 address valid test\)<a name="function-isIpv6.title"></a>
+### `.isIpv6()` \(IPv6 address valid test\) {#function-isIpv6.title}
 
 **Usage:** `<ipaddr>.isIpv6()`
 
@@ -859,7 +859,7 @@ ip("ffee::/64").isIpv6()     //true
 ip("::1").isIpv6()           //true
 ```
 
-### `.isLoopback()` \(test for IP loopback address\)<a name="function-isLoopback.title"></a>
+### `.isLoopback()` \(test for IP loopback address\) {#function-isLoopback.title}
 
 **Usage:** `<ipaddr>.isLoopback()`
 
@@ -871,7 +871,7 @@ ip("::1").isLoopback()        //true
 ip("::2").isLoopback()        //false
 ```
 
-### `.isMulticast()` \(test for multicast address\)<a name="function-isMulticast.title"></a>
+### `.isMulticast()` \(test for multicast address\) {#function-isMulticast.title}
 
 **Usage:** `<ipaddr>.isMulticast()`
 
@@ -882,7 +882,7 @@ ip("127.0.0.1").isMulticast()  //false
 ip("ff00::2").isMulticast()    //true
 ```
 
-### `.isInRange()` \(test for inclusion in IP address range\)<a name="function-isInRange.title"></a>
+### `.isInRange()` \(test for inclusion in IP address range\) {#function-isInRange.title}
 
 **Usage:** `<ipaddr>.isInRange(<ipaddr>)`
 

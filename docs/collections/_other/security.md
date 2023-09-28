@@ -4,7 +4,7 @@ title: Security
 nav_order: 13
 ---
 
-# Cedar security<a name="security"></a>
+# Cedar security {#security}
 {: .no_toc }
 
 This section provides information about security as it relates to the Cedar policy language.
@@ -18,11 +18,11 @@ This section provides information about security as it relates to the Cedar poli
 {:toc}
 </details>
 
-## Shared responsibility<a name="security-shared-responsibility"></a>
+## Shared responsibility {#security-shared-responsibility}
 
 Security is a shared responsibility between Cedar and its users. It is the responsibility of Cedar to correctly evaluate policies to arrive at an authorization decision. It is the responsibility of users of Cedar to correctly define policies that implement their authorization model. Although Cedar provides tools such as the policy validator to validate your policies against the schema, it is ultimately the user's responsibility to write policies correctly.
 
-## Security of Cedar<a name="security-cedar"></a>
+## Security of Cedar {#security-cedar}
 
 It is the responsibility of Cedar to implement the Cedar policy language correctly as described in this guide.
 
@@ -41,11 +41,11 @@ In particular, Cedar provides two properties about authorization queries:
 + *default-deny* &ndash; Authorization queries result in a `Deny` unless an explicit `permit` policy evaluates to `true`.
 + *forbid-trumps-permit* &ndash; A single `forbid` policy evaluating to `true` results in a `Deny`.
 
-## Security of applications using Cedar<a name="security-of-apps"></a>
+## Security of applications using Cedar {#security-of-apps}
 
 It is the responsibility of applications using Cedar to implement their authorization logic correctly using Cedar policies. To do this, application developers must understand the semantics of Cedar policies. Developers should understand the risks associated with an incorrectly implemented authorization model and take appropriate steps to mitigate those risks. We will provide customers with tools to help them author correct and secure policies, such as policy validation, semantic analysis, and policy templates.
 
-### Understanding Cedar semantics<a name="security-cedar-semantics"></a>
+### Understanding Cedar semantics {#security-cedar-semantics}
 
 To create correct authorization policies, developers must understand the semantics of Cedar. This guide contains a detailed description of every feature of the language and how it is evaluated. It also includes several examples.
 
@@ -55,7 +55,7 @@ Developers must understand how the results of evaluating individual policies are
 + **forbid-overrides-permit** &ndash; A single `forbid` policy evaluating to true results in a `Deny`.
 + An error in a policy results in that policy being ignored for the purpose of an evaluation decision. (*skip-on-error* semantics)
 
-### Validating your Cedar policies against your schema<a name="security-validate-against-schema"></a>
+### Validating your Cedar policies against your schema {#security-validate-against-schema}
 
 Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. By providing a schema, policies that pass validation don't result in runtime errors when they are run against schema-compliant entities and requests.
 
@@ -71,7 +71,7 @@ The Cedar validator can detect the many types of bugs, including the following:
 
 Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Dafny. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
 
-## Security best practices for applications using Cedar<a name="security-best-practices"></a>
+## Security best practices for applications using Cedar {#security-best-practices}
 
 Some security best practices for applications that use Cedar are as follows:
 

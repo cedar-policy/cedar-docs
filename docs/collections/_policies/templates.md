@@ -4,7 +4,7 @@ title: Policy templates
 nav_order: 8
 ---
 
-# Cedar policy templates<a name="templates"></a>
+# Cedar policy templates {#templates}
 {: .no_toc }
 
 A policy template is a policy that contains *placeholders*. The placeholders can represent the principal and the resource. Later, you can create a template-linked policy based on the policy template by specifying the exact principal and resource to use for this one policy. Template-linked policies are dynamic, meaning that the new policy stays linked to its policy template. When you change a policy statement in the policy template, any policies linked to that template automatically and immediately use the new statement for all authorization decisions made from that moment forward.

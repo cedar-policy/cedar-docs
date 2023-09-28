@@ -5,7 +5,7 @@ nav_order: 12
 has_children: false
 ---
 
-# Entities and context syntax<a name="entities-syntax"></a>
+# Entities and context syntax {#entities-syntax}
 {: .no_toc }
 
 When you want to authorize a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires a list of policies along with the list of entities and a list of other context information that Cedar uses in its evaluation of the request.

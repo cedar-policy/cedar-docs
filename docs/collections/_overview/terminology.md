@@ -4,7 +4,7 @@ title: Terms & concepts
 nav_order: 3
 ---
 
-# Cedar terms and concepts<a name="terminology"></a>
+# Cedar terms and concepts {#terminology}
 {: .no_toc }
 
 Cedar manages fine-grained permissions to support the authorization requirements for custom applications. To create Cedar policies successfully, you should understand the following concepts.
@@ -18,7 +18,7 @@ Cedar manages fine-grained permissions to support the authorization requirements
 {:toc}
 </details>
 
-## Authorization<a name="term-authorization"></a>
+## Authorization {#term-authorization}
 
 *Authorization* is the process of determining if a specific user request to do something is allowed by the defined set of [policies](#term-policy). Authorization works by evaluating each incoming request against the set of policies provided to Cedar.
 
@@ -28,7 +28,7 @@ Cedar lets you describe permissions by creating [policies](#term-policy) as text
 
 When a principal attempts to do something in an application, the application generates an authorization request. Cedar [evaluates](#term-policy-evaluation) requests against the set of defined policies, producing a decision to **allow** or **deny** the request.
 
-## Policy<a name="term-policy"></a>
+## Policy {#term-policy}
 
 A policy is a statement that declares which principals are explicitly permitted, or explicitly forbidden, to perform an action on a resource. The collection of policies together define the authorization rules for your application.
 
@@ -48,7 +48,7 @@ You can use a variety of strategies to construct the policies. Some of the commo
 + **[Role-based access control \(RBAC\)](https://wikipedia.org/wiki/Role-based_access_control)** – Cedar lets you define roles that receive a set of permissions granted by associating policies with the role. These roles can then be assigned to one or more identities. Each assigned identity acquires the permissions granted by the policies associated with the role. If the policies associated with a role are modified, it automatically impacts any identity assigned to that role. Cedar supports RBAC decisions by using [groups](#term-group) for your principals.
 + **[Attribute-based access control \(ABAC\)](https://wikipedia.org/wiki/Attribute-based_access_control)** – Cedar uses the attributes attached to the principal and the resource to determine the permissions. For example, a policy can state that all users that are tagged as the owner of a resource automatically have access. A different policy could state that only users that are members of the Human Resources (HR) department can access resources that are tagged as HR resources.
 
-## Policy evaluation<a name="term-policy-evaluation"></a>
+## Policy evaluation {#term-policy-evaluation}
 
 An authorization request is a request by an application for an authorization decision, asking the question "*Can this principal take this action on this resource in this context?*". To reach the decision, Cedar's authorization engine evaluates a request against each [policy](#term-policy), and combines the results. It ultimately produces an ***authorization response*** that consists of the decision (`Allow` or `Deny`), and the list of ***determining policies*** that are the reasons for that decision.
 
@@ -60,7 +60,7 @@ Your application must gather all of the relevant information and provide it to C
 
 The algorithmic details for how authorization decisions are made, and how individual policies are evaluated, are discussed in the [authorization](../auth/authorization.html) section of these docs.
 
-## Policy template<a name="term-policy-template"></a>
+## Policy template {#term-policy-template}
 
 A policy template is a policy that has a placeholder for either the principal, the resource, or both. A policy template is useful when you have a common pattern for access that you need to apply to many resources, or many principals. You can't use a template in an authorization decision directly. Instead, you first associate a principal and resource with the template to create a template-linked policy that is complete and usable for authorization decisions.
 
@@ -70,7 +70,7 @@ A policy created from a policy template is called a template-linked policy. When
 
 For more information about creating and using policy templates, see [Cedar policy templates](../policies/templates.html).
 
-## Entity<a name="term-entity"></a>
+## Entity {#term-entity}
 
 A [principal](../policies/syntax-policy.html#term-parc-principal), an [action](../policies/syntax-policy.html#term-parc-action), or a [resource](../policies/syntax-policy.html#term-parc-resource) that is part of your application are all represented in Cedar as *entities*.
 
@@ -87,7 +87,7 @@ Define the attributes that are useful to your scenario.
 
 For more details about entities, see [Entity](../policies/syntax-entity.html) in [Cedar syntax - elements of the policy language](../policies/syntax.html).
 
-## Namespaces<a name="term-namespaces"></a>
+## Namespaces {#term-namespaces}
 
 As software products increase in size and organizations grow, multiple services can be added to contribute to the overall implementation of an application or product portfolio. You can see this outcome happening when vendors offer several products to customers, or alternatively, in service meshes where multiple services contribute portions of an application.
 
@@ -115,7 +115,7 @@ ExampleCo::Furniture::Table::"c7b981f1-97e4-436b-9af9-21054a3b30f1"
 ExampleCo::This::Is::A::Long::Name::For::Something::"12345"
 ```
 
-## Groups and hierarchies<a name="term-group"></a>
+## Groups and hierarchies {#term-group}
 
 You can represent a group in Cedar by adding a `parent` attribute to an entity. All entities with the same parent can be considered members of that group. If you have an entity "A" that has a parent entity "B", then you can say that A is a member of B.
 
@@ -133,7 +133,7 @@ permit (
 );
 ```
 
-## Schema<a name="term-schema"></a>
+## Schema {#term-schema}
 
 A schema is a declaration of the structure of the entity types supported by your application, and the actions your application may provide in authorization requests. Cedar uses [JSON](https://json.org) to define a schema. You can use the schema to define the principals, resources, and actions used by your application. Each definition specifies the structure of the entity that your application recognizes. For example, a resource of type `Photo` could be defined to include both a  `Name` attribute that is a [string](../policies/syntax-datatypes.html#datatype-string), and a `LocationTaken` attribute that is a [record](../policies/syntax-datatypes.html#datatype-record). That record could include `Latitude` and `Longitude` values that are both [decimal](../policies/syntax-datatypes.html#datatype-decimal).
 

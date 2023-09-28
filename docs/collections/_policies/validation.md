@@ -4,7 +4,7 @@ title: Policy validation
 nav_order: 5
 ---
 
-# Cedar policy validation against schema<a name="validation"></a>
+# Cedar policy validation against schema {#validation}
 {: .no_toc }
 
 Cedar policies are code, and as with all code it is possible to make mistakes that mean the code will not behave as expected. For example, the following is a well-formed Cedar policy according to syntax rules, but with a number of typos and type errors.
@@ -43,7 +43,7 @@ This topic provides a brief overview of schemas and how they work to provide val
 {:toc}
 </details>
 
-## Example of schema-based validation<a name="schema-intro"></a>
+## Example of schema-based validation {#schema-intro}
 
 The following is an example of a basic Cedar schema.
 
@@ -105,7 +105,7 @@ The Cedar validator knows that any request that triggers evaluation of this poli
 
 1. **Validation error** &ndash; The left operand of `==` is always of type `Long` and the right operand is always a `String`. Because the `==` operator always returns false if its operands have different runtime types, this comparison always returns false. Although this comparison won't raise a runtime error during evaluation, it probably isn’t what the policy author intended and so is flagged as a validation error.
 
-## Supported validation checks<a name="validation-supported-checks"></a>
+## Supported validation checks {#validation-supported-checks}
 
 The validator compares a policy with a schema to look for inconsistencies. From these inconsistencies, the validator detects the following errors:
 
@@ -120,7 +120,7 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 
 The schema can also specify the expected format of the context record for each `Action`. Making this specification lets Cedar also flag errors on references to context.
 
-## Enforcement of validation rules: Expectations<a name="validation-enforcement"></a>
+## Enforcement of validation rules: Expectations {#validation-enforcement}
 
 As implied by the discussion above, we expect validation to be performed _before_ a policy is used by the authorization engine to decide authorization requests. Indeed, the Cedar authorization APIs do not perform validation at the same time that a request is evaluated. Rather, validation is an entirely separate API which can be invoked when policies are loaded or created.
 
@@ -157,7 +157,7 @@ You can think of a schema as a contract between the application and the policies
 
 Note that this contract implies that if an application's schema changes then so has its authorization model, i.e., the actions and/or entities it may submit to the Cedar authorization engine, and their structure. Policies still in effect may need to be revalidated to make sure they are consistent with these changes.
 
-## Benefits of validation and schemas<a name="validation-benefits-of-schema"></a>
+## Benefits of validation and schemas {#validation-benefits-of-schema}
 
 Performing validation before using your policies gives you a significant benefit, called _validation soundness_: If your policies are deemed valid, they are sure not to exhibit most errors that could arise during request evaluation, for requests that adhere to the expectations defined by the schema. We have formally _proved_ validation soundness as part of the novel [verification guided development](https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing) process we used to build Cedar. In particular, we implemented a version of the validator in the [Dafny verification-aware programming language](https://dafny.org), and used [automated reasoning](https://www.amazon.science/blog/a-gentle-introduction-to-automated-reasoning) to prove the validation soundness property. Then we performed extensive _differential testing_ to make sure that our Rust implementation of the validator behaves the same as the Dafny version does.
 

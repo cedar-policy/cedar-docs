@@ -4,7 +4,7 @@ title: Example scenario
 nav_order: 4
 ---
 
-# Cedar example scenario used in this guide<a name="scenario"></a>
+# Cedar example scenario used in this guide {#scenario}
 {: .no_toc }
 
 **Conventions used in this guide**  
