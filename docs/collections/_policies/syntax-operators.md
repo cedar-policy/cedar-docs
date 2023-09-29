@@ -378,7 +378,7 @@ decimal("-1.23").greaterThanOrEqual(decimal("-1.24"))  //true
 
 ## Logical operators<a name="operators-logical"></a>
 
-Use these operators to logically combine Boolean values or expressions.
+Use these operators on Boolean values or expressions.
 
 ### `&&` \(AND\)<a name="operator-and"></a>
 
@@ -491,6 +491,43 @@ unless {
 ! 8                                   // type error
 if !true then "hello" else "goodbye"  // "goodbye"
 ```
+
+### `if` \(CONDITIONAL\)<a name="operator-if"></a>
+
+**Usage:** `if <Boolean> then <T> else <U>`
+
+The `if` operator returns its evaluated second argument if the first argument evaluates to `true`, else it returns the evaluated third argument.
+
+The `if` operator requires its first argument to be a boolean, i.e., to evaluate to either `true` or `false`. If it does not, the evaluator issues a type error. The second and third arguments can have any type; to be compatible with [validation](validation.html), both arguments must have the _same_ type.
+
+In the following policy, the `when` condition is `true` if both `principal.numberOfLaptops < 5` and `principal.jobLevel > 6` are `true`.
+
+```cedar
+permit (principal, action == Action::"remoteAccess", resource)
+when {
+    if principal.numberOfLaptops < 5 then
+      principal.jobLevel > 6
+    else false
+};
+```
+
+The `if` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). When the first argument evaluates to `true` the third argument is never evaluated. When the first argument evaluates to `false`, the second argument is never evaluated.
+
+The `if` operator is a strict generalization of the `&&` and `||` operators. The expression _e1_ `||` _e2_ is equivalent to the expression `if` _e1_ `then` `true` `else` (`if` _e2_ `then` `true` `else` `false`). The expression _e1_ `&&` _e2_ is equivalent to the expression `if` _e1_ `then` (`if` _e2_ `then` `true` `else` `false`) `else` `false`. Note that _e1_ `||` _e2_ is _not_ equivalent to `if` _e1_ `then` `true` `else` _e2_, due to the possibility of type errors. To see why, consider that `false` `||` `"foo"` produces a type error, while `if false then true else "foo"` evaluates to `"foo"`.
+
+Note that `if` and `when`, though similar in normal English, play different roles in Cedar. The keyword `when` is part of the _policy syntax_ which simply connects the policy scope to the policy's condition(s). The keyword `if` is a part of an _expression_ that can be contained in such a condition, and can be evaluated against a relevant authorization request.
+
+#### More Examples:
+{: .no_toc }
+
+```cedar
+if 1 == 1 then "ok" else "wrong"         //"ok"
+if 1 == "foo" then User::"foo" else "ok" //"ok"
+if 1 then "wrong" else "wrong"           //type error
+if false then (1 && "hello") else "ok"   //"ok"
+if true then (1 && "hello") else "ok"    //type error
+```
+Notice that the fourth example does not have a type error because it short-circuits evaluation of the second argument. The second example's second and third arguments do not have the same type; this is fine for evaluation, but a policy with an expression like this will fail to validate.
 
 ## Arithmetic operators<a name="operators-math"></a>
 
