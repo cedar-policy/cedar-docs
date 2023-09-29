@@ -515,6 +515,8 @@ The `if` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Sho
 
 The `if` operator is a strict generalization of the `&&` and `||` operators. The expression _e1_ `||` _e2_ is equivalent to the expression `if` _e1_ `then` `true` `else` (`if` _e2_ `then` `true` `else` `false`). The expression _e1_ `&&` _e2_ is equivalent to the expression `if` _e1_ `then` (`if` _e2_ `then` `true` `else` `false`) `else` `false`. Note that _e1_ `||` _e2_ is _not_ equivalent to `if` _e1_ `then` `true` `else` _e2_, due to the possibility of type errors. To see why, consider that `false` `||` `"foo"` produces a type error, while `if false then true else "foo"` evaluates to `"foo"`.
 
+Note that `if` and `when`, though similar in normal English, play different roles in Cedar. The keyword `when` is part of the _policy syntax_ which simply connects the policy scope to the policy's condition(s). The keyword `if` is a part of an _expression_ that can be contained in such a condition, and can be evaluated against a relevant authorization request.
+
 #### More Examples:
 {: .no_toc }
 
