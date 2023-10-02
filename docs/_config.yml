@@ -50,6 +50,8 @@ collections:
     output: true
   schema:
     output: true
+  bestpractices:
+    output: true
   other:
     output: true
 
@@ -63,5 +65,7 @@ just_the_docs:
       name: Policies
     schema:
       name: Schema
+    bestpractices:
+      name: Best practices
     other:
       name: Other

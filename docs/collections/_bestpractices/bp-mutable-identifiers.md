@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Avoid mutable identifiers
-parent: Best practices
 nav_order: 6
 ---
 

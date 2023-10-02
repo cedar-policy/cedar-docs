@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Normalize data input
-parent: Best practices
 nav_order: 2
 ---
 
