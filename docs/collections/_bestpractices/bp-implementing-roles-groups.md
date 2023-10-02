@@ -56,51 +56,6 @@ For example, an authorization request to determine whether Alice can approve Jea
 
 If you are building your own authorization engine, using the Cedar SDK, then you must also pass all relevant policies, as part of the request. If you are using a hosted service, such as Amazon Verified Permissions, then the service can select the relevant policies for evaluation from its policy store.
 
-<!---
-The following is a sample authorization request for Amazon Verified Permissions (one service that uses Cedar). This example uses the [IsAuthorized](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation to illustrate the previous scenario.
-
-```
-isAuthorized (
-    principal = "User::Alice",
-    action = Action::"TimeSheetApprove",
-    resource = TimeSheet::"JeanPaul-230331",
-    sliceComplement = {
-        Entities = [
-            {
-                Identifier: { 
-                    EntityId: "Alice", 
-                    EntityType:"User"
-                },
-                #Each group that Alice is part of is a parent. 
-                Parents: [ 
-                    { 
-                        EntityId: "Approver-France", 
-                        EntityType: "Role" 
-                    },
-                    { 
-                        EntityId: "Approver-UK", 
-                        EntityType: "Role" 
-                    }  
-                ]  
-            },
-            {
-                Identifier:{ 
-                    EntityId: "JeanPaul-230331", 
-                    EntityType:"TimeSheet"
-                },
-                #Each group that the resource is a member of 
-                { 
-                    EntityId: "France", 
-                    EntityType: "TimesheetGrp" 
-                }
-            }
-        
-        ]
-    }
-)
-```
--->
-
 ## Expanding to a new country
 
 Adding a new country requires you to create of a new group in the IdP to represent the country specific role, and to add a new policy for that group. 
