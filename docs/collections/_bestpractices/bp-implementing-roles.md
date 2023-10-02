@@ -9,7 +9,7 @@ has_children: true
 
 {:toc}
 
-This topic helps you to understand how to implement role-based access control (RBAC) by using Cedar. It describes the recommended approach of using principal groups to represent roles. This topic assumes that you are using Cedar with some sort of hosted policy store. This can be a policy store that you built, or that is part of a commercial product, such as Amazon Verified Permission.
+This topic helps you to understand how to implement role-based access control (RBAC) by using Cedar. It describes the recommended approach of using principal groups to represent roles. This topic assumes that you are using Cedar with some sort of hosted policy store. This can be a policy store that you built, or that is part of a commercial product, such as Amazon Verified Permissions.
 
 ## What is a role?
 
