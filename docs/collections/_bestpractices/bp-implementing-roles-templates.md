@@ -10,7 +10,7 @@ has_children: false
 
 The recommended approach to implementing role-based access control in Cedar is to use principal groups to represent the roles. However, this requires a system of record, such as an identity provider (IdP), to keep track of which users are assigned to which roles. If this isn't an option, then you can manage role assignment within your policy store by using policy templates.
 
-Using this approach, you create a template for each of the roles. So, continuing with the timesheet example from the previous sections, you create we’d have a Worker template and an Approver template. 
+Using this approach, you create a template for each of the roles. So, continuing with the timesheet example from the previous sections, you create a Worker template and an Approver template. 
 
 ```
 # Approver-Role-Assignment policy template 
@@ -51,10 +51,10 @@ The entity data within the authorization request must include the group membersh
 
 ## Expanding to a new country
 
-To create an approver role for a new country doesn't require the addition of a new user group in the IdP, or the creation of a new policy or template. The only configuration activity required is the creation of a new resource group to contain the resources for that country. For example, when the company expands into Japan it must add a new resource group called `TimesheetGrp::"Japanese-timesheets"`.
+To create an approver role for a new country, it's not necessary to add a new user group in the IdP, or create a new policy or template. The only configuration activity required is to create of a new resource group to contain the resources for that country. For example, when the company expands into Japan it must add a new resource group called `TimesheetGrp::"Japanese-timesheets"`.
 
 ## Considerations when using templates
 
-If you use the template approach, you tightly couple the policy store to the life-cycle management of your users. When you on-board a new user and assign them to a role, you must create template-linked policies for them. When that user changes roles, you must find those policies, archive them, and then create new template-linked policies. When the user leaves the organization, you must archive the policies for that user. If you simply delete the policies, rather than archiving them, then you lose the historical record of who was permitted to do what, which might be required for forensics purposes. 
+If you use the template approach, you tightly couple the policy store to the life-cycle management of your users. When you onboard a new user and assign them to a role, you must create template-linked policies for them. When that user changes roles, you must find those policies, archive them, and then create new template-linked policies. When the user leaves the organization, you must archive the policies for that user. If you delete the policies instead of archiving them, then you lose the historical record of who was permitted to do what, which might be required for forensics purposes. 
 
-These challenges compound, if the role is a complex set of permissions requiring multiple policies. In the simple example above, the permissions for the role can be expressed as a single policy statement. Therefore, assigning a principal requires the creation of a single template-linked policy. However more complex roles might require several policies to express the permissions. In that case, the assignment and unassignment processes can become more burdensome, as you must create or delete multiple template-linked policies.
+These challenges reinforce each other if the role is a complex set of permissions requiring multiple policies. In the simple example above, the permissions for the role can be expressed as a single policy statement. Therefore, assigning a principal requires the creation of a single template-linked policy. However, more complex roles might require several policies to express the permissions. In that case, the assignment and unassignment processes can become more burdensome, as you must create or delete multiple template-linked policies.
