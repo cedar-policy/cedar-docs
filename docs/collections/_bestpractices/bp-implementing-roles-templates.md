@@ -47,31 +47,7 @@ You can see that each template-linked policy grants permissions to a specified u
 ## Making an authorization request
 
 The entity data within the authorization request must include the group membership of the resource. However, this approach doesn’t need to include group memberships of the principal, because we created a separate template-linked policy for each assigned principal.
-<!---
-```
-// Authorization request 
-isAuthorized ( 
-    principal = "User::Alice", 
-    action = Action::"TimeSheetApprove", 
-    resource = TimeSheet::"JeanPaul-230331", 
-    sliceComplement = { 
-        Entities = [
-            { 
-                Identifier: {
-                    EntityId: "JeanPaul-230331",
-                    EntityType:"TimeSheet" 
-                },
-                #Each group that the resource is a member of 
-                { 
-                    EntityId: "France", 
-                    EntityType: "TimesheetGrp" 
-                }
-            }
-        ]
-    } 
-) 
 
-```-->
 
 ## Expanding to a new country
 
