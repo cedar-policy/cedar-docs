@@ -45,8 +45,8 @@ Note the capitalization of `EXAMPLE.COM` and multiple `/` characters at the begi
 ```cedar
 permit (principal, action, resource)
 when {
-  context.url.host == "example.com" && // Won't match "EXAMPLE.COM"
-  context.url.path == "/path/to/page"  // Won't match "///path/to/page"
+    context.url.host == "example.com" && // Won't match "EXAMPLE.COM"
+    context.url.path == "/path/to/page"  // Won't match "///path/to/page"
 };
 ```
 
@@ -65,9 +65,9 @@ If a service accepts all formats of the identifier, which format can be reliably
 // This policy won't match if the Object ID is provided in a different format.
 // This allows the caller to bypass the forbid rule and retrieve the object.
 forbid (
-  principal,
-  action == Action::"getObject",
-  resource == Object::"a9edd19b-46f3-486b-887d-4c378aced880"
+    principal,
+    action == Action::"getObject",
+    resource == Object::"a9edd19b-46f3-486b-887d-4c378aced880"
 );
 ```
 
