@@ -13,9 +13,9 @@ One simple approach to meta-permissions is to introduce a new action, such as `e
 
 ```cedar
 permit (
-  principal == User::"&ExampleToken1;",
-  action == Action::"editPermissions",
-  resource in Account::"&ExampleToken2;"
+    principal == User::"&ExampleToken1;",
+    action == Action::"editPermissions",
+    resource in Account::"&ExampleToken2;"
 );
 ```
 
@@ -25,12 +25,12 @@ Richer implementations may choose more granular meta-permissions, such as `editR
 
 ```cedar
 permit (
-  principal,
-  action == Action::"editPermissions",
-  resource
+    principal,
+    action == Action::"editPermissions",
+    resource
 )
 when {
-  principal == resource.owner
+    principal == resource.owner
 };
 ```
 
