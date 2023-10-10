@@ -322,7 +322,7 @@ false <= true          // type error
 [1, 2] <= [47, 0]      // type error
 ```
 
-### `.greaterThan()` \(decimal 'greater than or equal'\)<a name="function-greaterThan"></a>
+### `.greaterThan()` \(decimal 'greater than'\)<a name="function-greaterThan"></a>
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
 
