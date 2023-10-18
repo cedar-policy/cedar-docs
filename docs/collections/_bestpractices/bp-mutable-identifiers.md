@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Avoid mutable identifiers
-parent: Best practices
 nav_order: 6
 ---
 
@@ -12,9 +11,9 @@ Mutable identifiers can't be used in policy statements. An example of a mutable 
 
 ```cedar
 permit (
-  principal in Group::"TeamExample",
-  action in ...,
-  resource in ...
+    principal in Group::"TeamExample",
+    action in ...,
+    resource in ...
 );
 ```
 
@@ -24,8 +23,8 @@ For these reasons, policies must refer to only unique, normalized, immutable, an
 
 ```cedar
 permit (
-  principal in Group::"fcaf664d4f89fec0cda8", // "TeamExample"
-  action in ...,
-  resource in ...
+    principal in Group::"fcaf664d4f89fec0cda8", // "TeamExample"
+    action in ...,
+    resource in ...
 );
 ```

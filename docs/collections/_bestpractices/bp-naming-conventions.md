@@ -1,7 +1,6 @@
 ---
 layout: default
 title: Naming conventions
-parent: Best practices
 nav_order: 1
 ---
 
