@@ -4,7 +4,7 @@ title: Document history
 nav_order: 14
 ---
 
-# Document history for the Cedar Policy Language Guide<a name="doc-history"></a>
+# Document history for the Cedar Policy Language Guide {#doc-history}
 {: .no_toc }
 
 The following table describes major documentation updates for Cedar.

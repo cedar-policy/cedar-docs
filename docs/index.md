@@ -8,7 +8,7 @@ nav_order: 2
 
 -----
 
-# Welcome to the Cedar policy language<a name="welcome-to-cedar"></a>
+# Welcome to the Cedar policy language {#welcome-to-cedar}
 {: .no_toc }
 
 This guide is a reference for [Version 2.3](other/doc-history.html) of the Cedar policy language.
@@ -28,7 +28,7 @@ In addition to supporting the authorization requirements for your own custom app
 {:toc}
 </details>
 
-## Introduction<a name="cedar-intro"></a>
+## Introduction {#cedar-intro}
 
 To make secure authorization decisions that you can trust, Cedar uses the following elements:
 
@@ -39,7 +39,7 @@ To make secure authorization decisions that you can trust, Cedar uses the follow
 
 Cedar evaluates each request against the provided policies and entities to make an allow or deny decision. The policies are completely separate from your application's code. This design ensures that your security team can update permissions for your application without having to touch the application's code. A change to a policy can result in an immediate change in the logic used to authorize requests.
 
-## Are you a first-time Cedar user?<a name="first-time-user"></a>
+## Are you a first-time Cedar user? {#first-time-user}
 
 If you are a first-time user of Cedar, we recommend that you begin by reading the following sections:
 
@@ -48,34 +48,34 @@ If you are a first-time user of Cedar, we recommend that you begin by reading th
 + Learn [basic Cedar policy syntax and its construction](policies/syntax-policy.html).
 + Learn how to [define a Cedar schema that can validate your policies](schema/schema.html) and ensure you're getting the evaluation results you intend.
 
-## Features of Cedar<a name="feature-overview"></a>
+## Features of Cedar {#feature-overview}
 
 Cedar provides several important features.
 
-#### Policy-based<a name="policy-based"></a>
+#### Policy-based {#policy-based}
 
 Cedar policies are written as rules that specify the conditions under which access to resources is to be allowed or denied. You define a policy as a set of statements that include conditions that evaluate the attributes of the requester, the resource being accessed, and the context of the request.
 
-#### Supports attributes on entities and sessions <a name="attribute-based"></a>
+#### Supports attributes on entities and sessions  {#attribute-based}
 
 Cedar policies can use attributes, which are key-value pairs that represent various aspects of the principal, the resource, and the caller's current session which defines the context of the request. Attributes can include information such as user roles, resource types, time of day, location, and any other relevant contextual information.
 
-#### Expressive<a name="feature-expressive"></a>
+#### Expressive {#feature-expressive}
 
 Cedar is a simple yet expressive language that is designed to support common authorization use cases, such as role-based access control \(RBAC\) and attribute-based access control \(ABAC\). The language supports logical operators such as AND, OR, and NOT on Boolean values, in addition to common operators on other types, such as comparison operators on integers. This broad set of operators helps provide fine-grained control over access decisions.
 
-#### Policies are separate from your application's code<a name="feature-dynamic"></a>
+#### Policies are separate from your application's code {#feature-dynamic}
 
 The Cedar evaluation engine evaluates policies dynamically. This design supports making changes in access control requirements that take effect immediately, and without requiring system-wide updates or downtime. This approach helps you to quickly and easily adapt to changing business rules or environmental conditions.
 
-#### High performing<a name="feature-performant"></a>
+#### High performing {#feature-performant}
 
 Cedar is fast and scalable. The policy structure allows your policies to be indexed for quick retrieval. The design also supports fast, scalable, real-time evaluation with bounded latency.
 
-#### Human-readable<a name="feature-readable"></a>
+#### Human-readable {#feature-readable}
 
 Cedar policies are designed to be easy to read and understand, making them accessible to both technical and non-technical stakeholders involved in defining access control policies. This helps facilitate collaboration and communication among different stakeholders in a distributed system.
 
-## Services that use Cedar<a name="related-services"></a>
+## Services that use Cedar {#related-services}
 
 For a list of some of the services that use Cedar as their policy language, see [Cedar Integrations](https://www.cedarpolicy.com/en/integrations)

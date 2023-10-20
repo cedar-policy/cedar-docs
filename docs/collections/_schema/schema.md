@@ -4,7 +4,7 @@ title: Schema format
 nav_order: 1
 ---
 
-# Cedar schema format<a name="schema"></a>
+# Cedar schema format {#schema}
 {: .no_toc }
 
 <details open markdown="block">
@@ -18,7 +18,7 @@ nav_order: 1
 
 This topic describes the structure of a Cedar schema. To view the formal grammar, see [Schema grammar](../policies/schema-grammar.html).
 
-## Overview<a name="schema-overview"></a>
+## Overview {#schema-overview}
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar uses [JSON](https://json.org) to define a schema. It bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences. After you define a schema, you can ask Cedar to validate your policies against it to ensure your policies reference the entities and their attributes correctly.
 
 {: .warning }
@@ -33,11 +33,11 @@ You can use a schema to define each of the following entities used by your appli
 
 Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](../policies/validation.html).
 
-## Schema format<a name="schema-format"></a>
+## Schema format {#schema-format}
 
 A schema contains a declaration of one or more namespaces, each of which contains two mandatory JSON objects, `entityTypes` and `actions`. A namespace declaration can optionally include a third object, `commonTypes`, which defines types that can be referenced by the other two objects. We consider the format of namespaces and these three objects next.
 
-## NameSpace<a name="schema-namespace"></a>
+## NameSpace {#schema-namespace}
 
 A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
 
@@ -106,7 +106,7 @@ You can reference entity types and actions defined in other namespaces of the sa
 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
-## `entityTypes`<a name="schema-entityTypes"></a>
+## `entityTypes` {#schema-entityTypes}
 
 A collection of the `principal` and `resource` entity types supported by your application. The `entityTypes` element contains a comma-separated list of JSON objects.
 
@@ -127,7 +127,7 @@ The high-level structure of an `entityTypes` entry looks like the following exam
 
 Each entry in the `entityTypes` is a JSON object with the following properties.
 
-### Entity type name<a name="schema-entitytypes-name"></a>
+### Entity type name {#schema-entitytypes-name}
 
 Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words.  
 
@@ -148,7 +148,7 @@ This type name is qualified by its [namespace](#schema-namespace) to form a full
 "My::Name::Space::UserGroup"
 ```
 
-### `memberOfTypes`<a name="schema-entitytypes-memberOf"></a>
+### `memberOfTypes` {#schema-entitytypes-memberOf}
 
 Specifies a list of entity types that can be direct parents of entities of this type. Values in this list must be valid entity type names declared in the schema. If the `memberOfTypes` element is empty or not defined, then entities of that entity type can't have any parents in the entity hierarchy. The following example shows that an entity of type `User` can have parents of type `UserGroup`.
 
@@ -173,7 +173,7 @@ If the parent type is part of the same namespace as the child type, then you can
 ]
 ```
 
-### `shape`<a name="schema-entitytypes-shape"></a>
+### `shape` {#schema-entitytypes-shape}
 
 Specifies the shape of the data stored in entities of this type. The `shape` element, if present, must have type `Record`, and be accompanied by a description of the entity's attributes. The following example shows a simple specification of the `User` entity type.
 
@@ -197,7 +197,7 @@ Each attribute in the `attributes` portion of the `shape` record must follow the
 
 Note that if the `shape` element is omitted, then entities of the type being defined are assumed to have no data stored with them. This is equivalent to specifying a `Record` with `{}` for its attributes.
 
-### Attribute specifications<a name="schema-attributes-specs"></a>
+### Attribute specifications {#schema-attributes-specs}
 
 Each attribute in a `Record` is a JSON object that describes one attribute in the record associated with entities of this type. It has the form
 
@@ -222,11 +222,11 @@ A policy should check for an optional attribute's presence by using the [`has`](
 
 You can choose to explicitly declare that an attribute is mandatory by including `"required": true` (but this is unnecessary as mandatory attributes are the default).
 
-### Attribute types<a name="schema-attributes-types"></a>
+### Attribute types {#schema-attributes-types}
 
 Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, or `"Extension"`. The first three require no further information to be specified. The latter four are described below.
 
-#### `Record`<a name="schema-entitytypes-shape-record"></a>
+#### `Record` {#schema-entitytypes-shape-record}
 {: .no_toc }
 
 A record attribute has the same JSON format as the [entity `shape`'s record's attributes](#schema-attributes-specs). As an example, the following refactors the `User` entity specification above to have a `features` attribute that is a `Record` containing some of the user's physical features.
@@ -258,7 +258,7 @@ A record attribute has the same JSON format as the [entity `shape`'s record's at
 }
 ```
 
-#### `Entity`<a name="schema-entitytypes-shape-entity"></a>
+#### `Entity` {#schema-entitytypes-shape-entity}
 {: .no_toc }
 
 For attributes of type `"Entity"`, you must also specify a `name` that identifies the entity type of this attribute. The entity type must be defined in the schema. For example, a resource entity might require an `Owner` element that specifies a `User`.
@@ -277,7 +277,7 @@ For attributes of type `"Entity"`, you must also specify a `name` that identifie
 }
 ```
 
-#### `Set`<a name="schema-entitytypes-shape-set"></a>
+#### `Set` {#schema-entitytypes-shape-set}
 {: .no_toc }
 
 For attributes with type `"Set"`, you must also specify an `element` that defines the properties of the members of the set. Each element is a JSON object that describes what each member of the set looks like.
@@ -301,7 +301,7 @@ An `element` must contain a structure formatted according to the same rules as a
 }
 ```
 
-#### `Extension`<a name="schema-entitytypes-shape-extension"></a>
+#### `Extension` {#schema-entitytypes-shape-extension}
 {: .no_toc }
 
 For attributes of type `"Extension"`, you must also specify the `name` of the specific extension type.
@@ -322,7 +322,7 @@ For example, a `Network` entity may include the IP address of its gateway.
 }
 ```
 
-## `actions`<a name="schema-actions"></a>
+## `actions` {#schema-actions}
 
 A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The `actions` element contains a comma-separated list of one or more JSON objects.
 
@@ -344,7 +344,7 @@ The high-level structure of an `actions` entry looks like the following.
 
 You can add as many actions as your application requires.
 
-### Action name<a name="schema-actions-name"></a>
+### Action name {#schema-actions-name}
 
 Specifies the identifier for the action entity, as a string. The name of the action isn't a value but the heading for its own JSON object. Since this is an [entity identifier](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the `entityTypes` section) it can contain anything that would be valid inside a Cedar string.
 
@@ -366,7 +366,7 @@ You can then refer to these actions in your policies by using the following synt
 MyApplicationNameSpace::Action::"ViewPhoto"
 ```
 
-### `memberOf`<a name="schema-actions-memberOf"></a>
+### `memberOf` {#schema-actions-memberOf}
 
 Specifies a list of action entity groups the action is a member of. The `memberOf` component is optional. If omitted, it means the action is a member of no action groups.
 
@@ -389,7 +389,7 @@ The following schema snippet shows an action named `viewAlbum` that is a member 
 
 Action groups are themselves actions, and thus must also be defined in the schema in the `actions` section; we'll see an example of that below.
 
-### `appliesTo`<a name="schema-actions-appliesTo"></a>
+### `appliesTo` {#schema-actions-appliesTo}
 
 Specifies a JSON object containing two lists, `principalTypes` and `resourceTypes`, which contain the principal and resources entity types, respectively, that can accompany the action in an authorization request.
 
@@ -432,7 +432,7 @@ The following example `actions` snippet shows three actions. The first action, `
 }
 ```
 
-### `context`<a name="schema-actions-context"></a>
+### `context` {#schema-actions-context}
 
 Specifies a JSON object in the same format as an entity's `shape` property, which defines the attributes that can be present in the context record in authorization requests made with this action. Specifying a `context` enables Cedar to validate policies that attempt to reference the `context` record's attributes.
 
@@ -458,7 +458,7 @@ Each `context` entry consists of `type` and `attributes` objects. The `type` obj
 }
 ```
 
-## `commonTypes`<a name="schema-commonTypes"></a>
+## `commonTypes` {#schema-commonTypes}
 
 Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a `commonTypes` construct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that includes a data type specification and a set of attributes.
 
@@ -584,7 +584,7 @@ If you then send an `Employee` entity as the principal in an authorization reque
 
 Note that definitions of types appearing in `commonTypes` cannot refer to one another. For example, if both `name` and `Person` from the above example were in the same `commonTypes` section, you could not change `Person`'s define to refer to objects of type `name`.
 
-## Example schema<a name="schema-examples"></a>
+## Example schema {#schema-examples}
 
 The following schema is for a hypothetical application called PhotoFlash.
 

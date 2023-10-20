@@ -4,7 +4,7 @@ title: Entities
 nav_order: 2
 ---
 
-# Entities in Cedar<a name="syntax-entity"></a>
+# Entities in Cedar {#syntax-entity}
 {: .no_toc }
 
 An entity in Cedar is a stored object that serves as the representation for [principals](../policies/syntax-policy.html#term-parc-principal), [actions](../policies/syntax-policy.html#term-parc-action), and [resources](../policies/syntax-policy.html#term-parc-resource) that are part of your application.
@@ -17,7 +17,7 @@ An entity in Cedar is a stored object that serves as the representation for [pri
 {:toc}
 </details>
 
-## Overview of entities<a name="entity-overview"></a>
+## Overview of entities {#entity-overview}
 
 An entity in Cedar has the following components.
 
@@ -68,7 +68,7 @@ This example allows any principal to perform the `readUser` action on any resour
 
 Except for action entities, which are prefixed with the reserved keyword `action`, there is no way to distinguish whether an entity should behave as a principal, resource, or both without additional context. You can use entity types to constrain how an entity type can be used.
 
-## Operators<a name="entity-operators"></a>
+## Operators {#entity-operators}
 
 Entities support the following operators in a Cedar policy:
 
@@ -77,11 +77,11 @@ Entities support the following operators in a Cedar policy:
 + **Attribute presence** &ndash; Using the [has operator](../policies/syntax-operators.html#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
 + **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
 
-## Namespaces<a name="entity-namespace"></a>
+## Namespaces {#entity-namespace}
 
 An entity can also be referenced in the context of multiple namespaces. This capability lets you infer a logical hierarchy of entity types. For example, `PhotoFlash::Groups::Album::"vacation"` refers to a specific entity with an entity ID of `"vacation"` and an entity type of `PhotoFlash::Groups::Album`. There is no real structure behind such a string, only what is logically inferred by the designer. You can create namespaces for an entity type when you define a schema.
 
-## Attributes of entities<a name="entity-attribute"></a>
+## Attributes of entities {#entity-attribute}
 
 An attribute is an additional detail about an entity. For example, a user typically has a name. An employee in a company can have an assigned department. A photo can have a description.
 

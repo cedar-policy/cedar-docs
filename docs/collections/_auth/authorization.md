@@ -4,13 +4,13 @@ title: Authorization
 nav_order: 5
 ---
 
-# How Cedar authorization works<a name="how-cedar-authorization-works"></a>
+# How Cedar authorization works {#how-cedar-authorization-works}
 {: .no_toc }
 
 Each time a user of your application wants to perform an action on a protected resource, the application needs to invoke the Cedar authorization engine (or *authorizer*, for short) to check if this request is allowed.
 The authorizer considers the request against the application's store of policies in order to make a decision, `Allow` or `Deny`. This topic discusses how the Cedar authorizer decides the answer to a particular request.
 
-## Request creation<a name="request-creation"></a>
+## Request creation {#request-creation}
 
 A Cedar *authorization request* asks the question "*Can this principal take this action on this resource in this context?*". More formally, an authorization request has four parts, abbreviated *PARC*:
 
@@ -23,11 +23,11 @@ A Cedar *authorization request* asks the question "*Can this principal take this
 
 Conceptually, you should imagine that the authorizer is able to consider *all* of your application's policies and entity data while evaluating a request. As a practical matter, making all policies and entity data available might be too difficult or too expensive. In that case, your application needs to determine which policies and entity data are *relevant* to properly handling the request.
 
-## Request authorization<a name="request-authorization"></a>
+## Request authorization {#request-authorization}
 
 Given an authorization request, Cedar’s authorizer returns `Allow` if the request is granted or `Deny` if it is rejected, along with some diagnostics. How does it make this decision?
 
-### Algorithm<a name="request-authorization-algorithm"></a>
+### Algorithm {#request-authorization-algorithm}
 
 First, the authorizer *evaluates* each of the policies to determine if the policy *satisfies* the request. More details about evaluation follow, but in summary, know that the evaluator can return:
 
@@ -45,7 +45,7 @@ After evaluating each policy, the authorizer combines the results to make an aut
 
 The authorizer returns an *authorization response*, which includes its decision along with some diagnostics. These diagnostics include the *determining policies* and any *error conditions*. If the decision is `Allow`, the determining policies are the `permit` policies that satisfy the request (rule 2). Otherwise, the determining policies are the `forbid` policies, if any, that satisfy the request (rule 1). If the decision is `Deny` because no policies were satisfied (rule 3), then the list of determining policies is empty. Whatever the final result, if the evaluation of any policies resulted in `error`, then the IDs of the erroneous policies are included in the diagnostics, too, along with the particulars of the errors.
 
-### Discussion<a name="request-authorization-discussion"></a>
+### Discussion {#request-authorization-discussion}
 
 Cedar's authorization algorithm has three useful properties:
 
@@ -57,11 +57,11 @@ Why was Cedar's authorization algorithm designed to satisfy these properties? Th
 
 The reasoning for the skip-on-error property is more involved. An alternative authorization algorithm we considered would be to `Deny` a request when any policy evaluation exhibits an error. While this might sound good at first, deny-on-error raises concerns of *safety*. An application that was working fine with 100 policies might suddenly start denying *all* requests if the 101st policy has an error. Skip-on-error avoids this dramatic failure mode, and is more flexible: applications can always choose to look at the authorization response's diagnostics and take a different decision if an evaluated policy produces errors. For more information, see this [blog post](https://cedarland.blog/design/why-ignore-errors/content.html) written by one of the Cedar designers.
 
-## Policy evaluation<a name="policy-evaluation"></a>
+## Policy evaluation {#policy-evaluation}
 
 As just discussed, to reach its decision the Cedar authorizer's algorithm *evaluates* a request *PARC* against each policy it is given. Evaluation returns whether or not the policy is satisfied by the request (`true`/`false`), or whether an error occurred during evaluation (`error`). How does evaluation work?
 
-### Expression evaluation<a name="expression-evaluation"></a>
+### Expression evaluation {#expression-evaluation}
 
 The key component of policy evaluation is *expression* evaluation. Each constraint in the policy scope is an expression. Each `when` clause also contains an expression, as does each `unless` clause. Evaluating a policy requires evaluating its constituent expressions. Example expressions include `resource.tags.contains("private")`, `action == Action::"viewPhoto"`, `principal in Team::"admin"`, and `resource in principal.account`.
 
@@ -73,7 +73,7 @@ For example, consider the expression `action == Action::"viewPhoto"`. If the aut
 
 As another example, consider the expression `resource.tags.contains("Private")`. If the authorizer binds the `resource` variable to the entity `Photo::"vacation94.jpg"` we get `Photo::"vacation94.jpg".tags.contains("Private")`. Evaluating further, the authorizer must look up `Photo::"vacation94.jpg"` in the provided entities data, and then extract its `tags` attribute. If that attribute contains a set with the string `"Private"` in it, the result is `true`; if it's a set without `"Private"` the result is `false`. Otherwise `tags` is either not a valid attribute or contains a non-set, and Cedar generates an `error`.
 
-### Policy satisfaction<a name="policy-satisfaction"></a>
+### Policy satisfaction {#policy-satisfaction}
 
 Determining whether a policy satisfies a request is a straightforward use of expression evaluation. To explain it, let's introduce some notation. For a policy *c*:
 
@@ -92,7 +92,7 @@ If all three steps evaluate to `true`, then *c* matches the request. Otherwise i
 
 If *c* matches the request, the authorizer evaluates the request's conditions *Conds(c)* in order. The authorizer binds the `principal`, `action`, `resource`, and `context` variables to the *PARC* values when we do so. If all of the `when` conditions evaluate to `true`, and all of the `unless` conditions evaluate to `false`, then policy *c* satisfies the request, and the final evaluation result is `true`. If evaluating any condition expression yields `error` then policy evaluation halts at that point (any remaining conditions are skipped), and `error` is returned as the final result. Otherwise, `false` is returned.
 
-## Detailed Example<a name="policy-evaluation-example"></a>
+## Detailed Example {#policy-evaluation-example}
 
 To illustrate policy evaluation, consider whether a set of four policies authorizes the following request: "Can the user `jane` perform the action `viewPhoto` on the photo `vacation.jpg`?" Precisely, the request is:
 

@@ -5,7 +5,7 @@ nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for Cedar schema<a name="schema-grammar"></a>
+# Grammar specification for Cedar schema {#schema-grammar}
 {: .no_toc }
 
 This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](../schema/schema.html).
@@ -32,7 +32,7 @@ Tokens are defined using regular expressions:
 
 The grammar ignores whitespace and comments.
 
-## `Schema`<a name="grammar-schema"></a>
+## `Schema` {#grammar-schema}
 
 A schema consists of a [`NameSpace`](#grammar-schema-NameSpace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
 
@@ -40,7 +40,7 @@ A schema consists of a [`NameSpace`](#grammar-schema-NameSpace) JSON object that
 Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [(',' commonTypes )] '}' '}'
 ```
 
-## `NameSpace`<a name="grammar-schema-NameSpace"></a>
+## `NameSpace` {#grammar-schema-NameSpace}
 
 The `NameSpace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](../schema/schema.html#schema-namepace).
 
@@ -48,7 +48,7 @@ The `NameSpace` element is a string made up of a sequence of one or more substri
 NameSpace ::= STR ('::' STR)*
 ```
 
-## `EntityTypes`<a name="grammar-schema-EntityTypes"></a>
+## `EntityTypes` {#grammar-schema-EntityTypes}
 
 The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of one or more Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
@@ -56,7 +56,7 @@ The `EntityTypes` element is identified by the keyword `entityTypes` followed by
 EntityTypes ::= 'entityTypes: {' EntityType ( ',' EntityType )* '}'
 ```
 
-## `EntityType`<a name="grammar-schema-EntityType"></a>
+## `EntityType` {#grammar-schema-EntityType}
 
 An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-NameSpace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes how entities of this type are constructed.
 
@@ -64,7 +64,7 @@ An `EntityType` element describes one entity type supported by your application.
 EntityType ::= IDENT ':' '{' 'memberOfTypes' ':' '[' (EntityType ( ',' EntityType )*)? '],' 'shape': TypeJson '}'
 ```
 
-## `Actions`<a name="grammar-schema-Actions"></a>
+## `Actions` {#grammar-schema-Actions}
 
 The `Actions` element is a list of the individual actions supported by your application.
 
@@ -72,7 +72,7 @@ The `Actions` element is a list of the individual actions supported by your appl
 Actions ::= '"actions"' ':' Action*
 ```
 
-## `Action`<a name="grammar-schema-Action"></a>
+## `Action` {#grammar-schema-Action}
 
 The `Action` element describes one action supported by your application. An action begins with a name string, and includes an `appliesTo` element. The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
@@ -80,7 +80,7 @@ The `Action` element describes one action supported by your application. An acti
 Action : STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}'
 ```
 
-## `PrincipalTypes`<a name="grammar-schema-PrincipalTypes"></a>
+## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
 
 The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application.
 
@@ -88,7 +88,7 @@ The `PrincipalTypes` element is identified by the keyword `principalType` follow
 PrincipalTypes ::= '"principalTypes"': '[' IDENT* ']'
 ```
 
-## `ResourceTypes`<a name="grammar-schema-ResourceTypes"></a>
+## `ResourceTypes` {#grammar-schema-ResourceTypes}
 
 The `ResourceTypes` element describes
 
@@ -96,7 +96,7 @@ The `ResourceTypes` element describes
 ResourceTypes ::= '"resourceTypes"': '[' IDENT* ']'
 ```
 
-## `TypeJson`<a name="grammar-schema-TypeJson"></a>
+## `TypeJson` {#grammar-schema-TypeJson}
 
 The `TypeJson` element describes
 
@@ -104,7 +104,7 @@ The `TypeJson` element describes
 TypeJson ::= '{' Type '}'
 ```
 
-## `Type`<a name="grammar-schema-Type"></a>
+## `Type` {#grammar-schema-Type}
 
 The `Type` element describes
 
@@ -112,7 +112,7 @@ The `Type` element describes
 Type ::= Primitive | Set | EntityRef | Record | Extension
 ```
 
-## `Primitive`<a name="grammar-schema-Primitive"></a>
+## `Primitive` {#grammar-schema-Primitive}
 
 The `Primitive` element describes
 
@@ -120,7 +120,7 @@ The `Primitive` element describes
 Primitive ::= '"type":' ('"Long"' | '"String"' | '"Boolean"')
 ```
 
-## `Set`<a name="grammar-schema-Set"></a>
+## `Set` {#grammar-schema-Set}
 
 The `Set` element describes
 
@@ -128,7 +128,7 @@ The `Set` element describes
 Set ::= '"type": "Set", "element": ' TypeJson
 ```
 
-## `EntityRef`<a name="grammar-schema-EntityRef"></a>
+## `EntityRef` {#grammar-schema-EntityRef}
 
 The `EntityRef` element describes
 
@@ -136,7 +136,7 @@ The `EntityRef` element describes
 EntityRef ::= '"type": "Entity", "name": "' Name '"'
 ```
 
-## `Record`<a name="grammar-schema-Record"></a>
+## `Record` {#grammar-schema-Record}
 
 The `Record` element describes
 
@@ -144,7 +144,7 @@ The `Record` element describes
 Record ::= '"type": "Record", "attributes": {' ( RecordAttr (',' RecordAttr )* )? '}'
 ```
 
-## `RecordAttr`<a name="grammar-schema-RecordAttr"></a>
+## `RecordAttr` {#grammar-schema-RecordAttr}
 
 The `RecordAttr` element describes
 
@@ -152,7 +152,7 @@ The `RecordAttr` element describes
 RecordAttr ::= STR ': {' Type (', "required": ' ( true | false ))? '}'
 ```
 
-## `STR`<a name="grammar-schema-STR"></a>
+## `STR` {#grammar-schema-STR}
 
 The `STR` element describes
 
@@ -160,7 +160,7 @@ The `STR` element describes
 STR ::= Fully-escaped Unicode surrounded by '"'s
 ```
 
-## `IDENT`<a name="grammar-IDENT"></a>
+## `IDENT` {#grammar-IDENT}
 
 The `IDENT` element describes
 
