@@ -322,7 +322,7 @@ false <= true          // type error
 [1, 2] <= [47, 0]      // type error
 ```
 
-### `.greaterThan()` \(decimal 'greater than'\)<a name="function-greaterThan"></a>
+### `.greaterThan()` \(decimal 'greater than'\) {#function-greaterThan}
 
 **Usage:** `<decimal>.greaterThan(<decimal>)`
 
@@ -492,7 +492,7 @@ unless {
 if !true then "hello" else "goodbye"  // "goodbye"
 ```
 
-### `if` \(CONDITIONAL\)<a name="operator-if"></a>
+### `if` \(CONDITIONAL\) {#operator-if}
 
 **Usage:** `if <Boolean> then <T> else <U>`
 
@@ -529,7 +529,7 @@ if true then (1 && "hello") else "ok"    //type error
 ```
 Notice that the fourth example does not have a type error because it short-circuits evaluation of the second argument. The second example's second and third arguments do not have the same type; this is fine for evaluation, but a policy with an expression like this will fail to validate.
 
-## Arithmetic operators<a name="operators-math"></a>
+## Arithmetic operators {#operators-math}
 
 Use these operators to perform arithmetic operations on long integer values.
 
