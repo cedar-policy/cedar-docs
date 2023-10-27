@@ -25,7 +25,7 @@ The recommended approach to modeling roles in Cedar is to use groups of principa
 
 For example, consider a timesheet management system that has two roles: (1) workers who submit timesheets and (2) approvers who approve the timesheets. A single individual can be assigned both roles. The following topics evaluate this scenario using the following strategies.
 
-Using the recommended approach you would create groups for each of these there roles. So we’d have a `Worker` group, and an `Approver` group. Within the policy store we would create policies for each group.
+Using the recommended approach you would create groups for each of these roles. So we’d have a `Worker` group, and an `Approver` group. Within the policy store we would create policies for each group.
 
 The policy for the Approver role would look like this
 
@@ -38,9 +38,9 @@ permit (
 );
 ```
 
-Note that we’ve also created a resource group called  `TimesheetGrp::"all-timesheets"`  As the name suggests, all timesheets are members of this resource group.
+Note that we’ve also created a resource group called  `TimesheetGrp::"all-timesheets"`.  As the name suggests, all timesheets are members of this resource group.
 
-We can simplify this policy a little bit, by creating an Action group. In this case we’d create an action group called `ApproverActions` , with the members `Action::"TimeSheetReview"`  and  `Action::"TimeSheetApprove"`.
+We can simplify this policy a little bit by creating an Action group. In this case we’d create an action group called `ApproverActions` , with the members `Action::"TimeSheetReview"`  and  `Action::"TimeSheetApprove"`.
 
 We can now rewrite the policy as the following:
 
@@ -58,8 +58,8 @@ If we want to assign Joe to the role of Approver, we add him as a member of the 
 
 When making an authorization request, we need to provide information about which groups the principal is in. For example, when asking whether `User::"Joe"` is permitted to take the action `TimeSheetReview`, we need to provide the authorization engine with the information that Joe is a member of the group `Role::"Approver"`.  
 
-## Managing resource specific roles
+## Managing resource-specific roles
 
-So far, we’ve kept things very simple. A principal assigned to the Approver role can approve all timesheets. Things get more complicated when a role must be assigned for a specific subset of resources. For example, the timesheet-approver could be country specific. Bob might be authorized to approve timesheets in Germany and France, while Alice can approve timesheets in France and the UK.  
+So far, we’ve kept things very simple. A principal assigned to the Approver role can approve all timesheets. Things get more complicated when a role must be assigned for a specific subset of resources. For example, the timesheet-approver role could be country-specific. Bob might be authorized to approve timesheets in Germany and France, while Alice can approve timesheets in France and the UK.  
 
-The following sections explore two different ways to do this. The first approach creates resource-specific roles. The second approach adds an attribute condition to the group policies. We assume that the are organized into resource groups per country.
+The following sections explore two different ways to do this. The first approach creates resource-specific roles. The second approach adds an attribute condition to the group policies. We assume that the timesheets are organized into per-country resource groups.
