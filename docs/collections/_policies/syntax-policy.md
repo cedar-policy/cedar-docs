@@ -200,11 +200,11 @@ when {
 }
 ```
 
-The following `when` example matches the request if the request was submitted before the specified date and time.
+The following `when` example matches the request if the request was submitted before the specified Unix time.
 
 ```cedar
 when {
-  context.time.now < timestamp("2022-01-01T10:15:00.021-05:00")
+  context.time.now < 1698423180
 }
 ```
 
