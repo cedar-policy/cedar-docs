@@ -12,10 +12,11 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
-| Added [Schema grammar](../schema/schema-grammar.html) topic | - | July 17, 2023 |
-| Added [Entities & context syntax](../auth/entities-syntax.html) topic | - | July 27, 2023 |
-| Added [JSON policy format](../policies/json-format.html) reference page | - | July 14, 2023 |
-| Added [Best Practices](../overview/best-practices.html) topics | - | July 14, 2023 |
+| Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
+| Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
+| Added [JSON policy format](../policies/json-format.html) reference page | July 14, 2023 |
+| Added [Best Practices](../overview/best-practices.html) topics | July 14, 2023 |
+| Initial release of the Cedar Policy Language Guide | May 10, 2023 | 
 
 
 ## History of the Cedar language
