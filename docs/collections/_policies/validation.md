@@ -97,7 +97,7 @@ when {
 };
 ```
 
-The Cedar validator knows that any request that triggers evaluation of this policy must have action `Action::"remoteAccess"`. According to our example schema, such a request must have a principal of type `Employee` (the resource can be anything, or unspecified). With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 in the `when` clause for the following reasons:
+The Cedar validator knows that any request that triggers evaluation of this policy must have action `Action::"remoteAccess"`. According to our example schema, such a request must have a principal of type `Employee` and an [unspecified](../policies/syntax-entity.html#entity-overview) resource entity. With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 in the `when` clause for the following reasons:
 
 1. **Validation error** &ndash; The policy tries to access an attribute that isn’t defined for `Employee` types. In this case, the error is because of a typo (`numberOfLatpops` instead of `numberOfLaptops`).
 

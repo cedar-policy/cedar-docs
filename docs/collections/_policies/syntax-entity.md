@@ -66,7 +66,9 @@ when {
 
 This example allows any principal to perform the `readUser` action on any resource, as long as the `principal` and the `resource` in the request are the same entity.
 
-Except for action entities, which are prefixed with the reserved keyword `action`, there is no way to distinguish whether an entity should behave as a principal, resource, or both without additional context. You can use entity types to constrain how an entity type can be used.
+Except for action entities, which are prefixed with the reserved entity type `Action`, there is no way to distinguish whether an entity should behave as a principal, resource, or both without additional context. You can use entity types to constrain how an entity type can be used.
+
+An entity may be *unspecified*, which means that its type is distinct from any type defined in the schema. Unspecified entities are not part of any hierarchy. They can be created by passing the `None` option in the principal and/or resource component of an authorization [`Request`](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Request.html).
 
 ## Operators {#entity-operators}
 
