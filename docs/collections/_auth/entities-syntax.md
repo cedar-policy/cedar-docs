@@ -32,7 +32,7 @@ At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. E
 [
     {
         "uid": {},
-        "parents": {},
+        "parents": [],
         "attrs": {}
     },
     {
