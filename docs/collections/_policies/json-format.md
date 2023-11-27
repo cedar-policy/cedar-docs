@@ -208,6 +208,73 @@ The `op` key is required. The `op` object must have one of the following string 
     },
     ```
 
+* `is`
+
+  If present, then the `principal` object must also have a an `entity_type` key.
+
+  **Example**
+
+  Cedar policy line:
+
+  ```cedar
+  principal is User
+  ```
+
+  JSON representation:
+
+  ```json
+  "principal": {
+      "op": "is",
+      "entity_type": "User"
+  }
+  ```
+
+  The `principal` object may also optionally have an `in` key. The value of this key is an object with one of the following:
+
+  * [`entity`](#entity)
+
+    **Example**
+
+    Cedar policy line:
+
+    ```cedar
+    principal is User in Group::"Admins"
+    ```
+
+    JSON representation:
+
+    ```json
+    "principal": {
+        "op": "is",
+        "entity_type": "User",
+        "in": {
+            "entity": { "type": "Group", "id": "Admins" }
+        }
+    }
+    ```
+
+  * [`slot`](#slot)
+
+    **Example**
+
+    Cedar policy line:
+
+    ```cedar
+    principal is User in ?principal
+    ```
+
+    JSON representation
+
+    ```json
+    "principal": {
+        "op": "is",
+        "entity_type": "User",
+        "in": {
+            "slot": { "?principal" }
+        }
+    },
+    ```
+
 ## `action`
 
 The `action` object is required.
@@ -423,6 +490,73 @@ The `op` object must have one of the following string values:
         "op": "in",
         "slot": { "?resource" }
     }
+    ```
+
+* `is`
+
+  If present, then the `resource` object must also have a an `entity_type` key.
+
+  **Example**
+
+  Cedar policy line:
+
+  ```cedar
+  resource is file
+  ```
+
+  JSON representation:
+
+  ```json
+  "resource": {
+      "op": "is",
+      "entity_type": "file"
+  }
+  ```
+
+  The `resource` object may also optionally have an `in` key. The value of this key is an object with one of the following:
+
+  * [`entity`](#entity)
+
+    **Example**
+
+    Cedar policy line:
+
+    ```cedar
+    resource is file in folder::"Public"
+    ```
+
+    JSON representation:
+
+    ```json
+    "resource": {
+        "op": "is",
+        "entity_type": "file",
+        "in": {
+            "entity": { "type": "Folder", "id": "Public" }
+        }
+    }
+    ```
+
+  * [`slot`](#slot)
+
+    **Example**
+
+    Cedar policy line:
+
+    ```cedar
+    resource is file in ?resource
+    ```
+
+    JSON representation
+
+    ```json
+    "resource": {
+        "op": "is",
+        "entity_type": "file",
+        "in": {
+            "slot": { "?resource" }
+        }
+    },
     ```
 
 ## conditions
@@ -786,6 +920,30 @@ JSON representation
         "Var": "context"
     },
     "attr": "something"
+}
+```
+
+### `is` {#JsonExpr-is}
+
+The value of this key is an object with the keys `left` and `entity_type`.
+The `left` key is itself an [JsonExpr object](#JsonExpr-objects), while the `entity_type` key is a string.
+The value may optionally have an `in` key which is also a JsonExpr object.
+
+**Example for `is`**
+
+Cedar policy line
+
+```cedar
+principal is User in Group::"friends"
+```
+
+JSON representation
+
+```json
+"is": {
+    "left": { "Var": "principal" },
+    "entity_type": "User",
+    "in": {"entity": { "type": "Folder", "id": "Public" }}
 }
 ```
 

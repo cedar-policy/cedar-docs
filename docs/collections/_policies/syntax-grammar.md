@@ -117,7 +117,7 @@ For more details, see [`&&` \(AND\)](../policies/syntax-operators.html#operator-
 ## `Relation` {#grammar-relation}
 
 ```
-Relation ::= Add [RELOP Add] | Add 'has' (IDENT | STR) | Add 'like' PAT
+Relation ::= Add [RELOP Add] | Add 'has' (IDENT | STR) | Add 'like' PAT | Add 'is' Path ('in' Add)?
 ```
 
 ## `Add` {#grammar-add}

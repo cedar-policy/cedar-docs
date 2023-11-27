@@ -116,7 +116,7 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Unrecognized attributes** &ndash; For example, `principal.jobbLevel` has a typo and should be `jobLevel`.
 + **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `"required": false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcut [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
 + **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an illegal comparison with a `String`.
-+ **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply.
++ **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply. Similarly, `principal is ExampleCo::Personnel::Admin` always evaluates to `false` when the `principal` is always a `User`, and not an `Admin`.
 
 The schema can also specify the expected format of the context record for each `Action`. Making this specification lets Cedar also flag errors on references to context.
 

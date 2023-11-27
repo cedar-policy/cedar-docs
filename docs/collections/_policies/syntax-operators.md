@@ -808,6 +808,34 @@ In that case, then the previous expression that checks for `context.addr has cou
 context has addr && context.addr has country && context.addr.country == "US"  // false, with no error
 ```
 
+### `is` \(entity type test\) {#operator-is}
+
+**Usage:** `<entity> is <entity-type>`
+
+Boolean operator that evaluates to `true` if the left operand is an entity and has the specified entity type and evaluates to `false` if it is an entity that does not have the specified entity type.
+If you attempt to test the type of an expression that is not an entity, then Cedar generates an error.
+
+**Usage:** `<entity> is <entity-type> in <entity>`
+
+The `is` operator may optionally be combined with an `in` operation, in which case the expression is equivalent to `<entity> is <entity-type> && <entity> in <entity>`.
+
+**Usage:** `<entity> is <entity-type> in set(<entity>, <entity>, ...)`
+
+As when `in` appears on it's own, an `is` with an `in` may check membership in a set of entities. It still may only check for one entity type.
+
+#### Examples:
+{: .no_toc }
+
+```cedar
+User::"alice" is User                       // true
+principal is User                           // true if `principal` has the `User` entity type
+principal is User in Group::"friends"       // true if `principal` has the `User` entity type and is in `Group::"friends`
+ExampleCo::User::"alice" is ExampleCo::User // true
+Group::"friends" is User                    // false
+ExampleCo::User::"alice" is User            // false - `ExampleCo::User` and `User` are different entity types
+"alice" is String                           // type error - `is` only applies to entities
+```
+
 ### `.contains()` \(single element set membership test\) {#function-contains}
 
 **Usage:** `<set>.contains(<entity>)`

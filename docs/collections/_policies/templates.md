@@ -17,6 +17,7 @@ You can use placeholders in a Cedar policy template for only the following two e
 You can use either one or both in a policy template.
 
 Placeholders can appear in ***only*** the policy head on the right-hand side of the `==` or `in` operators.
+This includes `in` operators when appearing together with an `is` operator, but excludes solitary `is` operators.
 
 Then, when you create a policy based on the policy template, you must specify values for each of the placeholders. Those values are combined with the rest of the policy template to form a complete and usable template-linked policy.
 
