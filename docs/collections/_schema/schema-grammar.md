@@ -35,9 +35,11 @@ The grammar ignores whitespace and comments.
 ## `Schema` {#grammar-schema}
 
 A schema consists of a [`NameSpace`](#grammar-schema-NameSpace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
+The grammar assumes a particular order of keys in JSON objects to simplify the presentation, but this order is not technically required.
+For example, the grammar as written requires that entity type declarations appear before actions, but actions may nonetheless be declared before entity types.
 
 ```
-Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [(',' commonTypes )] '}' '}'
+Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions (',' commonTypes )? '}' '}'
 ```
 
 ## `NameSpace` {#grammar-schema-NameSpace}
@@ -50,10 +52,10 @@ NameSpace ::= STR ('::' STR)*
 
 ## `EntityTypes` {#grammar-schema-EntityTypes}
 
-The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of one or more Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
+The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
 ```
-EntityTypes ::= 'entityTypes: {' EntityType ( ',' EntityType )* '}'
+EntityTypes ::= 'entityTypes' ':' '{' ( EntityType ( ',' EntityType )* )? '}'
 ```
 
 ## `EntityType` {#grammar-schema-EntityType}
@@ -61,7 +63,7 @@ EntityTypes ::= 'entityTypes: {' EntityType ( ',' EntityType )* '}'
 An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-NameSpace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes how entities of this type are constructed.
 
 ```
-EntityType ::= IDENT ':' '{' 'memberOfTypes' ':' '[' (EntityType ( ',' EntityType )*)? '],' 'shape': TypeJson '}'
+EntityType ::= IDENT ':' '{' ( 'memberOfTypes' ':' '[' (IDENT ( ',' IDENT )*)? ']' )? ',' ( 'shape': TypeJson )? '}'
 ```
 
 ## `Actions` {#grammar-schema-Actions}
@@ -69,15 +71,17 @@ EntityType ::= IDENT ':' '{' 'memberOfTypes' ':' '[' (EntityType ( ',' EntityTyp
 The `Actions` element is a list of the individual actions supported by your application.
 
 ```
-Actions ::= '"actions"' ':' Action*
+Actions ::= '"actions"' ':' '{' ( Action ( ',' Action )* )? '}'
 ```
 
 ## `Action` {#grammar-schema-Action}
 
-The `Action` element describes one action supported by your application. An action begins with a name string, and includes an `appliesTo` element. The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
+The `Action` element describes one action supported by your application. An action begins with a name string, and may include a `memberOf` and `appliesTo` element.
+The `memberOf` element specifies what action groups the declared action is a member of in the action hierarchy.
+The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
 ```
-Action : STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}'
+Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '"appliesTo" ':' {' PrincipalTypes? ',' ResourceTypes? ',' Context? '}' )? '}'
 ```
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
@@ -85,7 +89,7 @@ Action : STR ':' '{' '"appliesTo": {' PrincipalTypes? ResourceTypes? Context? '}
 The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application.
 
 ```
-PrincipalTypes ::= '"principalTypes"': '[' IDENT* ']'
+PrincipalTypes ::= '"principalTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
 ```
 
 ## `ResourceTypes` {#grammar-schema-ResourceTypes}
@@ -93,7 +97,7 @@ PrincipalTypes ::= '"principalTypes"': '[' IDENT* ']'
 The `ResourceTypes` element describes
 
 ```
-ResourceTypes ::= '"resourceTypes"': '[' IDENT* ']'
+ResourceTypes ::= '"resourceTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
 ```
 
 ## `TypeJson` {#grammar-schema-TypeJson}
