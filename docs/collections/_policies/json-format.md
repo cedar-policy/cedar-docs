@@ -210,7 +210,7 @@ The `op` key is required. The `op` object must have one of the following string 
 
 * `is`
 
-  If present, then the `principal` object must also have a an `entity_type` key.
+  If present, then the `principal` object must also have an `entity_type` key.
 
   **Example**
 
@@ -494,7 +494,7 @@ The `op` object must have one of the following string values:
 
 * `is`
 
-  If present, then the `resource` object must also have a an `entity_type` key.
+  If present, then the `resource` object must also have an `entity_type` key.
 
   **Example**
 

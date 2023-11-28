@@ -812,7 +812,7 @@ context has addr && context.addr has country && context.addr.country == "US"  //
 
 **Usage:** `<entity> is <entity-type>`
 
-Boolean operator that evaluates to `true` if the left operand is an entity and has the specified entity type and evaluates to `false` if it is an entity that does not have the specified entity type.
+Boolean operator that evaluates to `true` if the left operand is an entity that has the specified entity type and evaluates to `false` if the left operand is an entity that does not have the specified entity type.
 If you attempt to test the type of an expression that is not an entity, then Cedar generates an error.
 
 **Usage:** `<entity> is <entity-type> in <entity>`
@@ -829,7 +829,7 @@ As when `in` appears on it's own, an `is` with an `in` may check membership in a
 ```cedar
 User::"alice" is User                       // true
 principal is User                           // true if `principal` has the `User` entity type
-principal is User in Group::"friends"       // true if `principal` has the `User` entity type and is in `Group::"friends`
+principal is User in Group::"friends"       // true if `principal` has the `User` entity type and is in `Group::"friends"`
 ExampleCo::User::"alice" is ExampleCo::User // true
 Group::"friends" is User                    // false
 ExampleCo::User::"alice" is User            // false - `ExampleCo::User` and `User` are different entity types
