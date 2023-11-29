@@ -60,10 +60,12 @@ Scope ::= Principal ',' Action ',' Resource
 
 The `Principal` element consists of the `principal` keyword. If specified by itself, the policy statement matches *any* principal.
 
-Optionally, the keyword can be followed by either the [`in`](../policies/syntax-operators.html#operator-in) or [`==`](../policies/syntax-operators.html#operator-equality) operator, followed by either an `Entity`, or the `?principal` placeholder when used in a policy template.
+Optionally, the keyword can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../_policies/syntax-operators.html#operator-is) operator.
+An `is` operator may appear together with an `in` operators, but not an `==` operator.
+The `in` and `==` operators are followed by either an `Entity`, or the `?principal` placeholder when used in a policy template.
 
 ```
-Principal ::= 'principal' [('in' | '==') (Entity | '?principal')]
+Principal ::= 'principal' [(['is' PATH] ['in' (Entity | '?principal')]) | ('==' (Entity | '?principal'))]
 ```
 
 ## `Action` {#grammar-action}
@@ -76,10 +78,12 @@ Action ::= 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
 
 ## `Resource` {#grammar-resource}
 
-The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](../policies/syntax-operators.html#operator-in) or [`==`](../policies/syntax-operators.html#operator-equality) operator, followed by an entity, or the `?resource` placeholder when used in a policy template.
+The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../_policies/syntax-operators.html#operator-is) operator.
+An `is` operator may appear together with an `in` operators, but not an `==` operator.
+The `in` and `==` operators are followed by either an `Entity`, or the `?resource` placeholder when used in a policy template.
 
 ```
-Resource ::= 'resource' [('in' | '==') (Entity | '?resource')]
+Resource ::= 'resource' [(['is' PATH] ['in' (Entity | '?resource')]) | ('==' (Entity | '?resource'))]
 ```
 
 ## `Condition` {#grammar-condition}
