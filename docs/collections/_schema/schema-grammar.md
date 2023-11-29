@@ -39,7 +39,7 @@ The grammar assumes a particular order of keys in JSON objects to simplify the p
 For example, the grammar as written requires that entity type declarations appear before actions, but actions may nonetheless be declared before entity types.
 
 ```
-Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions (',' commonTypes )? '}' '}'
+Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [',' CommonTypes] '}' '}'
 ```
 
 ## `NameSpace` {#grammar-schema-NameSpace}
@@ -47,7 +47,7 @@ Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions (',' commonTypes )? '}'
 The `NameSpace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](../schema/schema.html#schema-namepace).
 
 ```
-NameSpace ::= STR ('::' STR)*
+NameSpace ::= '"' STR { '::' STR } '"'
 ```
 
 ## `EntityTypes` {#grammar-schema-EntityTypes}
@@ -55,7 +55,7 @@ NameSpace ::= STR ('::' STR)*
 The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
 ```
-EntityTypes ::= 'entityTypes' ':' '[' ( EntityType ( ',' EntityType )* )? ']'
+EntityTypes ::= 'entityTypes' ':' '[' [ EntityType { ',' EntityType } ] ']'
 ```
 
 ## `EntityType` {#grammar-schema-EntityType}
@@ -63,7 +63,7 @@ EntityTypes ::= 'entityTypes' ':' '[' ( EntityType ( ',' EntityType )* )? ']'
 An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-NameSpace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes how entities of this type are constructed.
 
 ```
-EntityType ::= IDENT ':' '{' ( 'memberOfTypes' ':' '[' (IDENT ( ',' IDENT )*)? ']' )? ',' ( 'shape': TypeJson )? '}'
+EntityType ::= IDENT ':' '{' [ 'memberOfTypes' ':' '[' [ IDENT { ',' IDENT } ] ']' ] ',' [ 'shape': TypeJson ] '}'
 ```
 
 ## `Actions` {#grammar-schema-Actions}
@@ -71,7 +71,7 @@ EntityType ::= IDENT ':' '{' ( 'memberOfTypes' ':' '[' (IDENT ( ',' IDENT )*)? '
 The `Actions` element is a list of the individual actions supported by your application.
 
 ```
-Actions ::= '"actions"' ':' '[' ( Action ( ',' Action )* )? ']'
+Actions ::= '"actions"' ':' '[' [ Action { ',' Action } ] ']'
 ```
 
 ## `Action` {#grammar-schema-Action}
@@ -81,7 +81,7 @@ The `memberOf` element specifies what action groups the declared action is a mem
 The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
 ```
-Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '"appliesTo"' ':' '{' PrincipalTypes? ',' ResourceTypes? ',' Context? '}' )? '}'
+Action ::= STR ':' '{' [ '"memberOf"' ':' '[' [ STR { ',' STR } ] ']' ] ',' [ '"appliesTo"' ':' '{' [PrincipalTypes] ',' [ResourceTypes] ',' [Context] '}' ] '}'
 ```
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
@@ -89,7 +89,7 @@ Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '
 The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application for the containing action.
 
 ```
-PrincipalTypes ::= '"principalTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
+PrincipalTypes ::= '"principalTypes"': '[' [ IDENT { ',' IDENT } ] ']'
 ```
 
 ## `ResourceTypes` {#grammar-schema-ResourceTypes}
@@ -97,7 +97,7 @@ PrincipalTypes ::= '"principalTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
 The `ResourceTypes` element follows the same format and serves the same purpose as as the `PrincipalTypes`, but instead lists the resource types supported for the containing action.
 
 ```
-ResourceTypes ::= '"resourceTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
+ResourceTypes ::= '"resourceTypes"': '[' [ IDENT { ',' IDENT } ] ']'
 ```
 
 ## `Context` {#grammar-schema-Context}
@@ -153,7 +153,7 @@ EntityRef ::= '"type": "Entity", "name": "' Name '"'
 The `Record` element describes
 
 ```
-Record ::= '"type": "Record", "attributes": {' ( RecordAttr (',' RecordAttr )* )? '}'
+Record ::= '"type": "Record", "attributes": {' [ RecordAttr { ',' RecordAttr } ] '}'
 ```
 
 ## `RecordAttr` {#grammar-schema-RecordAttr}
@@ -161,20 +161,16 @@ Record ::= '"type": "Record", "attributes": {' ( RecordAttr (',' RecordAttr )* )
 The `RecordAttr` element describes
 
 ```
-RecordAttr ::= STR ': {' Type (', "required": ' ( true | false ))? '}'
+RecordAttr ::= STR ': {' Type [',' '"required"' ':' ( true | false )] '}'
 ```
 
 ## `STR` {#grammar-schema-STR}
-
-The `STR` element describes
 
 ```
 STR ::= Fully-escaped Unicode surrounded by '"'s
 ```
 
 ## `IDENT` {#grammar-IDENT}
-
-The `IDENT` element describes
 
 ```
 IDENT ::= ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
