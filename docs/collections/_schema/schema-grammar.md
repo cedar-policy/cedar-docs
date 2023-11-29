@@ -55,7 +55,7 @@ NameSpace ::= STR ('::' STR)*
 The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
 ```
-EntityTypes ::= 'entityTypes' ':' '{' ( EntityType ( ',' EntityType )* )? '}'
+EntityTypes ::= 'entityTypes' ':' '[' ( EntityType ( ',' EntityType )* )? ']'
 ```
 
 ## `EntityType` {#grammar-schema-EntityType}
@@ -71,7 +71,7 @@ EntityType ::= IDENT ':' '{' ( 'memberOfTypes' ':' '[' (IDENT ( ',' IDENT )*)? '
 The `Actions` element is a list of the individual actions supported by your application.
 
 ```
-Actions ::= '"actions"' ':' '{' ( Action ( ',' Action )* )? '}'
+Actions ::= '"actions"' ':' '[' ( Action ( ',' Action )* )? ']'
 ```
 
 ## `Action` {#grammar-schema-Action}
@@ -81,7 +81,7 @@ The `memberOf` element specifies what action groups the declared action is a mem
 The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
 ```
-Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '"appliesTo" ':' {' PrincipalTypes? ',' ResourceTypes? ',' Context? '}' )? '}'
+Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '"appliesTo"' ':' '{' PrincipalTypes? ',' ResourceTypes? ',' Context? '}' )? '}'
 ```
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
@@ -105,7 +105,7 @@ ResourceTypes ::= '"resourceTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
 The `Context` element describes the type of the context record for an action using the same `TypeJson` format used for the shape of an entity type.
 
 ```
-Context ::= '"context"': TypeJson
+Context ::= '"context"' ':' TypeJson
 ```
 
 ## `TypeJson` {#grammar-schema-TypeJson}
