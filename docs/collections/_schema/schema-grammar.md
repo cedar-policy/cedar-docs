@@ -86,7 +86,7 @@ Action : STR ':' '{' ( '"memberOf"' ':' '[' ( STR ( ',' STR )* )? ']' )? ',' ( '
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
 
-The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application.
+The `PrincipalTypes` element is identified by the keyword `principalType` followed by a comma-separated array list of the principal types supported by your application for the containing action.
 
 ```
 PrincipalTypes ::= '"principalTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
@@ -94,10 +94,18 @@ PrincipalTypes ::= '"principalTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
 
 ## `ResourceTypes` {#grammar-schema-ResourceTypes}
 
-The `ResourceTypes` element describes
+The `ResourceTypes` element follows the same format and serves the same purpose as as the `PrincipalTypes`, but instead lists the resource types supported for the containing action.
 
 ```
 ResourceTypes ::= '"resourceTypes"': '[' ( IDENT ( ',' IDENT )* )? ']'
+```
+
+## `Context` {#grammar-schema-Context}
+
+The `Context` element describes the type of the context record for an action using the same `TypeJson` format used for the shape of an entity type.
+
+```
+Context ::= '"context"': TypeJson
 ```
 
 ## `TypeJson` {#grammar-schema-TypeJson}
