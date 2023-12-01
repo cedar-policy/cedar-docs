@@ -821,7 +821,7 @@ The `is` operator may optionally be combined with an `in` operation, in which ca
 
 **Usage:** `<entity> is <entity-type> in set(<entity>, <entity>, ...)`
 
-As when `in` appears on it's own, an `is` with an `in` may check membership in a set of entities. It still may only check for one entity type.
+As when `in` appears on its own, an `is` with an `in` may check membership in a set of entities. It still may only check for one entity type.
 
 #### Examples:
 {: .no_toc }

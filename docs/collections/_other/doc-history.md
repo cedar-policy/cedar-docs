@@ -12,6 +12,7 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
+| Added [`is` operator](../auth/syntax-operators.html) | July 27, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
 | Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
 | Added [JSON policy format](../policies/json-format.html) reference page | July 14, 2023 |
@@ -23,6 +24,7 @@ The following table describes major documentation updates for Cedar.
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Versions | Date | 
 | --- |--- |--- | --- |
+| 3.0 | New `is` operator [PR](https://github.com/cedar-policy/cedar/pull/396) | 2.4.2 | December 1, 2023 |
 | 2.1.2 | Change to how validation treats template-linked policies [PR](https://github.com/cedar-policy/cedar/pull/371) | 2.4.2 | October 23, 2023 |
 | 2.1.1 | Increased validation precision [PR](https://github.com/cedar-policy/cedar/pull/117) | 2.4.0 - 2.4.1 | September 29, 2023 |
 | 2.1.0 | [RFC #9](https://github.com/cedar-policy/rfcs/blob/main/text/0009-disallow-whitespace-in-entityuid.md): Disallows whitespace in namespaces | 2.3.0 - 2.3.3 | June 29, 2023 |
