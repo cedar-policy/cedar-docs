@@ -74,7 +74,7 @@ Writing a schema and using the policy validator can give you increased confidenc
 ## Input Validation {#security-input-validation}
 The Cedar spec places no restrictions on the size of Cedar policies, schemas, or requests. 
 It is important for services accepting arbitrary Cedar inputs to place a bound on input sizes to protect against memory exhaustion.
-Given bounded inputs, the parsers provided by Cedar are safe to execute on arbitrary inputs, and should be relied on validating inputs.
+The parsers provided by Cedar are safe to execute on bounded, arbitrary inputs, and are the suggested way to validate inputs.
 Cedar policies of a bounded size are guaranteed to terminate, and are effect free.
 
 
