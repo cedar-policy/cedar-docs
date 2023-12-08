@@ -71,6 +71,13 @@ The Cedar validator can detect the many types of bugs, including the following:
 
 Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Dafny. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
 
+## Input Validation {#security-input-validation}
+The Cedar spec places no restrictions on the size of Cedar policies, schemas, or requests. 
+It is important for services accepting arbitrary Cedar inputs to place a bound on input sizes to protect against memory exhaustion.
+Given bounded inputs, the parsers provided by Cedar are safe to execute on arbitrary inputs, and should be relied on validating inputs.
+Cedar policies of a bounded size are guaranteed to terminate, are effect free, and execute in approximately linear time.
+
+
 ## Security best practices for applications using Cedar {#security-best-practices}
 
 Some security best practices for applications that use Cedar are as follows:
