@@ -114,6 +114,12 @@ principal == User::"alice"
 
 //matches any principal in the hierarchy of the specified Group
 principal in Group::"alice_friends"
+
+//matches any principal of type User
+principal is User
+
+//matches any principal of type User in the hierarchy of the specified Group
+principal is User in Group::"alice_friends"
 ```
 
 ### `action` {#term-parc-action}
@@ -157,6 +163,12 @@ resource == Photo::"VacationPhoto94.jpg"
 
 //matches any resource that is in the hierarchy of the specified entity of type Album
 resource in Album::"alice_vacation"
+
+//matches any resource of type Photo
+resource is Photo
+
+//matches any resource of type Photo in the hierarchy of the specified entity Album
+resource is Photo in Album::"alice_vacation"
 ```
 
 ## Conditions {#term-parc-context}
