@@ -12,7 +12,7 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
-| Added [`is` operator](../auth/syntax-operators.html) | December 15, 2023 |
+| Added [`is` operator](../policies/syntax-operators.html) | December 15, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
 | Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
 | Added [JSON policy format](../policies/json-format.html) reference page | July 14, 2023 |
