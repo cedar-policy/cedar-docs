@@ -190,7 +190,7 @@ when {
 
 The scope values of `principal`, `action`, and `resource` represent stable information in the system and must be present in every request. In comparison, `context` represents information about a point-in-time request and is required only for relevant request scenarios.
 
-Context elements take the following two forms:
+Condition elements take the following two forms:
 
 + [`when`](#term-parc-context-when)
 + [`unless`](#term-parc-context-unless)
