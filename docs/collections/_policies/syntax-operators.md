@@ -848,7 +848,7 @@ context has addr && context.addr has country && context.addr.country == "US"  //
 
 #### Validation
 
-Validating `has` expressions relies on information specified in the [schema](../_schema/schema.html#schema) about what entity and record types have what attributes, and which attributes might be optional. Suppose we have expression `context has role`. It can have the following types:
+Validating `has` expressions relies on information specified in the [schema](../schema/schema.html#schema) about what entity and record types have what attributes, and which attributes might be optional. Suppose we have expression `context has role`. It can have the following types:
 
 - Type `Boolean` if the schema says `context` has a `role` attribute which is not required, i.e., it's optional
 - Type `True` if the schema says `context` has a `role` attribute which _is_ required, which means the expression will always evaluate to `true`
@@ -896,7 +896,7 @@ ExampleCo::User::"alice" is User            //false - `ExampleCo::User` and `Use
 
 #### Validation
 
-Validating `is` expressions relies on information specified in the [schema](../_schema/schema.html#schema) about what the possible entity types are, and what the `principal`, `resource`, and `context` types can be for particular actions. Suppose we have expression `principal is Admin`. It can have the following types:
+Validating `is` expressions relies on information specified in the [schema](../schema/schema.html#schema) about what the possible entity types are, and what the `principal`, `resource`, and `context` types can be for particular actions. Suppose we have expression `principal is Admin`. It can have the following types:
 
 - Type error if `Admin` is not declared as an entity type in the schema
 - Type `True` if the schema says `principal` surely does have type `Admin`, which means the expression will always evaluate to `true`
