@@ -53,7 +53,7 @@ A collection of elements that can be of the same or different types. A set is co
 [3<5, ["nested", "set"], true]
 ```
 
-While all of the above sets can be _evaluated_ successfully, not all of them can be _validated_. In particular, Cedar's [policy validator](validation.md#validation) may flag some expressions as being type incorrect even though they can evaluate during an authorization request successfully (as is typical of most programming language type systems). For sets, the policy validator will only accept set literals in policies if (1) the set is non-empty, and (2) all of its elements have the same type. Thus, _only_ the second out of the above four sets can be validated in Cedar. Note that empty sets can appear in entities and/or the `context` record; the only restriction is their appearance as a literal in a Cedar policy.
+While all of the above sets can be _evaluated_ successfully, not all of them can be _validated_. In particular, Cedar's [policy validator](validation.html#validation) may flag some expressions as being type incorrect even though they can evaluate during an authorization request successfully (as is typical of most programming language type systems). For sets, the policy validator will only accept set literals in policies if (1) the set is non-empty, and (2) all of its elements have the same type. Thus, _only_ the second out of the above four sets can be validated in Cedar. Note that empty sets can appear in entities and/or the `context` record; the only restriction is their appearance as a literal in a Cedar policy.
 
 
 ## Record {#datatype-record}

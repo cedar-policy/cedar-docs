@@ -10,11 +10,11 @@ nav_order: 4
 
 This topic describes the built-in operators and functions that you can use to build your expressions using the Cedar policy language.
 
-Not all expressions that you can _evaluate_ will necessarily _validate_ when using Cedar's [policy validator](validation.md#validation). This situation is similar to that of most programming languages. For example, in Java the following code does not type check, even though executing it will never result in an error.
+Not all expressions that you can _evaluate_ will necessarily _validate_ when using Cedar's [policy validator](validation.html#validation). This situation is similar to that of most programming languages. For example, in Java the following code does not type check, even though executing it will never result in an error.
 ```java
 if (false) { return 1 == "hello"; } else { return true; }
 ```
-A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation]((validation.md#validation)) section for more information.
+A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation]((validation.html#validation)) section for more information.
 
 When giving examples below, we will highlight restrictions on the form of expressions that allows them to properly validate.
 
@@ -164,7 +164,7 @@ decimal("922337203685477.5808")  //error - overflow
 decimal("0.12345")               //error - too many fractional digits
 ```
 
-Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.md#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow. So, all of the above examples are also accepted by the validator except those commented as `//error`.
+Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow. So, all of the above examples are also accepted by the validator except those commented as `//error`.
 
 ### `ip()` \(parse string and convert to ipaddr\) {#function-ip}
 
@@ -198,7 +198,7 @@ ip("127.0.0.1") == "127.0.0.1"                //false – different types
 ip("::1") == 1                                //false – different types
 ```
 
-Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.md#validation) only permits `e` to be a _string literal_ that will not result in an error. So, all of the above examples are also validatable except those commented as `//error` as well as the last two, as `==` expressions do not validate when applied to expressions of different types (see the [discussion of `==`](#operator-equality) below).
+Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error. So, all of the above examples are also validatable except those commented as `//error` as well as the last two, as `==` expressions do not validate when applied to expressions of different types (see the [discussion of `==`](#operator-equality) below).
 
 ## Comparison operators and functions {#operators-comparison}
 
@@ -652,7 +652,7 @@ During policy validation, the validator will reject `-` expressions where either
 
 **Usage:** `<Long> * <Long>`
 
-Binary operator that multiplies two `Long` integer operands and returns a `Long` integer product. One of the operands ***must*** be an literal, the other value can be a literal or a general expression or else the expression is [rejected by the parser](syntax-grammar.md#grammar-mult).
+Binary operator that multiplies two `Long` integer operands and returns a `Long` integer product. One of the operands ***must*** be an literal, the other value can be a literal or a general expression or else the expression is [rejected by the parser](syntax-grammar.html#grammar-mult).
 
 {: .note }
 >There is no operator for arithmetic division.
@@ -808,7 +808,7 @@ You must check for presence of nested, optional attributes one layer at a time. 
 principal has custom && principal.custom has project && principal.custom.project == "greenzone"
 ```
 
-If the attribute name is not valid as an [identifier](syntax-grammar.md#grammar-ident), then the string literal syntax must be used for `has` and attribute values must be accessed with the `[]` operator instead of using dot syntax. For example, to check if `context` has an attribute called `owner info` (with an embedded space), then you could use the following syntax.
+If the attribute name is not valid as an [identifier](syntax-grammar.html#grammar-ident), then the string literal syntax must be used for `has` and attribute values must be accessed with the `[]` operator instead of using dot syntax. For example, to check if `context` has an attribute called `owner info` (with an embedded space), then you could use the following syntax.
 
 ```cedar
 context has "owner info" && context["owner info"].name == "Alice"    //true
@@ -848,7 +848,7 @@ context has addr && context.addr has country && context.addr.country == "US"  //
 
 #### Validation
 
-Validating `has` expressions relies on information specified in the [schema](../_schema/schema.md#schema) about what entity and record types have what attributes, and which attributes might be optional. Suppose we have expression `context has role`. It can have the following types:
+Validating `has` expressions relies on information specified in the [schema](../_schema/schema.html#schema) about what entity and record types have what attributes, and which attributes might be optional. Suppose we have expression `context has role`. It can have the following types:
 
 - Type `Boolean` if the schema says `context` has a `role` attribute which is not required, i.e., it's optional
 - Type `True` if the schema says `context` has a `role` attribute which _is_ required, which means the expression will always evaluate to `true`
@@ -896,7 +896,7 @@ ExampleCo::User::"alice" is User            //false - `ExampleCo::User` and `Use
 
 #### Validation
 
-Validating `is` expressions relies on information specified in the [schema](../_schema/schema.md#schema) about what the possible entity types are, and what the `principal`, `resource`, and `context` types can be for particular actions. Suppose we have expression `principal is Admin`. It can have the following types:
+Validating `is` expressions relies on information specified in the [schema](../_schema/schema.html#schema) about what the possible entity types are, and what the `principal`, `resource`, and `context` types can be for particular actions. Suppose we have expression `principal is Admin`. It can have the following types:
 
 - Type error if `Admin` is not declared as an entity type in the schema
 - Type `True` if the schema says `principal` surely does have type `Admin`, which means the expression will always evaluate to `true`
@@ -935,7 +935,7 @@ context.role.contains("admin")                  //true if the `context.role` set
 "ham and ham".contains("ham")                   // error - 'contains' is not allowed on strings
 ```
 
-To be accepted by the policy validator, the `contains` function must be called on a receiver that is a `Set` of some type _T_, with an argument that also has type _T_. The second, third, fifth, and eighth examples above would not validate. The second and third operate on a set that contains values of multiple types rather than a single type, the fifth operates on the empty set literal; none of these is a valid set (see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more info). The eighth example is invalid because it does not operate on a set at all.
+To be accepted by the policy validator, the `contains` function must be called on a receiver that is a `Set` of some type _T_, with an argument that also has type _T_. The second, third, fifth, and eighth examples above would not validate. The second and third operate on a set that contains values of multiple types rather than a single type, the fifth operates on the empty set literal; none of these is a valid set (see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more info). The eighth example is invalid because it does not operate on a set at all.
 
 ### `.containsAll()` \(all element set membership test\) {#function-containsAll}
 
@@ -957,7 +957,7 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 "ham and eggs".containsAll("ham")                            // type error - prefix and operand are strings
 {"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})         // type error - prefix and operand are records
 ```
-The first five examples would validate, since in all cases the receiver and argument are sets of `Long` integers. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more information on validity rules for sets.
+The first five examples would validate, since in all cases the receiver and argument are sets of `Long` integers. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more information on validity rules for sets.
 
 ### `.containsAny()` \(any element set membership test\) {#function-containsAny}
 
@@ -978,7 +978,7 @@ Function that evaluates to `true` if *any one or more* members of the operand se
 {"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           // type error - prefix and operands are records
 ```
 
-The first six examples would validate, since in all cases the receiver and argument are sets of `Long` integers, or `String`s. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more information on validity rules for sets.
+The first six examples would validate, since in all cases the receiver and argument are sets of `Long` integers, or `String`s. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more information on validity rules for sets.
 
 ## IP address functions {#functions-ipaddr}
 
