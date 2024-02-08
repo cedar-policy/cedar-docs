@@ -917,29 +917,31 @@ Recall that for `Action::"view"` we said that `principal`s always have type `Use
 
 ### `.contains()` \(single element set membership test\) {#function-contains}
 
-**Usage:** `<set>.contains(<entity>)`
+**Usage:** `<set>.contains(<value>)`
 
-Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `set`.
+Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `Set`.
 
 #### Examples:
 {: .no_toc }
 
 ```cedar
-[1,2,3].contains(1)                             // true
-[1,"something",2].contains(1)                   // true
-[1,"something",2].contains("Something")         // false - string comparison is case-sensitive
-["some", "useful", "tags"].contains("useful")   // true
-[].contains(100)                                // false
-context.role.contains("admin")                  // true if the set `role` contains the string "admin"
-[User::"alice"].contains(principal)             // true if principal == User::"alice"
-"ham and ham".contains("ham")                   // type error - 'contains' is not allowed on strings
+[1,2,3].contains(1)                             //true
+[1,"something",2].contains(1)                   //true
+[1,"something",2].contains("Something")         //false - string comparison is case-sensitive
+["some", "useful", "tags"].contains("useful")   //true
+[].contains(100)                                //false
+context.role.contains("admin")                  //true if the `context.role` set contains string "admin"
+[User::"alice"].contains(principal)             //true if principal == User::"alice"
+"ham and ham".contains("ham")                   // error - 'contains' is not allowed on strings
 ```
+
+To be accepted by the policy validator, the `contains` function must be called on a receiver that is a `Set` of some type _T_, with an argument that also has type _T_. The second, third, fifth, and eighth examples above would not validate. The second and third operate on a set that contains values of multiple types rather than a single type, the fifth operates on the empty set literal; none of these is a valid set (see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more info). The eighth example is invalid because it does not operate on a set at all.
 
 ### `.containsAll()` \(all element set membership test\) {#function-containsAll}
 
 **Usage:** `<set>.containsAll(<set>)`
 
-Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
+Function that evaluates to `true` if *every* member of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`. To be accepted by the validator, the receiver and argument to `containsAll` must be homogeneous sets of the same type.
 
 ```cedar
 [1, -22, 34].containsAll([-22, 1])                           // true
@@ -955,12 +957,13 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 "ham and eggs".containsAll("ham")                            // type error - prefix and operand are strings
 {"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})         // type error - prefix and operand are records
 ```
+The first five examples would validate, since in all cases the receiver and argument are sets of `Long` integers. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more information on validity rules for sets.
 
 ### `.containsAny()` \(any element set membership test\) {#function-containsAny}
 
 **Usage:** `<set>.containsAny(<set>)`
 
-Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`.
+Function that evaluates to `true` if *any one or more* members of the operand set is a member of the receiver set. Both the receiver and the operand must be of type `set`. To be accepted by the policy validator, calls to `containsAny` must be on _homogeneous_ sets _of the same type_.
 
 ```cedar
 [1, -22, 34].containsAny([1, -22])                             // true
@@ -975,6 +978,8 @@ Function that evaluates to `true` if *any one or more* members of the operand se
 {"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           // type error - prefix and operands are records
 ```
 
+The first six examples would validate, since in all cases the receiver and argument are sets of `Long` integers, or `String`s. The remaining examples would not validate because they either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.md#datatype-set) for more information on validity rules for sets.
+
 ## IP address functions {#functions-ipaddr}
 
 Use these functions to test characteristics of IP addresses and ranges.
@@ -983,12 +988,13 @@ Use these functions to test characteristics of IP addresses and ranges.
 
 **Usage:** `<ipaddr>.isIpv4()`
 
-Evaluates to `true` if the receiver is an IPv4 address. This function takes no operand.
+Evaluates to `true` if the receiver is an IPv4 address. This function takes no operand. 
 
 ```cedar
 ip("127.0.0.1").isIpv4()     //true
 ip("::1").isIpv4()           //false
 ip("127.0.0.1/24").isIpv4()  //true
+context.foo.isIpv4()         //error if `context.foo` is not an `ipaddr`
 ```
 
 ### `.isIpv6()` \(IPv6 address valid test\) {#function-isIpv6.title}
@@ -1001,6 +1007,7 @@ Function that evaluates to `true` if the receiver is an IPv6 address. This funct
 ip("127.0.0.1/24").isIpv6()  //false
 ip("ffee::/64").isIpv6()     //true
 ip("::1").isIpv6()           //true
+context.foo.isIpv6()         //error if `context.foo` is not an `ipaddr`
 ```
 
 ### `.isLoopback()` \(test for IP loopback address\) {#function-isLoopback.title}
@@ -1013,6 +1020,7 @@ Function that evaluates to `true` if the receiver is a valid loopback address fo
 ip("127.0.0.2").isLoopback()  //true
 ip("::1").isLoopback()        //true
 ip("::2").isLoopback()        //false
+context.foo.isLoopback()      //error if `context.foo` is not an `ipaddr`
 ```
 
 ### `.isMulticast()` \(test for multicast address\) {#function-isMulticast.title}
@@ -1024,6 +1032,7 @@ Function that evaluates to `true` if the receiver is a multicast address for its
 ```cedar
 ip("127.0.0.1").isMulticast()  //false
 ip("ff00::2").isMulticast()    //true
+context.foo.isMulticast()      //error if `context.foo` is not an `ipaddr`
 ```
 
 ### `.isInRange()` \(test for inclusion in IP address range\) {#function-isInRange.title}
@@ -1039,4 +1048,6 @@ ip("192.168.0.75").isInRange(ip("192.168.0.1/24"))  //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/28"))  //false
 ip("1:2:3:4::/48").isInRange(ip("1:2:3:4::"))       //true
 ip("192.168.0.1").isInRange(ip("1:2:3:4::"))        //false
+ip("192.168.0.1").isInRange(1)                      //error - operand is not an ipaddr
+context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is not an `ipaddr`
 ```
