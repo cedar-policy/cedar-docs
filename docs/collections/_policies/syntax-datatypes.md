@@ -7,7 +7,7 @@ nav_order: 3
 # Data types supported by Cedar {#syntax-datatypes}
 {: .no_toc }
 
-The Cedar policy language supports values and expressions of the following data types.
+The Cedar policy language supports values and expressions of several possible data types.
 
 <details open markdown="block">
   <summary>
@@ -37,7 +37,7 @@ A whole number without decimals that can range from -9223372036854775808 to 9223
 
 ## Set {#datatype-set}
 
-A collection of elements that can be of the same or different types. A set is constructed using bracket characters `[ ]` and separating the elements with commas. The following examples show a few sets.
+A collection of elements that can be of the same or different types. A set is constructed using bracket characters `[ ]` and separating the elements with commas. Here are a few examples of sets.
 
 ```cedar
 // a set of three elements, two of type long, and one of type string
@@ -53,6 +53,9 @@ A collection of elements that can be of the same or different types. A set is co
 [3<5, ["nested", "set"], true]
 ```
 
+While all of the above sets can be _evaluated_ successfully, not all of them can be _validated_. In particular, Cedar's [policy validator](validation.md#validation) may flag some expressions as being type incorrect even though they can evaluate during an authorization request successfully (as is typical of most programming language type systems). For sets, the policy validator will only accept set literals in policies if (1) the set is non-empty, and (2) all of its elements have the same type. Thus, _only_ the second out of the above four sets can be validated in Cedar. Note that empty sets can appear in entities and/or the `context` record; the only restriction is their appearance as a literal in a Cedar policy.
+
+
 ## Record {#datatype-record}
 
 A collection of *attributes*. Each attribute consists of a name and an associated value. Names are simple strings. Values can be of any type. You can access an attribute's value by referencing its name as an index using either of the following syntax options:
@@ -63,7 +66,7 @@ A collection of *attributes*. Each attribute consists of a name and an associate
 The following example shows the correct syntax for a `Record`.
 
 ```json
-{"key": "some value", id:"another value" }
+{"key": "some value", id: "another value" }
 ```
 
 You can reference the first attribute as either `record["key"]` or `record.key`. Both options evaluate to `"some value"`.
@@ -120,6 +123,8 @@ The remaining Cedar data types are introduced as *extension types*. Values of an
 
 As of now Cedar supports two extension types: [decimal](#datatype-decimal) and [ipaddr](#datatype-ipaddr).
 
+While Cedar policies can _evaluate_ extension constructor functions and operations applied to _any_ expression, the policy validator will only _validate_ extension constructor and operation calls whose arguments are valid (for the extension type) _string literals_. We say more below.
+
 ### decimal {#datatype-decimal}
 
 A value with both a whole number part and a decimal part of no more than four digits.
@@ -137,6 +142,8 @@ A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
 {: .warning }
 >If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
+Constructor calls such as `decimal(context.num)` and `decimal(if true then "100.01" else "1.01")` can _evaluate_ properly, assuming `context.num` is a string of the accepted format, but will not _validate_. To validate, the `decimal()` constructor must be given a _string literal_. If calling `decimal()` with the string literal would produce an overflow, the constructor call is also deemed invalid.
+
 ### ipaddr {#datatype-ipaddr}
 
 A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
@@ -148,3 +155,5 @@ ip("192.168.1.100")    // a single IPv4 address
 ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
 ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
 ```
+
+Constructor calls such as `ip(context.addr)` and `ip(if context.addr like "145.*" then context.addr else "127.0.0.1")` can _evaluate_ properly, assuming `context.addr` is a string of the accepted format, but will not _validate_. To validate, the `ip()` constructor must be given a _string literal_. If calling `ip()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
