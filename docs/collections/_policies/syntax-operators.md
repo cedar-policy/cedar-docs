@@ -157,7 +157,7 @@ decimal("0.1234")
 decimal("-0.0123")
 decimal("55.1")
 decimal("00.000")
-decimal(context.time)            //evaluation ok, but will not validate - parameter not a string literal
+decimal(context.time)            //Evaluates //Doesn't validate (parameter not a string literal)
 decimal(context.date)            //error - invalid format (not valid as parameter not a string literal)
 decimal("1234")                  //error - missing decimal
 decimal("1.0.")                  //error - stray period at end
@@ -190,7 +190,7 @@ ip("127.0.0.1/24")
 ip("ffee::/64")
 ip("ff00::2")
 ip("::2")
-ip(context.addr)                    //evaluation ok but will not validate - parameter not a string literal
+ip(context.addr)                    //Evaluates //Doesn't validate (parameter not a string literal)
 ip(context.time)                    //error - invalid format (not valid as parameter not a string literal)
 ip("380.0.0.1")                     //error – invalid IPv4 address
 ip("ab.ab.ab.ab")                   //error – invalid IPv4 address
@@ -210,8 +210,8 @@ ip("192.168.0.1/24") == ip("8.8.8.8/8")       //false
 ip("192.168.0.1/24") == ip("192.168.0.8/24")  //false - different host address
 ip("127.0.0.1") == ip("::1")                  //false – different IP versions
 ip("127.0.0.1") == ip("192.168.0.1/24")       //false - address compared to range
-ip("127.0.0.1") == "127.0.0.1"                //false – different types; will not validate
-ip("::1") == 1                                //false – different types; will not validate
+ip("127.0.0.1") == "127.0.0.1"                //false – different types //Doesn't validate
+ip("::1") == 1                                //false – different types //Doesn't validate 
 ```
 
 ## Comparison operators and functions {#operators-comparison}
@@ -249,9 +249,9 @@ context.device_properties == {"os": "Windows", "version": 11}
                                 //true if context.device_properties represents a Windows 11 computer
 User::"alice" == User::"alice"  //true
 User::"alice" == User::"bob"    //false -- two different entities of same type
-User::"alice" == Admin::"alice" //false -- entities of two different types (validates properly)
-5 == "5"                        //false -- operands have two different types; will not validate
-"alice" == User::"alice"        //false -- operands have two different types; will not validate
+User::"alice" == Admin::"alice" //false -- entities of two different types //Validates
+5 == "5"                        //false -- operands have two different types //Doesn't validate 
+"alice" == User::"alice"        //false -- operands have two different types //Doesn't validate 
 ```
 
 ### `!=` \(inequality\) {#operator-inequality}
@@ -472,15 +472,15 @@ The description of `&&` so far has been from the perspective of _evaluation_. Fr
 In the following examples, those labeled with `//error` both fail to evaluate and fail to validate. Others evaluate correctly, but some may fail to validate, per the label. Discussion of the reasons for non-validation is given below.
 
 ```cedar
-3 && false          //error -- first operand is not a Boolean
-false && 3          //false (due to short circuiting); validates
-(3 == 4) && 3       //false (due to short circuiting); does not validate
-(User::"alice" == Action::"viewPhoto") && 3 //false; validates
-true && 3           //error -- second operand is not a Boolean
-(false && 3) == 3   //false; does not validate (== applied to different types)
+3 && false                                  //error -- first operand is not a Boolean
+false && 3                                  //Evaluates to false (due to short circuiting) //Validates
+(3 == 4) && 3                               //Evaluates to false (due to short circuiting) //Doesn't validate
+(User::"alice" == Action::"viewPhoto") && 3 //Evaluates to false //Validates
+true && 3                                   //error -- second operand is not a Boolean
+(false && 3) == 3                           //Evaluates to false //Doesn't validate (== applied to different types)
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `false && 3` (second example) and `(User::"alice" == Action::"viewPhoto") && 3` (fourth example), but not `(3 == 4) && 3` (third example). The reason is that it knows `false` is always, well, `false`, so it can model short-circuiting. It also knows that comparing two entities with different types will always evaluate to to `false`. Internally, the validator has a type `False` for expressions that  surely evaluate to `false`, and also a type `True` for those that surely evaluate to `true`. So, `false` has type `False`, as does `(User::"alice" == Action::"viewPhoto")`. And so does expression `e1 && e2` when `e1` has type `False`. However, expression `3 == 4` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 4) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `false && 3` and `(User::"alice" == Action::"viewPhoto") && 3`, but not `(3 == 4) && 3`. The reason is that it knows `false` is always, well, `false`, so it can model short-circuiting. It also knows that comparing two entities with different types will always evaluate to to `false`. Internally, the validator has a type `False` for expressions that  surely evaluate to `false`, and also a type `True` for those that surely evaluate to `true`. So, `false` has type `False`, as does `(User::"alice" == Action::"viewPhoto")`. And so does expression `e1 && e2` when `e1` has type `False`. However, expression `3 == 4` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 4) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
 
 ### `||` \(OR\) {#operator-or}
 
@@ -515,12 +515,12 @@ In the following examples, those labeled with `//error` both fail to evaluate an
 
 ```cedar
 3 || true                  //error (first operand not a Boolean)
-true || 3                  //true (due to short-circuiting); validates
+true || 3                  //Evaluates to true (due to short-circuiting) //Validates
 false || 3                 //error (second operand not a Boolean)
-(3 == 3) || 3              //true (due to short-circuiting); does not validate
+(3 == 3) || 3              //Evaluates to true (due to short-circuiting) //Doesn't validate
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` (second example) but not `(3 == 3) && 3` (fourth example). As discussed for [`&&`](#operator-and), the validator has an internal type `True` for expressions that surely evaluate to `true`, and similarly for `False`, and it uses these types to implement a short-circuiting semantics for `&&` and `||`. Here, the expression `3 == 3` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 3) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) && 3`. As discussed for [`&&`](#operator-and), the validator has an internal type `True` for expressions that surely evaluate to `true`, and similarly for `False`, and it uses these types to implement a short-circuiting semantics for `&&` and `||`. Here, the expression `3 == 3` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 3) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
 
 ### `!` \(NOT\) {#operator-not}
 
@@ -592,14 +592,14 @@ Note that `if` and `when`, though similar in normal English, play different role
 In the following examples, those labeled with `//error` both fail to evaluate and fail to validate. Others evaluate correctly, but some may fail to validate, per the label. Discussion of the reasons for non-validation is given below.
 
 ```cedar
-if 1 == 1 then "ok" else "wrong"         //"ok"; validates
-if 1 == 2 then User::"foo" else "ok"     //"ok"; does not validate
+if 1 == 1 then "ok" else "wrong"         //Evaluates to "ok" //Validates
+if 1 == 2 then User::"foo" else "ok"     //Evaluates to "ok" //Doesn't validate
 if 1 then "wrong" else "wrong"           //error
-if false then (1 && "hello") else "ok"   //"ok" (due to short circuiting); validates
+if false then (1 && "hello") else "ok"   //Evaluates to "ok" (due to short circuiting) //Validates
 if true then (1 && "hello") else "ok"    //error
 ```
 
-Considering the examples from the perspective of validation, the first example is valid because the first operand `1 == 1` has `Boolean` type, and both the second and third operands have the same type (`String`). The second example is rejected because the second and third operands do not have the same type. The third example is rejected because first operand `1` does not have type `Boolean`. The fourth example is _accepted_ because the validator is able to consider short-circuiting: It knows that because the first operand is `false` that the second operand _must_ be skipped. It does this by giving `false` the internal type `False` as described for operators [`&&`](#operator-and) and [`||`](#operator-or). Note that it is not able to give the expression `1 == 2` type `False` in the second example; if it was, then this example would be accepted despite the last two operands not having the same type.
+The example `if 1 == 1 then "ok" else "wrong"` validates because the first operand `1 == 1` has `Boolean` type, and both the second and third operands have the same type (`String`). The example `if 1 == 2 then User::"foo" else "ok"` doesn't validate because the second and third operands do not have the same type. The example `if 1 then "wrong" else "wrong"` doesn't validate because the first operand `1` does not have type `Boolean`. The example `if false then (1 && "hello") else "ok"` is _accepted_ (validates) because the validator is able to consider short-circuiting: It knows that because the first operand is `false` that the second operand _must_ be skipped. It does this by giving `false` the internal type `False` as described for operators [`&&`](#operator-and) and [`||`](#operator-or). Note that it is not able to give the expression `1 == 2` type `false` in the second example; if it was, then this example would be accepted despite the last two operands not having the same type.
 
 ## Arithmetic operators {#operators-math}
 
@@ -638,9 +638,9 @@ In the following examples, those labeled with `//error` both fail to evaluate *a
 ```cedar
 11 + 0                              //11
 -1 + 1                              //0
-9223372036854775807 + 1             //error - overflow (validates)
-7 + "3"                             //error - second operand not a Long (does not validate)
-"lamp" + "la"                       //error - operands not `Long` (does not validate)
+9223372036854775807 + 1             //error - overflow //Validates
+7 + "3"                             //error - second operand not a Long //Doesn't validate
+"lamp" + "la"                       //error - operands not `Long` //Doesn't validate
 ```
 
 ### `-` \(Numeric subtraction or negation\) {#operator-subtract}
@@ -658,11 +658,11 @@ In the following examples, those labeled with `//error` both fail to evaluate *a
 -3                              //-3
 44 - 31                         //13
 5 - (-3)                        //8
--9223372036854775807 - 2 + 3    //error - overflow (validates)
-7 - "3"                         //error - second operand not a `Long` (does not validate)
+-9223372036854775807 - 2 + 3    //error - overflow //Validates
+7 - "3"                         //error - second operand not a `Long` //Doesn't validate
 ```
 
-Since the `-` symbol can mean both unary and binary subtraction, the third example must use parentheses to disambiguate.
+Because the `-` symbol can mean both unary and binary subtraction, the example `-9223372036854775807 - 2 + 3` must use parentheses to disambiguate.
 
 ### `*` \(Numeric multiplication\) {#operator-multiply}
 
@@ -683,10 +683,10 @@ In these examples, suppose that `resource.value` is 3 and `context.budget` is 4.
 resource.value * 10              //30
 2 * context.budget > 100         //false
 context.budget * resource.value  //will not parse - one operand must be a literal
-9223372036854775807 * 2          //error - overflow (validates)
+9223372036854775807 * 2          //error - overflow //Validates
 5 * (-3)                         //-15
 5 * 0                            //0
-"5" * 0                          //error - both operands must have type `Long` (does not validate)
+"5" * 0                          //error - both operands must have type `Long` //Doesn't validate
 ```
 
 ## Hierarchy and set membership operators and functions {#functions-set}
@@ -764,12 +764,12 @@ User::"alice" in [Group::"jane_family", Group::"jane_friends"]
 Because the in operator is reflexive, A `in` A returns true even if the entity A does not exist in the `entities` passed in with the request. The evaluator treats entity references that are not in the hierarchy as a valid entity. For example:
 
 ```cedar
-Stranger::"jimmy" in Stranger::"jimmy"        // true by reflexivity.
-Stranger::"jimmy" in Group::"jane_friends"    // false - Stranger::"jimmy" does not refer to an existing entity
+Stranger::"jimmy" in Stranger::"jimmy"        //true by reflexivity.
+Stranger::"jimmy" in Group::"jane_friends"    //false - Stranger::"jimmy" does not refer to an existing entity
 Stranger::"jimmy" in [
     Group::"jane_family",
     Stranger::"jimmy"
-]                                             // true - Stranger::"jimmy" in Stranger::"jimmy" is true
+]                                             //true - Stranger::"jimmy" in Stranger::"jimmy" is true
 ```
 
 #### More Examples:
@@ -943,20 +943,20 @@ Function that evaluates to `true` if the operand is a member of the receiver on 
 #### Examples:
 {: .no_toc }
 
-Examples labeled with `//error` both fail to evaluate and fail to validate. Examples that evaluate to a result may fail to validate; they are labeled accordingly, with discussion below.
+Examples labeled with `//error` both fail to evaluate and fail to validate. Examples that evaluate to a result may fail to validate.
 
 ```cedar
-[1,2,3].contains(1)                             //true (validates)
-[1,"something",2].contains(1)                   //true (does not validate: heterogeneous set)
-[1,"something",2].contains("Something")         //false - string comparison is case-sensitive (does not validate: heterogeneous set)
-["some", "useful", "tags"].contains("useful")   //true (validates)
-[].contains(100)                                //false (does not validate: has empty-set literal)
-context.role.contains("admin")                  //true if the `context.role` set contains string "admin" (validates)
-[User::"alice"].contains(principal)             //true if principal == User::"alice" (validates)
+[1,2,3].contains(1)                             //Evaluates to true //Validates
+[1,"something",2].contains(1)                   //Evaluates to true //Doesn't validate (heterogeneous set)
+[1,"something",2].contains("Something")         //Evaluates to false (string comparison is case-sensitive) //Doesn't validate (heterogeneous set)
+["some", "useful", "tags"].contains("useful")   //Evaluates to true //Validates
+[].contains(100)                                //Evaluates to false // Doesn't validate (has empty-set literal)
+context.role.contains("admin")                  //Evaluates to true (if the `context.role` set contains string "admin") //Validates
+[User::"alice"].contains(principal)             //Evaluates to true (if principal == User::"alice") //Validates
 "ham and ham".contains("ham")                   //error - 'contains' is not allowed on strings
 ```
 
-The second, third, fifth examples above evaluate to a result but do not validate. The second and third operate on a set that contains values of multiple types rather than a single type, the fifth operates on the empty set literal; none of these is a valid set (see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more info).
+A *heterogeneous set*, as shown in several examples, contains more than one type. None of the `validates: false` examples is a valid set. See [valid sets](syntax-datatypes.html#datatype-set) for more info.
 
 ### `.containsAll()` \(all element set membership test\) {#function-containsAll}
 
@@ -970,20 +970,24 @@ Function that evaluates to `true` if *every* member of the operand set is a memb
 In the examples that follow, those labeled `//error` both evaluate and validate to an error. The remaining examples evaluate to a proper result, but some fail to validate, as indicated in the labels.
 
 ```cedar
-[1, -22, 34].containsAll([-22, 1])                           // true (validates)
-[1, -22, 34].containsAll([-22])                              // true (validates)
-[43, 34].containsAll([34, 43])                               // true (validates)
-[1, -2, 34].containsAll([1, -22])                            // false (validates)
-[1, 34].containsAll([1, 101, 34])                            // false (validates)
-[false, 3, [47, 0], "some"].containsAll([3, "some"])         // true (does not validate: heterogeneous set)
-[false, 3, [47, 0], {"2": "ham"}].containsAll([3, {"2": "ham"}])  // true (does not validate: heterogeneous set)
-[2, 43].containsAll([])                                      // true (does not validate: emptyset literal)
-[].containsAll([2, 43])                                      // false (does not validate: emptyset literal)
-[false, 3, [47, 0], "thing"].containsAll("thing")            // error - operand a string
-"ham and eggs".containsAll("ham")                            // error - prefix and operand are strings
-{"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})         // error - prefix and operand are records
+[1, -22, 34].containsAll([-22, 1])                                //Evaluates to true //Validates
+[1, -22, 34].containsAll([-22])                                   //Evaluates to true //Validates
+[43, 34].containsAll([34, 43])                                    //Evaluates to true //Validates
+[1, -2, 34].containsAll([1, -22])                                 //Evaluates to false //Validates
+[1, 34].containsAll([1, 101, 34])                                 //Evaluates to false //Validates
+[false, 3, [47, 0], "some"].containsAll([3, "some"])              //Evaluates to true //Doesn't validate (heterogeneous set)
+[false, 3, [47, 0], {"2": "ham"}].containsAll([3, {"2": "ham"}])  //Evaluates to true //Doesn't validate (heterogeneous set)
+[2, 43].containsAll([])                                           //Evaluates to true //Doesn't validate (emptyset literal)
+[].containsAll([2, 43])                                           //Evaluates to false //Doesn't validate (emptyset literal)
+[false, 3, [47, 0], "thing"].containsAll("thing")                 //error - operand a string
+"ham and eggs".containsAll("ham")                                 //error - prefix and operand are strings
+{"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})              //error - prefix and operand are records
 ```
-Some examples evaluate to a result but fail to validate because either (a) operate on heterogeneous sets (of values of multiple types) and/or (b) reference the empty-set literal `[]`, or (c) do not operate on sets at all. Please see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more information on validity rules for sets.
+Some examples evaluate to a result but fail to validate for one or more of the following reasons: 
+- They operate on heterogeneous sets: values of multiple types
+- They reference the empty-set literal `[]`
+- They don't operate on sets at all. 
+See [valid sets](syntax-datatypes.html#datatype-set) for more info.
 
 ### `.containsAny()` \(any element set membership test\) {#function-containsAny}
 
@@ -997,19 +1001,19 @@ Function that evaluates to `true` if *any one or more* members of the operand se
 In the examples that follow, those labeled `//error` both evaluate and validate to an error. The remaining examples evaluate to a proper result, but some fail to validate, as indicated in the labels.
 
 ```cedar
-[1, -22, 34].containsAny([1, -22])                             // true (validates)
-[1, -22].containsAny([1, -22, 34])                             // true (validates)
-[-22].containsAny([1, -22, 34])                                // true (validates)
-[1, 101].containsAny([1, -22, 34])                             // true (validates)
-[1, 101].containsAny([-22, 34])                                // false (validates)
-["alice","bob","charlie"].containsAny(["david","bob","juan"])  // true (validates)
-[].containsAny(["bob"])                                        // false (does not validate: emptyset literal)
-["bob"].containsAny([])                                        // false (does not validate: emptyset literal)
-"ham".containsAny("ham and eggs")                              // error - operand is a string
-{"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           // error - prefix and operands are records
+[1, -22, 34].containsAny([1, -22])                             //Evaluates to true //Validates
+[1, -22].containsAny([1, -22, 34])                             //Evaluates to true //Validates
+[-22].containsAny([1, -22, 34])                                //Evaluates to true //Validates
+[1, 101].containsAny([1, -22, 34])                             //Evaluates to true //Validates
+[1, 101].containsAny([-22, 34])                                //Evaluates to false //Validates
+["alice","bob","charlie"].containsAny(["david","bob","juan"])  //Evaluates to true //Validates
+[].containsAny(["bob"])                                        //Evaluates to false //Doesn't validate (emptyset literal)
+["bob"].containsAny([])                                        //Evaluates to false //Doesn't validate (emptyset literal)
+"ham".containsAny("ham and eggs")                              //error - operand is a string
+{"2": "ham"}.containsAny({"2": "ham", "3": "eggs "})           //error - prefix and operands are records
 ```
 
-The two examples that evaluate to a result but fail to validate reference the empty-set literal `[]`; please see discussion of [valid sets](syntax-datatypes.html#datatype-set) for more information on validity rules for sets.
+The examples that evaluate to a result but fail to validate reference the empty-set literal `[]`. See [valid sets](syntax-datatypes.html#datatype-set) for more info.
 
 ## IP address functions {#functions-ipaddr}
 
