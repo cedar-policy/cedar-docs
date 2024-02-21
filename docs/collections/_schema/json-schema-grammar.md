@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Schema grammar
+title: JSON schema grammar
 nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
