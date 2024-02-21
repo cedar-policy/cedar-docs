@@ -24,11 +24,6 @@ A schema contains a declaration of one or more namespaces, each of which contain
 
 ## NameSpace {#schema-namespace}
 
-A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types and actions declared within it. The namespace is a string that uses double colons \(`::`\) as separators between its elements, which must be identifiers. A namespace can be empty (i.e., the empty string).
-
-{: .important }
->The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
-
 A namespace declaration contains a comma-separated list of JSON objects within braces `{ }`. The following is an example of a namespace declaration:
 
 A namespace declaration must contain two child elements, and may contain a third, appearing in any order:
@@ -202,8 +197,6 @@ You can choose to specify whether an attribute is required or optional. By defau
     "required": false
 },
 ```
-
-A policy should check for an optional attribute's presence by using the [`has`](../policies/syntax-operators.html#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
 
 You can choose to explicitly declare that an attribute is mandatory by including `"required": true` (but this is unnecessary as mandatory attributes are the default).
 

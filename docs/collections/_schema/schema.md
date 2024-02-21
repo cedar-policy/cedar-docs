@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Schema format
+title: Schema formats
 nav_order: 1
 ---
 
@@ -16,13 +16,12 @@ nav_order: 1
 {:toc}
 </details>
 
-This topic describes the structure of a schema. There are two schema formats --- human-readable and JSON. To view their formal grammars, see [JSON schema grammar](../schema/json-schema-grammar.html) and [human-readable schema grammar](../_schema/human-readable-schema-grammar.md).
+This topic describes the structure of a Cedar schema. There are two schema formats --- human-readable and JSON. Cedar provides two formats (human-readable and JSON) to define a schema. The syntax of the human-readable schema format is very similar to that of Cedar policies; hence the name. The JSON schema format bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences. The two formats are interchangeable and Cedar CLI provides a command to translate schemas in one format to the other. We encourage you to use the human-readable schema format for its simplicity and conciseness. To view their details, see [human-readable schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
+ 
 
 ## Overview {#schema-overview}
-A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services. Cedar provides two formats (human-readable and JSON) to define a schema. The syntax of the human-readable schema format is very similar to that Cedar policy; hence the name. The JSON schema format bears some resemblance to [JSON Schema](https://json-schema.org/), but unique aspects of the design of Cedar, such as its use of entity types, require some differences. We recommend you to use the human-readable schema format for its simplicity and conciseness, although Cedar CLI provides a command to translate schemas written in both formats.
-
-After you define a schema, you can ask Cedar to validate your policies against it to ensure that your policies do not contain type errors, such as referencing the entities and their attributes incorrectly.
-
+A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services.
+After you define a schema, you can ask Cedar to [validate your policies](../policies/validation.html) against it to ensure that your policies do not contain type errors, such as referencing the entities and their attributes incorrectly.
 
 {: .warning }
 >If you change your schema, any policies that you validated before the change might no longer be valid. Those policies can then generate errors during authorization queries if you include entities that match the updated schema in your request. 
@@ -30,17 +29,21 @@ After you define a schema, you can ask Cedar to validate your policies against i
 
 You can use a schema to define each of the following entities used by your application:
 
-+ **Principals** – The entities that represent the users of your application. In the schema for the example PhotoFlash application, the principals consist of the `user` and `group` entity types. You can define the properties of each principal, such as a name, age, address, or any other characteristic that is important to your application.
-+ **Resources** – The entities that your principals can interact with. In the PhotoFlash application, resource entities could include the photo and the album resource types. These resource entities can also include the properties of each resource, such as a photo's name, location where taken, resolution, codec type, and so on.
-+ **Actions** – The operations that principals can perform on your resources. These operations include specifying which resource types each action can apply to and which principal types can perform each action. In the PhotoFlash application, actions include viewing photos, sharing photos, and commenting on photos.
++ **Principals** – The entities that represent the users of your application. In the schema for the example [PhotoFlash](../schema/human-readable-schema.html#schema-examples) application, the principals consist of the `User` and `UserGroup` entity types. You can define the properties of each principal, such as a name, age, address, or any other characteristic that is important to your application.
++ **Resources** – The entities that your principals can interact with. In the [PhotoFlash](../schema/human-readable-schema.html#schema-examples) application, resource entities could include the `Photo` and the `Album` resource types. These resource entities can also include the properties of each resource, such as a photo's name, location where taken, resolution, codec type, and so on.
++ **Actions** – The operations that principals can perform on your resources. These operations include specifying which resource types each action can apply to and which principal types can perform each action. In the [PhotoFlash](../schema/human-readable-schema.html#schema-examples) application, actions include viewing photos, uploading photos, and listing albums.
 
 Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](../policies/validation.html).
 
-Both schema formats implement the same ideas, which we detail as follows. We then present their the human-readable JSON realizations.
+Both schema formats implement the same ideas, which we detail as follows. We then present their human-readable anb JSON realizations.
 
 ## Schema {#schema-format}
 
 A schema contains a declaration of one or more namespaces, each of which contains declarations of entity types, actions, and common types. A namespace has an optional name.
+
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-format)
+* [JSON schema format](../schema/json-schema.html#schema-format)
+
 
 ## NameSpace {#schema-namespace}
 
@@ -60,6 +63,9 @@ You define the types of your application's principal and resource entities via e
 Declarations (e.g, entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referred in qualified or unqualified forms within the same namespace. For example, you can only refer the entity type `Table` declared in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
+
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-namespace)
+* [JSON schema format](../schema/json-schema.html#schema-namespace)
 
 ## Entity types {#schema-entityTypes}
 
