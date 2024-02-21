@@ -438,43 +438,6 @@ Each `context` entry consists of `type` and `attributes` objects. The `type` obj
 
 ## `commonTypes` {#schema-commonTypes}
 
-Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a `commonTypes` construct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that includes a data type specification and a set of attributes.
-
-### Motivation
-
-Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions: both `view` and `upload` have identical `context` components.
-
-```json
-"actions": {
-    "view": {
-        "appliesTo": {
-            "context": { 
-                "type": "Record",
-                "attributes": {
-                    "ip": { "type": "Extension", "name": "ipaddr" },
-                    "is_authenticated": { "type": "Boolean" },
-                    "timestamp": { "type": "Long" }
-                }
-            }
-        }
-    },
-    "upload": {
-        "appliesTo": {
-            "context": { 
-                "type": "Record",
-                "attributes": {
-                    "ip": { "type": "Extension", "name": "ipaddr" },
-                    "is_authenticated": { "type": "Boolean" },
-                    "timestamp": { "type": "Long" }
-                }
-            }
-        }
-    }
-}
-```
-
-Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once within `commonTypes`, and then refer to the definition in multiple places.
-
 ### Structure
 
 Each JSON object within `commonTypes` consists of the name of a type being defined and its associated definition. The definition is specified just like an [attribute type specification](#schema-attributes-specs), i.e.,

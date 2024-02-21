@@ -20,7 +20,7 @@ This topic describes Cedar's human-readable schema format.
 
 ## Schema format {#schema-format}
 
-A schema consists of zero or more namespaces, each of which contains declarations of three types --- *Entity Declaration*, *Action Declaration*, and *Common Type Declaration*. These declarations define entity types, actions, and common types used to define the former two, respectively. Declarations are delimited by `;`s. Note that unlike the JSON schema format, the human-readable schema format allows you to write Cedar-style comments.
+A schema consists of zero or more namespaces, each of which contains declarations of three types --- *Entity Type Declaration*, *Action Declaration*, and *Common Type Declaration*. These declarations define entity types, actions, and common types used to define the former two, respectively. Declarations are delimited by `;`s. Note that unlike the JSON schema format, the human-readable schema format allows you to write Cedar-style comments.
 
 ## NameSpace {#schema-namespace}
 
@@ -32,7 +32,7 @@ Multiple `namespace` declarations with the same names are disallowed. This rule 
 
 The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have three attributes, `personalGroup` of type `Group`, `delegate` of type `User`, and `blocked` of type `Set<User>`, respectively. The attribute `delegate` is optional, which is specified by the `?` after the attribute name.
 
-```
+```cedar
 entity User in [Group] {
     personalGroup: Group,
     delegate?: User,
@@ -48,14 +48,14 @@ The parent types are specified by `in <EntityTypes>` after `entity <EntityName>`
 
 ### Shape {#schema-entitytypes-shape}
 
-You specify the shape of an entity type using the [record syntax](../policies/syntax-datatypes.html#datatype-record) of Cedar policies. That is, attribute declarations are enclosed by brackets, each of which is a `<Name>:<Type>` pair. Attribute names are either identifiers or strings. Such a declaration also defines a record type. We will visit schema type syntax later in the document. To make entity type declarations consistent with common type declarations, users can write a `=` before attribute declarations like `entity User = {...};`.
+You specify the shape of an entity type using the [record syntax](../policies/syntax-datatypes.html#datatype-record) of Cedar policies. That is, attribute declarations are enclosed by brackets, each of which is a `<Name>:<Type>` pair. Attribute names are either identifiers or strings. Such a declaration also defines a [record schema type](#schema-entitytypes-shape-record), which we will visit later in the document. To make entity type declarations consistent with [common type declarations](#schema-commonTypes), users can write a `=` before attribute declarations like `entity User = {...};`.
 
 Note that if you omit attribute declarations, then entities of this type do not have any attributes. This is equivalent to specifying an empty record (i.e., `{}`).
 
 
 ### Schema types {#schema-types}
 
-The corresponding type names of Cedar data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively. An entity type or an extension type is specified by its name. The entity type name is either an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are both valid entity type names. An extension type name is just an identifier, specifically, `ipaddr` or `decimal` as of now.
+Schema types can be used as RHS of an attribute or common type declaration. Cedar data types have their corresponding schema types: The corresponding type names of Cedar primitive data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively. An entity type or an extension type is specified by its name: The entity type name is either an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are both valid entity type names. An extension type name is just an identifier, specifically, `ipaddr` or `decimal` as of now. Since Cedar verison 3.1, we reserve the namespace `__cedar` and allow fully-qualified type names for primitive and extension types with this namespace. For example, `__cedar::ipaddr` uniquely identifies the `ipaddr` extension type.
 
 We detail the declarations of composite data types as follows.
 
@@ -64,7 +64,7 @@ We detail the declarations of composite data types as follows.
 
 The specification of a record type is similar to that of a Cedar record, except that "values" of the former are types. For example, you can declare a record type as follows.
 
-```
+```cedar
 {
   name: String,
   features: {
@@ -78,15 +78,15 @@ The specification of a record type is similar to that of a Cedar record, except 
 #### Set {#schema-entitytypes-shape-set}
 {: .no_toc }
 
-A set type declaration consists of keyword `Set` and an element type surrounded by brackets (`<>`). For example, `Set<Long>` represents a set of `Long`s.
+A set type declaration consists of keyword `Set` and an element type surrounded by brackets (`<>`). For example, `Set<Long>` is the type of a set of `Long`s.
 
 
 ## Actions {#schema-actions}
 
 The following action declaration specifies an action `ViewDocument`. It is a child action of action group `ReadActions` and applies to principals of entity type `User` and `Public`, resources of entity type `Document` and contexts of record type `{ network: ipaddr, browser: String}`.
 
-```
-action ViewDocument in [ReadActions] appliesTo {
+```cedar
+action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
     principal: [User,Public],
     resource: Document,
     context: {
@@ -96,7 +96,7 @@ action ViewDocument in [ReadActions] appliesTo {
 };
 ```
 
-An action name is either an identifier or a string. The membership relation syntax of action declarations is akin to that of entity declarations. The difference is that action names could be strings but entity type names must be identifiers.
+An action name is either an identifier or a string. The membership relation syntax of action declarations is akin to that of entity declarations. The difference is that parent action names could be strings but entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. For example, the `Write` action declared in the namespace `ExampleNS` must be referred to as `ExampleNS::Action::"Write"` in the above action declaration.
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three optional keys: `principal`, `resource`, and `context` that specifies principals, resources, and contexts to which the action apply. Absence of the `appliesTo` construct means that the actions do not apply to any principals/resources/contexts. `principal` or `resource` keys, if given, must an entity type or a non-empty list of entity types. Absence of `principal` or `resource` keys means that the action applies to *unspecified* principals or resources, respectively.
 The `context` value must be a record and its absence defaults to an empty record.
@@ -115,7 +115,7 @@ Type names in the human-readable schema format can conflict with each other. For
 
 We elaborate the second rule as the others are obvious. The priority order is common type > entity type > primitive/extension type. In other words, a type name is resolved by checking if it is declared as a common type, then entity type, and finally a primitive or extension type. The following example demonstrate this rule.
 
-```
+```cedar
 namespace Demo {
   entity Host {
     // the type of attribute `ip` is common type `ipaddr`

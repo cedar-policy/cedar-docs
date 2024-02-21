@@ -69,30 +69,67 @@ If you change a declared namespace in your schema you will need to change the en
 
 ## Entity types {#schema-entityTypes}
 
-A collection of the `principal` and `resource` entity types supported by your application. An entity type name is a Cedar identifier. An entity type declaration specifies its membership relations with other entity types and its shape.
+A collection of the `principal` and `resource` entity types supported by your application. An entity type name is a Cedar identifier. An entity type declaration specifies its membership relations with other entity types and its shape/attributes.
 
 {: .important }
 >The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
 
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-entityTypes)
+* [JSON schema format](../schema/json-schema.html#schema-entityTypes)
+
 ### Membership relation
 
-Specifies a list of entity types that can be direct parents of entities of this type.
+Specifies a list of entity types that can be *direct* parents of entities of this type.
 
-### Shape
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-entitytypes-memberOf)
+* [JSON schema format](../schema/json-schema.html#schema-entitytypes-memberOf)
+
+### Shape/Attributes
 
 Specifies the shape of the data stored in entities of this type. More precisely, it defines the attributes of an entity type --- their names, types, and optionality.
-An attribute type is one of the [Cedar supported data types](../policies/syntax-datatypes.html).
+An attribute type is one of the [Cedar supported data types](../policies/syntax-datatypes.html) or a common type, which have different representations in the human-readable format and the JSON format.
 You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present.
 
 A policy should check for an optional attribute's presence by using the [`has`](../policies/syntax-operators.html#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
 
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-entitytypes-shape)
+* [JSON schema format](../schema/json-schema.html#schema-entitytypes-shape)
+
 ## Actions {#schema-actions}
 
-A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section).
-You should refer to actions in your policies by using the following syntax. If the schema declares a namespace, then the entity type `Action` is qualified by that namespace.
+A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier (EID)](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section). For example, the action entity name of action declaration `viewPhoto` of the PhotoFlash application is `PhotoFlash::Action::"viewPhoto"` because `PhotoFlash::Action` is the fully-qualified action entity type.
 
 An action declaration specifies an action's membership relations with action groups, its applicability (with respect to principal and resource entity types, and the context shape).
+
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-actions)
+* [JSON schema format](../schema/json-schema.html#schema-actions)
 
 ## Common type {#schema-commonTypes}
 
 Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a common type construct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that includes a data type specification and a set of attributes.
+
+### Motivating example
+
+Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions in the human-readable schema format: both `view` and `upload` have identical `context` components.
+
+```cedar
+action view appliesTo {
+    context: {
+        ip: ipaddr,
+        is_authenticated: Bool,
+        timestamp: Long
+    }
+}
+action upload appliesTo {
+    context: {
+        ip: ipaddr,
+        is_authenticated: Bool,
+        timestamp: Long
+    }
+}
+```
+
+Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once using a common type declaration, and then refer to the definition in multiple places.
+
+* [Human-Readable schema format](../schema/human-readable-schema.html#schema-commonTypes)
+* [JSON schema format](../schema/json-schema.html#schema-commonTypes)
