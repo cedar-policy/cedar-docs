@@ -1,22 +1,37 @@
 ---
 layout: default
-title: Human-Readable schema grammar
+title: Human-readable schema grammar
 nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for the human-readable schema format {#schema-grammar}
+# Grammar specification for human-readable schema {#schema-grammar}
 {: .no_toc }
 
 This topic describes the grammar specification for the human-readable schema format. For a more complete description, see [Schema format](../schema/human-readable-schema-format).
 
-The grammar applies the following the conventions. Capitalized words stand for grammar productions, and lexical tokens are given in all-caps. When productions or tokens match those in the Cedar policy grammar, we use the same names (e.g., `IDENT` and `Path`).
+The grammar applies the following conventions. 
++ Words with initial capital letters designate grammar constructs.
++ Words in all capital letters designate lexical tokens. 
 
-For grammar productions it uses `|` for alternatives, `[]` for optional productions, `()` for grouping, and `{}` for repetition of a form zero or more times.
+When productions or tokens match those in the Cedar policy grammar, use the same names, for example `IDENT` and `Path.
 
-Tokens are defined using regular expressions, where `[]` stands for character ranges; `|` stands for alternation; `*` , `+` , and `?` stand for zero or more, one or more, and zero or one occurrences, respectively; `~` stands for complement; and `-` stands for difference. The grammar ignores whitespace and comments.
+Grammar productions use the following symbols:
++ `|` designates alternatives.
++ `[]` designates optional productions.
++ `()` designates grouping.
++ `{}` designates repetition of a form zero or more times.
 
-The grammar adopts the same string escaping rules as Cedar policy grammar.
+Tokens are defined using regular expressions:
++ `[]` designates character ranges.
++ `|` designates alternation.
++ `*` , `+` , and `?` designate zero or more, one or more, and zero or one occurrences, respectively.
++ `~` designates complement.
++ `-` designates difference.
+
+The human-readable grammar ignores whitespace and comments.
+
+The grammar adopts the same string escaping rules as [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
 Schema    := {Namespace}
