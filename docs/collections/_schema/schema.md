@@ -16,7 +16,7 @@ nav_order: 1
 {:toc}
 </details>
 
-This topic describes the structure of a Cedar schema. Cedar has two schema formats: human-readable and JSON. The syntax of the human-readable schema format is very similar to that of Cedar policies. The JSON schema format is built from the [JSON Schema](https://json-schema.org/). Some unique aspects of the design of Cedar, like the use of entity types, differ from the base JSON specification. The two formats are interchangeable. The Cedar CLI can translate schemas in one format to the other. We encourage you to use the human-readable schema format for its simplicity and conciseness. For details, see [human-readable schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
+This topic describes the structure of a Cedar schema. Cedar has two schema formats: human-readable and JSON. The syntax of the human-readable schema format is very similar to that of Cedar policies. The JSON schema format is built from the [JSON Schema](https://json-schema.org/). Some unique aspects of the design of Cedar, like the use of entity types, differ from the common JSON schema. The two formats are interchangeable. The Cedar CLI can translate schemas in one format to the other. We encourage you to use the human-readable schema format for its simplicity and conciseness. For details, see [human-readable schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
  
 
 ## Overview {#schema-overview}

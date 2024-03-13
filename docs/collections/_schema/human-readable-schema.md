@@ -26,7 +26,7 @@ A schema consists of zero or more namespaces, each of which contains declaration
 
 You can create a namespace that you want to associate with your declarations. Add the namespace key word, for example `namespace Foo { entity Bar; }`. The name of a namespace must be an identifier as specified in Cedar syntax. Anything declared in this namespace must be referred to in its fully-qualified form when referenced outside of the namespace, so the declared entity type would be `Foo::Bar`.
 
-Alternatively, you can create a declaration with a namespace, for example `entity Bar;`. The names of declarations that lack a namespace are always referred to without qualification, for example `Bar`.
+Alternatively, you can create a declaration without a namespace, for example `entity Bar;`. The names of declarations that lack a namespace are always referred to without qualification, for example `Bar`.
 
 Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations.
 

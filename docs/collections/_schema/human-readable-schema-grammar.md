@@ -29,8 +29,6 @@ Tokens are defined using regular expressions:
 + `~` designates complement.
 + `-` designates difference.
 
-The human-readable grammar ignores whitespace and comments.
-
 The grammar adopts the same string escaping rules as [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
