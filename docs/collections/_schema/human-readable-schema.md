@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Human-Readable schema format
+title: Human-readable schema format
 nav_order: 2
 ---
 
-# Human-Readable schema format {#schema}
+# Human-readable schema format {#schema}
 {: .no_toc }
 
 <details open markdown="block">

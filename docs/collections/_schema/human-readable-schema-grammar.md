@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Human-Readable schema grammar
+title: Human-readable schema grammar
 nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
