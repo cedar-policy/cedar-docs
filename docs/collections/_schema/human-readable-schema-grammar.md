@@ -29,7 +29,7 @@ Tokens are defined using regular expressions:
 + `~` designates complement.
 + `-` designates difference.
 
-The grammar adopts the same string escaping rules as [Cedar policy grammar](../policies/syntax-grammar.html).
+The grammar adopts the same string escaping rules as the [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
 Schema    := {Namespace}

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Human-Readable schema format
+title: Human-readable schema format
 nav_order: 2
 ---
 
