@@ -16,7 +16,7 @@ For grammar productions it uses `|` for alternatives, `[]` for optional producti
 
 Tokens are defined using regular expressions, where `[]` stands for character ranges; `|` stands for alternation; `*` , `+` , and `?` stand for zero or more, one or more, and zero or one occurrences, respectively; `~` stands for complement; and `-` stands for difference. The grammar ignores whitespace and comments.
 
-The grammar adopts the same string escaping rules as Cedar policy grammar.
+The grammar adopts the same string escaping rules as the Cedar policy grammar.
 
 ```
 Schema    := {Namespace}
