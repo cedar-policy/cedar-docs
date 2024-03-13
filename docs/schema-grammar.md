@@ -1,6 +1,6 @@
 ---
 layout: forward
-target: schema/schema-grammar.html
+target: schema/json-schema-grammar.html
 ---
 
 
