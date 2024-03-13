@@ -5,7 +5,7 @@ nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for Cedar schema {#schema-grammar}
+# Grammar specification for JSON schemas {#schema-grammar}
 {: .no_toc }
 
 This topic describes the grammar specification for the Cedar schema. For a more complete description, see [Schema format](../schema/schema.html).

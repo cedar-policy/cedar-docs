@@ -5,7 +5,7 @@ nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for human-readable schema {#schema-grammar}
+# Grammar specification for human-readable schemas {#schema-grammar}
 {: .no_toc }
 
 This topic describes the grammar specification for the human-readable schema format. For a more complete description, see [Schema format](../schema/human-readable-schema-format).
@@ -14,9 +14,9 @@ The grammar applies the following conventions.
 + Words with initial capital letters designate grammar constructs.
 + Words in all capital letters designate lexical tokens. 
 
-When productions or tokens match those in the Cedar policy grammar, use the same names, for example `IDENT` and `Path.
+When productions or tokens match those in the Cedar policy grammar, use the same names, for example `IDENT` and `Path`.
 
-Grammar productions use the following symbols:
+Grammar constructs use the following symbols:
 + `|` designates alternatives.
 + `[]` designates optional productions.
 + `()` designates grouping.

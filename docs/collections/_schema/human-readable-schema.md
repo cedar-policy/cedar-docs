@@ -51,13 +51,15 @@ Note that in the human-readable schema format, unlike in the JSON schema format,
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
-The parent types are specified by `in <EntityTypes>` after `entity <EntityName>`. `EntityTypes` can be a list of entity type names surrounded by brackets and delimited by `,`, or an entity type name if there is only one parent type. For example, you can also declare entity type `User` in the format `entity User in Group ...`. The membership relation declaration is optional. If you don't create this declaration, the declared entity type doesn't have any parent entity types. 
+Set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`. The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`. Entities with one parent type don't require brackets, for example `entity User in UserGroup`. 
+
+The membership relation declaration is optional. If you don't create this declaration, the declared entity type doesn't have any parent entity types. 
 
 ### Shape {#schema-entitytypes-shape}
 
 Specify the shape of an entity type using the [record syntax](../policies/syntax-datatypes.html#datatype-record) of Cedar policies. Enclose attribute declarations in brackets, each of which is a `<Name>:<Type>` key-value pair. Attribute names are either identifiers or strings. Such a declaration also defines a [record schema type](#schema-entitytypes-shape-record). To make entity type declarations consistent with [common type declarations](#schema-commonTypes), you can prefix a `=` to attribute declarations, for example `entity User = {...};`.
 
-Note that if you omit attribute declarations, then entities of this type do not have any attributes. This is equivalent to specifying an empty record (i.e., `{}`).
+Note that if you omit attribute declarations, then entities of this type don't have any attributes. This is equivalent to specifying an empty record (i.e., `{}`).
 
 
 ### Schema types {#schema-types}
