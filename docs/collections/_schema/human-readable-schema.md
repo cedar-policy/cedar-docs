@@ -64,7 +64,7 @@ Note that if you omit attribute declarations, then entities of this type don't h
 
 ### Schema types {#schema-types}
 
-Schema types can be used as RHS of an attribute or common type declaration. 
+Schema types can be used as right-hand side of an attribute or common type declaration. 
 
 Cedar data types have corresponding schema types. The corresponding type names of Cedar primitive data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively. 
 
