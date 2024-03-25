@@ -136,8 +136,6 @@ Add ::= Mult {('+' | '-') Mult}
 Mult ::= Unary { '*' Unary}
 ```
 
-Cedar places a syntactic constraint on the multiplication operation. At most, one of the operands can be something other than an integer literal. For example, `1 * 2 * context.value * 3` is allowed. However, `context.laptopValue * principal.numOfLaptops` isn't allowed.
-
 ## `Unary` {#grammar-unary}
 
 ```

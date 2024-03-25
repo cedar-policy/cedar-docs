@@ -668,7 +668,7 @@ Because the `-` symbol can mean both unary and binary subtraction, the example `
 
 **Usage:** `<Long> * <Long>`
 
-Binary operator that multiplies two `Long` integer operands and returns a `Long` integer product. It evaluates (and validates) to an error if given non-`Long` operands. One of the operands to `*` ***must*** be an literal, the other value can be a literal or a general expression or else the expression is [rejected by the parser](syntax-grammar.html#grammar-mult). Multiplication could result in an overflow evaluation error; such errors are *not* detected by the validator.
+Binary operator that multiplies two `Long` integer operands and returns a `Long` integer product. It evaluates (and validates) to an error if given non-`Long` operands. Multiplication could result in an overflow evaluation error; such errors are *not* detected by the validator.
 
 {: .note }
 >There is no operator for arithmetic division.
@@ -682,7 +682,7 @@ In these examples, suppose that `resource.value` is 3 and `context.budget` is 4.
 10 * 20                          //200
 resource.value * 10              //30
 2 * context.budget > 100         //false
-context.budget * resource.value  //will not parse - one operand must be a literal
+context.budget * resource.value  //depends on entity data
 9223372036854775807 * 2          //error - overflow //Validates
 5 * (-3)                         //-15
 5 * 0                            //0
