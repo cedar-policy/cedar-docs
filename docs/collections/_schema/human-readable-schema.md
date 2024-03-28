@@ -89,11 +89,35 @@ The specification of a record type is similar to that of a Cedar record, except 
   }
 }
 ```
+Here is a declaration of an entity type `List` which contains an attribute `flags` which is a record:
+```cedar
+entity List {
+  owner: User,
+  flags: {
+    organizations?: Set<Org>,
+    locales?: Set<Location>,
+    tags: Set<String>,
+  },
+};
+```
+Here, the `flags` record contains three attributes: `organizations` (which is optional, per the `?` annotation), `locales` (also optional), and `tags`. Each of these is a set, where the first two contain entity types `Org` and `Location` respectively (not shown), and the third contains `String`s.
+
+Suppose `resource` in a policy is a `List` entity. Per the above declaration, we can write `when`-clause expressions that reference the `flags` attribute's contents. For example: `resource.flags.tags.contains("private")` or `resource.flags has organizations && resource.flags.organizations.contains(principal.org)`.
 
 #### Set {#schema-entitytypes-shape-set}
 {: .no_toc }
 
-A set type declaration consists of keyword `Set` and an element type surrounded by angle brackets (`<>`). For example, `Set<Long>` is a set type made up of values of type `Long`.
+A set type declaration consists of keyword `Set` and an element type surrounded by angle brackets (`<>`).
+
+For example, `Set<Long>` is a set type made up of values of type `Long`. Another example of the use of `Set` types is give above, for the `List` entity declaration. Finally, another example is this entity declaration for `User`, whose `blocked` attribute is a set of `User`s.
+
+```cedar
+entity User in [Group] {
+    personalGroup: Group,
+    delegate?: User,
+    blocked: Set<User>,
+};
+```
 
 
 ## Actions {#schema-actions}
