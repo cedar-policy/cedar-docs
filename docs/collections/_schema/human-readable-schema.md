@@ -32,14 +32,15 @@ Multiple `namespace` declarations with the same names are disallowed. This rule 
 
 ## Entity type {#schema-entityTypes}
 
-The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have three attributes: 
+The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have three attributes:
+
 + `personalGroup` of type `Group`
 + `delegate` of type `User`
 + `blocked` of type `Set<User>`
 
 The attribute `delegate` is optional, as indicated by the `?` after the attribute name.
 
-```cedar
+```cedarschema
 entity User in [Group] {
     personalGroup: Group,
     delegate?: User,
@@ -61,14 +62,13 @@ Specify the shape of an entity type using the [record syntax](../policies/syntax
 
 Note that if you omit attribute declarations, then entities of this type don't have any attributes. This is equivalent to specifying an empty record (i.e., `{}`).
 
-
 ### Schema types {#schema-types}
 
-Schema types can be used as right-hand side of an attribute or common type declaration. 
+Schema types can be used as right-hand side of an attribute or common type declaration.
 
-Cedar data types have corresponding schema types. The corresponding type names of Cedar primitive data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively. 
+Cedar data types have corresponding schema types. The corresponding type names of Cedar primitive data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively.
 
-An entity type or an extension type is specified by its name. The entity type name is an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are valid entity type names. 
+An entity type or an extension type is specified by its name. The entity type name is an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are valid entity type names.
 
 An extension type name is an identifier. Currently, `ipaddr` and `decimal` are the only available extension type names. Since the release of version 3.1 of the Cedar language, the namespace `__cedar` is a reserved namespace. You can specify fully-qualified type names for primitive and extension types under the `__cedar` namespace. For example, `__cedar::ipaddr` uniquely identifies the `ipaddr` extension type.
 
@@ -79,7 +79,7 @@ Format composite data type declarations as follows.
 
 The specification of a record type is similar to that of a Cedar record, except that values of a record in the human-readable schema are types. For example, you can declare a record type as follows.
 
-```cedar
+```cedarschema
 {
   name: String,
   features: {
@@ -89,8 +89,10 @@ The specification of a record type is similar to that of a Cedar record, except 
   }
 }
 ```
+
 Here is a declaration of an entity type `List` which contains an attribute `flags` which is a record:
-```cedar
+
+```cedarschema
 entity List {
   owner: User,
   flags: {
@@ -100,6 +102,7 @@ entity List {
   },
 };
 ```
+
 Here, the `flags` record contains three attributes: `organizations` (which is optional, per the `?` annotation), `locales` (also optional), and `tags`. Each of these is a set, where the first two contain entity types `Org` and `Location` respectively (not shown), and the third contains `String`s.
 
 Suppose `resource` in a policy is a `List` entity. Per the above declaration, we can write `when`-clause expressions that reference the `flags` attribute's contents. For example: `resource.flags.tags.contains("private")` or `resource.flags has organizations && resource.flags.organizations.contains(principal.org)`.
@@ -111,7 +114,7 @@ A set type declaration consists of keyword `Set` and an element type surrounded 
 
 For example, `Set<Long>` is a set type made up of values of type `Long`. Another example of the use of `Set` types is give above, for the `List` entity declaration. Finally, another example is this entity declaration for `User`, whose `blocked` attribute is a set of `User`s.
 
-```cedar
+```cedarschema
 entity User in [Group] {
     personalGroup: Group,
     delegate?: User,
@@ -123,12 +126,13 @@ entity User in [Group] {
 ## Actions {#schema-actions}
 
 The following action declaration defines the action `ViewDocument`. It has the following characteristics:
+
 + It's a member of action group `ReadActions`
 + It applies to principals of entity type `User` and `Public`
 + It applies to resources of entity type `Document`
 + It applies to context of record types `network: ipaddr` and `browser: String`.
 
-```cedar
+```cedarschema
 action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
     principal: [User,Public],
     resource: Document,
@@ -156,13 +160,15 @@ Type names in the human-readable schema format can conflict with each other. For
 2. Type references are resolved in a priority order.
 3. To disambiguate extension and primitive types from others, the namespace `__cedar` is reserved. For example, `__cedar::Long` uniquely refers to Cedar primitive type `Long`.
 
-The priority order is 
-```
+The priority order is
+
+```text
 common type > entity type > primitive/extension type
 ```
+
 A type name is resolved by checking if it is declared as a common type, then entity type, and finally a primitive or extension type. The following example demonstrates this rule.
 
-```cedar
+```cedarschema
 namespace Demo {
   entity Host {
     // the type of attribute `ip` is common type `ipaddr`
@@ -198,7 +204,7 @@ namespace Demo {
  Common types and entity types can both be qualified with namespaces. 
  The human-readable format allows *inline* declarations. Because of this, there may be conflicts between type names declared within a namespace and those declared using inline declarations. The resolution rule for this scenario is like *static scoping*: type names within the same namespace have higher priority. The following example demonstrates this rule.
 
- ```
+ ```cedarschema
 type id = {
   group: String,
   name: String,
@@ -226,7 +232,7 @@ namespace Demo {
 
 The following schema is for the hypothetical application PhotoFlash.
 
-```
+```cedarschema
 namespace PhotoFlash {
   entity User in UserGroup = {
     "department": String,
