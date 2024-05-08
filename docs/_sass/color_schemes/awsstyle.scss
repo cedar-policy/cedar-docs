@@ -1,0 +1,185 @@
+@import "./color_schemes/dark";
+
+//############ Body ############
+
+$white: #E7E7E7;
+$grey-dk-300: #0C0C0D;
+$link-color: #71A621;
+$body-background-color: #0C0C0D;
+$sidebar-color:#0C0C0D;
+$body-font-family: "Amazon Ember", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Segoe UI Emoji" !default;
+$border-color: #272727;
+
+//Regular
+@font-face {
+	font-family: 'Amazon Ember';
+	src:url('/fonts/amazonember_w_rg.woff2') format('woff2');
+	font-weight:normal;
+	font-style:normal;
+}
+@font-face {
+	font-family: 'Vault Alarm';
+        src:url('/fonts/vaultalarm-regular.otf') format('opentype');
+        font-weight:normal;
+        font-style:normal;
+}
+
+
+//############ _variables.scss ############
+//$body-font-family: "Amazon Ember", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Segoe UI Emoji" !default;
+$body-font-family: "Amazon Ember", system-ui, -apple-system, blinkmacsystemfont, sans-serif, !default;
+
+$content-width: 30rem !default;
+$header-height: 5rem !default;
+
+
+
+//############ Classes ############
+
+ body {
+	//overflow-y:none !important;
+	 position:fixed;
+	 font-family: "Amazon Ember";
+}
+
+.feedback-cta {
+	padding-left: 1rem;
+	font-size: 14px;
+}
+
+
+//############ Main ############
+
+.main-header  { 
+	height:5rem; 
+	max-height:5rem; 
+	position: sticky;
+	top: 0;
+	z-index: 999;
+}
+
+.main-content-wrap {  
+	padding-right: 8rem;  
+	padding-left: 4rem; 
+}
+
+.main-content {
+	color: #BBBBB6;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: normal;
+	line-height: 1.75; /* 160% */
+}
+
+.main-content h1 {
+    
+	  color: #E7E7E7;
+	  font-family: "Vault Alarm";
+	  font-weight: normal;
+	  font-size: 2rem !important;
+	  font-style: normal;
+	  //line-height: 2 !default;
+	  margin-top:0.1em;
+	  margin-bottom:1em;
+}
+
+.main-content h2 {
+	font-family: "Amazon Ember";
+	font-size: 1.5rem !important;
+}
+
+.main-content h3 {
+	font-family: "Amazon Ember";
+	font-size: 1.3rem !important;
+}
+
+.main-content h4 {
+	font-family: "Amazon Ember";
+	font-size:1.1rem !important;
+	font-weight: bolder;
+	text-transform: uppercase;
+	letter-spacing: 0;
+	margin-top: 2em;
+}
+
+.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content #toctitle {
+  position: static !important;
+}
+
+.main-content ul>li::before {
+  position: static !important;
+}
+
+blockquote .important {
+	background:rgba(255, 235, 130, 0.07);
+}
+
+blockquote .warning {
+	background:rgba(247,126,126,0.07);
+}
+:not(pre, figure) > code {
+	background:rgba(49, 52, 63, 0.49);
+}
+
+
+
+//############ Left nav ############
+.site-header { 
+	height:5rem; 
+	max-height:5rem; 
+	min-height: 5rem;
+} 
+.site-logo { 
+	width:65%; 
+	height:65%; 
+} 
+
+.site-title {
+	.lh-tight {
+		.site-logo {
+			height:80%;
+		}
+	}
+}
+
+.site-nav { 
+	padding-top: 1.25rem;
+}
+
+.nav-category { 
+	color: #B0B0AB;
+	font-size: 0.8rem !important;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 24px;
+	text-transform: uppercase;
+	margin-bottom: 0rem;
+	margin-top: 1.5rem;
+	border-bottom:0;  
+}
+
+
+.nav-list-item {
+  font-family: "Amazon Ember";
+  color: #DE7C21;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px;
+}
+
+
+.nav-list-link {
+  color: #BBBBB6;
+  font-family: "Amazon Ember";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px; /* 225% */
+}
+
+.nav-list .nav-list-item .nav-list-link.active {
+        font-weight: 400;
+        color: #DE7C21;
+        text-decoration: none;
+}

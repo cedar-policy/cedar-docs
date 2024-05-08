@@ -4,10 +4,6 @@ title: What is Cedar?
 nav_order: 2
 ---
 
-![\[Cedar Logo\]](images/Cedar1-green.png)
-
------
-
 # Welcome to the Cedar policy language {#welcome-to-cedar}
 {: .no_toc }
 
