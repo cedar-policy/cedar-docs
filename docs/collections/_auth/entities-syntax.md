@@ -56,11 +56,11 @@ Use the `attrs` object to specify the key name and value of each attribute attac
 
 Notice that the `department` attribute has a string value, and the `jobLevel` attribute has an integer value, but these types are not explicitly declared in the JSON format. Cedar automatically converts these primitive JSON types to their Cedar equivalents.
 
-+ JSON string --> [Cedar String](../policies/syntax-datatypes.html#string)
-+ JSON integer --> [Cedar Long](../policies/syntax-datatypes.html#long)
-+ JSON boolean --> [Cedar Boolean](../policies/syntax-datatypes.html#boolean)
-+ JSON list/array --> [Cedar Set](../policies/syntax-datatypes.html#set)
-+ JSON object/map --> [Cedar Record](../policies/syntax-datatypes.html#record)
++ JSON string --> [Cedar String](../policies/syntax-datatypes.html#datatype-string)
++ JSON integer --> [Cedar Long](../policies/syntax-datatypes.html#datatype-long)
++ JSON boolean --> [Cedar Boolean](../policies/syntax-datatypes.html#datatype-boolean)
++ JSON list/array --> [Cedar Set](../policies/syntax-datatypes.html#datatype-set)
++ JSON object/map --> [Cedar Record](../policies/syntax-datatypes.html#datatype-record)
 
 For entity references, Cedar JSON format supports an `__entity` escape, whose value is a JSON object with the attributes `type` and `id`.
 
