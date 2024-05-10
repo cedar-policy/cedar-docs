@@ -35,3 +35,7 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem "webrick", "~> 1.8"
 
 gem "minitest", "~> 5.19.0"
+
+
+# Add Jekyll default layout - 3/28 jitani
+gem "jekyll-default-layout"

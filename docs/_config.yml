@@ -6,7 +6,11 @@ logo: images/Cedar1-green.png
 
 remote_theme: just-the-docs/just-the-docs
 plugins:
-- jekyll-remote-theme #
+- jekyll-remote-theme 
+- jekyll-default-layout #
+
+# Add ref to awsstyle.scss
+color_scheme: awsstyle
 
 # GitHub edit and feedback links
 gh_edit_link: true # show or hide edit this page link
