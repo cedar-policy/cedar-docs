@@ -150,7 +150,7 @@ The `context` value must be a record and its absence defaults to an empty record
 
 ## Common types {#schema-commonTypes}
 
-Like in the JSON schema format, human-readable schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance where there are cycles in common type declarations like `type A = Set<B>; type B = {"a" : A};`. Cedar schema parser reports an error when there exist cycles in the input schema.
+Like in the JSON schema format, human-readable schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
 
 ## Type name disambiguation
 
