@@ -523,7 +523,25 @@ As another example, we can use a defined record type for the `shape` of multiple
 
 If you then send an `Employee` entity as the principal in an authorization request, you could evaluate the attributes of that principal by using syntax similar to this example: `principal.age`.
 
-Note that definitions of types appearing in `commonTypes` cannot refer to one another. For example, if both `name` and `Person` from the above example were in the same `commonTypes` section, you could not change `Person`'s define to refer to objects of type `name`.
+Note that definitions of types appearing in `commonTypes` can refer to one another as long as they do not constitute cycles. For example, we can declare a common type `Name` as an alias for primitive type `String` and use it as the type of `Person`'s `name` attribute. However, Cedar schema parser raises an error if `Name` were declared as an alias of `Person` since they form a dependency cycle.
+
+```json
+...
+"commonTypes": {
+    "Person": {
+        "type": "Record",
+        "attributes": {
+            "age": {"type": "Long"},
+            "name": {"type": "Name"}
+        }
+    },
+    "Name": { "type": "String"}
+},
+"entityTypes": {
+    "Employee": { "shape": { "type": "Person" } },
+    "Customer": { "shape": { "type": "Person" } }
+}
+```
 
 ## Example schema {#schema-examples}
 
