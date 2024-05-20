@@ -44,6 +44,17 @@ If you are a first-time user of Cedar, we recommend that you begin by reading th
 + Learn [basic Cedar policy syntax and its construction](policies/syntax-policy.html).
 + Learn how to [define a Cedar schema that can validate your policies](schema/schema.html) and ensure you're getting the evaluation results you intend.
 
+## Resources for getting started {#additional-resources}
+
+If you want to see Cedar in action, implement Cedar as a service, or work with an example application while you learn, check out these additional resources.
+
++ Build policies and experiment with Cedar authorization with the [Cedar playground](https://www.cedarpolicy.com/en/playground).
++ Set up an example application with [cedar-examples on GitHub](https://github.com/cedar-policy/cedar-examples/).
++ Create a managed Cedar policy store with [Amazon Verified Permissions](https://aws.amazon.com/verified-permissions/).
++ Join the [cedar-policy Slack](https://communityinviter.com/apps/cedar-policy/cedar-policy-language).
+
+For more links, see [cedar-policy on GitHub](https://github.com/cedar-policy).
+
 ## Features of Cedar {#feature-overview}
 
 Cedar provides several important features.
