@@ -59,7 +59,7 @@ When you retrieve the JSON representation of this policy, it looks like the foll
                         }
                     },
                     "right": {
-                        "Literal": "1.3"
+                        "Value": "1.3"
                     }
                 }
             }
