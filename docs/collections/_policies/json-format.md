@@ -1207,11 +1207,11 @@ The JSON representation of a policy set contains the following keys:
 
 ### `staticPolicies`
 
-This field is the set of static policies in the policy set, represented as a map from policy id to policy content in the format described [above](#representing-a-policy-with-json). This field can only include static policies; including a template will result in an error.
+This field is the set of static policies in the policy set, represented as a map from policy ID to policy content in the format described [above](#representing-a-policy-with-json). This field can only include static policies; including a template will result in an error.
 
 ### `templates`
 
-This field is the set of templates in the policy set, represented as a map from policy id to template in the format described [above](#representing-a-policy-with-json).
+This field is the set of templates in the policy set, represented as a map from policy ID to template in the format described [above](#representing-a-policy-with-json).
 
 ### `templateLinks`
 
@@ -1221,4 +1221,4 @@ This field is a JSON array of template links. The JSON representation of a templ
 * `newId`
 * `values`
 
-`templateId` is the id of the policy to be linked against. `new_id` is the id of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
+`templateId` is the ID of the policy to be linked against. `new_id` is the ID of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
