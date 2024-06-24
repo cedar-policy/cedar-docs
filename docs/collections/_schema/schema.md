@@ -46,7 +46,7 @@ A schema contains a declaration of one or more namespaces, each of which contain
 * [JSON schema format](../schema/json-schema.html#schema-format)
 
 
-## NameSpace {#schema-namespace}
+## Namespace {#schema-namespace}
 
 A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types declared within it. The name of a namespace consists of identifiers separated by double colons (`::`).
 
@@ -120,6 +120,8 @@ Suppose your schema defines several entity types or action entities that share a
 
 ```cedar
 action view appliesTo {
+    principal: User,
+    resource: File,
     context: {
         ip: ipaddr,
         is_authenticated: Bool,
@@ -127,6 +129,8 @@ action view appliesTo {
     }
 }
 action upload appliesTo {
+    principal: User,
+    resource: Server,
     context: {
         ip: ipaddr,
         is_authenticated: Bool,
@@ -135,7 +139,25 @@ action upload appliesTo {
 }
 ```
 
-Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once using a common type declaration, and then refer to the definition in multiple places.
+Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once using a common type declaration, and then refer to the definition in multiple places, like so:
+
+```cedar
+type reusedContext = {
+    ip: ipaddr,
+    is_authenticated: Bool,
+    timestamp: Long
+};
+action view appliesTo {
+    principal: User,
+    resource: File,
+    context: reusedContext
+};
+action upload appliesTo {
+    principal: User,
+    resource: Server,
+    context: reusedContext
+};
+```
 
 **Common types topics**
 * [Human-readable schema format](../schema/human-readable-schema.html#schema-commonTypes)

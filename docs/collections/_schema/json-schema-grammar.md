@@ -34,20 +34,20 @@ The grammar ignores whitespace and comments.
 
 ## `Schema` {#grammar-schema}
 
-A schema consists of a [`NameSpace`](#grammar-schema-NameSpace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
+A schema consists of a [`Namespace`](#grammar-schema-Namespace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
 The grammar assumes a particular order of keys in JSON objects to simplify the presentation, but this order is not technically required.
 For example, the grammar as written requires that entity type declarations appear before actions, but actions may nonetheless be declared before entity types.
 
 ```
-Schema ::= '{' NameSpace ':' '{' EntityTypes ',' Actions [',' CommonTypes] '}' '}'
+Schema ::= '{' Namespace ':' '{' EntityTypes ',' Actions [',' CommonTypes] '}' '}'
 ```
 
-## `NameSpace` {#grammar-schema-NameSpace}
+## `Namespace` {#grammar-schema-Namespace}
 
-The `NameSpace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](../schema/schema.html#schema-namepace).
+The `Namespace` element is a string made up of a sequence of one or more substrings separated by double colons (`::`). This namespace serves as a qualifier, or disambiguator, for entity types that might be defined in multiple namespaces. The type reference must include the namespace so that Cedar uses the correct entity type. For more information see [`namespace`](../schema/schema.html#schema-namepace).
 
 ```
-NameSpace ::= '"' STR { '::' STR } '"'
+Namespace ::= '"' STR { '::' STR } '"'
 ```
 
 ## `EntityTypes` {#grammar-schema-EntityTypes}
@@ -60,7 +60,7 @@ EntityTypes ::= 'entityTypes' ':' '[' [ EntityType { ',' EntityType } ] ']'
 
 ## `EntityType` {#grammar-schema-EntityType}
 
-An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-NameSpace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes how entities of this type are constructed.
+An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-Namespace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes how entities of this type are constructed.
 
 ```
 EntityType ::= IDENT ':' '{' [ 'memberOfTypes' ':' '[' [ IDENT { ',' IDENT } ] ']' ] ',' [ 'shape': TypeJson ] '}'
@@ -81,7 +81,7 @@ The `memberOf` element specifies what action groups the declared action is a mem
 The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
 ```
-Action ::= STR ':' '{' [ '"memberOf"' ':' '[' [ STR { ',' STR } ] ']' ] ',' [ '"appliesTo"' ':' '{' [PrincipalTypes] ',' [ResourceTypes] ',' [Context] '}' ] '}'
+Action ::= STR ':' '{' [ '"memberOf"' ':' '[' [ STR { ',' STR } ] ']' ] ',' [ '"appliesTo"' ':' '{' PrincipalTypes ',' ResourceTypes [',' Context] '}' ] '}'
 ```
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}

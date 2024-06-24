@@ -22,7 +22,7 @@ This topic describes Cedar's JSON schema format.
 
 A schema contains a declaration of one or more namespaces, each of which contains two mandatory JSON objects, `entityTypes` and `actions`. A namespace declaration can optionally include a third object, `commonTypes`, which defines types that can be referenced by the other two objects. We consider the format of namespaces and these three objects next.
 
-## NameSpace {#schema-namespace}
+## Namespace {#schema-namespace}
 
 A namespace declaration contains a comma-separated list of JSON objects within braces `{ }`. The following is an example of a namespace declaration:
 
@@ -341,7 +341,7 @@ Specifies the identifier for the action entity, as a string. The name of the act
 You can then refer to these actions in your policies by using the following syntax. If the schema declares a namespace, then the entity type `Action` is qualified by that namespace.
 
 ```cedar
-MyApplicationNameSpace::Action::"ViewPhoto"
+MyApplicationNamespace::Action::"ViewPhoto"
 ```
 
 ### `memberOf` {#schema-actions-memberOf}
@@ -369,13 +369,11 @@ Action groups are themselves actions, and thus must also be defined in the schem
 
 ### `appliesTo` {#schema-actions-appliesTo}
 
-Specifies a JSON object containing two lists, `principalTypes` and `resourceTypes`, which contain the principal and resources entity types, respectively, that can accompany the action in an authorization request.
+Specifies a JSON object containing two lists, `principalTypes` and `resourceTypes`, which contain the principal and resources entity types, respectively, that can accompany the action in an authorization request. Both fields are required.
 
 + If either the `principalTypes` or `resourceTypes` components is given with an empty list `[]`, the associated action is not permitted in an authorization request with *any* entities of that category. This effectively means that the action will not be used in an authorization request at all. This makes sense for actions that act as groups for other actions.
 
-+ If the `principalTypes` component is omitted from the `appliesTo` element, then an authorization request with this action must have an [unspecified](../policies/syntax-entity.html#entity-overview) principal entity. The same is true for `resourceTypes`, for a request's resource component. If the `appliesTo` component is omitted entirely, it's the same as if it were present with both `principalTypes` and `resourceTypes` components omitted (i.e., a request must have both unspecified principal and resource entities).
-
-The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It cannot appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership only requires giving the ID of the action -- `"read"` -- and not the type. This is because the validator knows that all action groups must have type `Action`, and by default the action will be within the current namespace. To declare membership in an action group in a different namespace you need to include `"type": "My::NameSpace::Action"` alongside the `"id"` portion, where `My::NameSpace` is the different namespace.
+The following example `actions` snippet shows three actions. The first action, `read`, is an action group for the other two. It cannot appear in an authorization request because its `principalTypes` and `resourceTypes` components are `[]`. The second action, `viewPhoto`, is a member of the `read` action group, and expects that any request with this action will have a principal entity of type `User` and a resource entity of type `Photo`. The third action, `listAlbums`, also a member of the `read` group, expects that a request with that action will have a principal entity of type `User` and a resource entity of type `Account`. Notice that for both of the latter two actions, the group membership only requires giving the ID of the action -- `"read"` -- and not the type. This is because the validator knows that all action groups must have type `Action`, and by default the action will be within the current namespace. To declare membership in an action group in a different namespace you need to include `"type": "My::Namespace::Action"` alongside the `"id"` portion, where `My::Namespace` is the different namespace.
 
 ```json
 "actions": {
@@ -465,11 +463,15 @@ Returning to our motivating example, we can define a record type called `ReusedC
 "actions": {
     "view": {
           "appliesTo": {
+                "principalTypes": [ "User" ],
+                "resourceTypes": [ "Photo" ],
                 "context": { "type": "ReusedContext" }
           }
     },
     "upload": {
         "appliesTo": {
+            "principalTypes": [ "User" ],
+            "resourceTypes": [ "Server" ],
             "context": { "type": "ReusedContext" }
         }
     }
