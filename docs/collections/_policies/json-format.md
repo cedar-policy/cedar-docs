@@ -1137,7 +1137,7 @@ permit (
     resource in Folder::"abc"
 );
 
-permit (
+forbid (
     principal == User::"12UA45",
     action == Action::"view",
     resource in ?resource
@@ -1168,7 +1168,7 @@ Here is the JSON representation of this policy set, plus a template-linked polic
     },
     "templates": {
         "template0": {
-            "effect": "permit",
+            "effect": "forbid",
             "principal": {
                 "op": "==",
                 "entity": { "type": "User", "id": "12UA45" }
