@@ -12,7 +12,7 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
-| Added [Human-readable schema format](../schema/huamn-readable-schema.html) topic | February 21, 2024 |
+| Added [Human-readable schema format](../schema/human-readable-schema.html) topic | February 21, 2024 |
 | Added [`is` operator](../policies/syntax-operators.html) | December 15, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
 | Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
