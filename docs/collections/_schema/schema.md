@@ -17,7 +17,6 @@ nav_order: 1
 </details>
 
 This topic describes the structure of a Cedar schema. Cedar has two schema formats: human-readable and JSON. The syntax of the human-readable schema format is very similar to that of Cedar policies. The JSON schema format is built from the [JSON Schema](https://json-schema.org/). Some unique aspects of the design of Cedar, like the use of entity types, differ from the common JSON schema. The two formats are interchangeable. The Cedar CLI can translate schemas in one format to the other. We encourage you to use the human-readable schema format for its simplicity and conciseness. For details, see [human-readable schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
- 
 
 ## Overview {#schema-overview}
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services.
@@ -45,8 +44,7 @@ A schema contains a declaration of one or more namespaces, each of which contain
 * [Human-readable schema format](../schema/human-readable-schema.html#schema-format)
 * [JSON schema format](../schema/json-schema.html#schema-format)
 
-
-## NameSpace {#schema-namespace}
+## Namespace {#schema-namespace}
 
 A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types declared within it. The name of a namespace consists of identifiers separated by double colons (`::`).
 
@@ -125,17 +123,31 @@ action view appliesTo {
         is_authenticated: Bool,
         timestamp: Long
     }
-}
+};
 action upload appliesTo {
     context: {
         ip: ipaddr,
         is_authenticated: Bool,
         timestamp: Long
     }
-}
+};
 ```
 
-Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once using a common type declaration, and then refer to the definition in multiple places.
+Instead of redundantly entering common type elements separately for each action / entity type that needs them, you can define them once using a common type declaration, and then refer to the definition in multiple places, like so:
+
+```cedar
+type commonContext = {
+    ip: ipaddr,
+    is_authenticated: Bool,
+    timestamp: Long
+};
+action view appliesTo {
+    context: commonContext
+};
+action upload appliesTo {
+    context: commonContext
+};
+```
 
 **Common types topics**
 * [Human-readable schema format](../schema/human-readable-schema.html#schema-commonTypes)
