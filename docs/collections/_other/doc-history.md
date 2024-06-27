@@ -26,10 +26,10 @@ The following table tracks changes to the Cedar language version. The language v
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
-| 3.3 | References between common types ([cedar#154](https://github.com/cedar-policy/cedar/issues/154)) | 3.2.0 - 3.2.1 | May 17, 2024 |
-| 3.2 | General multiplication operator ([rfc#57](https://github.com/cedar-policy/rfcs/blob/main/text/0057-general-multiplication.md)) | 3.1.2 - 3.1.4 | March 29, 2024 |
-| 3.1 | New schema syntax ([rfc#24](https://github.com/cedar-policy/rfcs/blob/main/text/0024-schema-syntax.md)) | 3.1.0 - 3.1.1 | March 8, 2024 |
-| 3.0 | `is` operator ([rfc#5](https://github.com/cedar-policy/rfcs/blob/main/text/0005-is-operator.md))<br/>Stricter validation ([rfc#19](https://github.com/cedar-policy/rfcs/blob/main/text/0019-stricter-validation.md))<br/>Disallow duplicate keys in records ([rfc#20](https://github.com/cedar-policy/rfcs/blob/main/text/0020-unique-record-keys.md))<br/>Request validation ([cedar#191](https://github.com/cedar-policy/cedar/issues/191))<br/>Entity validation ([cedar#360](https://github.com/cedar-policy/cedar/pull/360)) | 3.0.0 - 3.0.1 | December 15, 2023 |
-| 2.2 | General multiplication operator ([rfc#57](https://github.com/cedar-policy/rfcs/blob/main/text/0057-general-multiplication.md)) | 2.4.5 - 2.4.7 | April 1, 2024 |
-| 2.1 | Disallow whitespace in namespaces ([rfc#9](https://github.com/cedar-policy/rfcs/blob/main/text/0009-disallow-whitespace-in-entityuid.md)) | 2.3.0 - 2.4.4 | June 29, 2023 |
+| 3.3 | References between common types [cedar#154](https://github.com/cedar-policy/cedar/issues/154) | 3.2.0 - 3.2.1 | May 17, 2024 |
+| 3.2 | General multiplication operator [rfc#57](https://github.com/cedar-policy/rfcs/blob/main/text/0057-general-multiplication.md) | 3.1.2 - 3.1.4 | March 29, 2024 |
+| 3.1 | Human-readable schema syntax [rfc#24](https://github.com/cedar-policy/rfcs/blob/main/text/0024-schema-syntax.md) | 3.1.0 - 3.1.1 | March 8, 2024 |
+| 3.0 | `is` operator [rfc#5](https://github.com/cedar-policy/rfcs/blob/main/text/0005-is-operator.md)<br/>Stricter validation [rfc#19](https://github.com/cedar-policy/rfcs/blob/main/text/0019-stricter-validation.md)<br/>Disallow duplicate keys in records [rfc#20](https://github.com/cedar-policy/rfcs/blob/main/text/0020-unique-record-keys.md)<br/>Request validation [cedar#191](https://github.com/cedar-policy/cedar/issues/191)<br/>Entity validation [cedar#360](https://github.com/cedar-policy/cedar/pull/360) | 3.0.0 - 3.0.1 | December 15, 2023 |
+| 2.2 | General multiplication operator (backport to 2.x) [rfc#57](https://github.com/cedar-policy/rfcs/blob/main/text/0057-general-multiplication.md) | 2.4.5 - 2.4.7 | April 1, 2024 |
+| 2.1 | Disallow whitespace in namespaces [rfc#9](https://github.com/cedar-policy/rfcs/blob/main/text/0009-disallow-whitespace-in-entityuid.md) | 2.3.0 - 2.4.4 | June 29, 2023 |
 | 2.0 | Initial release of the Cedar Policy Language | 2.0.0 - 2.2.0 | May 10, 2023 |
