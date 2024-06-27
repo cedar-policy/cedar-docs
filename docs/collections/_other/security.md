@@ -28,7 +28,7 @@ It is the responsibility of Cedar to implement the Cedar policy language correct
 
 We, members of the Cedar development team, ensure Cedar’s correctness and security by developing several artifacts:
 
-1. **A formal model** implemented in Dafny. Dafny is an open-source, verification-aware programming language. The Dafny model consists of executable definitions of Cedar’s components which represent the semantics of Cedar, and *properties* of those components. Dafny verifies that the properties hold. It gives us confidence that our definition of the ground truth is correct.
+1. **A formal model** implemented in Lean. Lean is an open-source programming language and theorem prover. The Lean model consists of executable definitions of Cedar’s components which represent the semantics of Cedar, and *properties* of those components. Lean verifies that the properties hold. It gives us confidence that our definition of the ground truth is correct.
 
 1. **A production authorization engine** written in Rust. We use only the `safe` subset of Rust, giving us memory safety, type safety, and data-race safety.
 
@@ -69,7 +69,7 @@ The Cedar validator can detect the many types of bugs, including the following:
 + **Detect optional attributes referenced without an existence check.** &ndash; For example, `principal.optionalValue < 100` instead of `principal has optionalValue && principal.optionalValue < 100`
 + **Detect invalid parameters to the constructors of extension types.** &ndash; For example, `IP("3.45.1111.43")` isn’t a valid IP address.
 
-Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Dafny. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
+Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Lean. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
 
 ## Input Validation {#security-input-validation}
 The Cedar spec places no restrictions on the size of Cedar policies, schemas, or requests. 
