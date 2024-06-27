@@ -369,7 +369,7 @@ Action groups are themselves actions, and thus must also be defined in the schem
 
 ### `appliesTo` {#schema-actions-appliesTo}
 
-Specifies a JSON object containing two lists, `principalTypes` and `resourceTypes`, which contain the principal and resources entity types, respectively, that can accompany the action in an authorization request.
+Specifies a JSON object containing `principalTypes`, `resourceTypes`, and `context` which contain the principal, resources, and context entity types, respectively, that can accompany the action in an authorization request.
 
 + If either the `principalTypes` or `resourceTypes` components is given with an empty list `[]`, the associated action is not permitted in an authorization request with *any* entities of that category. This effectively means that the action will not be used in an authorization request at all. This makes sense for actions that act as groups for other actions.
 
@@ -414,7 +414,7 @@ The following example `actions` snippet shows three actions. The first action, `
 
 Specifies a JSON object in the same format as an entity's `shape` property, which defines the attributes that can be present in the context record in authorization requests made with this action. Specifying a `context` enables Cedar to validate policies that attempt to reference the `context` record's attributes.
 
-Each `context` entry consists of `type` and `attributes` objects. The `type` object is always the type `Record`. The `attributes` object has the same JSON format as the [entity `shape`'s record's attributes](#schema-attributes-specs). For example, the following `context` snippet specifies that any request to perform the `SomeAction` action must include a `Boolean` attribute named `field1` and a `Long`attribute named `field2`. Optionally, the `context` may include a third attribute `field3` which, if present, is a `String`. The `context` entry is optional, and if excluded it is assumed to be an empty `Record` (in which case policies that try to access attributes in `context` will produce validation errors).
+Each `context` entry consists of `type` and `attributes` objects. Bt default, the `type` object is of type `Record`, but can also be of type `commonType`. The `attributes` object has the same JSON format as the [entity `shape`'s record's attributes](#schema-attributes-specs). For example, the following `context` snippet specifies that any request to perform the `SomeAction` action must include a `Boolean` attribute named `field1` and a `Long`attribute named `field2`. Optionally, the `context` may include a third attribute `field3` which, if present, is a `String`. The `context` entry is optional, and if excluded it is assumed to be an empty `Record` (in which case policies that try to access attributes in `context` will produce validation errors).
 
 ```json
 "actions": {
