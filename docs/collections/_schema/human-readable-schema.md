@@ -52,9 +52,9 @@ Note that in the human-readable schema format, unlike in the JSON schema format,
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
-Set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`. The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`. Entities with one parent type don't require brackets, for example `entity User in UserGroup`. 
+Set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`. The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`. Entities with one parent type don't require brackets, for example `entity User in UserGroup`.
 
-The membership relation declaration is optional. If you don't create this declaration, the declared entity type doesn't have any parent entity types. 
+The membership relation declaration is optional. If you don't create this declaration, the declared entity type doesn't have any parent entity types.
 
 ### Shape {#schema-entitytypes-shape}
 
@@ -121,7 +121,6 @@ entity User in [Group] {
     blocked: Set<User>,
 };
 ```
-
 
 ## Actions {#schema-actions}
 
@@ -200,7 +199,7 @@ namespace Demo {
 }
 ```
 
- Common types and entity types can both be qualified with namespaces. 
+ Common types and entity types can both be qualified with namespaces.
  The human-readable format allows *inline* declarations. Because of this, there may be conflicts between type names declared within a namespace and those declared using inline declarations. The resolution rule for this scenario is like *static scoping*: type names within the same namespace have higher priority. The following example demonstrates this rule.
 
  ```cedarschema
