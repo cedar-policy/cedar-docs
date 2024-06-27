@@ -19,7 +19,7 @@ To allow for programmatically constructing and parsing policies, Cedar supports 
 {:toc}
 </details>
 
-## Representing a policy with JSON {#policy-set-format}
+## Representing a policy with JSON
 
 ### Overview
 
@@ -1124,7 +1124,7 @@ JSON representation
 ]
 ```
 
-## Representing a policy set with JSON
+## Representing a policy set with JSON {#policy-set-format}
 
 ### Overview
 
