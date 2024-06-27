@@ -70,3 +70,6 @@ permit (
     resource in TimesheetGrp::"Japanese-timesheets"
 );
 ```
+For more information, see [Manage roles and entitlements with PBAC using Amazon Verified Permissions](https://aws.amazon.com/blogs/devops/manage-roles-and-entitlements-with-pbac-using-amazon-verified-permissions/) on the _AWS DevOps Blog_. 
+
+To see a sample application, see [avp-petstore-sample-v2](https://github.com/aws-samples/avp-petstore-sample-v2) on _GitHub_.
