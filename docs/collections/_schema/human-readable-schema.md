@@ -144,8 +144,7 @@ action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
 
 An action name is either an identifier or a string. The membership relation syntax of action declarations is like that of entity declarations, but parent action names can be strings, and entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the action `Write` in the example action declaration. It's declared in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
 
-The `appliesTo` construct specifies an action's applicability. It is a record of three optional keys: `principal`, `resource`, and `context` that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. The `principal` and `resource` keys, if given, must an entity type or a non-empty list of entity types. Without `principal` or `resource` keys in your schema, the action applies to *unspecified* principals or resources, respectively.
-The `context` value must be a record and its absence defaults to an empty record.
+The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
 
 ## Common types {#schema-commonTypes}
 

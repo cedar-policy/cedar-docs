@@ -63,12 +63,14 @@ The following is an example of a basic Cedar schema.
                         }
                     }
                 }
-            }
+            },
+            "System": {}
         },
         "actions": {
             "remoteAccess": {
                 "appliesTo": {
-                    "principalTypes": ["Employee"]
+                    "principalTypes": ["Employee"],
+                    "resourceTypes": ["System"]
                 }
             }
         }
@@ -80,7 +82,8 @@ This schema specifies the following:
 
 + The entities defined in this schema exist in the namespace `ExampleCo::Personnel`. References to those entities _within policies_ require the namespace prefix, e.g., `ExampleCo::Personnel::Employee`. References to those entities _within the schema_, within the namespace declaration, need no namespace prefix, e.g., we write just `Employee` in the `principalTypes` part, rather than `ExampleCo::Personnel::Employee`.
 + Every entity of type `Employee` in the store has an attribute `name` with a value that is a Cedar `String`, an attribute `jobLevel` with a value that is a Cedar `Long`, and an optional attribute `numberOfLaptops` that is also a Cedar `Long`.
-+ Any authorization request from the application that specifies action `Action::"remoteAccess"` is expected to specify only principals that are of type `Employee` (with no restriction on the type of a request's resource).
++ Entities of type `System` are expected to have no attributes.
++ Any authorization request from the application that specifies action `Action::"remoteAccess"` is expected to specify only principals that are of type `Employee` and resources that are of type `System`.
 
 Consider the following policy.
 
@@ -97,7 +100,7 @@ when {
 };
 ```
 
-The Cedar validator knows that any request that triggers evaluation of this policy must have action `Action::"remoteAccess"`. According to our example schema, such a request must have a principal of type `Employee` and an [unspecified](../policies/syntax-entity.html#entity-overview) resource entity. With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 in the `when` clause for the following reasons:
+The Cedar validator knows that any request that triggers evaluation of this policy must have action `Action::"remoteAccess"`. According to our example schema, such a request must have a principal of type `Employee`. With this knowledge, validation will report an error or warning on each of the comparisons 1 through 3 in the `when` clause for the following reasons:
 
 1. **Validation error** &ndash; The policy tries to access an attribute that isn’t defined for `Employee` types. In this case, the error is because of a typo (`numberOfLatpops` instead of `numberOfLaptops`).
 
@@ -127,7 +130,7 @@ As implied by the discussion above, we expect validation to be performed _before
 
 We expect that **all authorization requests adhere to the rules given in the schema** used to validate the policies. In particular:
 
-+ For a request with components _PARC_ (principal, action, resource, context), the _A_ component must be an action enumerated in the `actions` part of the schema, and the _PRC_ components will have the types given with _A_ in the schema. Our example schema above states that _A_ must always be `ExampleCo::Personnel::Action::"remoteAccess"` (since it's the only action given in the schema), and for this action _P_ must be an entity of type `ExampleCo::Personnel::Employee`, _R_ can be any entity (or omitted entirely), and _C_ must be the empty record `{}` (since no information about the context is given).
++ For a request with components _PARC_ (principal, action, resource, context), the _A_ component must be an action enumerated in the `actions` part of the schema, and the _PRC_ components will have the types given with _A_ in the schema. Our example schema above states that _A_ must always be `ExampleCo::Personnel::Action::"remoteAccess"` (since it's the only action given in the schema), and for this action _P_ must be an entity of type `ExampleCo::Personnel::Employee`, _R_ must be an entity of type `ExampleCo::Personnel::System`, and _C_ must be the empty record `{}` (since no information about the context is given).
 + The entities used when evaluating the request must have the structure given in the `entityTypes` part of the schema. Our example schema above states that `ExampleCo::Personnel::Employee` entities have at least two attributes (`name` and `jobLevel`) and optionally have a third (`numberOfLaptops`), each with the types given (`String`, `Long`, and `Long`, respectively). Schemas may also specify the expected hierarchical relationships among entities (not shown in the example).
 
 If these expectations are not met then a policy that the validator accepts as valid may fail with an error when evaluated, causing it to be ignored. To see why, consider the following policy, which passes validation when using our example schema.
@@ -146,7 +149,7 @@ Now suppose we submitted the following authorization request:
 
 + _P_ = `ExampleCo::Personnel::Employee::"Rick"`
 + _A_ = `ExampleCo::Personnel::Action::"remoteAccess"`
-+ _R_ = _omitted_
++ _R_ = `ExampleCo::Personnel::System::"dev"`
 + _C_ = `{}`
 + The attributes of entity `ExampleCo::Personnel::Employee::"Rick"` are the record `{ "firstName": "Rick", "jobLevel" : "admin" }`
 

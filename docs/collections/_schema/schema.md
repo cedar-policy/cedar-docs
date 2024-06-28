@@ -118,6 +118,8 @@ Suppose your schema defines several entity types or action entities that share a
 
 ```cedar
 action view appliesTo {
+    principal: User,
+    resource: File,
     context: {
         ip: ipaddr,
         is_authenticated: Bool,
@@ -125,6 +127,8 @@ action view appliesTo {
     }
 };
 action upload appliesTo {
+    principal: User,
+    resource: Server,
     context: {
         ip: ipaddr,
         is_authenticated: Bool,
