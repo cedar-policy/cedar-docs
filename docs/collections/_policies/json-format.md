@@ -108,7 +108,7 @@ The `principal` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-### `op`
+#### `op`
 
 The `op` key is required. The `op` object must have one of the following string values:
 
@@ -288,7 +288,7 @@ The `action` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
 
-### `op`
+#### `op`
 
 The `op` key is required.
 
@@ -389,7 +389,7 @@ The `resource` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-### `op`
+#### `op`
 
 The `op` key is required.
 
@@ -601,34 +601,6 @@ JSON representation
 
 Annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
 
-### `entity`
-
-This object has a value that specifies the Cedar `type` and unique `id` of a single entity.
-
-```json
-"entity": { "type": "User", "id": "12UA45" }
-```
-
-### `entities`
-
-This object is a JSON array or list of objects. Each entry in the list is a  each with a value that specifies the `type` and `id` of the entity.
-
-```json
-"entities": [
-    { "type": "User", "id": "12UA45" },
-    { "type": "Group", "id": "67VB89" }
-]
-```
-
-### `slot`
-
-This key is required only if the policy being rendered is a template that uses a placeholder and the `principal` or `resource` object uses the `==` or `in` operator.
-
-```json
-"slot": "?principal"
-"slot": "?resource"
-```
-
 ### JsonExpr objects {#JsonExpr-objects}
 
 An JsonExpr object is an object with a single key that is any of the following.
@@ -783,7 +755,7 @@ JSON representation
 ]
 ```
 
-### `Var` {#JsonExpr-Var}
+#### `Var` {#JsonExpr-Var}
 
 The value of this key is one of the strings `principal`, `action`, `resource`, or `context`.
 
@@ -856,13 +828,14 @@ JSON representation
     {
         "kind": "when",
         "body": {
-        "!": {
-            "arg": {
-                ".": {
-                    "left": {
-                        "Var": "context"
-                    },
-                    "attr": "something"
+            "!": {
+                "arg": {
+                    ".": {
+                        "left": {
+                            "Var": "context"
+                        },
+                        "attr": "something"
+                    }
                 }
             }
         }
