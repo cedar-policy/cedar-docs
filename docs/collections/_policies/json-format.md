@@ -8,7 +8,7 @@ nav_order: 7
 # JSON policy format {#json-format}
 {: .no_toc }
 
-To allow for programmatically constructing and parsing policies, Cedar supports a [JSON](https://json.org) policy format. This topic describes the JSON format for policies and templates.
+To allow for programmatically constructing and parsing policies, Cedar supports a [JSON](https://json.org) policy format. This topic describes the JSON format for individual policies/templates and policy sets.
 
 <details open markdown="block">
   <summary>
@@ -19,7 +19,9 @@ To allow for programmatically constructing and parsing policies, Cedar supports 
 {:toc}
 </details>
 
-## Overview
+## Representing a policy with JSON
+
+### Overview
 
 A "standard" Cedar policy looks like the following:
 
@@ -89,7 +91,7 @@ The JSON representation of a policy contains the following keys:
 * [conditions](#conditions)
 * [annotations](#annotations)
 
-## `effect`
+### `effect`
 
 The `effect` object is required.
 
@@ -100,13 +102,13 @@ The value of this object must be either the string `permit` or the string `forbi
 "effect": "forbid",
 ```
 
-## `principal`
+### `principal`
 
 The `principal` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-### `op`
+#### `op`
 
 The `op` key is required. The `op` object must have one of the following string values:
 
@@ -280,13 +282,13 @@ The `op` key is required. The `op` object must have one of the following string 
     },
     ```
 
-## `action`
+### `action`
 
 The `action` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
 
-### `op`
+#### `op`
 
 The `op` key is required.
 
@@ -381,13 +383,13 @@ The `op` object must have one of the following string values:
     }
     ```
 
-## `resource`
+### `resource`
 
 The `resource` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-### `op`
+#### `op`
 
 The `op` key is required.
 
@@ -564,7 +566,7 @@ The `op` object must have one of the following string values:
     },
     ```
 
-## conditions
+### conditions
 
 The `conditions` object is required.
 
@@ -595,11 +597,11 @@ JSON representation
 ]
 ```
 
-## `annotations`
+### `annotations`
 
 Annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
 
-## JsonExpr objects {#JsonExpr-objects}
+### JsonExpr objects {#JsonExpr-objects}
 
 An JsonExpr object is an object with a single key that is any of the following.
 
@@ -616,7 +618,7 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Record`](#JsonExpr-Record)
 + [`Any other key`](#JsonExpr-any-other-key)
 
-### `Value` {#JsonExpr-Value}
+#### `Value` {#JsonExpr-Value}
 
 The value of this key is a Cedar value in the same syntax as expected for entity attribute values in Cedar’s entity format. This can include entity reference literals, set literals, and record literals.
 
@@ -753,7 +755,7 @@ JSON representation
 ]
 ```
 
-### `Var` {#JsonExpr-Var}
+#### `Var` {#JsonExpr-Var}
 
 The value of this key is one of the strings `principal`, `action`, `resource`, or `context`.
 
@@ -799,15 +801,15 @@ JSON representation
 ]
 ```
 
-### `Slot` {#JsonExpr-Slot}
+#### `Slot` {#JsonExpr-Slot}
 
 The value of this key is one of the strings `?principal` or `?resource`. Currently, policies containing this are not valid Cedar
 
-### `Unknown` {#JsonExpr-Unknown}
+#### `Unknown` {#JsonExpr-Unknown}
 
 The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the JSON rendering of residuals.
 
-### `!` or `neg` operators {#JsonExpr-neg}
+#### `!` or `neg` operators {#JsonExpr-neg}
 
 The value of this key is an object with a single key argument, whose value is itself an [JsonExpr object](#JsonExpr-objects).
 
@@ -841,7 +843,7 @@ JSON representation
 ]
 ```
 
-### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny` {#JsonExpr-binary}
+#### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny` {#JsonExpr-binary}
 
 The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [JsonExpr object](#JsonExpr-objects).
 
@@ -878,7 +880,7 @@ JSON representation
 ]
 ```
 
-### `.`, `has` {#JsonExpr-has}
+#### `.`, `has` {#JsonExpr-has}
 
 The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
 
@@ -901,7 +903,7 @@ JSON representation
 }
 ```
 
-### `is` {#JsonExpr-is}
+#### `is` {#JsonExpr-is}
 
 The value of this key is an object with the keys `left` and `entity_type`.
 The `left` key is itself an [JsonExpr object](#JsonExpr-objects), while the `entity_type` key is a string.
@@ -925,11 +927,11 @@ JSON representation
 }
 ```
 
-### `like` {#JsonExpr-like}
+#### `like` {#JsonExpr-like}
 
 The value of this key is an object with keys `left` and `pattern`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is any string.
 
-### `if-then-else` {#JsonExpr-if-then-else}
+#### `if-then-else` {#JsonExpr-if-then-else}
 
 The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [JsonExpr object](#JsonExpr-objects).
 
@@ -988,7 +990,7 @@ JSON representation
 ]    
 ```
 
-### `Set` {#JsonExpr-Set}
+#### `Set` {#JsonExpr-Set}
 
 The value of this key is a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).
 
@@ -1012,7 +1014,7 @@ JSON representation
 }
 ```
 
-### `Record` {#JsonExpr-Record}
+#### `Record` {#JsonExpr-Record}
 
 The value of this key is a JSON object whose keys are arbitrary strings and values are themselves [JsonExpr objects](#JsonExpr-objects).
 
@@ -1032,7 +1034,7 @@ JSON representation
 }    
 ```
 
-### Any other key {#JsonExpr-any-other-key}
+#### Any other key {#JsonExpr-any-other-key}
 
 This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
 
@@ -1094,3 +1096,102 @@ JSON representation
     }
 ]
 ```
+
+## Representing a policy set with JSON {#policy-set-format}
+
+### Overview
+
+Here is an example policy set containing a static policy and policy template.
+
+```cedar
+permit (
+    principal == User::"12UA45",
+    action == Action::"view",
+    resource in Folder::"abc"
+);
+
+forbid (
+    principal == User::"12UA45",
+    action == Action::"view",
+    resource in ?resource
+);
+```
+
+Here is the JSON representation of this policy set, plus a template-linked policy that sets the `?resource` placeholder of the template.
+
+```json
+{ 
+    "staticPolicies": {
+        "policy0": {
+            "effect": "permit",
+            "principal": {
+                "op": "==",
+                "entity": { "type": "User", "id": "12UA45" }
+            },
+            "action": {
+                "op": "==",
+                "entity": { "type": "Action", "id": "view" }
+            },
+            "resource": {
+                "op": "in",
+                "entity": { "type": "Folder", "id": "abc" }
+            },
+            "conditions": []
+        }
+    },
+    "templates": {
+        "template0": {
+            "effect": "forbid",
+            "principal": {
+                "op": "==",
+                "entity": { "type": "User", "id": "12UA45" }
+            },
+            "action": {
+                "op": "==",
+                "entity": { "type": "Action", "id": "view" }
+            },
+            "resource": {
+                "op": "in",
+                "slot": { "?resource" }
+            },
+            "conditions": []
+        }
+    },
+    "templateLinks": [
+        {
+            "templateId": "template0",
+            "newId": "policy1",
+            "values": {
+                "?resource": {
+                    "type": "Folder",
+                    "id": "def"
+                }
+            }
+        }
+    ]
+}
+```
+
+The JSON representation of a policy set contains the following keys:
+
+* [staticPolicies](#staticpolicies)
+* [templates](#templates)
+* [templateLinks](#templatelinks)
+
+### `staticPolicies`
+
+This field is the set of static policies in the policy set, represented as a map from policy ID to policy content in the format described [above](#representing-a-policy-with-json). This field can only include static policies; including a template will result in an error.
+
+### `templates`
+
+This field is the set of templates in the policy set, represented as a map from policy ID to template in the format described [above](#representing-a-policy-with-json).
+
+### `templateLinks`
+
+This field is a JSON array of template links. The JSON representation of a template link contains the following keys:
+
+* `templateId`
+* `newId`
+* `values`
+
+`templateId` is the ID of the policy to be linked against. `new_id` is the ID of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
