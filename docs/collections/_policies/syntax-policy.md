@@ -139,8 +139,8 @@ action == Action::"view"
 //matches any of the listed actions
 action in [Action::"listAlbums", Action::"listPhotos", Action::"view"]
 
-//matches any action in the hierarchy of the admin entity of type PhotoFlashRole
-action in PhotoFlashRole::"admin"
+//matches any action in the "admin" action group
+action in Action::"admin"
 ```
 
 ### `resource` {#term-parc-resource}
