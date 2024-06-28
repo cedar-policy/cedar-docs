@@ -1,20 +1,25 @@
 ---
 layout: default
-title: Programmatic policy creation using JSON
+title: JSON policy format
 nav_order: 7
 ---
 <!-- markdownlint-disable-file MD036 -->
 
-# Programmatic policy creation using JSON policy format {#json-format}
+# JSON policy format {#json-format}
 {: .no_toc }
 
-You can use the Cedar `Policy::to_json()` method to convert the specified policy into a [JSON](https://json.org) document.
+To allow for programmatically constructing and parsing policies, Cedar supports a [JSON](https://json.org) policy format. This topic describes the JSON format for policies and templates.
 
-You can also use the `Policy::from_json()` method to convert a JSON document into a new Cedar policy. This gives you another option for programmatically constructing or parsing your policies.
+<details open markdown="block">
+  <summary>
+    Topics on this page
+  </summary>
+  {: .text-delta }
+- TOC
+{:toc}
+</details>
 
-The JSON document format you receive or submit using either of these methods is described in this topic.
-
-***Example***
+## Overview
 
 A "standard" Cedar policy looks like the following:
 
@@ -101,7 +106,7 @@ The `principal` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-## `op`
+### `op`
 
 The `op` key is required. The `op` object must have one of the following string values:
 
@@ -281,7 +286,7 @@ The `action` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
 
-## `op`
+### `op`
 
 The `op` key is required.
 
@@ -382,7 +387,7 @@ The `resource` object is required.
 
 The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `entity` or `slot`.
 
-## `op`
+### `op`
 
 The `op` key is required.
 
@@ -593,34 +598,6 @@ JSON representation
 ## `annotations`
 
 Annotations, if present, must be a JSON object.  The keys and values, which must all be strings, correspond to the Cedar annotation keys and values on the policy.
-
-## `entity`
-
-This object has a value that specifies the Cedar `type` and unique `id` of a single entity.
-
-```json
-"entity": { "type": "User", "id": "12UA45" }
-```
-
-## `entities`
-
-This object is a JSON array or list of objects. Each entry in the list is a  each with a value that specifies the `type` and `id` of the entity.
-
-```json
-"entities": [
-    { "type": "User", "id": "12UA45" },
-    { "type": "Group", "id": "67VB89" }
-]
-```
-
-## `slot`
-
-This key is required only if the policy being rendered is a template that uses a placeholder and the `principal` or `resource` object uses the `==` or `in` operator.
-
-```json
-"slot": "?principal"
-"slot": "?resource"
-```
 
 ## JsonExpr objects {#JsonExpr-objects}
 
@@ -849,13 +826,14 @@ JSON representation
     {
         "kind": "when",
         "body": {
-        "!": {
-            "arg": {
-                ".": {
-                    "left": {
-                        "Var": "context"
-                    },
-                    "attr": "something"
+            "!": {
+                "arg": {
+                    ".": {
+                        "left": {
+                            "Var": "context"
+                        },
+                        "attr": "something"
+                    }
                 }
             }
         }
