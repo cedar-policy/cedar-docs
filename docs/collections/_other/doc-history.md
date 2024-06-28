@@ -12,6 +12,7 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
+| Added [JSON policy set format](../policies/json-format.html#policy-set-format) sub-topic | TBD |
 | Added [Human-readable schema format](../schema/human-readable-schema.html) topic | February 21, 2024 |
 | Added [`is` operator](../policies/syntax-operators.html#operator-is) sub-topic | December 15, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
