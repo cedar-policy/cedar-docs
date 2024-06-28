@@ -76,12 +76,12 @@ Actions ::= '"actions"' ':' '[' [ Action { ',' Action } ] ']'
 
 ## `Action` {#grammar-schema-Action}
 
-The `Action` element describes one action supported by your application. An action begins with a name string, and may include a `memberOf` and `appliesTo` element.
+The `Action` element describes one action supported by your application. An action consists of a name string, an optional `memberOf` element, and a  required `appliesTo` element.
 The `memberOf` element specifies what action groups the declared action is a member of in the action hierarchy.
 The `appliesTo` element defines the principal types, resource types, and other context information that can be specified in a request for the action.
 
 ```
-Action ::= STR ':' '{' [ '"memberOf"' ':' '[' [ STR { ',' STR } ] ']' ] ',' [ '"appliesTo"' ':' '{' [PrincipalTypes] ',' [ResourceTypes] ',' [Context] '}' ] '}'
+Action ::= STR ':' '{' [ '"memberOf"' ':' '[' [ STR { ',' STR } ] ']' ] ',' '"appliesTo"' ':' '{' PrincipalTypes ',' ResourceTypes [',' Context] '}' '}'
 ```
 
 ## `PrincipalTypes` {#grammar-schema-PrincipalTypes}
