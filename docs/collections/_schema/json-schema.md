@@ -34,7 +34,8 @@ A namespace declaration must contain two child elements, and may contain a third
 
 You define the types of your application's principal and resource entities within the `entityTypes` element, and the specific actions in the `actions` element. Principals and resources are separated from actions because actions are defined in the schema as individual discrete elements (each of which has type `Action`), whereas only the `principal` and `resource` entities' *types* are defined. In your entity store you create individual principal and resource entities that have these types. Optionally, you can define type names in `commonTypes` and reference those names as types in the `entityTypes` and `actions` elements of your schema.
 
-The declared namespace is automatically prepended to all types defined within the associated scope. For example, consider the following schema:
+The declared namespace must be an identifier as specified in Cedar syntax, and it cannot contain the reserved `__cedar` namespace.
+It is automatically prepended to all types defined within the associated scope. For example, consider the following schema:
 
 ```json
 {
