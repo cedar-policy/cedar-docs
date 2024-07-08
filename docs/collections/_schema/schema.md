@@ -49,7 +49,7 @@ A schema contains a declaration of one or more namespaces, each of which contain
 A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types declared within it. The name of a namespace consists of identifiers separated by double colons (`::`).
 
 {: .important }
->The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
+>The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments. It also may not include the reserved `__cedar` identifier.
 
 A namespace declaration contains three types of declarations, appearing in any order:
 

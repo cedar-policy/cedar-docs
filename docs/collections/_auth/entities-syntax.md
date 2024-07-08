@@ -106,7 +106,7 @@ You can specify the `__extn` escape explicitly, or leave it implicit. For more i
 
 ### `uid`
 
-The `uid` object specifies the Cedar type and unique identifier for the entity. You can explicitly include the `__entity` escape, or leave it implicit. You should reference a Cedar type defined in the schema, and provide a unique, immutable, and non-reusable identifier for the entity. Both of the following are valid and equivalent, and specify an entity of type `User` with the unique identifier of `12UA45`.
+The `uid` object specifies the Cedar type and unique identifier for the entity. You can explicitly include the `__entity` escape, or leave it implicit. You should reference a Cedar type defined in the schema, and provide a unique, immutable, and non-reusable identifier for the entity. As with all entity types, this cannot contain the reserved `__cedar` identifier. Both of the following are valid and equivalent, and specify an entity of type `User` with the unique identifier of `12UA45`.
 
 ```json
 "uid": {
