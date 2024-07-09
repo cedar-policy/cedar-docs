@@ -450,7 +450,12 @@ when {
 };
 ```
 
-The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression.
+The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression. Short circuit evaluations will often be accompanied by the following validation error:
+
+```cedar
+for policy `policy0`, policy is impossible: the policy expression
+      evaluates to false for all valid requests
+```
 
 The following policy is satisfied only if the principal has the attribute `level` and the `level > 5`.
 
