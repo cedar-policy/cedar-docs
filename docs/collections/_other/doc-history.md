@@ -13,7 +13,7 @@ The following table tracks changes to the Cedar language version. The language v
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
-| 3.4 | JSON format for policy sets [cedar#549](https://github.com/cedar-policy/cedar/issues/549) | 3.3.0 | TBD |
+| 3.4 | JSON format for policy sets [cedar#549](https://github.com/cedar-policy/cedar/issues/549) | 3.3.0 | August 19, 2024 |
 | 3.3 | References between common types [cedar#154](https://github.com/cedar-policy/cedar/issues/154) | 3.2.0 - 3.2.4 | May 17, 2024 |
 | 3.2 | General multiplication operator [rfc#57](https://github.com/cedar-policy/rfcs/blob/main/text/0057-general-multiplication.md) | 3.1.2 - 3.1.4 | March 29, 2024 |
 | 3.1 | Human-readable schema syntax [rfc#24](https://github.com/cedar-policy/rfcs/blob/main/text/0024-schema-syntax.md) | 3.1.0 - 3.1.1 | March 8, 2024 |
@@ -27,7 +27,7 @@ The following table describes major documentation updates for Cedar.
 
 | Description | Date |
 | --- | --- |
-| Added [JSON policy set format](../policies/json-format.html#policy-set-format) sub-topic | TBD |
+| Added [JSON policy set format](../policies/json-format.html#policy-set-format) sub-topic | August 19, 2024 |
 | Added [Human-readable schema format](../schema/human-readable-schema.html) topic | February 21, 2024 |
 | Added [`is` operator](../policies/syntax-operators.html#operator-is) sub-topic | December 15, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
