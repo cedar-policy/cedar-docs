@@ -114,7 +114,7 @@ The `op` key is required. The `op` object must have one of the following string 
 
 * `All`
 
-    If present, then the original policy contains only the key word `principal` with no constraints. In this case, the `principal` object doesn't require any additional objects.
+    If present, then the original policy contains only the keyword `principal` with no constraints. In this case, the `principal` object doesn't require any additional objects.
 
     **Example**
 
@@ -296,7 +296,7 @@ The `op` object must have one of the following string values:
 
 * `All`
 
-    If present, then the original policy contains only the key word `action` with no constraints. In this case, the `action` object doesn't require any additional objects.
+    If present, then the original policy contains only the keyword `action` with no constraints. In this case, the `action` object doesn't require any additional objects.
 
     **Example**
 
@@ -397,7 +397,7 @@ The `op` object must have one of the following string values:
 
 * `All`
 
-    If present, then the original policy contains only the key word `resource` with no constraints. In this case, the `resource` object doesn't require any additional objects.
+    If present, then the original policy contains only the keyword `resource` with no constraints. In this case, the `resource` object doesn't require any additional objects.
 
     **Example**
 
