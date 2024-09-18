@@ -55,7 +55,7 @@ Name      := IDENT | STR
 Names     := Name {',' Name}
 Idents    := IDENT {',' IDENT}
 
-IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
+IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
 STR       := Fully-escaped Unicode surrounded by '"'s
 PRIMTYPE  := 'Long' | 'String' | 'Bool'
 WHITESPC  := Unicode whitespace

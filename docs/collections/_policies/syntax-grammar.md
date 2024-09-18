@@ -253,7 +253,7 @@ INT ::= '-'? ['0'-'9']+
 ## `RESERVED` {#grammar-reserved}
 
 ```
-RESERVED ::= BOOL | 'if' | 'then' | 'else' | 'in' | 'like' | 'has'
+RESERVED ::= BOOL | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | '__cedar'
 ```
 
 ## `VAR` {#grammar-var}
