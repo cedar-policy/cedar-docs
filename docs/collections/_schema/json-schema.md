@@ -204,7 +204,7 @@ You can choose to explicitly declare that an attribute is mandatory by including
 
 ### Attribute types {#schema-attributes-types}
 
-Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, or `"Extension"`. The first three require no further information to be specified. The latter four are described below.
+Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, `"Extension"`, `"EntityOrCommon"`, or a common type name. The first three require no further information to be specified, the next five are described below, and the last is described in the [`commonTypes` section](#schema-commonTypes).
 
 #### `Record` {#schema-entitytypes-shape-record}
 {: .no_toc }
@@ -301,6 +301,30 @@ For example, a `Network` entity may include the IP address of its gateway.
     }
 }
 ```
+
+#### `EntityOrCommon` {#schema-entitytypes-shape-entity-or-common}
+{: .no_toc }
+
+Attributes with an entity or common type can also be referred to using an alternate `"EntityOrCommon"` syntax.
+This syntax more closely matches the Cedar schema format, and is output by the Cedar CLI when converting from the Cedar schema format to JSON.
+As an example, the following definition for the `Document` type is equivalent to the one given above in the [`Entity` section](#schema-entitytypes-shape-entity) if `User` is defined as an entity type.
+
+```json
+"Document" : {
+    "shape" : {
+        "type" : "Record",
+        "attributes" : {
+            "Owner": {
+                "type": "EntityOrCommon",
+                "name": "User"
+            }
+        }
+    }
+}
+```
+
+If `User` is defined as a common type, then `Owner` has this common type instead.
+It is an error for `User` to be defined as both an entity and common type.
 
 ## `actions` {#schema-actions}
 

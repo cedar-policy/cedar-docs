@@ -121,7 +121,7 @@ TypeJson ::= '{' Type '}'
 The `Type` element describes
 
 ```
-Type ::= Primitive | Set | EntityRef | Record | Extension
+Type ::= Primitive | Set | EntityRef | Record | Extension | EntityOrCommon
 ```
 
 ## `Primitive` {#grammar-schema-Primitive}
@@ -129,7 +129,7 @@ Type ::= Primitive | Set | EntityRef | Record | Extension
 The `Primitive` element describes
 
 ```
-Primitive ::= '"type":' ('"Long"' | '"String"' | '"Boolean"')
+Primitive ::= '"type":' ('"Long"' | '"String"' | '"Boolean"' | TYPENAME)
 ```
 
 ## `Set` {#grammar-schema-Set}
@@ -162,6 +162,22 @@ The `RecordAttr` element describes
 
 ```
 RecordAttr ::= STR ': {' Type [',' '"required"' ':' ( true | false )] '}'
+```
+
+## `Extension` {#grammar-schema-Extension}
+
+The `Extension` element describes
+
+```
+Extension ::= '"type": "Extension", "name": "' Name '"'
+```
+
+## `EntityOrCommon` {#grammar-schema-EntityOrCommon}
+
+The `EntityOrCommon` element describes
+
+```
+EntityOrCommon ::= '"type": "EntityOrCommon", "name": "' Name '"'
 ```
 
 ## `STR` {#grammar-schema-STR}
