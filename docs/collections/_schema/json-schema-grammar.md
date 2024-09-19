@@ -34,7 +34,7 @@ The grammar ignores whitespace and comments.
 
 ## `Schema` {#grammar-schema}
 
-A schema consists of a [`Namespace`](#grammar-schema-Namespace) JSON object that contains a list of [`EntityTypes`](#grammar-schema-EntityTypes), and a list of [`Actions`](#grammar-schema-Actions).
+A schema consists of a [`Namespace`](#grammar-schema-Namespace) JSON object that contains [`EntityTypes`](#grammar-schema-EntityTypes), [`Actions`](#grammar-schema-Actions), and (optional) [`CommonTypes`](#grammar-schema-CommonTypes) components.
 The grammar assumes a particular order of keys in JSON objects to simplify the presentation, but this order is not technically required.
 For example, the grammar as written requires that entity type declarations appear before actions, but actions may nonetheless be declared before entity types.
 
@@ -55,7 +55,7 @@ Namespace ::= '"' STR { '::' STR } '"'
 The `EntityTypes` element is identified by the keyword `entityTypes` followed by a comma-separated list of Entity types supported by your application. For more information see [`entityTypes`](../schema/schema.html#schema-entityTypes).
 
 ```
-EntityTypes ::= 'entityTypes' ':' '[' [ EntityType { ',' EntityType } ] ']'
+EntityTypes ::= 'entityTypes' ':' '{' [ EntityType { ',' EntityType } ] '}'
 ```
 
 ## `EntityType` {#grammar-schema-EntityType}
@@ -71,7 +71,7 @@ EntityType ::= IDENT ':' '{' [ 'memberOfTypes' ':' '[' [ IDENT { ',' IDENT } ] '
 The `Actions` element is a list of the individual actions supported by your application.
 
 ```
-Actions ::= '"actions"' ':' '[' [ Action { ',' Action } ] ']'
+Actions ::= '"actions"' ':' '{' [ Action { ',' Action } ] '}'
 ```
 
 ## `Action` {#grammar-schema-Action}
@@ -174,4 +174,22 @@ STR ::= Fully-escaped Unicode surrounded by '"'s
 
 ```
 IDENT ::= ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
+```
+
+## `CommonTypes` {#grammar-schema-CommonTypes}
+
+The `CommonTypes` element is identified by the keyword `commonTypes` followed by a comma-separated list of common types supported by your application. For more information see [`commonTypes`](../schema/schema.html#schema-commonTypes).
+
+```
+CommonTypes ::= 'commonTypes' ':' '{' [ CommonType { ',' CommonType } ] '}'
+```
+
+## `CommonType` {#grammar-schema-CommonType}
+
+A `CommonType` element describes one common type supported by your application. It begins with a name string for the common type that, when qualified by its parent [namespace](#grammar-schema-Namespace), uniquely identifies this common type.
+
+```
+CommonType ::= TYPENAME ':' TypeJson
+TYPENAME   ::= IDENT - RESERVED
+RESERVED   ::= 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
 ```

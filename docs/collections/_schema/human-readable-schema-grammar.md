@@ -37,7 +37,7 @@ Namespace := ('namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
 Entity    := 'entity' Idents ['in' EntOrTyps] [['='] RecType] ';'
 Action    := 'action' Names ['in' RefOrRefs] [AppliesTo]';'
-TypeDecl  := 'type' IDENT '=' Type ';'
+TypeDecl  := 'type' TYPENAME '=' Type ';'
 Type      := Path | SetType | RecType
 EntType   := Path
 SetType   := 'Set' '<' Type '>'
@@ -55,9 +55,11 @@ Name      := IDENT | STR
 Names     := Name {',' Name}
 Idents    := IDENT {',' IDENT}
 
-IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
+IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
+TYPENAME  := IDENT - RESERVED
 STR       := Fully-escaped Unicode surrounded by '"'s
 PRIMTYPE  := 'Long' | 'String' | 'Bool'
 WHITESPC  := Unicode whitespace
 COMMENT   := '//' ~NEWLINE* NEWLINE
+RESERVED  := 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
 ```

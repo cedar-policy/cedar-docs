@@ -85,6 +85,8 @@ You can reference entity types and actions defined in other namespaces of the sa
 }
 ```
 
+One special case: you cannot define entity types, actions, or common types in a namespace that would shadow definitions in the empty namespace. For example, if the entity type `Table` was also defined in the empty namespace, then the schema above would be invalid.
+
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
 ## `entityTypes` {#schema-entityTypes}
