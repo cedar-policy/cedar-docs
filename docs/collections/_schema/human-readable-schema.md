@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Human-readable schema format
+title: Cedar schema format
 nav_order: 2
 ---
 
-# Human-readable schema format {#schema}
+# Cedar schema format {#schema}
 {: .no_toc }
 
 <details open markdown="block">
@@ -16,11 +16,11 @@ nav_order: 2
 {:toc}
 </details>
 
-This topic describes Cedar's human-readable schema format.
+This topic describes the Cedar schema format.
 
 ## Schema format {#schema-format}
 
-A schema consists of zero or more namespaces, each of which contains declarations of three types --- *Entity Type Declaration*, *Action Declaration*, and *Common Type Declaration*. These declarations define entity types and actions, and common types that define types that can be referenced by the Entity Type and Action Declarations. Declarations are delimited by `;` characters. Note that in the human-readable schema format, unlike in the JSON schema format, you can write Cedar-style comments.
+A schema consists of zero or more namespaces, each of which contains declarations of three types --- *Entity Type Declaration*, *Action Declaration*, and *Common Type Declaration*. These declarations define entity types and actions, and common types that define types that can be referenced by the Entity Type and Action Declarations. Declarations are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
 
 ## Namespace {#schema-namespace}
 
@@ -48,7 +48,7 @@ entity User in [Group] {
 };
 ```
 
-Note that in the human-readable schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
+Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
@@ -77,7 +77,7 @@ Format composite data type declarations as follows.
 #### Record {#schema-entitytypes-shape-record}
 {: .no_toc }
 
-The specification of a record type is similar to that of a Cedar record, except that values of a record in the human-readable schema are types. For example, you can declare a record type as follows.
+The specification of a record type is similar to that of a Cedar policy record, except that values of a record in the schema are types. For example, you can declare a record type as follows.
 
 ```cedarschema
 {
@@ -148,11 +148,11 @@ The `appliesTo` construct specifies an action's applicability. It is a record of
 
 ## Common types {#schema-commonTypes}
 
-Like in the JSON schema format, human-readable schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
+Like in the JSON schema format, Cedar schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
 
 ## Type name disambiguation
 
-Type names in the human-readable schema format can conflict with each other. For example, `ipaddr` is a valid unqualified common type name as well as an extension type name. `Foo::Bar` is a valid qualified common type name and an entity type name. Cedar uses the following rules to disambiguate type names.
+Type names in the Cedar schema format can conflict with each other. For example, `ipaddr` is a valid unqualified common type name as well as an extension type name. `Foo::Bar` is a valid qualified common type name and an entity type name. Cedar uses the following rules to disambiguate type names.
 
 1. Primitive and extension type names cannot alias by design.
 2. Type references are resolved in a priority order.

@@ -16,7 +16,7 @@ nav_order: 1
 {:toc}
 </details>
 
-This topic describes the structure of a Cedar schema. Cedar has two schema formats: human-readable and JSON. The syntax of the human-readable schema format is very similar to that of Cedar policies. The JSON schema format is built from the [JSON Schema](https://json-schema.org/). Some unique aspects of the design of Cedar, like the use of entity types, differ from the common JSON schema. The two formats are interchangeable. The Cedar CLI can translate schemas in one format to the other. We encourage you to use the human-readable schema format for its simplicity and conciseness. For details, see [human-readable schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
+This topic describes the structure of a Cedar schema. Cedar has two schema formats: a human-readable format (which we call the Cedar format) and JSON. The syntax of the Cedar schema format is similar to that of Cedar policies. The JSON schema format is based on [JSON Schema](https://json-schema.org/), with some adaptations for unique aspects of Cedar, like the use of entity types. The two schema formats are interchangeable and the Cedar CLI can translate schemas in one format to the other. We encourage you to use the Cedar schema format for its simplicity and conciseness. For details, see [Cedar schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
 
 ## Overview {#schema-overview}
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services.
@@ -34,14 +34,14 @@ You can use a schema to define each of the following entities used by your appli
 
 Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](../policies/validation.html).
 
-Both schema formats implement the same ideas, which we detail as follows. We then present their human-readable anb JSON realizations.
+Both schema formats implement the same ideas, which we detail as follows. We then present their Cedar and JSON realizations.
 
 ## Schema {#schema-format}
 
 A schema contains a declaration of one or more namespaces, each of which contains declarations of entity types, actions, and common types. A namespace has an optional name.
 
 **Schema topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-format)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-format)
 * [JSON schema format](../schema/json-schema.html#schema-format)
 
 ## Namespace {#schema-namespace}
@@ -64,7 +64,7 @@ Declarations (e.g, entity types) of a namespace must be qualified with its name 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
 **Namespace topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-namespace)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-namespace)
 * [JSON schema format](../schema/json-schema.html#schema-namespace)
 
 ## Entity types {#schema-entityTypes}
@@ -75,7 +75,7 @@ A collection of the `principal` and `resource` entity types supported by your ap
 >The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
 
 **Entity type topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-entityTypes)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-entityTypes)
 * [JSON schema format](../schema/json-schema.html#schema-entityTypes)
 
 ### Membership relation
@@ -83,19 +83,19 @@ A collection of the `principal` and `resource` entity types supported by your ap
 Specifies a list of entity types that can be *direct* parents of entities of this type.
 
 **Membership topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-entitytypes-memberOf)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-entitytypes-memberOf)
 * [JSON schema format](../schema/json-schema.html#schema-entitytypes-memberOf)
 
 ### Shape/Attributes
 
 Specifies the shape of the data stored in entities of this type. More precisely, it defines the attributes of an entity type --- their names, types, and optionality.
-An attribute type is one of the [Cedar supported data types](../policies/syntax-datatypes.html) or a common type, which have different representations in the human-readable format and the JSON format.
+An attribute type is one of the [Cedar supported data types](../policies/syntax-datatypes.html) or a common type, which have different representations in the Cedar format and the JSON format.
 You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present.
 
 A policy should check for an optional attribute's presence by using the [`has`](../policies/syntax-operators.html#operator-has) operator before trying to access the attribute's value. If evaluation of a policy results in an attempt to access a non-existent attribute, evaluation fails with an error (which causes the policy to be ignored during authorization, and for a diagnostic to be generated). The validator will flag the potential for such errors to occur.
 
 **Shape topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-entitytypes-shape)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-entitytypes-shape)
 * [JSON schema format](../schema/json-schema.html#schema-entitytypes-shape)
 
 ## Actions {#schema-actions}
@@ -105,7 +105,7 @@ A collection of the `Action` entities usable as actions in authorization request
 An action declaration specifies an action's membership relations with action groups, its applicability (with respect to principal and resource entity types, and the context shape).
 
 **Actions topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-actions)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-actions)
 * [JSON schema format](../schema/json-schema.html#schema-actions)
 
 ## Common type {#schema-commonTypes}
@@ -114,7 +114,7 @@ Your schema might define several entity types that share a lot of elements in co
 
 ### Motivating example
 
-Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions in the human-readable schema format: both `view` and `upload` have identical `context` components.
+Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions in the Cedar schema format: both `view` and `upload` have identical `context` components.
 
 ```cedar
 action view appliesTo {
@@ -154,5 +154,5 @@ action upload appliesTo {
 ```
 
 **Common types topics**
-* [Human-readable schema format](../schema/human-readable-schema.html#schema-commonTypes)
+* [Cedar schema format](../schema/human-readable-schema.html#schema-commonTypes)
 * [JSON schema format](../schema/json-schema.html#schema-commonTypes)

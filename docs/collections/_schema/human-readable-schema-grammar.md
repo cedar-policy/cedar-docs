@@ -1,14 +1,14 @@
 ---
 layout: default
-title: Human-readable schema grammar
+title: Cedar schema grammar
 nav_order: 2
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for human-readable schemas {#schema-grammar}
+# Grammar specification for Cedar schemas {#schema-grammar}
 {: .no_toc }
 
-This topic describes the grammar specification for the human-readable schema format. For a more complete description, see [Schema format](../schema/human-readable-schema.html).
+This topic describes the grammar specification for the Cedar schema format. For a more complete description, see [Cedar schema format](../schema/human-readable-schema.html).
 
 The grammar applies the following conventions. 
 + Words with initial capital letters designate grammar constructs.
