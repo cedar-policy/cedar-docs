@@ -199,8 +199,9 @@ namespace Demo {
 }
 ```
 
- Common types and entity types can both be qualified with namespaces.
- The Cedar schema format allows *inline* declarations. Because of this, there may be conflicts between type names declared within a namespace and those declared using inline declarations. The resolution rule for this scenario is like *static scoping*: type names within the same namespace have higher priority. The following example demonstrates this rule.
+Common types and entity types can both be qualified with namespaces.
+We do not allow defining entity types or common types that would shadow definitions of other entity types or common types in the empty namespace.
+For example, the following schema is *invalid*.
 
  ```cedarschema
 type id = {
@@ -208,20 +209,11 @@ type id = {
   name: String,
 };
 
-type email_address = {
-  id: String,
-  domain: String,
-};
-
 namespace Demo {
   entity User {
-    // The type of attribute `name` is the primitive type `String`
-    // because there is a common type declaration below.
     name: id,
-    // The type of attribute `email` is the common type `email_address`
-    // declared above.
-    email: email_address;
   };
+  // ERROR - this definition of `id` would shadow the one above
   type id = String;
 }
 ```
