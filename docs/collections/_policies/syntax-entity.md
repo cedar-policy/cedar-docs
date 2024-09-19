@@ -21,7 +21,7 @@ An entity in Cedar is a stored object that serves as the representation for [pri
 
 An entity in Cedar has the following components.
 
-+ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema).
++ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema). The Cedar language reserves the `__cedar` entity type, so this entity type, and all entity types with `__cedar` as a component, cannot be used.
 + **An entity identifier \(EID\)** &ndash; The EID lets you reference a specific entity in your policy. The combination of entity type and an EID uniquely identifies an object for Cedar.
 
    {: .important }
@@ -79,7 +79,7 @@ Entities support the following operators in a Cedar policy:
 
 ## Namespaces {#entity-namespace}
 
-An entity can also be referenced in the context of multiple namespaces. This capability lets you infer a logical hierarchy of entity types. For example, `PhotoFlash::Groups::Album::"vacation"` refers to a specific entity with an entity ID of `"vacation"` and an entity type of `PhotoFlash::Groups::Album`. There is no real structure behind such a string, only what is logically inferred by the designer. You can create namespaces for an entity type when you define a schema.
+An entity can also be referenced in the context of multiple namespaces. This capability lets you infer a logical hierarchy of entity types. For example, `PhotoFlash::Groups::Album::"vacation"` refers to a specific entity with an entity ID of `"vacation"` and an entity type of `PhotoFlash::Groups::Album`. There is no real structure behind such a string, only what is logically inferred by the designer. The Cedar language reserves all namespaces containing the reserved identifier `__cedar`, so you cannot have an entity `__cedar::Album::"vacation"`. You can create a namespace for an entity type when you define a schema.
 
 ## Attributes of entities {#entity-attribute}
 
