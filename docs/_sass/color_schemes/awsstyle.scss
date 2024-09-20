@@ -9,6 +9,7 @@ $body-background-color: #0C0C0D;
 $sidebar-color:#0C0C0D;
 $body-font-family: "Amazon Ember", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Segoe UI Emoji" !default;
 $border-color: #272727;
+$main-header-height: 5rem;
 
 //Regular
 @font-face {
@@ -24,6 +25,12 @@ $border-color: #272727;
         font-style:normal;
 }
 
+// Apply scroll padding only for larger screens
+@media (min-width: 50rem) {
+	html {
+	  scroll-padding-top: $main-header-height;
+	}
+}
 
 //############ _variables.scss ############
 //$body-font-family: "Amazon Ember", system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Segoe UI Emoji" !default;
@@ -51,8 +58,8 @@ $header-height: 5rem !default;
 //############ Main ############
 
 .main-header  { 
-	height:5rem; 
-	max-height:5rem; 
+	height: $main-header-height;
+	max-height: $main-header-height;
 	position: sticky;
 	top: 0;
 	z-index: 999;
