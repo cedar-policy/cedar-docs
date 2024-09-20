@@ -324,7 +324,7 @@ As an example, the following definition for the `Document` type is equivalent to
 ```
 
 If `User` is defined as a common type, then `Owner` has this common type instead.
-It is an error for `User` to be defined as both an entity and common type.
+If `User` is defined as both an entity and common type, the common type definition is preferred, matching the [disambiguation rules for the Cedar schema format](../schema/human-readable-schema.html#schema-typeDisambiguation).
 
 ## `actions` {#schema-actions}
 
