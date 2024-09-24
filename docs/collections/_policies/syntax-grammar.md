@@ -151,7 +151,7 @@ Member ::= Primary {Access}
 ## `Annotation` {#grammar-annotation}
 
 ```
-Annotation ::= '@'IDENT'('STR')'
+Annotation ::= '@'ANYIDENT'('STR')'
 ```
 
 ## `Access` {#grammar-access}
@@ -214,10 +214,16 @@ RecInits ::= (IDENT | STR) ':' Expr {',' (IDENT | STR) ':' Expr}
 RELOP ::= '<' | '<=' | '>=' | '>' | '!=' | '==' | 'in'
 ```
 
+## `ANYIDENT` {#grammar-any-ident}
+
+```
+ANYIDENT ::= ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
+```
+
 ## `IDENT` {#grammar-ident}
 
 ```
-IDENT ::= ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
+IDENT ::= ANYIDENT - RESERVED
 ```
 
 ## `STR` {#grammar-str}
@@ -253,7 +259,7 @@ INT ::= '-'? ['0'-'9']+
 ## `RESERVED` {#grammar-reserved}
 
 ```
-RESERVED ::= BOOL | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | '__cedar'
+RESERVED ::= BOOL | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | 'is' | '__cedar'
 ```
 
 ## `VAR` {#grammar-var}
