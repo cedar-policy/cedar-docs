@@ -13,7 +13,7 @@ Individual entity and attribute names are spelled using *camelCase*, with only t
 
 The examples in this guide use the following hypothetical photo sharing application, called *PhotoFlash*. This application provides users with the ability to store, organize, and share their photos. Users can upload photos to their *PhotoFlash* account and organize them into albums. Albums can be nested in other albums and photos can belong to multiple albums. Users can also add custom metadata, such as the names of people visible, to each photo in the form of tags. Then, users can search for photos based on the attached metadata, such as searching for any photos that were taken after a certain date or at a certain geographic location.
 
-*PhotoFlash* users can share their photos and albums with other *PhotoFlash* users or user groups. In the previous illustration, a user named **jane** created groups to represent her family \(`janeFamily`\), friends \(`janeFriends`\), and coworkers \(`janeCoworkers`\). She can then populate those groups with other *PhotoFlash* users, and specify how members of those groups can access her photos and albums. User groups are as flexible as albums; they can be nested, and a user can belong to multiple groups.
+*PhotoFlash* users can share their photos and albums with other *PhotoFlash* users or user groups. In the following illustration, a user named **jane** created groups to represent her family \(`janeFamily`\), friends \(`janeFriends`\), and coworkers \(`janeCoworkers`\). She can then populate those groups with other *PhotoFlash* users, and specify how members of those groups can access her photos and albums. User groups are as flexible as albums; they can be nested, and a user can belong to multiple groups.
 
 ![\[A user named Jane has an account that contains her albums and photos, and groups of users that she created.\]](../../images/AVP-BASICS.jpg)
 
@@ -54,4 +54,4 @@ when { resource.tags.contains("private") }    // assumes that resource has "tags
 unless { resource in principal.account };     // assumes that principal has "account"
 ```
 
-The order of the `when` and `unless` clauses matters in the case where one or more of them generate errors. Cedar evaluates the `when` and `unless` clauses in the order in which they appear in the policy. In the previous example, consider a scenario where the `when` and `unless` clauses generate separate errors. The order determines which error you actually see. If only one clause causes an error, the order can have an impact on the resulting evaluation, but not authorization, behavior.
+The order of the `when` and `unless` clauses matters in the case where one or more of them generate errors. Cedar evaluates the `when` and `unless` clauses in the order in which they appear in the policy. In the previous example, consider a scenario where the `when` and `unless` clauses generate separate errors. The order determines which error you actually see.
