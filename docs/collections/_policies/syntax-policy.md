@@ -264,11 +264,14 @@ An annotation takes the form of the following string:
 @annotationname("annotation value")
 ```
 
-The following example shows two annotations that could be part of a policy.
+Annotations don't need to have an explicit value. When the value is omitted, the annotation implicitly has the value `""`, so `@annotationname` is equivalent to `@annotationname("")`.
+
+The following example shows three annotations that could be part of a policy.
 
 ```cedar
 @advice("My advice")
 @id("My ID")
+@shadow_mode
 permit (
     ...
 );
