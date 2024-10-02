@@ -4,7 +4,7 @@ title: Additional resources
 nav_order: 5
 ---
 
-# Resources for getting started {#additional-resources}
+# Start using Cedar {#additional-resources}
 {: .no_toc }
 
 If you want to see Cedar in action, implement Cedar as a service, or work with an example application while you learn, check out these additional resources.
@@ -14,4 +14,4 @@ If you want to see Cedar in action, implement Cedar as a service, or work with a
 + Create a managed Cedar policy store with [Amazon Verified Permissions](https://aws.amazon.com/verified-permissions/).
 + Join the [cedar-policy Slack](https://communityinviter.com/apps/cedar-policy/cedar-policy-language).
 
-For more links, see [cedar-policy on GitHub](https://github.com/cedar-policy).
+For more links, see [cedar-awesome on GitHub](https://github.com/cedar-policy/cedar-awesome).
