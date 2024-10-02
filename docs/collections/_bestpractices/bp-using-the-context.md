@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Using the context
-nav_order: 3
+nav_order: 9
 ---
 
 # Best practice: Don't use the context field to hold information about the principal, action, and resource
