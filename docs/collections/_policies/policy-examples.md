@@ -7,7 +7,7 @@ nav_order: 8
 # Policy examples {#policy-examples}
 {: .no_toc }
 
-The following policy examples are based on the schema defined for the hypothetical application called PhotoFlash described in the [Example schema section](../overview/scenario.html).
+The following policy examples are based on the schema defined for the hypothetical application called PhotoFlash described in [Example scenario](../overview/scenario.html).
 
 <details open markdown="block" id="toc">
   <summary>
