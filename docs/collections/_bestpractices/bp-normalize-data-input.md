@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Normalize data input
-nav_order: 2
+nav_order: 8
 ---
 
 # Security requirement: Normalize input data prior to invoking the authorization APIs
