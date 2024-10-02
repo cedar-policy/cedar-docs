@@ -7,7 +7,7 @@ nav_order: 8
 # Policy examples {#policy-examples}
 {: .no_toc }
 
-The following Verified Permissions policy examples are based on the schema defined for the hypothetical application called PhotoFlash described in the [Example schema section](#example-schama).
+The following policy examples are based on the schema defined for the hypothetical application called PhotoFlash described in the [Example schema section](../schema/schema.html#example-schema).
 
 <details open markdown="block" id="toc">
   <summary>
@@ -101,7 +101,7 @@ permit(
 );
 ```
 ## Allows access for attributes of an entity (ABAC) {#allow-abac}
-Attribute-based access control (ABAC) is an authorization strategy that defines permissions based on attributes. Verified Permissions allows attributes to be attached to principals, actions, and resources. These attributes can then be referenced within the `when` and `unless` clauses of policies that evaluate the attributes of the principals, actions, and resources that make up the context of the request.
+Attribute-based access control (ABAC) is an authorization strategy that defines permissions based on attributes. Cedar allows attributes to be attached to principals, actions, and resources. These attributes can then be referenced within the `when` and `unless` clauses of policies that evaluate the attributes of the principals, actions, and resources that make up the context of the request.
 
 This following example shows how you might create a policy that allows any principal in the `HardwareEngineering` department with a job level of greater than or equal to 5 to view and list photos in the album `device_prototypes`.
 ```Cedar
