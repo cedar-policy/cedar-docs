@@ -75,22 +75,22 @@ As another example, consider the expression `resource.tags.contains("Private")`.
 
 ### Policy satisfaction {#policy-satisfaction}
 
-Determining whether a policy satisfies a request is a straightforward use of expression evaluation. To explain it, let's introduce some notation. For a policy *c*:
+Determining whether a policy satisfies a request is a straightforward use of expression evaluation. To explain it, let's introduce some notation. For a policy *y*:
 
-+ *Principal(c)* is the constraint involving the `principal` in *c*'s [policy scope](../overview/terminology.html#term-policy). If there is no constraint on `principal`, then *Principal(c)* is `true`.
-+ *Action(c)* is the constraint involving `action` in *c*'s policy scope. If there is no constraint on `action`, then *Action(c)* is `true`.
-+ *Resource(c)* is the constraint involving `resource` in *c*'s policy scope. If there is no constraint on `resource`, then *Resource(c)* is `true`.
-+ *Conds(c)* is the list of `when` and `unless` expressions in *c*.
++ *Principal(y)* is the constraint involving the `principal` in *y*'s [policy scope](../overview/terminology.html#term-policy). If there is no constraint on `principal`, then *Principal(y)* is `true`.
++ *Action(y)* is the constraint involving `action` in *y*'s policy scope. If there is no constraint on `action`, then *Action(y)* is `true`.
++ *Resource(y)* is the constraint involving `resource` in *y*'s policy scope. If there is no constraint on `resource`, then *Resource(y)* is `true`.
++ *Conds(y)* is the list of `when` and `unless` expressions in *y*.
 
-Here's how the Cedar authorizer evaluates a policy *c* with respect to a *PARC* request. First, the authorizer tests whether *c* **matches** the request, as follows:
+Here's how the Cedar authorizer evaluates a policy *y* with respect to a *PARC* request. First, the authorizer tests whether *y* **matches** the request, as follows:
 
-1. Bind `principal` to *P* in expression *Principal(c)* and evaluate it
-1. Bind `action` to *A* in expression *Action(c)* and evaluate it
-1. Bind `resource` to *R* in expression *Resource(c)* and evaluate it
+1. Bind `principal` to *P* in expression *Principal(y)* and evaluate it
+1. Bind `action` to *A* in expression *Action(y)* and evaluate it
+1. Bind `resource` to *R* in expression *Resource(y)* and evaluate it
 
-If all three steps evaluate to `true`, then *c* matches the request. Otherwise it does not. (Cedar's design ensures that none of these three steps can possibly evaluate to `error`.)
+If all three steps evaluate to `true`, then *y* matches the request. Otherwise it does not. (Cedar's design ensures that none of these three steps can possibly evaluate to `error`.)
 
-If *c* matches the request, the authorizer evaluates the request's conditions *Conds(c)* in order. The authorizer binds the `principal`, `action`, `resource`, and `context` variables to the *PARC* values when we do so. If all of the `when` conditions evaluate to `true`, and all of the `unless` conditions evaluate to `false`, then policy *c* satisfies the request, and the final evaluation result is `true`. If evaluating any condition expression yields `error` then policy evaluation halts at that point (any remaining conditions are skipped), and `error` is returned as the final result. Otherwise, `false` is returned.
+If *y* matches the request, the authorizer evaluates the request's conditions *Conds(y)* in order. The authorizer binds the `principal`, `action`, `resource`, and `context` variables to the *PARC* values when we do so. If all of the `when` conditions evaluate to `true`, and all of the `unless` conditions evaluate to `false`, then policy *y* satisfies the request, and the final evaluation result is `true`. If evaluating any condition expression yields `error` then policy evaluation halts at that point (any remaining conditions are skipped), and `error` is returned as the final result. Otherwise, `false` is returned.
 
 ## Detailed Example {#policy-evaluation-example}
 
@@ -121,10 +121,10 @@ The Cedar authorizer evaluates each of the four policies against this request.
   ```
 
   This policy is **satisfied**.
-  + *Principal* in P1 is `principal == User::"jane"`, so after binding `principal` to `User::"jane"` (the *P* in the request), the expression evaluates to `true`.
-  + *Action* in P1 is simply `true` since there is no action constraint.
-  + *Resource* in P1 is `resource == Photo::"vacation.jpg"`, so after binding `resource` to `Photo::"vacation.jpg"` (the *R* in the request), the expression evaluates to `true`.
-  + *Cond(c)* is empty, so evaluates trivially to `true`.
+  + *Principal(P1)* is `principal == User::"jane"`, so after binding `principal` to `User::"jane"` (the *P* in the request), the expression evaluates to `true`.
+  + *Action(P1)* is simply `true` since there is no action constraint.
+  + *Resource(P1)* is `resource == Photo::"vacation.jpg"`, so after binding `resource` to `Photo::"vacation.jpg"` (the *R* in the request), the expression evaluates to `true`.
+  + *Cond(P1)* is empty, so evaluates trivially to `true`.
 
 + **P2** – A member of group `kevinFriends` can view any of Kevin's photos when they are tagged `Holiday`
 
@@ -139,11 +139,11 @@ The Cedar authorizer evaluates each of the four policies against this request.
   };
   ```
 
-  This policy is **not satisfied**. While it matches the request, its *condition evaluates to `false`*.
-  + *Principal* in P2 is `principal in UserGroup::"kevinFriends"`, so after binding `principal` to `User::"jane"` (the *P* in the request), the expression evaluates to `true` because `User::"jane"` is a member of `Group::"kevinsFriends"`
-  + *Action* in P2 is `action == Action::"viewPhoto"`, so after binding `action` to `Action::"viewPhoto"` the expression evaluates to `true`
-  + *Resource* in P2 is simply `true` since there is no resource constraint
-  + *Cond(c)* in P2 is the list containing `when` expression `resource.tags.contains("Holiday")`. After binding `resource` to `Photo::"vacation.jpg"` (the *R* in the request), the expression evaluates to `false` because the `.tags` attribute of `Photo::"vacation.jpg"` is `["Private","Work"]`, i.e., it does not contain `"Holiday"`.
+  This policy is **not satisfied**. While it matches the request, its *condition evaluates to* `false`.
+  + *Principal(P2)* is `principal in UserGroup::"kevinFriends"`, so after binding `principal` to `User::"jane"` (the *P* in the request), the expression evaluates to `true` because `User::"jane"` is a member of `Group::"kevinsFriends"`
+  + *Action(P2)* is `action == Action::"viewPhoto"`, so after binding `action` to `Action::"viewPhoto"` the expression evaluates to `true`
+  + *Resource(P2)* is simply `true` since there is no resource constraint
+  + *Cond(P2)* is the list containing `when` expression `resource.tags.contains("Holiday")`. After binding `resource` to `Photo::"vacation.jpg"` (the *R* in the request), the expression evaluates to `false` because the `.tags` attribute of `Photo::"vacation.jpg"` is `["Private","Work"]`, i.e., it does not contain `"Holiday"`.
 
 + **P3** – Users are forbidden from viewing any photos tagged `Private` unless they are the owner of the photo.
 
@@ -174,7 +174,7 @@ The Cedar authorizer evaluates each of the four policies against this request.
   ```
 
   This policy is **not satisfied**.
-  + The policy ***fails to match the request*** because while `principal` and `resource` are unconstrained, *Action(c)* evaluates to `false` because binding `action` to *A* yields expression `Action::"viewPhoto" == Action::"updatePassword"`.
+  + The policy ***fails to match the request*** because while `principal` and `resource` are unconstrained, *Action(P4)* evaluates to `false` because binding `action` to *A* yields expression `Action::"viewPhoto" == Action::"updateTags"`.
 
 In sum:
 
