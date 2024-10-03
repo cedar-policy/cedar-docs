@@ -599,8 +599,8 @@ JSON representation
 
 ### `annotations`
 
-Annotations, if present, must be a JSON object.  The keys which must be strings and values which may be strings or the JSON value `null`, correspond to the Cedar annotation keys and values on the policy.
-A `null` value corresponds to an annotation without a value (`@shadow_mode`) and is equivalent to the value to `""`.
+Annotations, if present, must be a JSON object.  The keys must be strings and the values may be strings or the JSON value `null`.
+A `null` value corresponds to an annotation without a value (e.g., `@shadow_mode`) and is equivalent to the value `""`.
 
 ### JsonExpr objects {#JsonExpr-objects}
 
