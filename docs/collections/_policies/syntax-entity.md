@@ -60,13 +60,13 @@ permit (
     resource
 )
 when {
-    principal == resource //The same entity
+    principal == resource // The same entity
 };
 ```
 
 This example allows any principal to perform the `readUser` action on any resource, as long as the `principal` and the `resource` in the request are the same entity.
 
-Except for action entities, which are prefixed with the reserved entity type `Action`, there is no way to distinguish whether an entity should behave as a principal, resource, or both without additional context. You can use entity types to constrain how an entity type can be used.
+Except for action entities, which are prefixed with the reserved entity type `Action`, there is no way to distinguish whether an entity should behave as a principal, resource, or both without additional context. You can use the schema to constrain how an entity type can be used.
 
 ## Operators {#entity-operators}
 
