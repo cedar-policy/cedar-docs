@@ -8,7 +8,7 @@ has_children: false
 # Entities and context syntax {#entities-syntax}
 {: .no_toc }
 
-When you want to authorize a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires a list of policies along with the list of entities and a list of other context information that Cedar uses in its evaluation of the request.
+When you want to authorize a user request by using the [Authorizer::is_authorized()](https://docs.rs/cedar-policy/latest/cedar_policy/struct.Authorizer.html#method.is_authorized) function, that API requires a list of policies along with the list of entities and a request that Cedar uses in its evaluation of the request.
 
 To construct that list of entities or context information, the Cedar public API provides functions such as:
 
@@ -82,7 +82,7 @@ You can specify the `__entity` escape explicitly, or leave it implicit. For more
 The type must be a normalized entity type, i.e., without whitespace or Cedar comments. For instance, the following is not valid:
 
 ```json
-"type": "User"
+"type": "User "
 ```
 
 For [Cedar extension](../policies/syntax-datatypes.html#extension) types and values, the Cedar JSON format supports an `__extn` escape, whose value is a JSON object with the attributes `fn` and `arg`.
@@ -134,11 +134,11 @@ Example:
 "parents": [
     { 
         "type": "UserGroup",
-        "id": "alice_friends" 
+        "id": "aliceFriends" 
     },
     {
         "type": "UserGroup",
-        "id": "bob_friends"
+        "id": "bobFriends"
     }    
 ]
 ```
@@ -147,7 +147,7 @@ Example:
 
 This example pulls together many of the features discussed in the previous sections. It uses `uid`, `attrs`, and `parents`.
 
-For `uid` and `parents` it uses the implicit `__entity` escape rather than explicitly adding it. Of course, a full entities file would also need to include entries for the two `UserGroup` entities which are referenced but not defined in this example.
+For `uid` and `parents` it uses the implicit `__entity` escape rather than explicitly adding it. Of course, a full entities file should include entries for the two `UserGroup` entities which are referenced but not defined in this example.
 
 This example also demonstrates attribute values with entity types (`User`) and extension types (IP address `ip` and `decimal`), and uses the explicit `__entity` and `__extn` escapes for those. It does not rely on [schema-based parsing](#Schema-based parsing).
 
@@ -162,8 +162,8 @@ This example also demonstrates attribute values with entity types (`User`) and e
             "confidenceScore": { "__extn": { "fn": "decimal", "arg": "33.57" } }
         },
         "parents": [
-            { "type": "UserGroup", "id": "alice_friends" },
-            { "type": "UserGroup", "id": "bob_friends" }
+            { "type": "UserGroup", "id": "aliceFriends" },
+            { "type": "UserGroup", "id": "bobFriends" }
         ]
     },
     {
@@ -188,9 +188,8 @@ Just as in [`attrs`](#attrs), the `__entity` and `__extn` escapes can be explici
 
 ```json
 {
-    "source_ip": "ip(\"10.0.1.101\")",
-    "expire_time_epoch": "1690482960",
-    "authn_mfa": true
+    "sourceIp": "10.0.1.101",
+    "authnMfa": true
 }
 ```
 
@@ -198,19 +197,13 @@ When you need to reference one of the context details in a policy, reference eac
 
 ```cedar
 when {
-    context.source_ip.isInRange(ip("222.222.222.0/24")) 
+    context.sourceIp.isInRange(ip("222.222.222.0/24")) 
 }
 ```
 
 ```cedar
 when {
-    context.expire_time_epoch > currentTime
-}
-```
-
-```cedar
-when {
-    context.authn_mfa
+    context.authnMfa
 }
 ```
 
