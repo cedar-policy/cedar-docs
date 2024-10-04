@@ -50,7 +50,7 @@ Developers must understand how the results of evaluating individual policies are
 + **forbid-overrides-permit** &ndash; A single `forbid` policy evaluating to true results in a `Deny`.
 + An error in a policy results in that policy being ignored for the purpose of an evaluation decision. (*skip-on-error* semantics)
 
-For more information, see [Rquest authorization discussion](../auth/authorization.html#request-authorization-discussion).
+For more information, see [Request authorization discussion](../auth/authorization.html#request-authorization-discussion).
 ### Validating your Cedar policies against your schema {#security-validate-against-schema}
 
 Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. By providing a schema, policies that pass validation don't result in runtime errors when they are run against schema-compliant entities and requests.
