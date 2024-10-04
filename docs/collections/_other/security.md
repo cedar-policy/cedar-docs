@@ -20,7 +20,7 @@ This section provides information about security as it relates to the Cedar poli
 
 ## Shared responsibility {#security-shared-responsibility}
 
-Security is a shared responsibility between Cedar and its users. It is the responsibility of Cedar to correctly evaluate policies to arrive at an authorization decision. It is the responsibility of users of Cedar to correctly define policies that implement their authorization model and provide CXedar with all the relevant data to arrive at a decision. Although Cedar provides tools such as the policy validator to validate your policies against the schema, it is ultimately the user's responsibility to write policies correctly.
+Security is a shared responsibility between Cedar and its users. It is the responsibility of Cedar to correctly evaluate policies to arrive at an authorization decision. It is the responsibility of users of Cedar to correctly define policies that implement their authorization model and provide Cedar with all the relevant data to arrive at a decision. Although Cedar provides tools such as the policy validator to validate your policies against the schema, it is ultimately the user's responsibility to write policies correctly.
 
 ## Security of Cedar {#security-cedar}
 
@@ -50,7 +50,7 @@ Developers must understand how the results of evaluating individual policies are
 + **forbid-overrides-permit** &ndash; A single `forbid` policy evaluating to true results in a `Deny`.
 + An error in a policy results in that policy being ignored for the purpose of an evaluation decision. (*skip-on-error* semantics)
 
-For more information, see [REquest authorization discussion](../auth/authorizationb.html#request-authorization-discussion).
+For more information, see [Rquest authorization discussion](../auth/authorization.html#request-authorization-discussion).
 ### Validating your Cedar policies against your schema {#security-validate-against-schema}
 
 Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. By providing a schema, policies that pass validation don't result in runtime errors when they are run against schema-compliant entities and requests.
