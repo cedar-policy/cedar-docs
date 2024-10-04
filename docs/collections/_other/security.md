@@ -20,7 +20,7 @@ This section provides information about security as it relates to the Cedar poli
 
 ## Shared responsibility {#security-shared-responsibility}
 
-Security is a shared responsibility between Cedar and its users. It is the responsibility of Cedar to correctly evaluate policies to arrive at an authorization decision. It is the responsibility of users of Cedar to correctly define policies that implement their authorization model. Although Cedar provides tools such as the policy validator to validate your policies against the schema, it is ultimately the user's responsibility to write policies correctly.
+Security is a shared responsibility between Cedar and its users. It is the responsibility of Cedar to correctly evaluate policies to arrive at an authorization decision. It is the responsibility of users of Cedar to correctly define policies that implement their authorization model and provide CXedar with all the relevant data to arrive at a decision. Although Cedar provides tools such as the policy validator to validate your policies against the schema, it is ultimately the user's responsibility to write policies correctly.
 
 ## Security of Cedar {#security-cedar}
 
@@ -30,20 +30,15 @@ We, members of the Cedar development team, ensure Cedar’s correctness and secu
 
 1. **A formal model** implemented in Lean. Lean is an open-source programming language and theorem prover. The Lean model consists of executable definitions of Cedar’s components which represent the semantics of Cedar, and *properties* of those components. Lean verifies that the properties hold. It gives us confidence that our definition of the ground truth is correct.
 
-1. **A production authorization engine** written in Rust. We use only the `safe` subset of Rust, giving us memory safety, type safety, and data-race safety.
+1. **A production authorization engine** written in Rust. We use only the safe subset of Rust, giving us memory safety, type safety, and data-race safety.
 
-1. **A differential testing engine** that can test automatically that \#1 and \#2 have the same semantics.
+1. **A differential testing engine** that can test automatically that \#1 and \#2 have the same semantics. For more information about differential testing, see [How we built Cedar with automated reasoning and differential testing](https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing) on the *Amazon Science* blog.
 
 ![\[How Cedar is verified as correct and secure.\]](../../images/security-of-cedar.png)
 
-In particular, Cedar provides two properties about authorization queries:
-
-+ *default-deny* &ndash; Authorization queries result in a `Deny` unless an explicit `permit` policy evaluates to `true`.
-+ *forbid-trumps-permit* &ndash; A single `forbid` policy evaluating to `true` results in a `Deny`.
-
 ## Security of applications using Cedar {#security-of-apps}
 
-It is the responsibility of applications using Cedar to implement their authorization logic correctly using Cedar policies. To do this, application developers must understand the semantics of Cedar policies. Developers should understand the risks associated with an incorrectly implemented authorization model and take appropriate steps to mitigate those risks. We will provide customers with tools to help them author correct and secure policies, such as policy validation, semantic analysis, and policy templates.
+It is the responsibility of applications using Cedar to implement their authorization logic correctly using Cedar policies. To do this, application developers must understand the semantics of Cedar policies. Developers should understand the risks associated with an incorrectly implemented authorization model and take appropriate steps to mitigate those risks. We will provide customers with tools to help them author correct and secure policies, such as policy validation and policy templates.
 
 ### Understanding Cedar semantics {#security-cedar-semantics}
 
@@ -55,6 +50,7 @@ Developers must understand how the results of evaluating individual policies are
 + **forbid-overrides-permit** &ndash; A single `forbid` policy evaluating to true results in a `Deny`.
 + An error in a policy results in that policy being ignored for the purpose of an evaluation decision. (*skip-on-error* semantics)
 
+For more information, see [REquest authorization discussion](../auth/authorizationb.html#request-authorization-discussion).
 ### Validating your Cedar policies against your schema {#security-validate-against-schema}
 
 Cedar users can check that policies are consistent with a *schema*. The schema defines the expected structure and type of Cedar entities represented in requests. In particular, the schema defines the set of entity types and how they are used (as actions, principals, or resources), how entities can be grouped into a hierarchy, and what attributes the entities have. Users can validate a policy before adding it to the store. By providing a schema, policies that pass validation don't result in runtime errors when they are run against schema-compliant entities and requests.
@@ -69,7 +65,7 @@ The Cedar validator can detect the many types of bugs, including the following:
 + **Detect optional attributes referenced without an existence check.** &ndash; For example, `principal.optionalValue < 100` instead of `principal has optionalValue && principal.optionalValue < 100`
 + **Detect invalid parameters to the constructors of extension types.** &ndash; For example, `IP("3.45.1111.43")` isn’t a valid IP address.
 
-Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. We achieve a high confidence in the correctness of the validator by formally modeling it using Lean. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
+Writing a schema and using the policy validator can give you increased confidence that you’ve written your authorization policies correctly. It is your responsibility to write a schema that correctly models your data. It is the responsibility of Cedar to ensure that the validator is correct. Cedar includes *entity validation* and *request validation* that you can use to check that your data conforms to your schema. We achieve a high confidence in the correctness of the validator by formally modeling it using Lean. We have proved the correctness of the validation algorithm, and we use differential testing to ensure the production validator matches the behavior of the formal model. For more information, see [Cedar policy validation against schema](../policies/validation.html).
 
 ## Input Validation {#security-input-validation}
 The Cedar spec places no restrictions on the size of Cedar policies, schemas, or requests. 
@@ -88,7 +84,7 @@ Some security best practices for applications that use Cedar are as follows:
   + Cedar has no facilities for I/O, so Cedar policies are unable to perform activities like reading files or talking to the network.
   + The evaluation of one Cedar policy can't effect the evaluation of another policy.
   + While all Cedar policies are guaranteed to terminate, a malicious user could attempt to submit very lengthy policies, incurring either storage or performance costs. If you are evaluating arbitrary Cedar policies, we recommend that you put a length limit in place.
-  + Cedar provides on authorization &ndash; determining what an authenticated user can do. However, Cedar does ***not*** perform authentication &ndash; verifying the identity of the users who attempt to access your application. You application must provide authentication services separately and then proceed with authorization of only successfully authenticated users.
+  + Cedar provides authorization &ndash; determining what an authenticated user can do. However, Cedar does ***not*** perform authentication &ndash; verifying the identity of the users who attempt to access your application. You application must provide authentication services separately and then proceed with authorization of only successfully authenticated users.
 
 + Write a schema and have Cedar validate it to ensure your authorization policies don't encounter runtime errors.
 
@@ -114,7 +110,7 @@ Some security best practices for applications that use Cedar are as follows:
    permit (principal == User::"alice", action == Action::"view", resource) when { principal.level > 3 };
    ```
 
-   But, if an attacker could somehow control the value for `input`, they could achieve `Cedar` code injection. For example, if the attacker set `input` to the following.
+   But, if an attacker could somehow control the value for `input`, they could achieve Cedar code injection. For example, if the attacker set `input` to the following.
 
    ```cedar
    "principal,action,resource); //"
