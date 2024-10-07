@@ -151,7 +151,7 @@ Member ::= Primary {Access}
 ## `Annotation` {#grammar-annotation}
 
 ```
-Annotation ::= '@'ANYIDENT'('STR')'
+Annotation ::= '@' ANYIDENT ( '('STR')' )?
 ```
 
 ## `Access` {#grammar-access}
