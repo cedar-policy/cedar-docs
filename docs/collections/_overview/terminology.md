@@ -76,7 +76,7 @@ A [principal](../policies/syntax-policy.html#term-parc-principal), an [action](.
 
 Entities are referenced by their type and identifier, together called the entity's *unique identifier* (UID). For example, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario.
 
-Entities have attributes that corespond to information that's known, such as information that's stored in a dayabase. For example, an entity of type `Photo` might contain attributes like the following:
+Entities have attributes that corespond to information that's known, such as information that's stored in a database. For example, an entity of type `Photo` might contain attributes like the following:
 
 + A `name` \(a [string](../policies/syntax-datatypes.html#datatype-string)\)
 + A `createdDate` \(a string containing a date\)
