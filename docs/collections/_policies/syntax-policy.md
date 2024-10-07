@@ -9,17 +9,17 @@ nav_order: 1
 
 A policy is a text document that includes the following elements:
 
-+ **[Effect](#term-policy-effect)** &ndash; The effect specifies the *intent* of the policy, to either *permit*` or *forbid* any request that matches the scope and conditions specified in the policy.
++ **[Effect](#term-policy-effect)** &ndash; The effect specifies the *intent* of the policy, to either *permit* or *forbid* any request that matches the scope and conditions specified in the policy.
 
-+ **[Scope](#term-policy-scope)** &ndash; The scope specifies the combination of principals, actions, and resources to which the policy applies. Inclusion of these elements is mandatory. A policy that has *only* a scope without additional context conditions can be part of a [role-based access control](https://wikipedia.org/wiki/Role-based_access_control) strategy.
++ **[Scope](#term-policy-scope)** &ndash; The scope specifies the combination of principals, actions, and resources to which the policy applies. Inclusion of these elements is mandatory. A policy that has *only* a scope without additional conditions can be part of a [role-based access control](https://wikipedia.org/wiki/Role-based_access_control) strategy.
 
 + **[Conditions](#term-parc-context)** &ndash; *(Optional)* You can optionally provide additional conditions. These conditions must be satisfied for the policy to affect the evaluation of the authorization request. These conditions are expressed as `when` and `unless` clauses. You can use the conditions to evaluate the attributes of the principals, resources, and other elements that make up the context of the request. A policy that includes conditions can be part of an [attribute-based access control](https://wikipedia.org/wiki/Attribute-based_access_control) strategy.
 
-+ **[Annotations](#term-parc-annotations)** &ndash; *(Optional)* An annotation is an arbitrary string value that can be used by other services that read and process Cedar policies. An annotation has no impact on policy evaluation.
++ **[Annotations](#term-parc-annotations)** &ndash; *(Optional)* An annotation is an arbitrary key-value pair that can be used by other services that read and process Cedar policies. An annotation has no impact on policy evaluation.
 
 The policy must end with a semicolon character (`;`).
 
-When the request exactly matches the scope, and all of the context conditions evaluate to `true`, then that policy evaluates to `true`. This process repeats for all policies that are relevant to the principal and resources referenced by the request.
+When the request exactly matches the scope, all of the `when` clauses evaluate to `true`, and all of the `unless` clauses evaluate to `false`, then that policy evaluates to `true`. This process repeats for all policies that are relevant to the principal and resources referenced by the request.
 
 {: .important }
 >This guide includes examples that use simple entity identifiers, such as `jane` or `bob` for the name of an entity of type `User`. This is done to make the examples more readable. However, in a production system it is critical for security reasons that you use unique values that can't be reused.
@@ -149,8 +149,6 @@ The resource element in a Cedar policy is a resource defined by your application
 
 The `resource` element must be present. If you specify only `resource` without an expression that constrains its scope, then the policy applies to *any* resource.
 
-The `principal`, `action`, and `resource` elements are defined as entities.
-
 #### Examples of the `resource` element {#term-parc-resource-examples}
 {: .no_toc }
 
@@ -167,7 +165,7 @@ resource in Album::"alice_vacation"
 //matches any resource of type Photo
 resource is Photo
 
-//matches any resource of type Photo in the hierarchy of the specified entity Album
+//matches any resource of type Photo in the hierarchy of the specified Album
 resource is Photo in Album::"alice_vacation"
 ```
 
@@ -254,11 +252,11 @@ unless {
 
 ## Annotations {#term-parc-annotations}
 
-You can attach arbitrary string values to Cedar policies in the form of annotation. An annotation has no impact on policy evaluation. Annotations are stored as part of the policy and are available for use by services that read and process Cedar policies.
+You can attach arbitrary key-velaue pairs to Cedar policies in the form of annotations. An annotation has no impact on policy evaluation. Even though annotations are not processed by Cedar, they are stored as part of the policy and are available for use by services and applications that read and process Cedar policies.
 
 You can place annotations only at the very top of the policy before the [effect](#term-policy-effect) element.
 
-An annotation takes the form of the following string:
+An annotation has the following form:
 
 ```cedar
 @annotationname("annotation value")
