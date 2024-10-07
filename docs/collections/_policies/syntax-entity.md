@@ -29,15 +29,18 @@ An entity in Cedar has the following components.
    >
    > We recommend that you use values like [universally unique identifiers \(UUIDs\)](https://wikipedia.org/wiki/Universally_unique_identifier). For example, if user `jane` leaves the company, and you later let someone else use the name `jane`, then that new user automatically gets access to everything granted by policies that still reference `User::"jane"`.
    >
-   > Cedar can't distinguish between the new user and the old. This applies to both principal and resource identifiers. Always use identifiers that are guaranteed unique and never reused to ensure that you don't unintentionally grant access because of the presence of an old identifier in a policy.  
+   > Cedar can't distinguish between the new user and the old. This applies to both principal and resource identifiers. Always use identifiers that are guaranteed unique and never reused to ensure that you don't unintentionally grant access because of the presence of an old identifier in a policy.
    >
-   > Where you use a UUID for an entity, we recommend that you follow it with the `//` comment specifier and the 'friendly' name of your entity. This helps to make your policies easier to understand. For example:  
+   > Where you use a UUID for an entity, we recommend that you follow it with the `//` comment specifier and the 'friendly' name of your entity. This helps to make your policies easier to understand. For example:
    >
    >```cedar
    >principal == User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111", // alice
    >```
 
 + **Attributes** &ndash; Zero or more attributes that can be of any [data type supported by Cedar](../policies/syntax-datatypes.html). For example, an entity of type `Photo` might contain attributes like a `name` \(a [string](../policies/syntax-datatypes.html#datatype-string)\), a `createdDate` \(a string containing a date\), a `location` \(a [set](../policies/syntax-datatypes.html#datatype-set) of type [Decimal](../policies/syntax-datatypes.html#datatype-decimal) that represent coordinates\), and the `photographer` \(a reference to another entity representing the user who took the photo\). Define the attributes relevant to an entity type as part of your application's schema.
+
++ **Tags** &ndash; Zero or more tags. Tags are similar to attributes, but they can have key names
+which are known only dynamically (at run-time) and not when the policy/schema is authored.
 
 Entities can be grouped into [logical hierarchies](../overview/terminology.html#term-group). You create a hierarchy by specifying a `parent` attribute that points to the group of which the entity is a member. Hierarchies allow you to arrange your entities according to the requirements of your scenario. For example, if your application has an entity that represents a `Photo`, then you can arrange those photos into one or more `Album` groups.
 
@@ -76,6 +79,9 @@ Entities support the following operators in a Cedar policy:
 + **Hierarchy / membership** &ndash; Using the `in` operator, you can determine if one entity is a descendant of (or a member of) another entity's hierarchy. For more information, see [in operator](../policies/syntax-operators.html#operator-in).
 + **Attribute presence** &ndash; Using the [has operator](../policies/syntax-operators.html#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
 + **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
++ **Tag presence** &ndash; Using the [`.hasTag()` method](../policies/syntax-operators.html#operator-hasTag), you can determine that a tag is present before attempting to access its value. If you attempt to access a tag that doesn't exist for the specified entity, it generates an error.
++ **Tag access** &ndash; Using the [`.getTag()` method](../policies/syntax-operators.html#operator-getTag), you can retrieve the value of one of the entity's tags. The type of this
+value is defined in the [schema](..schema/schema.html).
 
 ## Namespaces {#entity-namespace}
 

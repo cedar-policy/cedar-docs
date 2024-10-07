@@ -10,9 +10,9 @@ nav_order: 2
 
 This topic describes the grammar specification for the Cedar schema format. For a more complete description, see [Cedar schema format](../schema/human-readable-schema.html).
 
-The grammar applies the following conventions. 
+The grammar applies the following conventions.
 + Words with initial capital letters designate grammar constructs.
-+ Words in all capital letters designate lexical tokens. 
++ Words in all capital letters designate lexical tokens.
 
 When productions or tokens match those in the Cedar policy grammar, use the same names, for example `IDENT` and `Path`.
 
@@ -35,7 +35,7 @@ The grammar adopts the same string escaping rules as the [Cedar policy grammar](
 Schema    := {Namespace}
 Namespace := ('namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
-Entity    := 'entity' Idents ['in' EntOrTyps] [['='] RecType] ';'
+Entity    := 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';'
 Action    := 'action' Names ['in' RefOrRefs] [AppliesTo]';'
 TypeDecl  := 'type' TYPENAME '=' Type ';'
 Type      := Path | SetType | RecType

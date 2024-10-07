@@ -112,10 +112,10 @@ Each entry in the `entityTypes` is a JSON object with the following properties.
 
 ### Entity type name {#schema-entitytypes-name}
 
-Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words.  
+Specifies the name of the entity type as a string. This type name must be an identifier, which is defined in the Cedar grammar as a sequence of alphanumeric characters, omitting any Cedar reserved words.
 
 {: .important }
->The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.  
+>The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
 
 ```json
 "My::Name::Space": {
@@ -138,7 +138,7 @@ Specifies a list of entity types that can be direct parents of entities of this 
 ```json
 "entityTypes": {
     "UserGroup": {
-        … 
+        …
     },
     "User": {
         "memberOfTypes": [ "UserGroup" ],
@@ -150,7 +150,7 @@ Specifies a list of entity types that can be direct parents of entities of this 
 If the parent type is part of the same namespace as the child type, then you can reference simply the parent type's name. If the parent type is in a different namespace than the child type, then you must include the parent type's namespace as part of the reference. The following example references two parent types, both named `UserGroup`. The first `UserGroup` is part of the same namespace as the child entity type that this entry is part of. The second `UserGroup` is defined in the namespace `Aws::Cognito::UserPool_1`.
 
 ```json
-"memberOfTypes": [ 
+"memberOfTypes": [
     "UserGroup",
     "Aws::Cognito::UserPool_1::UserGroup"
 ]
@@ -180,6 +180,10 @@ Each attribute in the `attributes` portion of the `shape` record must follow the
 
 Note that if the `shape` element is omitted, then entities of the type being defined are assumed to have no data stored with them. This is equivalent to specifying a `Record` with `{}` for its attributes.
 
+### `tags` {#schema-entitytypes-tags}
+
+Specifies the tag type for entities of this type. If this is not present, entities of this type are not allowed to have tags. Legal values for the tag type are the same as legal values for [attribute types](#schema-attributes-types).
+
 ### Attribute specifications {#schema-attributes-specs}
 
 Each attribute in a `Record` is a JSON object that describes one attribute in the record associated with entities of this type. It has the form
@@ -195,7 +199,7 @@ where `name` is the name of the attribute, and `Type` is one of the [Cedar suppo
 You can choose to specify whether an attribute is required or optional. By default, attributes that you define are required. This means that policies that reference this type can assume that the attribute is always present. You can make an attribute optional by adding `"required": false` to the attribute description. Here is an example:
 
 ```json
-"jobLevel": { 
+"jobLevel": {
     "type": "Long",
     "required": false
 },
@@ -379,15 +383,15 @@ The following schema snippet shows an action named `viewAlbum` that is a member 
 
 ```json
 "actions": {
-    "viewAlbum": { 
-        … 
-        "memberOf": [ 
+    "viewAlbum": {
+        …
+        "memberOf": [
             {
                 "id": "viewImages",
                 "type": "PhotoFlash::Images::Action"
             },
         ],
-        …        
+        …
     }
 }
 ```
@@ -504,7 +508,7 @@ Returning to our motivating example, we can define a record type called `ReusedC
     }
 }
 ```
-When referencing the attributes of a `commonType` object, you can reference the attributes directly. As an example, take the `view` action from the above schema. It is of `type` `ReusedContent`, which is defined as a `commonTypes` object. The following is how you would reference the `is_authenticated` attribute:  
+When referencing the attributes of a `commonType` object, you can reference the attributes directly. As an example, take the `view` action from the above schema. It is of `type` `ReusedContent`, which is defined as a `commonTypes` object. The following is how you would reference the `is_authenticated` attribute:
 
 ```json
 context.is_authenticated == "True"

@@ -27,6 +27,7 @@ At the top level, Cedar expects a JSON list (an array using `[ ]`) of objects. E
 + [`uid`](#uid)
 + [`parents`](#parents)
 + [`attrs`](#attrs)
++ [`tags`](#tags) (optional)
 
 ```json
 [
@@ -112,7 +113,7 @@ The `uid` object specifies the Cedar type and unique identifier for the entity. 
 "uid": {
     "__entity": {
         "type": "User",
-        "id": "12UA45" 
+        "id": "12UA45"
     }
 }
 ```
@@ -120,9 +121,9 @@ The `uid` object specifies the Cedar type and unique identifier for the entity. 
 ```json
 "uid": {
     "type": "User",
-    "id": "12UA45" 
+    "id": "12UA45"
 }
-```  
+```
 
 ### `parents`
 
@@ -132,16 +133,21 @@ Example:
 
 ```json
 "parents": [
-    { 
+    {
         "type": "UserGroup",
-        "id": "aliceFriends" 
+        "id": "aliceFriends"
     },
     {
         "type": "UserGroup",
         "id": "bobFriends"
-    }    
+    }
 ]
 ```
+
+### `tags`
+
+In this format, entity tags are specified in exactly the same way as `attrs`,
+with key-names and values in the same format.
 
 ### Example
 
@@ -197,7 +203,7 @@ When you need to reference one of the context details in a policy, reference eac
 
 ```cedar
 when {
-    context.sourceIp.isInRange(ip("222.222.222.0/24")) 
+    context.sourceIp.isInRange(ip("222.222.222.0/24"))
 }
 ```
 
