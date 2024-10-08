@@ -142,7 +142,7 @@ Function that parses the string and tries to convert it to type [decimal](syntax
 
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
-Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
 
 #### Examples:
 {: .no_toc }
@@ -176,7 +176,7 @@ decimal("0.12345")               //error - too many fractional digits
 
 Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then the `ip()` expression generates an error when evaluated.
 
-Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
+Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
 
 #### Examples:
 {: .no_toc }
@@ -780,7 +780,7 @@ Stranger::"jimmy" in [
 #### More Examples:
 {: .no_toc }
 
-These examples both fail to evaluate and fail to validate because their operands are illegal.
+These examples both fail to evaluate and fail to validate because their operands are invalid.
 
 ```cedar
 "some" in ["some", "thing"] //error - these are strings, not entities. For strings, use `contains` for set membership.

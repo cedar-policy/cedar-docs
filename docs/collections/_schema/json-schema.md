@@ -182,7 +182,7 @@ Note that if the `shape` element is omitted, then entities of the type being def
 
 ### `tags` {#schema-entitytypes-tags}
 
-Specifies the tag type for entities of this type. If this is not present, entities of this type are not allowed to have tags. Legal values for the tag type are the same as legal values for [attribute types](#schema-attributes-types).
+Specifies the tag type for entities of this type. If this is not present, entities of this type are not allowed to have tags. Valid values for the tag type are the same as valid values for [attribute types](#schema-attributes-types).
 
 ### Attribute specifications {#schema-attributes-specs}
 
