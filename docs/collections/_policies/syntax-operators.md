@@ -35,8 +35,8 @@ The operators use the following syntax structures:
 
   ```cedar
   <operator> operand
-  
-  // Uses the logical NOT operator and evaluates to the 
+
+  // Uses the logical NOT operator and evaluates to the
   // inverse of the value of the Boolean operand
   ! a
   ```
@@ -45,11 +45,11 @@ The operators use the following syntax structures:
 
   ```cedar
   firstOperand <operator> secondOperand
-  
+
   // Evaluates to true if both operands have the same type and value
   a == b
-  
-  // Evaluates to true if the first operand is within the 
+
+  // Evaluates to true if the first operand is within the
   // hierarchy of the second operand
   c in d
   ```
@@ -69,8 +69,8 @@ Functions use one of two styles of syntax:
 
   ```cedar
   firstOperand.function(secondOperand, thirdOperand, …)
-  
-  // Evaluates to true if the any of the set member 
+
+  // Evaluates to true if the any of the set member
   // elements b, c, or d is an element of set a
   a.containsAny([b, c, d])
   ```
@@ -142,7 +142,7 @@ Function that parses the string and tries to convert it to type [decimal](syntax
 
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
-Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
 
 #### Examples:
 {: .no_toc }
@@ -176,7 +176,7 @@ decimal("0.12345")               //error - too many fractional digits
 
 Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then the `ip()` expression generates an error when evaluated.
 
-Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a legal string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_. 
+Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
 
 #### Examples:
 {: .no_toc }
@@ -211,7 +211,7 @@ ip("192.168.0.1/24") == ip("192.168.0.8/24")  //false - different host address
 ip("127.0.0.1") == ip("::1")                  //false – different IP versions
 ip("127.0.0.1") == ip("192.168.0.1/24")       //false - address compared to range
 ip("127.0.0.1") == "127.0.0.1"                //false – different types //Doesn't validate
-ip("::1") == 1                                //false – different types //Doesn't validate 
+ip("::1") == 1                                //false – different types //Doesn't validate
 ```
 
 ## Comparison operators and functions {#operators-comparison}
@@ -222,7 +222,7 @@ Use these operators to compare two values. An expression that uses one of these 
 
 **Usage:** `<any type> == <any type>`
 
-Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value. 
+Binary operator that compares two operands of any type and evaluates to `true` only if they are exactly the same type and the same value.
 
 While Cedar can _evaluate_ expressions `e1 == e2` when `e1` and `e2` have different types (usually giving the result `false`), such comparison expressions are not accepted by the policy validator. In particular, policies containing equality expressions `e1 == e2` are only validated when
 
@@ -250,8 +250,8 @@ context.device_properties == {"os": "Windows", "version": 11}
 User::"alice" == User::"alice"  //true
 User::"alice" == User::"bob"    //false -- two different entities of same type
 User::"alice" == Admin::"alice" //false -- entities of two different types //Validates
-5 == "5"                        //false -- operands have two different types //Doesn't validate 
-"alice" == User::"alice"        //false -- operands have two different types //Doesn't validate 
+5 == "5"                        //false -- operands have two different types //Doesn't validate
+"alice" == User::"alice"        //false -- operands have two different types //Doesn't validate
 ```
 
 ### `!=` \(inequality\) {#operator-inequality}
@@ -496,7 +496,7 @@ Binary operator that evaluates to `true` if the first operand evaluates to `true
 This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `true`, then the expression immediately evaluates to `true` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. The first argument should be a test that can determine if the second argument is safe to evaluate. For example, consider the following expression. It evaluates to `true` if the principal is either missing the `age` attribute or that attribute is at least 21.
 
 ```cedar
-!(principal has age) || principal.age < 21 
+!(principal has age) || principal.age < 21
 ```
 
 The second comparison in this expression will evaluate to a Boolean only if the `age` attribute for the `principal` entity is present. If it is missing, then `principal.age` will evaluate to an error. The first expression uses the [`has`](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property. If that evaluates to `true`, there is no test of the second expression.
@@ -610,7 +610,7 @@ The example `if 1 == 1 then "ok" else "wrong"` validates because the first opera
 
 Use these operators to perform arithmetic operations on `Long` integer values.
 
-**Notes**  
+**Notes**
 The arithmetic operators support ***only*** values of type `Long`. They don't support values of type `Decimal`.
 There is no operator for arithmetic division.
 
@@ -762,7 +762,7 @@ The right operand of `in` can be any expression that evaluates to a set of entit
 Then the following two expressions in a policy statement are equivalent:
 
 ```cedar
-User::"alice" in context.groups 
+User::"alice" in context.groups
 User::"alice" in [Group::"jane_family", Group::"jane_friends"]
 ```
 
@@ -780,7 +780,7 @@ Stranger::"jimmy" in [
 #### More Examples:
 {: .no_toc }
 
-These examples both fail to evaluate and fail to validate because their operands are illegal.
+These examples both fail to evaluate and fail to validate because their operands are invalid.
 
 ```cedar
 "some" in ["some", "thing"] //error - these are strings, not entities. For strings, use `contains` for set membership.
@@ -881,6 +881,27 @@ Recall that types `True` and `False` are used internally by the validator for si
 
 The validator will reject any `has` expression whose left-hand operand is not an expression whose type is an entity or record.
 
+### `.hasTag()` \(presence of tag test\) {#operator-hasTag}
+
+**Usage:** `<entity>.hasTag(<expr>)`
+
+Method that evalutes to `true` if the entity on the left has a value defined for the tag name specified on the right. Unlike for attributes with [`has`](#operator-has), for tags the tag name may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
+
+In all other respects, `.hasTag()` behaves similarly to [`has`](#operator-has) except that it
+operates on tags instead of attributes. (And only entities, not records, can have tags.)
+
+Calling `.hasTag()` on an entity type without a `tags` declaration is valid and will return `false` without a validation error, because entities of that type cannot have tags.
+
+### `.getTag()` \(tag access\) {#operator-getTag}
+
+**Usage:** `<entity>.getTag(<expr>)`
+
+Method that gets the value of a given tag. The tag name (`<expr>`) may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
+
+For validation, `.getTag()` has the same relationship to `.hasTag()` as `.` has to `has`. See the notes on [`has`](#operator-has).
+
+The `.getTag()` expression has a return type as specified by the `tags` declaration on the appropriate entity type in the [schema](../schema/schema.html#schema). If `.getTag()` is used on an entity type without a `tags` declaration, validation produces an error.
+
 ### `is` \(entity type test\) {#operator-is}
 
 **Usage:** `<entity> is <entity-type>`
@@ -943,7 +964,7 @@ Recall that for `Action::"view"` we said that `principal`s always have type `Use
 
 **Usage:** `<set>.contains(<value>)`
 
-Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `Set` or evaluation produces an error. To be accepted by the policy validator, `contains` must be called on a receiver that is a `Set` of some type _T_, with an argument that also has type _T_. 
+Function that evaluates to `true` if the operand is a member of the receiver on the left side of the function. The receiver must be of type `Set` or evaluation produces an error. To be accepted by the policy validator, `contains` must be called on a receiver that is a `Set` of some type _T_, with an argument that also has type _T_.
 
 #### Examples:
 {: .no_toc }
@@ -988,10 +1009,10 @@ In the examples that follow, those labeled `//error` both evaluate and validate 
 "ham and eggs".containsAll("ham")                                 //error - prefix and operand are strings
 {"2": "ham", "3": "eggs "}.containsAll({"2": "ham"})              //error - prefix and operand are records
 ```
-Some examples evaluate to a result but fail to validate for one or more of the following reasons: 
+Some examples evaluate to a result but fail to validate for one or more of the following reasons:
 - They operate on heterogeneous sets: values of multiple types
 - They reference the empty-set literal `[]`
-- They don't operate on sets at all. 
+- They don't operate on sets at all.
 See [valid sets](syntax-datatypes.html#datatype-set) for more info.
 
 ### `.containsAny()` \(any element set membership test\) {#function-containsAny}
@@ -1099,7 +1120,7 @@ context.foo.isMulticast()      //error if `context.foo` is not an `ipaddr`
 
 **Usage:** `<ipaddr>.isInRange(<ipaddr>)`
 
-Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand. This function evaluates (and validates) to an error if either operand does not have `ipaddr` type. 
+Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand. This function evaluates (and validates) to an error if either operand does not have `ipaddr` type.
 
 #### Examples:
 {: .no_toc }

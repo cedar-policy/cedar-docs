@@ -40,12 +40,14 @@ The following entity type declaration specifies an entity type `User` , whose pa
 
 The attribute `delegate` is optional, as indicated by the `?` after the attribute name.
 
+Finally, entities of type `User` have string-typed `tags`, which means that `User`s may have any number of tags, with any names, where the value associated with each tag is a `String`.
+
 ```cedarschema
 entity User in [Group] {
     personalGroup: Group,
     delegate?: User,
     blocked: Set<User>,
-};
+} tags String;
 ```
 
 Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
@@ -242,8 +244,8 @@ namespace PhotoFlash {
     "private": Bool,
   };
   action "uploadPhoto" appliesTo {
-    principal: User, 
-    resource: Album, 
+    principal: User,
+    resource: Album,
     context: {
       "authenticated": Bool,
       "photo": {
@@ -253,15 +255,15 @@ namespace PhotoFlash {
     }
   };
   action "viewPhoto" appliesTo {
-    principal: User, 
-    resource: Photo, 
+    principal: User,
+    resource: Photo,
     context: {
       "authenticated": Bool,
     }
   };
   action "listAlbums" appliesTo {
-    principal: User, 
-    resource: Account, 
+    principal: User,
+    resource: Account,
     context: {
       "authenticated": Bool,
     }

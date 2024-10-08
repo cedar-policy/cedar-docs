@@ -128,11 +128,11 @@ The `op` key is required. The `op` object must have one of the following string 
 
     ```json
     "principal": {
-        "op": "All" 
+        "op": "All"
     }
     ```
 
-* `==`  
+* `==`
     If present, then the `principal` object must also have one of the following:
 
   * [`entity`](#entity)
@@ -153,7 +153,7 @@ The `op` key is required. The `op` object must have one of the following string 
         "entity": { "type": "User", "id": "12UA45" }
     }
     ```
-  
+
   * [`slot`](#slot)
 
     **Example**
@@ -310,11 +310,11 @@ The `op` object must have one of the following string values:
 
     ```json
     "action": {
-        "op": "All" 
+        "op": "All"
     }
     ```
 
-* `==`  
+* `==`
 
     If present, then the `action` object must also have the following object:
 
@@ -411,11 +411,11 @@ The `op` object must have one of the following string values:
 
     ```json
     "resource": {
-        "op": "All" 
+        "op": "All"
     }
     ```
 
-* `==`  
+* `==`
 
   If this operator is present, then the `resource` object must also have one of the following:
 
@@ -437,7 +437,7 @@ The `op` object must have one of the following string values:
         "entity": { "type": "file", "id": "vacationphoto.jpg" }
     }
     ```
-  
+
   * [`slot`](#slot)
 
     **Example**
@@ -481,7 +481,7 @@ The `op` object must have one of the following string values:
     ```
 
   * [`slot`](#slot)
-  
+
     **Example**
 
     Cedar policy line:
@@ -570,7 +570,7 @@ The `op` object must have one of the following string values:
 
 The `conditions` object is required.
 
-The value of this object is a JSON array of objects.  Each object in the array must have exactly two keys: `kind` and `body`.  
+The value of this object is a JSON array of objects.  Each object in the array must have exactly two keys: `kind` and `body`.
 
 The `kind` key must be either the string `when` or the string `unless`.
 
@@ -611,7 +611,7 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Slot`](#JsonExpr-Slot)
 + [`Unknown`](#JsonExpr-Unknown)
 + [`!` or `neg` operators](#JsonExpr-neg)
-+ [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`](#JsonExpr-binary)
++ [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
 + [`.`, `has`](#JsonExpr-has)
 + [`like`](#JsonExpr-like)
 + [`if-then-else`](#JsonExpr-if-then-else)
@@ -844,7 +844,7 @@ JSON representation
 ]
 ```
 
-#### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny` {#JsonExpr-binary}
+#### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag` {#JsonExpr-binary}
 
 The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [JsonExpr object](#JsonExpr-objects).
 
@@ -988,7 +988,7 @@ JSON representation
             }
         }
     }
-]    
+]
 ```
 
 #### `Set` {#JsonExpr-Set}
@@ -1032,7 +1032,7 @@ JSON representation
         "foo": { "Value": "spam" },
         "somethingelse": { "Value": false },
     }
-}    
+}
 ```
 
 #### Any other key {#JsonExpr-any-other-key}
@@ -1121,7 +1121,7 @@ forbid (
 Here is the JSON representation of this policy set, plus a template-linked policy that sets the `?resource` placeholder of the template.
 
 ```json
-{ 
+{
     "staticPolicies": {
         "policy0": {
             "effect": "permit",
