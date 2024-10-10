@@ -626,12 +626,12 @@ Binary operator that adds the two `Long` integer values and returns a `Long` int
 #### Example:
 {: .no_toc }
 
-The following policy returns `allow` if the context `budget` minus the context `downloaded` is greater than 100.
+The following policy returns `allow` if the context `budget` plus the context `downloaded` is greater than 100.
 
 ```cedar
 permit (principal, action, resource)
 when {
-    context.budget - context.downloaded > 100
+    context.budget + context.downloaded > 100
 };
 ```
 
@@ -681,7 +681,7 @@ Binary operator that multiplies two `Long` integer operands and returns a `Long`
 #### Examples:
 {: .no_toc }
 
-In these examples, suppose that `resource.value` is 3 and `context.budget` is 4. Examples labeled with `//error` both fail to evaluate *and* fail to validate, except in the case of overflow, in which case evaluation produces an error but validation does not. Failure to parse precludes both evaluation and validation.
+In these examples, suppose that `resource.value` is 3 and `context.budget` is 4. Examples labeled with `//error` both fail to evaluate *and* fail to validate, except in the case of overflow, in which case evaluation produces an error but validation does not.
 
 ```cedar
 10 * 20                          //200
@@ -749,7 +749,7 @@ would evaluate to `true` because the second expression given to `||` is short-ci
 User::"bob" in [Group::"janefriends", 1]
 ```
 
-evalautes to an error (since `1` is not an entity).
+evaluates to an error (since `1` is not an entity).
 
 The right operand of `in` can be any expression that evaluates to a set of entity references, not just a set literal. For example, suppose the query `context` record contains the following:
 
@@ -783,7 +783,7 @@ Stranger::"jimmy" in [
 These examples both fail to evaluate and fail to validate because their operands are invalid.
 
 ```cedar
-"some" in ["some", "thing"] //error - these are strings, not entities. For strings, use `contains` for set membership.
+"some" in ["some", "thing"] //error - these are strings, not entities. Use `contains` for set membership.
 "os" in {"os":"Windows "}   //error - use `has` operator to check if a key exists
 ```
 
