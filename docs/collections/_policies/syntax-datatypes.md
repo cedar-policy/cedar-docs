@@ -26,8 +26,6 @@ A value that is either `true` or `false`.
 
 A sequence of characters consisting of letters, numbers, or symbols.
 
-Cedar doesn't have a string length limit, but services that use Cedar are likely to have limits for each element with a value of type `String`.
-
 ## Long {#datatype-long}
 
 A whole number without decimals that can range from -9223372036854775808 to 9223372036854775807.
@@ -60,13 +58,13 @@ While all of the above sets can be _evaluated_ successfully, not all of them can
 
 A collection of *attributes*. Each attribute consists of a name and an associated value. Names are simple strings. Values can be of any type. You can access an attribute's value by referencing its name as an index using either of the following syntax options:
 
-+ `record["attributename"]`
++ `record["attributename"]` (Required syntax if the attribute name includes anything other than letters, numbers, or underscores.) 
 + `record.attributename`
 
 The following example shows the correct syntax for a `Record`.
 
 ```json
-{"key": "some value", id: "another value" }
+{"key": "some value", id: "another value"}
 ```
 
 You can reference the first attribute as either `record["key"]` or `record.key`. Both options evaluate to `"some value"`.
@@ -102,6 +100,13 @@ Action::"ReadFile"
 // A principal of type User with a full UUID as 
 // the entity identifier and its friendly name in comments
 User::"a1b2c3d4-e5f6-a1b2-c3d4-EXAMPLE11111"
+
+// A principal of type User in a Namespace PhotoFlash
+PhotoFlash::User::"alice"
+
+// A principal of type File in a nested namespace
+Nested::Namespace::App::File::"myFile.txt"
+
 ```
 
 {: .important }
