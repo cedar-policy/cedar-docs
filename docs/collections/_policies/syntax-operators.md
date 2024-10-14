@@ -37,7 +37,7 @@ The operators use the following syntax structures:
   <operator> operand
 
   // Uses the logical NOT operator and evaluates to the
-  // inverse of the value of the Boolean operand
+  // inverse of the value of the boolean operand
   ! a
   ```
 
@@ -216,7 +216,7 @@ ip("::1") == 1                                //false – different types //Does
 
 ## Comparison operators and functions {#operators-comparison}
 
-Use these operators to compare two values. An expression that uses one of these operators evaluates to a Boolean `true` or `false`. You can then combine multiple expressions using the logical operators.
+Use these operators to compare two values. An expression that uses one of these operators evaluates to a boolean `true` or `false`. You can then combine multiple expressions using the logical operators.
 
 ### `==` \(equality\) {#operator-equality}
 
@@ -270,11 +270,11 @@ when{
 };
 ```
 
-### `<` \(Long integer 'less than'\) {#operator-lessthan}
+### `<` \(long integer 'less than'\) {#operator-lessthan}
 
-**Usage:** `<Long> < <Long>`
+**Usage:** `<long> < <long>`
 
-Binary operator that compares two `Long` integer operands and evaluates to `true` if the left operand is numerically less than the right operand. If either operand is not a `Long` then evaluation (and validation) results in an error.
+Binary operator that compares two `long` integer operands and evaluates to `true` if the left operand is numerically less than the right operand. If either operand is not a `long` then evaluation (and validation) results in an error.
 
 #### Examples:
 {: .no_toc }
@@ -284,10 +284,10 @@ In the following examples, `//error` indicates both an evaluation and a validati
 ```cedar
 3 < 303               //true
 principal.age < 22    //true (assuming principal.age is 21)
-3 < "3"               //error - operator not allowed on non-Long
-false < true          //error - operator not allowed on non-Long
-"" < "zzz"            //error - operator not allowed on non-Long
-[1, 2] < [47, 0]      //error - operator not allowed on non-Long
+3 < "3"               //error - operator not allowed on non-long
+false < true          //error - operator not allowed on non-long
+"" < "zzz"            //error - operator not allowed on non-long
+[1, 2] < [47, 0]      //error - operator not allowed on non-long
 ```
 
 ### `.lessThan()` \(decimal 'less than'\) {#function-lessThan}
@@ -311,11 +311,11 @@ decimal("1.1").lessThan(2)                    //error -- not a decimal operand
 ip("1.1.2.3").lessThan(decimal("1.2"))        //error -- not a decimal operand
 ```
 
-### `<=` \(Long integer 'less than or equal'\) {#operator-lessthanorequal}
+### `<=` \(long integer 'less than or equal'\) {#operator-lessthanorequal}
 
-**Usage:** `<Long> <= <Long>`
+**Usage:** `<long> <= <long>`
 
-Binary operator that compares two `Long` integer operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand. If either operand is not a `Long` then evaluation (and validation) results in an error.
+Binary operator that compares two `long` integer operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand. If either operand is not a `long` then evaluation (and validation) results in an error.
 
 #### Examples:
 {: .no_toc }
@@ -325,10 +325,10 @@ In the following examples, `//error` indicates both an evaluation and a validati
 ```cedar
 3 <= 303               //true
 principal.age <= 21    //true (assuming principal.age is 21)
-3 <= "3"               //error - operator not allowed on non-Long
-false <= true          //error - operator not allowed on non-Long
-"" <= "zzz"            //error - operator not allowed on non-Long
-[1, 2] <= [47, 0]      //error - operator not allowed on non-Long
+3 <= "3"               //error - operator not allowed on non-long
+false <= true          //error - operator not allowed on non-long
+"" <= "zzz"            //error - operator not allowed on non-long
+[1, 2] <= [47, 0]      //error - operator not allowed on non-long
 ```
 
 ### `.lessThanOrEqual()` \(decimal 'less than or equal'\) {#function-lessThanOrEqual}
@@ -352,11 +352,11 @@ decimal("1.1").lessThanOrEqual(2)                   //error -- not a decimal ope
 ip("1.1.2.3").lessThanOrEqual(decimal("1.2"))       //error -- not a decimal operand
 ```
 
-### `>` \(Long integer 'greater than'\) {#operator-greaterthan}
+### `>` \(long integer 'greater than'\) {#operator-greaterthan}
 
-**Usage:** `<Long> > <Long>`
+**Usage:** `<long> > <long>`
 
-Binary operator that compares two `Long` integer operands and evaluates to `true` if the left operand is numerically greater than the right operand. If either operand is not a `Long` then evaluation (and validation) results in an error.
+Binary operator that compares two `long` integer operands and evaluates to `true` if the left operand is numerically greater than the right operand. If either operand is not a `long` then evaluation (and validation) results in an error.
 
 #### Examples:
 {: .no_toc }
@@ -366,9 +366,9 @@ In the following examples, `//error` indicates both an evaluation and a validati
 ```cedar
 3 > 303                //false
 principal.age > 22     //false (assuming principal.age is 21)
-3 > "3"                //error - operand is a non-Long
-false > true           //error - operands are not Long integers
-"some" > "thing"       //error - operands are not Long integers
+3 > "3"                //error - operand is a non-long
+false > true           //error - operands are not long integers
+"some" > "thing"       //error - operands are not long integers
 ```
 
 ### `.greaterThan()` \(decimal 'greater than'\) {#function-greaterThan}
@@ -393,11 +393,11 @@ ip("1.1.2.3").greaterThan(decimal("1.2"))       //error -- not a decimal operand
 ```
 The `greaterThan` function must take two `decimal` operands or else it will produce an error when evaluated, per the last two examples. The policy validator also rejects also any expression that attempts to call `greaterThan` on non-`decimal` values.
 
-### `>=` \(Long integer 'greater than or equals'\) {#operator-greaterthanorequal}
+### `>=` \(long integer 'greater than or equal'\) {#operator-greaterthanorequal}
 
-**Usage:** `<Long> >= <Long>`
+**Usage:** `<long> >= <long>`
 
-Binary operator that compares two `Long` integer operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand. If either operand is not a `Long` then evaluation (and validation) results in an error.
+Binary operator that compares two `long` integer operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand. If either operand is not a `long` then evaluation (and validation) results in an error.
 
 #### Examples:
 {: .no_toc }
@@ -407,11 +407,11 @@ In the following examples, `//error` indicates both an evaluation and a validati
 ```cedar
 3 >= 303               //false
 principal.age >= 21    //true (assuming principal.age is 21)
-3 >= "3"               //error - operand is a non-Long
-false >= true          //error - operands are not Long integers
-"some" >= "thing"      //error - operands are not Long integers
+3 >= "3"               //error - operand is a non-long
+false >= true          //error - operands are not long integers
+"some" >= "thing"      //error - operands are not long integers
 ```
-As shown in the examples, evaluating an expression with `>=` when the operators are not both `Long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `Long`.
+As shown in the examples, evaluating an expression with `>=` when the operators are not both `long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `long`.
 
 ### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\) {#function-greaterThanOrEqual}
 
@@ -432,11 +432,11 @@ decimal("-1.23").greaterThanOrEqual(decimal("-1.24"))  //true
 
 ## Logical operators {#operators-logical}
 
-Use these operators on Boolean values or expressions.
+Use these operators on boolean values or expressions.
 
 ### `&&` \(AND\) {#operator-and}
 
-**Usage:** `<Boolean> && <Boolean>`
+**Usage:** `<boolean> && <boolean>`
 
 Binary operator that evaluates to `false` if the first evaluates to `false`, or if the first evaluates to `true` and the second evaluates to `false`. Evaluates to `true` only if both arguments evaluate to `true`.
 
@@ -450,12 +450,7 @@ when {
 };
 ```
 
-The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression. Short circuit evaluations will often be accompanied by the following validation error:
-
-```cedar
-for policy `policy0`, policy is impossible: the policy expression
-      evaluates to false for all valid requests
-```
+The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). If the first argument is `false`, then the expression immediately evaluates to `false` and the second argument isn't evaluated. This approach is useful when the second argument might result in an error if evaluated. You can use the first argument to test that the second argument is a valid expression.
 
 The following policy is satisfied only if the principal has the attribute `level` and the `level > 5`.
 
@@ -469,7 +464,7 @@ when {
 
 The `>` comparison in this expression can only succeed if the  `principal` entity has a `level` attribute. If it doesn't, then `principal.level` sub-expression would evaluate to an error. The expression that is the first operand of `&&` uses the [`has`](#operator-has) operator to ensure that the `principal` entity does have such an attribute. If that evaluates to `false`, then the second operand to `&&` isn't evaluated.
 
-The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `Boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the examples below.
+The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the examples below.
 
 #### More Examples:
 {: .no_toc }
@@ -477,19 +472,19 @@ The description of `&&` so far has been from the perspective of _evaluation_. Fr
 In the following examples, those labeled with `//error` both fail to evaluate and fail to validate. Others evaluate correctly, but some may fail to validate, per the label. Discussion of the reasons for non-validation is given below.
 
 ```cedar
-3 && false                                  //error -- first operand is not a Boolean
+3 && false                                  //error -- first operand is not a boolean
 false && 3                                  //Evaluates to false (due to short circuiting) //Validates
 (3 == 4) && 3                               //Evaluates to false (due to short circuiting) //Doesn't validate
 (User::"alice" == Action::"viewPhoto") && 3 //Evaluates to false //Validates
-true && 3                                   //error -- second operand is not a Boolean
+true && 3                                   //error -- second operand is not a boolean
 (false && 3) == 3                           //Evaluates to false //Doesn't validate (== applied to different types)
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `false && 3` and `(User::"alice" == Action::"viewPhoto") && 3`, but not `(3 == 4) && 3`. The reason is that it knows `false` is always, well, `false`, so it can model short-circuiting. It also knows that comparing two entities with different types will always evaluate to to `false`. Internally, the validator has a type `False` for expressions that  surely evaluate to `false`, and also a type `True` for those that surely evaluate to `true`. So, `false` has type `False`, as does `(User::"alice" == Action::"viewPhoto")`. And so does expression `e1 && e2` when `e1` has type `False`. However, expression `3 == 4` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 4) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `false && 3` and `(User::"alice" == Action::"viewPhoto") && 3`, but not `(3 == 4) && 3`. The reason is that it knows `false` is always, well, `false`, so it can model short-circuiting. 
 
 ### `||` \(OR\) {#operator-or}
 
-**Usage:** `<Boolean> || <Boolean>`
+**Usage:** `<boolean> || <boolean>`
 
 Binary operator that evaluates to `true` if the first operand evaluates to `true`, or the first evaluates to `false` and the second operand evaluates to `true`. Evaluates to `false` if both operands evaluate to `false`.
 
@@ -499,7 +494,7 @@ This operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-c
 !(principal has age) || principal.age < 21
 ```
 
-The second comparison in this expression will evaluate to a Boolean only if the `age` attribute for the `principal` entity is present. If it is missing, then `principal.age` will evaluate to an error. The first expression uses the [`has`](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property. If that evaluates to `true`, there is no test of the second expression.
+The second comparison in this expression will evaluate to a boolean only if the `age` attribute for the `principal` entity is present. If it is missing, then `principal.age` will evaluate to an error. The first expression uses the [`has`](#operator-has) operator, inverted by the `!` **[NOT](#operator-not)** operator, to flag that the `principal` entity is missing the `age` property. If that evaluates to `true`, there is no test of the second expression.
 
 The following policy allows if either `resource.owner == principal` or `resource.tag == "public"` is true.
 
@@ -511,7 +506,7 @@ when {
 };
 ```
 
-The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `Boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the examples below.
+The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the examples below.
 
 #### More Examples:
 {: .no_toc }
@@ -519,19 +514,19 @@ The description so far is from the perspective of _evaluation_. From the perspec
 In the following examples, those labeled with `//error` both fail to evaluate and fail to validate. Others evaluate correctly, but some may fail to validate, per the label. Discussion of the reasons for non-validation is given below.
 
 ```cedar
-3 || true                  //error (first operand not a Boolean)
+3 || true                  //error (first operand not a boolean)
 true || 3                  //Evaluates to true (due to short-circuiting) //Validates
-false || 3                 //error (second operand not a Boolean)
+false || 3                 //error (second operand not a boolean)
 (3 == 3) || 3              //Evaluates to true (due to short-circuiting) //Doesn't validate
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) && 3`. As discussed for [`&&`](#operator-and), the validator has an internal type `True` for expressions that surely evaluate to `true`, and similarly for `False`, and it uses these types to implement a short-circuiting semantics for `&&` and `||`. Here, the expression `3 == 3` has type `Boolean` (the validator does not look at the values of the literals), so the validator will not short-circuit when considering `(3 == 3) && e2` -- it will require that `e2` has type `Boolean` (or `True` or `False`).
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) && 3`.
 
 ### `!` \(NOT\) {#operator-not}
 
-**Usage:** `! <Boolean>`
+**Usage:** `! <boolean>`
 
-Unary operator with only one argument. It inverts the value of the Boolean operand from `true` to `false`, or from `false` to `true`. If either operand is not a `Boolean` then evaluation (and validation) results in an error.
+Unary operator with only one argument. It inverts the value of the boolean operand from `true` to `false`, or from `false` to `true`. If either operand is not a `boolean` then evaluation (and validation) results in an error.
 
 #### Example:
 {: .no_toc }
@@ -568,7 +563,7 @@ if !true then "hello" else "goodbye"  //"goodbye"
 
 ### `if` \(CONDITIONAL\) {#operator-if}
 
-**Usage:** `if <Boolean> then <T> else <U>`
+**Usage:** `if <boolean> then <T> else <U>`
 
 The `if` operator returns its evaluated second argument if the first argument evaluates to `true`, else it returns the evaluated third argument.
 
@@ -587,7 +582,7 @@ when {
 
 The `if` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Short-circuit_evaluation). When the first argument evaluates to `true` the third argument is never evaluated. When the first argument evaluates to `false`, the second argument is never evaluated.
 
-The `if` operator is a strict generalization of the `&&` and `||` operators. The expression _e1_ `||` _e2_ is equivalent to the expression `if` _e1_ `then` `true` `else` (`if` _e2_ `then` `true` `else` `false`). The expression _e1_ `&&` _e2_ is equivalent to the expression `if` _e1_ `then` (`if` _e2_ `then` `true` `else` `false`) `else` `false`. Note that _e1_ `||` _e2_ is _not_ equivalent to `if` _e1_ `then` `true` `else` _e2_, due to the possibility of type errors. To see why, consider that `false` `||` `"foo"` produces a type error, while `if false then true else "foo"` evaluates to `"foo"`.
+The `if` operator is a strict generalization of the `&&` and `||` operators. The expression `_e1_ || _e2_` is equivalent to the expression `if` `_e1_` `then` `true` `else` (`if` `_e2_` `then` `true` `else` `false`). The expression `_e1_ && _e2_` is equivalent to the expression `if` `_e1_` `then` (`if` `_e2_` `then` `true` `else` `false`) `else` `false`. Note that `_e1_` `||` `_e2_` is _not_ equivalent to `if` `_e1_` `then` `true` `else` `_e2_`, due to the possibility of type errors. To see why, consider that `false` `||` `"foo"` produces a type error, while `if false then true else "foo"` evaluates to `"foo"`.
 
 Note that `if` and `when`, though similar in normal English, play different roles in Cedar. The keyword `when` is part of the _policy syntax_ which simply connects the policy scope to the policy's condition(s). The keyword `if` is a part of an _expression_ that can be contained in such a condition, and can be evaluated against a relevant authorization request.
 
@@ -604,24 +599,24 @@ if false then (1 && "hello") else "ok"   //Evaluates to "ok" (due to short circu
 if true then (1 && "hello") else "ok"    //error
 ```
 
-The example `if 1 == 1 then "ok" else "wrong"` validates because the first operand `1 == 1` has `Boolean` type, and both the second and third operands have the same type (`String`). The example `if 1 == 2 then User::"foo" else "ok"` doesn't validate because the second and third operands do not have the same type. The example `if 1 then "wrong" else "wrong"` doesn't validate because the first operand `1` does not have type `Boolean`. The example `if false then (1 && "hello") else "ok"` is _accepted_ (validates) because the validator is able to consider short-circuiting: It knows that because the first operand is `false` that the second operand _must_ be skipped. It does this by giving `false` the internal type `False` as described for operators [`&&`](#operator-and) and [`||`](#operator-or). Note that it is not able to give the expression `1 == 2` type `false` in the second example; if it was, then this example would be accepted despite the last two operands not having the same type.
+The example `if 1 == 1 then "ok" else "wrong"` validates because the first operand `1 == 1` has `boolean` type, and both the second and third operands have the same type (`String`). The example `if 1 == 2 then User::"foo" else "ok"` doesn't validate because the second and third operands do not have the same type. The example `if 1 then "wrong" else "wrong"` doesn't validate because the first operand `1` does not have type `boolean`. The example `if false then (1 && "hello") else "ok"` is _accepted_ (validates) because the validator is able to consider short-circuiting.
 
 ## Arithmetic operators {#operators-math}
 
-Use these operators to perform arithmetic operations on `Long` integer values.
+Use these operators to perform arithmetic operations on `long` integer values.
 
 **Notes**
-The arithmetic operators support ***only*** values of type `Long`. They don't support values of type `Decimal`.
+The arithmetic operators support ***only*** values of type `long`. They don't support values of type `Decimal`.
 There is no operator for arithmetic division.
 
 {: .warning }
->If you exceed the range available for the `Long` data type by using any of the arithmetic operators, it results in an overflow error. In general, a policy that results in an error is ignored, meaning that a `permit` policy might unexpectedly fail to allow access, or a `forbid` policy might unexpectedly fail to block access.
+>If you exceed the range available for the `long` data type by using any of the arithmetic operators, it results in an overflow error. In general, a policy that results in an error is ignored, meaning that a `permit` policy might unexpectedly fail to allow access, or a `forbid` policy might unexpectedly fail to block access.
 
-### `+` \(Numeric addition\) {#operator-add}
+### `+` \(numeric addition\) {#operator-add}
 
-**Usage:** `<Long> + <Long>`
+**Usage:** `<long> + <long>`
 
-Binary operator that adds the two `Long` integer values and returns a `Long` integer sum; it evaluates (and validates) to an error if given non-`Long` operands. Addition could result in an overflow evaluation error; such errors are *not* detected by the validator.
+Binary operator that adds the two `long` integer values and returns a `long` integer sum; it evaluates (and validates) to an error if given non-`long` operands. Addition could result in an overflow evaluation error; such errors are *not* detected by the validator.
 
 #### Example:
 {: .no_toc }
@@ -644,15 +639,15 @@ In the following examples, those labeled with `//error` both fail to evaluate *a
 11 + 0                              //11
 -1 + 1                              //0
 9223372036854775807 + 1             //error - overflow //Validates
-7 + "3"                             //error - second operand not a Long //Doesn't validate
-"lamp" + "la"                       //error - operands not `Long` //Doesn't validate
+7 + "3"                             //error - second operand not a long //Doesn't validate
+"lamp" + "la"                       //error - operands not `long` //Doesn't validate
 ```
 
-### `-` \(Numeric subtraction or negation\) {#operator-subtract}
+### `-` \(numeric subtraction or negation\) {#operator-subtract}
 
-**Usage:** `<Long> - <Long>` or `- <Long>`
+**Usage:** `<long> - <long>` or `- <long>`
 
-As a binary operator with two operands, it subtracts the second `Long` integer value from the first and returns a `Long` integer difference. It evaluates (and validates) to an error if given non-`Long` operands. Subtraction could result in an overflow evaluation error (underflow, more precisely); such errors are *not* detected by the validator.
+As a binary operator with two operands, it subtracts the second `long` integer value from the first and returns a `long` integer difference. It evaluates (and validates) to an error if given non-`long` operands. Subtraction could result in an overflow evaluation error (underflow, more precisely); such errors are *not* detected by the validator.
 
 #### Examples:
 {: .no_toc }
@@ -664,16 +659,16 @@ In the following examples, those labeled with `//error` both fail to evaluate *a
 44 - 31                         //13
 5 - (-3)                        //8
 -9223372036854775807 - 2 + 3    //error - overflow //Validates
-7 - "3"                         //error - second operand not a `Long` //Doesn't validate
+7 - "3"                         //error - second operand not a `long` //Doesn't validate
 ```
 
 Because the `-` symbol can mean both unary and binary subtraction, the example `-9223372036854775807 - 2 + 3` must use parentheses to disambiguate.
 
-### `*` \(Numeric multiplication\) {#operator-multiply}
+### `*` \(numeric multiplication\) {#operator-multiply}
 
-**Usage:** `<Long> * <Long>`
+**Usage:** `<long> * <long>`
 
-Binary operator that multiplies two `Long` integer operands and returns a `Long` integer product. It evaluates (and validates) to an error if given non-`Long` operands. Multiplication could result in an overflow evaluation error; such errors are *not* detected by the validator.
+Binary operator that multiplies two `long` integer operands and returns a `long` integer product. It evaluates (and validates) to an error if given non-`long` operands. Multiplication could result in an overflow evaluation error; such errors are *not* detected by the validator.
 
 {: .note }
 >There is no operator for arithmetic division.
@@ -691,14 +686,14 @@ context.budget * resource.value  //depends on entity data
 9223372036854775807 * 2          //error - overflow //Validates
 5 * (-3)                         //-15
 5 * 0                            //0
-"5" * 0                          //error - both operands must have type `Long` //Doesn't validate
+"5" * 0                          //error - both operands must have type `long` //Doesn't validate
 ```
 
 ## Hierarchy and set membership operators and functions {#functions-set}
 
 Use these functions to test if entities are members of a hierarchy or a set.
 
-### `in` \(Hierarchy membership\) {#operator-in}
+### `in` \(hierarchy membership\) {#operator-in}
 
 **Usage:** `<entity> in <entity>`
 
@@ -791,7 +786,7 @@ These examples both fail to evaluate and fail to validate because their operands
 
 **Usage:** `<entity or record> has <attribute>`
 
-Boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Evaluation (and validation) produces an error if lhs is not a record or entity type. We discuss evaluation, first, and validation in more depth further down.
+boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Evaluation (and validation) produces an error if lhs is not a record or entity type. We discuss evaluation, first, and validation in more depth further down.
 
 #### Evaluation
 
@@ -873,7 +868,7 @@ context has addr && context.addr has country && context.addr.country == "US"  //
 
 Validating `has` expressions relies on information specified in the [schema](../schema/schema.html#schema) about what entity and record types have what attributes, and which attributes might be optional. Suppose we have expression `context has role`. It can have the following types:
 
-- Type `Boolean` if the schema says `context` has a `role` attribute which is not required, i.e., it's optional
+- Type `boolean` if the schema says `context` has a `role` attribute which is not required, i.e., it's optional
 - Type `True` if the schema says `context` has a `role` attribute which _is_ required, which means the expression will always evaluate to `true`
 - Type `False` if the schema says `context` does not have a `role` attribute, which means that the expression will always evaluate to `false`
 
@@ -906,7 +901,7 @@ The `.getTag()` expression has a return type as specified by the `tags` declarat
 
 **Usage:** `<entity> is <entity-type>`
 
-Boolean operator that evaluates to `true` if the left operand is an entity that has the specified entity type and evaluates to `false` if the left operand is an entity that does not have the specified entity type. Evaluating (and validating) an `is` expression where the type of an expression that is not an entity results in an error. Validation can also fail if the RHS is not a known entity type (given in the schema).
+boolean operator that evaluates to `true` if the left operand is an entity that has the specified entity type and evaluates to `false` if the left operand is an entity that does not have the specified entity type. Evaluating (and validating) an `is` expression where the type of an expression that is not an entity results in an error. Validation can also fail if the RHS is not a known entity type (given in the schema).
 
 Using `is` is helpful when knowing the type of an entity ensures that it has particular attributes or entity relationships. For example, suppose that for requests with action `Action::"view"`, the `principal` always has type `User`, but the `resource` could have type `Photo` or type `User`, and only entities of type `Photo` have an `owner` attribute. Then we might write the following policy.
 
