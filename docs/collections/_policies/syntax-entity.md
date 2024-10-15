@@ -76,8 +76,8 @@ Except for action entities, which are prefixed with the reserved entity type `Ac
 Entities support the following operators in a Cedar policy:
 
 + **Equality** &ndash; Using the `==` operator, you can compare two entities to see if they are the same. Equality in this context means that they are literally the same entity and have the same unique entity identifier. For more information, see [`==` equality operator](../policies/syntax-operators.html#operator-equality).
-+ **Hierarchy / membership** &ndash; Using the `in` operator, you can determine if one entity is a descendant of (or a member of) another entity's hierarchy. For more information, see [in operator](../policies/syntax-operators.html#operator-in).
-+ **Attribute presence** &ndash; Using the [has operator](../policies/syntax-operators.html#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
++ **Hierarchy / membership** &ndash; Using the `in` operator, you can determine if one entity is a descendant of (or a member of) another entity's hierarchy. For more information, see [`in` operator](../policies/syntax-operators.html#operator-in).
++ **Attribute presence** &ndash; Using the [`has` operator](../policies/syntax-operators.html#operator-has), you can determine if the entity has a specific attribute. You can use this operator to ensure that an attribute is present before attempting to access its value. If you attempt to access an attribute that doesn't exist for the specified entity, it generates an error.
 + **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
 + **Tag presence** &ndash; Using the [`.hasTag()` method](../policies/syntax-operators.html#operator-hasTag), you can determine that a tag is present before attempting to access its value. If you attempt to access a tag that doesn't exist for the specified entity, it generates an error.
 + **Tag access** &ndash; Using the [`.getTag()` method](../policies/syntax-operators.html#operator-getTag), you can retrieve the value of one of the entity's tags. The type of this
@@ -85,7 +85,7 @@ value is defined in the [schema](..schema/schema.html).
 
 ## Namespaces {#entity-namespace}
 
-An entity can also be referenced in the context of multiple namespaces. This capability lets you infer a logical hierarchy of entity types. For example, `PhotoFlash::Groups::Album::"vacation"` refers to a specific entity with an entity ID of `"vacation"` and an entity type of `PhotoFlash::Groups::Album`. There is no real structure behind such a string, only what is logically inferred by the designer. The Cedar language reserves all namespaces containing the reserved identifier `__cedar`, so you cannot have an entity `__cedar::Album::"vacation"`. You can create a namespace for an entity type when you define a schema.
+An entity can also be referenced in the context of multiple namespaces. This capability lets you infer a logical hierarchy of entity types. For example, `PhotoFlash::Groups::Album::"vacation"` refers to a specific entity with an entity ID of `"vacation"` and an entity type of `PhotoFlash::Groups::Album`. There is no real structure behind such a string, only what is logically inferred by the designer. The Cedar language reserves all namespaces containing the reserved identifier `__cedar`, so you cannot have an entity `__cedar::Album::"vacation"`. You can create a [namespace](../schema/schema.html#schema-namespace) for an entity type when you define a schema.
 
 ## Attributes of entities {#entity-attribute}
 
@@ -94,9 +94,9 @@ An attribute is an additional detail about an entity. For example, a user typica
 Attributes are referenced by using dot operator notation \(`entity.attribute`\), as shown by the following examples.
 
 ```cedar
-SomeUser.name                  //SomeUser is an entity of type user
-SomeEmployee.department        //SomeEmployee is an entity of type employee
-SomePhoto.description          //SomePhoto is an entity of type photo.
+SomeUser.name                  // SomeUser is an entity of type user
+SomeEmployee.department        // SomeEmployee is an entity of type employee
+SomePhoto.description          // SomePhoto is an entity of type photo.
 ```
 
 Alternatively, you can reference an entity's attributes by using indexing notation \(`entity["attribute"]`\), as shown by the following examples which are equivalent to the preceding examples.
