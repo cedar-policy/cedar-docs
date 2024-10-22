@@ -613,6 +613,7 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`!` or `neg` operators](#JsonExpr-neg)
 + [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
 + [`.`, `has`](#JsonExpr-has)
++ [`is`](#JsonExpr-is)
 + [`like`](#JsonExpr-like)
 + [`if-then-else`](#JsonExpr-if-then-else)
 + [`Set`](#JsonExpr-Set)
@@ -924,7 +925,7 @@ JSON representation
 "is": {
     "left": { "Var": "principal" },
     "entity_type": "User",
-    "in": {"entity": { "type": "Folder", "id": "Public" }}
+    "in": {"Value": {"__entity": { "type": "Folder", "id": "Public" }}}
 }
 ```
 
