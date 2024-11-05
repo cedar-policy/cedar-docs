@@ -47,7 +47,7 @@ The policy store isn't maintaining a record of which roles a user is assigned to
 
 ## Making an Authorization Request
 
-Consider an application using Cedar policy in the Amazon Verified Permssions service. The application needs to call [`IsAuthorized`](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation, passing through [`entities`](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html#verifiedpermissions-IsAuthorized-request-entities) data that describes the principal’s group memberships and the resource’s group memberships.
+Consider an application using Cedar policies in the Amazon Verified Permssions service. The application needs to call the [`IsAuthorized`](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html) operation, passing through [`entities`](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorized.html#verifiedpermissions-IsAuthorized-request-entities) data that describes the principal’s group memberships and the resource’s group memberships.
 
 For example, an authorization request to determine whether Alice can approve JeanPaul’s timesheet must include the following:
 
