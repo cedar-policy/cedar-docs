@@ -6,7 +6,7 @@ nav_order: 2
 has_children: false
 ---
 
-# Adding attribute-based conditions
+# When to use attribute-based conditions
 
 [The approach described in the previous section](bp-implementing-roles-groups.html) requires that you add a new user group in your identity provider (IdP) and create a new policy for each group of resources. In the previous examples, the resource groups reflect countries: `Approver-France`, `Approver-Germany`, `Approver-UK`, and so on. There is a finite number of countries, and they don’t change very often. The company might expand into five new countries per year, and so creating new user groups in the IdP and new policies to support this expansion might not represent a significant overhead.
 
