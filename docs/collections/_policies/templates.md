@@ -48,3 +48,9 @@ unless {
 ```
 
 However, the new policy isn't actually constructed as a static policy with that policy statement. Instead, the new policy is a template-linked policy that dynamically links the policy template with those two specific placeholder values. Later, you might choose to modify the policy template, such as by adding an additional condition to the `unless` clause. From that moment on the change immediately affects all authorization decision results for all template-linked policies created from the modified policy template.
+
+## Considerations when using templates
+
+If you use the template approach, you tightly couple the policy store to the life-cycle management of your users. When you onboard a new user and assign them to a role, you must create template-linked policies for them. When that user changes roles, you must find those policies, archive them, and then create new template-linked policies. When the user leaves the organization, you must archive the policies for that user. If you delete the policies instead of archiving them, then you lose the historical record of who was permitted to do what, which might be required for forensics purposes.
+
+These challenges reinforce each other if the role is a complex set of permissions requiring multiple policies. In the simple example above, the permissions for the role can be expressed as a single policy statement. Therefore, assigning a principal requires the creation of a single template-linked policy. However, more complex roles might require several policies to express the permissions. In that case, the assignment and unassignment processes can become more burdensome, as you must create or delete multiple template-linked policies.
