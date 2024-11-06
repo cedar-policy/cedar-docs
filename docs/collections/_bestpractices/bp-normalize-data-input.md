@@ -7,7 +7,7 @@ nav_order: 8
 # Security requirement: Normalize input data prior to invoking the authorization APIs
 {: .no_toc }
 
-The Cedar policy language omits some well-known operators, including those used to format data and to manipulate and transform strings and lists. This omission is intentional. One reason why is that these operators disrupt the ability to apply automated reasoning techniques to Cedar policy statements. Another reason that Cedar does not provide operators is that Cedar is designed to support situations where policy authors can reside outside the service team, or even be external customers. To provide a safe, intuitive policy authoring experience for these audiences, each individual policy author should not be required to discover and apply appropriate formatting rules.
+The Cedar policy language omits some well-known operators, including those used to format data and to manipulate and transform strings and lists. This omission is intentional. One reason why is that these operators disrupt the ability to apply automated reasoning techniques to Cedar policy statements. Another reason that Cedar does not provide operators is that Cedar is designed to support situations where policy authors can be outside of the development team, or even be external customers. To provide a safe, intuitive policy authoring experience for these audiences, each individual policy author should not be required to discover and apply appropriate formatting rules.
 
 As a result, application owners should format data prior to passing it into the authorization APIs. For example, instead of passing the following data in the context record:
 
