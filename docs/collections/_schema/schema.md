@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Schema formats
+title: Schema overview
 nav_order: 1
 ---
 
@@ -18,7 +18,7 @@ nav_order: 1
 
 This topic describes the structure of a Cedar schema. Cedar has two schema formats: a human-readable format (which we call the Cedar format) and JSON. The syntax of the Cedar schema format is similar to that of Cedar policies. The JSON schema format is based on [JSON Schema](https://json-schema.org/), with some adaptations for unique aspects of Cedar, like the use of entity types. The two schema formats are interchangeable and the Cedar CLI can translate schemas in one format to the other. We encourage you to use the Cedar schema format for its simplicity and conciseness. For details, see [Cedar schema format](../schema/human-readable-schema.html) and [JSON schema format](../schema/json-schema.html).
 
-## Overview {#schema-overview}
+## What is a schema {#schema-overview}
 A schema is a declaration of the structure of the entity types that you want to support in your application and for which you want Cedar to provide authorization services.
 After you define a schema, you can ask Cedar to [validate your policies](../policies/validation.html) against it to ensure that your policies do not contain type errors, such as referencing the entities and their attributes incorrectly.
 
@@ -36,11 +36,7 @@ Services that use Cedar can use the information provided in the schema to valida
 
 Both schema formats implement the same ideas, which we detail as follows. We then present their Cedar and JSON realizations.
 
-## Schema {#schema-format}
-
-A schema contains a declaration of one or more namespaces, each of which contains declarations of entity types, actions, and common types. A namespace has an optional name.
-
-**Schema topics**
+**Schema formats**
 * [Cedar schema format](../schema/human-readable-schema.html#schema-format)
 * [JSON schema format](../schema/json-schema.html#schema-format)
 
@@ -49,7 +45,7 @@ A schema contains a declaration of one or more namespaces, each of which contain
 A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types declared within it. The name of a namespace consists of identifiers separated by double colons (`::`).
 
 {: .important }
->The namespace name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments. It also may not include the reserved `__cedar` identifier.
+>The namespace name cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments. It also may not include the reserved `__cedar` identifier.
 
 A namespace declaration contains three types of declarations, appearing in any order:
 
@@ -59,7 +55,7 @@ A namespace declaration contains three types of declarations, appearing in any o
 
 You define the types of your application's principal and resource entities via entity type declarations, and its actions via action declarations. Optionally, you can define type names in common type declarations and reference those names as types in other places in the schema. For example, a common practice is to name a shared record type in this way and refer it, e.g., in entity attribute declarations.
 
-Declarations (e.g, entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referred in qualified or unqualified forms within the same namespace. For example, you can only refer the entity type `Table` declared in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
+Declarations (e.g. entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referenced in qualified or unqualified forms within the same namespace. For example, you can only reference the entity type `Table` declared in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
@@ -112,7 +108,7 @@ An action declaration specifies an action's membership relations with action gro
 
 Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a common type construct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that includes a data type specification and a set of attributes.
 
-### Motivating example
+### Why you should use Common Types
 
 Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions in the Cedar schema format: both `view` and `upload` have identical `context` components.
 
