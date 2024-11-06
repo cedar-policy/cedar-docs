@@ -153,6 +153,6 @@ action upload appliesTo {
 };
 ```
 
-**Common types topics**
+**Common types formats**
 * [Cedar schema format](../schema/human-readable-schema.html#schema-commonTypes)
 * [JSON schema format](../schema/json-schema.html#schema-commonTypes)
