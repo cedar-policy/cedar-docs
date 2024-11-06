@@ -108,7 +108,7 @@ An action declaration specifies an action's membership relations with action gro
 
 Your schema might define several entity types that share a lot of elements in common. Instead of redundantly entering those elements separately for each entity that needs them, you can define those elements once using a common type construct with a name, and then reference that construct's name in each entity that requires them. You can use this anywhere you can define a Cedar type that includes a data type specification and a set of attributes.
 
-### Why you should use Common Types
+### Why you should use common types
 
 Suppose your schema defines several entity types or action entities that share a lot of elements in common. For example, consider the following actions in the Cedar schema format: both `view` and `upload` have identical `context` components.
 
