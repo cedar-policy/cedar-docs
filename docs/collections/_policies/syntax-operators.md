@@ -1127,7 +1127,7 @@ ip("192.168.0.1").isInRange(ip("192.168.0.1/24"))   //true
 ip("192.168.0.1").isInRange(ip("192.168.0.1/28"))   //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/24"))  //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/28"))  //false
-ip("1:2:3:4::/48").isInRange(ip("1:2:3:4::"))       //true
+ip("1:2:3:4::").isInRange(ip("1:2:3:4::/48"))       //true
 ip("192.168.0.1").isInRange(ip("1:2:3:4::"))        //false
 ip("192.168.0.1").isInRange(1)                      //error - operand is not an ipaddr
 context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is not an `ipaddr`
