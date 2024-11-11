@@ -252,7 +252,7 @@ unless {
 
 ## Annotations {#term-parc-annotations}
 
-You can attach arbitrary key-velaue pairs to Cedar policies in the form of annotations. An annotation has no impact on policy evaluation. Even though annotations are not processed by Cedar, they are stored as part of the policy and are available for use by services and applications that read and process Cedar policies.
+You can attach arbitrary key-value pairs to Cedar policies in the form of annotations. An annotation has no impact on policy evaluation. Even though annotations are not processed by Cedar, they are stored as part of the policy and are available for use by services and applications that read and process Cedar policies.
 
 You can place annotations only at the very top of the policy before the [effect](#term-policy-effect) element.
 
