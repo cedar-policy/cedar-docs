@@ -85,6 +85,8 @@ This schema specifies the following:
 + Entities of type `System` are expected to have no attributes.
 + Any authorization request from the application that specifies action `Action::"remoteAccess"` is expected to specify only principals that are of type `Employee` and resources that are of type `System`.
 
+The schema can also specify the expected format of the context record for each `Action`. Making this specification lets Cedar also flag errors on references to context.
+
 Consider the following policy.
 
 ```cedar
@@ -115,16 +117,14 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Unrecognized entity types** &ndash; For example, misspelling `File` as `Filee`.
 + **Unrecognized actions** &ndash; For example, misspelling `Action::"viewFile"` as `Action::"viewFiel"`.
 + **Action applied to unsupported principal or resource** &ndash; For example, saying a `File` can `View` a `User`.
-+ **Improper use of in or ==** &ndash; For example, stating `principal in Folder::"folder-name"` when a principal can't be a `File`.
++ **Improper use of in or ==** &ndash; For example, stating `principal == Folder::"folder-name"` when a principal can't be a `Folder` and you meant to write `in`.
 + **Unrecognized attributes** &ndash; For example, `principal.jobbLevel` has a typo and should be `jobLevel`.
-+ **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `"required": false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcut [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
++ **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `required : false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcircuiting [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
 + **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an invalid comparison with a `String`.
 + **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply.
   Similarly, `principal is ExampleCo::Personnel::Admin` always evaluates to `false` when the `principal` is always a `User`, and not an `Admin`.
 
-The schema can also specify the expected format of the context record for each `Action`. Making this specification lets Cedar also flag errors on references to context.
-
-## Enforcement of validation rules: Expectations {#validation-enforcement}
+## Request validation expectations {#validation-enforcement}
 
 As implied by the discussion above, we expect validation to be performed _before_ a policy is used by the authorization engine to decide authorization requests. Indeed, the Cedar authorization APIs do not perform validation at the same time that a request is evaluated. Rather, validation is an entirely separate API which can be invoked when policies are loaded or created.
 
@@ -172,7 +172,7 @@ Performing validation before using your policies gives you a significant benefit
 
 Validation soundness ensures the absence of most, but not all errors that could arise during policy evaluation. The only errors that are not precluded are the following:
 
-+ **Errors due to integer overflow**. In Cedar when you add two large `Long` numbers together the result may be too big to fit in 64 bits. Rather than wrap around (e.g., producing a negative number) as in many languages, Cedar throws an error. Validation does not currently attempt to detect this possibility, but we are developing such detection as a future feature.
++ **Errors due to integer overflow**. In Cedar when you add two large `Long` numbers together the result may be too big to fit in 64 bits. Rather than wrap around (e.g., producing a negative number) as in many languages, Cedar throws an error. Validation does not currently attempt to detect this possibility.
 + **Errors due to missing entities**. If a policy references an entity that does not exist in the entities used to evaluate the policy, any attempt to access that entity's attributes will fail. This could happen with an entity literal (e.g., `User::"Rick".name == "rick"`) or with an entity passed in as a principal or resource (e.g., `principal.name == "rick"`, or `principal.manager.name == "Vijay"` where `principal.manager` should be an entity). Request validation ([RFC 11](https://github.com/cedar-policy/rfcs/pull/11)) and schema-based JSON parsing do not confirm the existence of entities.
 + **Errors due to incorrect [Extension](../schema/schema.html#schema-entitytypes-shape-extension) values** (in non-strict mode). IP addresses and decimals are constructed by calling a function, either `ip()` or `decimal()`, with a string. For policies that pass non-literal strings to these functions, there is a risk that the string is not well-formed, and thus evaluating it will produce an error. For example, if we had a policy with the expression `ip(principal.IPAddr)` and `principal.IPAddr` happened to be the string `"XYZ"` then evaluating the policy would fail with an error. However, by default the validator runs in a _strict_ mode that forbids passing non-literal strings to extension function constructors; in this mode, the expression above will fail to validate with the error _extension constructors may not be called with non-literal expressions_. An expression like `ip("XYZ")` in a policy will fail to validate (regardless of mode).
 
