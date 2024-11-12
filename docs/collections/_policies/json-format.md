@@ -805,7 +805,7 @@ JSON representation
 
 #### `Slot` {#JsonExpr-Slot}
 
-The value of this key is one of the strings `?principal` or `?resource`. Currently, policies containing this are not valid Cedar
+The value of this key is one of the strings `?principal` or `?resource` and act as placeholders in [policy templates](templates.html). Currently, policies containing this are not valid Cedar.
 
 #### `Unknown` {#JsonExpr-Unknown}
 
