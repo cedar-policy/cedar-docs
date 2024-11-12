@@ -5,10 +5,10 @@ nav_order: 6
 ---
 <!-- markdownlint-disable-file MD040 -->
 
-# Grammar specification for Cedar policy syntax {#syntax-grammar}
+# Grammar for Cedar syntax {#syntax-grammar}
 {: .no_toc }
 
-This topic describes the grammar specification for the Cedar Policy Language. This grammar uses the following symbols:
+This topic describes the grammar specification for policies in the Cedar Policy Language. This grammar uses the following symbols:
 
 + A vertical bar `|` designates alternatives. Only one alternative can be used.
 + Brackets `[ ]` designate an optional element.
@@ -266,16 +266,4 @@ RESERVED ::= BOOL | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | 'is' | '__c
 
 ```
 VAR ::= 'principal' | 'action' | 'resource' | 'context'
-```
-
-## `WHITESPC` {#grammar-whitespc}
-
-```
-WHITESPC ::= Unicode whitespace
-```
-
-## `COMMENT` {#grammar-comment}
-
-```
-COMMENT ::= '//' ~NEWLINE* NEWLINE
 ```
