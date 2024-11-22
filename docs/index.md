@@ -75,4 +75,4 @@ Cedar policies are designed to be easy to read and understand, making them acces
 
 ## Services that use Cedar {#related-services}
 
-[Amazon Verified Pernmissions](https://aws.amazon.com/verified-permissions/) is a managed service using Cedar. For a list of some of the other services that use Cedar as their policy language, see [Cedar Integrations](https://www.cedarpolicy.com/en/integrations)
+[Amazon Verified Permissions](https://aws.amazon.com/verified-permissions/) is a managed service using Cedar. For a list of some of the other services that use Cedar as their policy language, see [Cedar Integrations](https://www.cedarpolicy.com/en/integrations)
