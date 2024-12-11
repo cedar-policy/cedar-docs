@@ -953,6 +953,9 @@ The pattern `/home/alice/docs/*.txt` is represented as:
 ]
 ```
 
+Note that it's allowed to represent literals with up to one `Literal` per character.
+For instance, in the previous example, we could use up to four objects with `Literal` keys to represent the `.txt` string.
+
 #### `if-then-else` {#JsonExpr-if-then-else}
 
 The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [JsonExpr object](#JsonExpr-objects).
