@@ -936,12 +936,7 @@ The value of this key is an object with keys `left` and `pattern`.
 The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is an array composed of pattern elements.
 A pattern element can be one of either
   - the string `Wildcard`
-  - a [`Literal`](#JsonExpr-Literal)
-
-#### `Literal` {#JsonExpr-Literal}
-
-The value of this key is a string.
-Note that this object is only used in [`like`](#JsonExpr-Like) patterns at the moment.
+  - an object with a single key `Literal`, whose value is a string
 
 #### `if-then-else` {#JsonExpr-if-then-else}
 
