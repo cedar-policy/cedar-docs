@@ -615,6 +615,7 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`.`, `has`](#JsonExpr-has)
 + [`is`](#JsonExpr-is)
 + [`like`](#JsonExpr-like)
++ [`Literal`](#JsonExpr-Literal)
 + [`if-then-else`](#JsonExpr-if-then-else)
 + [`Set`](#JsonExpr-Set)
 + [`Record`](#JsonExpr-Record)
@@ -931,7 +932,16 @@ JSON representation
 
 #### `like` {#JsonExpr-like}
 
-The value of this key is an object with keys `left` and `pattern`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is any string.
+The value of this key is an object with keys `left` and `pattern`.
+The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is an array composed of pattern elements.
+A pattern element can be one of either
+  - the string `Wildcard`
+  - a [`Literal`](#JsonExpr-Literal)
+
+#### `Literal` {#JsonExpr-Literal}
+
+The value of this key is a string.
+Note that this object is only used in [`like`](#JsonExpr-Like) patterns at the moment.
 
 #### `if-then-else` {#JsonExpr-if-then-else}
 
