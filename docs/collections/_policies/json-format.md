@@ -615,7 +615,6 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`.`, `has`](#JsonExpr-has)
 + [`is`](#JsonExpr-is)
 + [`like`](#JsonExpr-like)
-+ [`Literal`](#JsonExpr-Literal)
 + [`if-then-else`](#JsonExpr-if-then-else)
 + [`Set`](#JsonExpr-Set)
 + [`Record`](#JsonExpr-Record)
