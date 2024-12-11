@@ -937,6 +937,22 @@ A pattern element can be one of either
   - the string `Wildcard`
   - an object with a single key `Literal`, whose value is a string
 
+**Example for `pattern`**
+
+The pattern `/home/alice/docs/*.txt` is represented as:
+
+```json
+"pattern": [
+  {
+    "Literal": "/home/alice/docs/"
+  },
+  "Wildcard",
+  {
+    "Literal": ".txt"
+  }
+]
+```
+
 #### `if-then-else` {#JsonExpr-if-then-else}
 
 The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [JsonExpr object](#JsonExpr-objects).
