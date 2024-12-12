@@ -931,7 +931,30 @@ JSON representation
 
 #### `like` {#JsonExpr-like}
 
-The value of this key is an object with keys `left` and `pattern`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is any string.
+The value of this key is an object with keys `left` and `pattern`.
+The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is an array composed of pattern elements.
+A pattern element can be one of either
+  - the string `Wildcard`
+  - an object with a single key `Literal`, whose value is a string
+
+**Example for `pattern`**
+
+The pattern `/home/alice/docs/*.txt` is represented as:
+
+```json
+"pattern": [
+  {
+    "Literal": "/home/alice/docs/"
+  },
+  "Wildcard",
+  {
+    "Literal": ".txt"
+  }
+]
+```
+
+Note that it's allowed to represent literals with up to one `Literal` per character.
+For instance, in the previous example, we could use up to four objects with `Literal` keys to represent the `.txt` string.
 
 #### `if-then-else` {#JsonExpr-if-then-else}
 
