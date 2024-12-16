@@ -60,9 +60,6 @@ $header-height: 5rem !default;
 .main-header  { 
 	height: $main-header-height;
 	max-height: $main-header-height;
-	position: sticky;
-	top: 0;
-	z-index: 999;
 }
 
 .main-content-wrap {  
@@ -107,10 +104,6 @@ $header-height: 5rem !default;
 	text-transform: uppercase;
 	letter-spacing: 0;
 	margin-top: 2em;
-}
-
-.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6, .main-content #toctitle {
-  position: static !important;
 }
 
 .main-content ul>li::before {
