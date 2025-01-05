@@ -141,11 +141,9 @@ A better way to set the properties of actions in your schema, however, is to arr
 ```Cedar
 permit(
   principal == PhotoFlash::User::"alice",
-  action,
+  action in PhotoFlash::Action::"ReadOnlyPhotoAccess",
   resource
-) when {
-    action in PhotoFlash::Action::"ReadOnlyPhotoAccess"
-};
+);
 ```
 This following example shows how you might create a policy that allows all principals to perform any action on resources for which they have `owner` attribute.
 ```Cedar
