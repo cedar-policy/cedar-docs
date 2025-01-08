@@ -256,6 +256,8 @@ You can attach arbitrary key-value pairs to Cedar policies in the form of annota
 
 You can place annotations only at the very top of the policy before the [effect](#term-policy-effect) element.
 
+**Note**: `@id`is not special in the Cedar language, it behaves like any other annotation. The Cedar CLI uses the `@id` annotation to set policy IDs, but other interfaces, such as the Cedar APIs, have other ways to set policy IDs.
+
 An annotation has the following form:
 
 ```cedar
