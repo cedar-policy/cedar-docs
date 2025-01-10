@@ -34,6 +34,8 @@ You can use a schema to define each of the following entities used by your appli
 
 Services that use Cedar can use the information provided in the schema to validate the policies you submit to the policy store. This helps prevent your policies from returning incorrect authorization decisions because of errors in policies like incorrectly typed attribute names. For more information about validating your policies, see [Cedar policy validation against schema](../policies/validation.html).
 
+Similar to Cedar policies, you can also annotate schema components with key-value pairs.
+
 Both schema formats implement the same ideas, which we detail as follows. We then present their Cedar and JSON realizations.
 
 **Schema formats**

@@ -28,6 +28,8 @@ You can create a namespace that you want to associate with your declarations. Ad
 
 Alternatively, you can create a declaration without a namespace, for example `entity Bar;`. The names of declarations that lack a namespace are always referred to without qualification, for example `Bar`.
 
+You can annotation a declaration with namespace like `@doc("this is a Foo") namespace Foo { entity Bar; }`. However, you cannot annotate the empty namespace.
+
 Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations.
 
 ## Entity type {#schema-entityTypes}
@@ -51,6 +53,8 @@ entity User in [Group] {
 ```
 
 Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
+
+You can annotate an entity type declaration by prepending annotations like `@doc("user entity") entity User ...`.
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
@@ -109,6 +113,8 @@ Here, the `flags` record contains three attributes: `organizations` (which is op
 
 Suppose `resource` in a policy is a `List` entity. Per the above declaration, we can write `when`-clause expressions that reference the `flags` attribute's contents. For example: `resource.flags.tags.contains("private")` or `resource.flags has organizations && resource.flags.organizations.contains(principal.org)`.
 
+You can annotate a record attribute declaration by prepending annotations like `{ @doc("list organizations") organizations?: Set<Org>, ...}`.
+
 #### Set {#schema-entitytypes-shape-set}
 {: .no_toc }
 
@@ -148,9 +154,13 @@ An action name is either an identifier or a string. The membership relation synt
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
 
+You can annotate an action declaration by prepending annotations like `@doc("view document") action ViewDocument ...`.
+
 ## Common types {#schema-commonTypes}
 
 Like in the JSON schema format, Cedar schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
+
+You can annotate a common type declaration by prepending annotations like `@doc("B is a record") type B = {"a" : A};`.
 
 ## Type name disambiguation {#schema-typeDisambiguation}
 
