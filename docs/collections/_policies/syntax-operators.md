@@ -1036,6 +1036,22 @@ In the examples that follow, those labeled `//error` both evaluate and validate 
 
 The examples that evaluate to a result but fail to validate reference the empty-set literal `[]`. See [valid sets](syntax-datatypes.html#datatype-set) for more info.
 
+### `.isEmpty()` \(set emptiness test\) {#function-isEmpty}
+
+**Usage:** `<set>.isEmpty()`
+
+Function that evaluates to `true` if the set is empty.
+The receiver must be of type `set` or evaluation produces an error.
+
+#### Examples:
+{: .no_toc }
+
+```cedar
+[1, -22, 34].isEmpty() // Evaluates to false
+[].isEmpty() // Evaluates to true
+"".isEmpty() // Error - operand is a string, not a set
+```
+
 ## IP address functions {#functions-ipaddr}
 
 Use these functions to test characteristics of IP addresses and ranges.
