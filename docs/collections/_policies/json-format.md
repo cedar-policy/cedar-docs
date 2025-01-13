@@ -1220,3 +1220,13 @@ This field is a JSON array of template links. The JSON representation of a templ
 * `values`
 
 `templateId` is the ID of the policy to be linked against. `new_id` is the ID of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
+
+## Convert Cedar policy format to JSON policy format
+
+If you have a policy statement in Cedar format, for example if you've used Amazon Verified Permission's [BatchGetPolicy](https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_BatchGetPolicy.html) API operation, and want to convert it to JSON policy format, follow these steps:
+
+1. Get the policy statement by calling the [parseStaticPolicy](https://github.com/cedar-policy/cedar-java/blob/main/CedarJava/src/main/java/com/cedarpolicy/model/policy/Policy.java) method.
+2. Convert the policy statement to JSON by calling the [toJson](https://github.com/cedar-policy/cedar-java/blob/main/CedarJava/src/main/java/com/cedarpolicy/model/policy/Policy.java) method.
+3. Convert the string representation of the policy statement to JSON policy format using [gson](https://github.com/google/gson) or a similar tool.
+
+Now you can easily parse the principal, action, resource, and conditions included in the policy.
