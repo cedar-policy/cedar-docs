@@ -610,7 +610,7 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Var`](#JsonExpr-Var)
 + [`Slot`](#JsonExpr-Slot)
 + [`Unknown`](#JsonExpr-Unknown)
-+ [`!` or `neg` operators](#JsonExpr-neg)
++ [`!`, `neg`, and `isEmpty` operators](#JsonExpr-neg)
 + [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
 + [`.`, `has`](#JsonExpr-has)
 + [`is`](#JsonExpr-is)
@@ -811,7 +811,7 @@ The value of this key is one of the strings `?principal` or `?resource` and act 
 
 The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the JSON rendering of residuals.
 
-#### `!` or `neg` operators {#JsonExpr-neg}
+#### `!`, `neg`, and `isEmpty` operators {#JsonExpr-neg}
 
 The value of this key is an object with a single key argument, whose value is itself an [JsonExpr object](#JsonExpr-objects).
 
