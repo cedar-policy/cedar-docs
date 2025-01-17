@@ -108,7 +108,7 @@ The Cedar validator knows that any request that triggers evaluation of this poli
 
 1. **Validation error** &ndash; The left operand of `>` is of type `String`. However, `>` only accepts operands of type `Long`, so this policy always raises a runtime error.
 
-1. **Validation error** &ndash; The left operand of `==` is always of type `Long` and the right operand is always a `String`. Because the `==` operator always returns false if its operands have different runtime types, this comparison always returns false. Although this comparison won't raise a runtime error during evaluation, it probably isn’t what the policy author intended and so is flagged as a validation error.
+1. **Validation warning** &ndash; The left operand of `==` is always of type `Long` and the right operand is always a `String`. Because the `==` operator always returns false if its operands have different runtime types, this comparison always returns false. Although this comparison won't raise a runtime error during evaluation, it probably isn’t what the policy author intended and so is flagged as a validation warning.
 
 ## Supported validation checks {#supported-validation-checks}
 
@@ -121,8 +121,15 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Unrecognized attributes** &ndash; For example, `principal.jobbLevel` has a typo and should be `jobLevel`.
 + **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `required : false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcircuiting [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
 + **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an invalid comparison with a `String`.
+
+The validator also looks for some suspicious situation that, while not runtime errors, are likely to be incorrect code.
+These are reported as the following warnings:
+
 + **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply.
   Similarly, `principal is ExampleCo::Personnel::Admin` always evaluates to `false` when the `principal` is always a `User`, and not an `Admin`.
++ **Mixed script strings and identifiers** &ndash; When a single string or identifier contains multiple unicode scripts (different writing system), it is possible for the string to appear to say something it doesn't. For example, the latin and cyrillic "a" character may appear identical in some fonts.
++ **Bidirectional text control characters in strings and identifiers** &ndash; These unicode characters can be used to craft strings that obfuscate true control flow.
++ **Unexpected characters in entity identifiers** &ndash;  While Cedar can support any string as an entity identifier, we recommend limiting them to characters inside the Unicode General Security Profile for Identifiers.
 
 ## Request validation expectations {#validation-enforcement}
 
