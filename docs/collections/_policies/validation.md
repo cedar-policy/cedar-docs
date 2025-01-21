@@ -122,7 +122,7 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `required : false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcircuiting [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
 + **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an invalid comparison with a `String`.
 
-The validator also looks for some suspicious situation that, while not runtime errors, are likely to be incorrect code.
+The validator also looks for some suspicious situations that, while not runtime errors, are likely to be incorrect code.
 These are reported as the following warnings:
 
 + **Cases that always evaluate to false, and thus never apply** &ndash; For example, `when { principal has manager && principal.manager == User::"Ethel" }` always evaluates to `false` when the type of `principal` will never have the `manager` attribute, as made clear in the schema, so the policy can never apply.
