@@ -788,6 +788,10 @@ These examples both fail to evaluate and fail to validate because their operands
 
 boolean operator that evaluates to `true` if the left operand has a value defined for the specified attribute. Evaluation (and validation) produces an error if lhs is not a record or entity type. We discuss evaluation, first, and validation in more depth further down.
 
+**Usage:** `<entity or record> has <accessors>`
+
+The RHS of a `has` operation can also be a sequence of *identifiers* separated by `.`. This extended syntax allows you to test the presence of all attributes in an access path. For instance, the expression `principal has contactInfo.address.zip` being true ensures that evaluating `principal.contactInfo.address.zip` does not produce any missing attribute runtime errors.
+
 #### Evaluation
 
 Use this operator to check that a value is present before accessing that value. If an expression accesses an attribute that isn't present, then evaluation produces an error.
