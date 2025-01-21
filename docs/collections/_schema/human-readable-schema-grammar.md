@@ -32,17 +32,19 @@ Tokens are defined using regular expressions:
 The grammar adopts the same string escaping rules as the [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
+Annotation := '@' IDENT '(' STR ')'
+Annotations := {Annotations}
 Schema    := {Namespace}
-Namespace := ('namespace' Path '{' {Decl} '}') | Decl
+Namespace := (Annotations 'namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
-Entity    := 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';'
-Action    := 'action' Names ['in' RefOrRefs] [AppliesTo]';'
-TypeDecl  := 'type' TYPENAME '=' Type ';'
+Entity    := Annotations 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';'
+Action    := Annotations 'action' Names ['in' RefOrRefs] [AppliesTo]';'
+TypeDecl  := Annotations 'type' TYPENAME '=' Type ';'
 Type      := Path | SetType | RecType
 EntType   := Path
 SetType   := 'Set' '<' Type '>'
 RecType   := '{' [AttrDecls] '}'
-AttrDecls := Name ['?'] ':' Type [',' | ',' AttrDecls]
+AttrDecls := Annotations Name ['?'] ':' Type [',' | ',' AttrDecls]
 AppliesTo := 'appliesTo' '{' AppDecls '}'
 AppDecls  := ('principal' | 'resource') ':' EntOrTyps [',' | ',' AppDecls]
            | 'context' ':' RecType [',' | ',' AppDecls]

@@ -64,7 +64,10 @@ You can reference entity types and actions defined in other namespaces of the sa
         "entityTypes": {
             "Manufacturer": { ... }
         },
-        "actions": { ... }
+        "actions": { ... },
+        "annotations" : {
+            "doc": "the namespace representing clients"
+        }
     },
     "ExampleCo::Furniture": {
         "entityTypes": {
@@ -86,6 +89,8 @@ You can reference entity types and actions defined in other namespaces of the sa
 ```
 
 One special case: you cannot define entity types, actions, or common types in a namespace that would shadow definitions in the empty namespace. For example, if the entity type `Table` was also defined in the empty namespace, then the schema above would be invalid.
+
+You can annotation a declaration with a namespace by adding the `annotations` key, in parallel to other keys like `entityTypes`. However, you cannot annotate a declaration without a namespace.
 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
@@ -184,6 +189,10 @@ Note that if the `shape` element is omitted, then entities of the type being def
 
 Specifies the tag type for entities of this type. If this is not present, entities of this type are not allowed to have tags. Valid values for the tag type are the same as valid values for [attribute types](#schema-attributes-types).
 
+### `annotations`
+
+Specifies the annotations of the entity type. An annotation is a key-value pair, both of which are strings.
+
 ### Attribute specifications {#schema-attributes-specs}
 
 Each attribute in a `Record` is a JSON object that describes one attribute in the record associated with entities of this type. It has the form
@@ -242,6 +251,8 @@ A record attribute has the same JSON format as the [entity `shape`'s record's at
     }
 }
 ```
+
+You can annotate `attribute`s of a `Record` type declaration by adding the `annotations` key, in parallel to other keys like `type`.
 
 #### `Entity` {#schema-entitytypes-shape-entity}
 {: .no_toc }
@@ -465,6 +476,10 @@ Each `context` entry consists of `type` and `attributes` objects. By default, th
 }
 ```
 
+### `annotations`
+
+Specifies the annotations of the action. An annotation is a key-value pair, both of which are strings.
+
 ## `commonTypes` {#schema-commonTypes}
 
 ### Structure
@@ -580,6 +595,8 @@ Note that definitions of types appearing in `commonTypes` can refer to one anoth
     "Customer": { "shape": { "type": "Person" } }
 }
 ```
+
+You can annotate a common type declaration by adding the `annotations` key, in parallel to other keys like `type`.
 
 ## Example schema {#schema-examples}
 
