@@ -790,7 +790,7 @@ boolean operator that evaluates to `true` if the left operand has a value define
 
 **Usage:** `<entity or record> has <accessors>`
 
-The RHS of a `has` operation can also be a sequence of *identifiers* separated by `.`. This extended syntax allows you to test the presence of all attributes in an access path. For instance, expression `principal has contactInfo.address.zip` being true ensures that evaluating `principal.contactInfo.address.zip` does not produce any missing attribute runtime errors.
+The RHS of a `has` operation can also be a sequence of *identifiers* separated by `.`. This extended syntax allows you to test the presence of all attributes in an access path. For instance, the expression `principal has contactInfo.address.zip` being true ensures that evaluating `principal.contactInfo.address.zip` does not produce any missing attribute runtime errors.
 
 #### Evaluation
 
