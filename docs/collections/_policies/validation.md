@@ -129,7 +129,7 @@ These are reported as the following warnings:
   Similarly, `principal is ExampleCo::Personnel::Admin` always evaluates to `false` when the `principal` is always a `User`, and not an `Admin`.
 + **Mixed script strings and identifiers** &ndash; When a single string or identifier contains multiple unicode scripts (different writing system), it is possible for the string to appear to say something it doesn't. For example, the latin and cyrillic "a" character may appear identical in some fonts.
 + **Bidirectional text control characters in strings and identifiers** &ndash; These unicode characters can be used to craft strings that obfuscate true control flow.
-+ **Unexpected characters in entity identifiers** &ndash;  While Cedar can support any string as an entity identifier, we recommend limiting them to characters inside the Unicode General Security Profile for Identifiers.
++ **Unexpected characters in entity identifiers** &ndash;  While Cedar can support any string as an entity identifier, we recommend limiting them to printable ASCII characters (including spaces, but excluding tabs and new lines) and characters inside the Unicode General Security Profile for Identifiers.
 
 ## Request validation expectations {#validation-enforcement}
 
