@@ -40,7 +40,7 @@ The following entity type declaration specifies an entity type `User` , whose pa
 + `delegate` of type `User`
 + `blocked` of type `Set<User>`
 
-The attribute `delegate` is optional, as indicated by the `?` after the attribute name.
+The attribute `delegate` is optional, as indicated by the `?` after the attribute name. Entity type `Group` is an enumerated entity. EIDs of entities of this type can only be `G1`, `G2`, and `G3`.
 
 Finally, entities of type `User` have string-typed `tags`, which means that `User`s may have any number of tags, with any names, where the value associated with each tag is a `String`.
 
@@ -50,6 +50,7 @@ entity User in [Group] {
     delegate?: User,
     blocked: Set<User>,
 } tags String;
+entity Group enum ["G1", "G2", "G3"];
 ```
 
 Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
