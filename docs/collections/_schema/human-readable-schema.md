@@ -50,6 +50,7 @@ entity User in [Group] {
     delegate?: User,
     blocked: Set<User>,
 } tags String;
+@doc("Only three values of EIDs are valid for entities of type `Group`.")
 entity Group enum ["G1", "G2", "G3"];
 ```
 
