@@ -63,7 +63,7 @@ EntityTypes ::= 'entityTypes' ':' '{' [ EntityType { ',' EntityType } ] '}'
 An `EntityType` element describes one entity type supported by your application. It begins with a name string for the entity type that, when qualified by its parent [namespace](#grammar-schema-Namespace), uniquely identifies this entity type. This element contains a `memberOfTypes` element that is an array list of any parent entity types that entities of this type can be a member or child of in a hierarchy. It also contains a `shape` element that describes the attributes of entities of this type, and a `tags` element that declares the tag type for entities of this type.
 
 ```
-EntityType ::= IDENT ':' '{' [ 'memberOfTypes' ':' '[' [ IDENT { ',' IDENT } ] ']' ] [ ',' 'shape': TypeJson ] [ ',' 'tags': Type ] '}'
+EntityType ::= IDENT ':' '{' [ 'memberOfTypes' ':' '[' [ IDENT { ',' IDENT } ] ']' ] [ ',' 'shape': TypeJson ] [ ',' 'tags': Type ] '}' | IDENT ':' '{' 'enum': STR+ '}'
 ```
 
 ## `Actions` {#grammar-schema-Actions}
