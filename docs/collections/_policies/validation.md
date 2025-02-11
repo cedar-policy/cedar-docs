@@ -121,6 +121,7 @@ The validator compares a policy with a schema to look for inconsistencies. From 
 + **Unrecognized attributes** &ndash; For example, `principal.jobbLevel` has a typo and should be `jobLevel`.
 + **Unsafe access to optional attributes** &ndash; For example, `principal.numberOfLaptops` where `numberOfLaptops` is an optional attribute declared with `required : false`. Such tests should be guarded by including a [`has`](../policies/syntax-operators.html#operator-has) check as the left side of the shortcircuiting [&&](../policies/syntax-operators.html#operator-and) expression. For example, as in `principal has numberOfLaptops && principal.numberOfLaptops > 1`.
 + **Type mismatch in operators** &ndash; For example, `principal.jobLevel > "14"` is an invalid comparison with a `String`.
++ ** Invalid entity literals of enumerated entity types ** &ndash; For example, `Application::"TinyTODO"` is an invalid entity literal if entity type `Application` is an enumerated type and `TinyTodo` is the only allowed EID.
 
 The validator also looks for some suspicious situations that, while not runtime errors, are likely to be incorrect code.
 These are reported as the following warnings:
