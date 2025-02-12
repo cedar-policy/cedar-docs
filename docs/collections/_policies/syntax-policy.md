@@ -98,7 +98,9 @@ The scope section of a Cedar policy statement defines which values *match* the r
 
 ### `principal` {#term-parc-principal}
 
-The `principal` element in a Cedar policy represents a role, user, service, or other identity that can make a request to perform an `action` on a `resource` in your application. If the principal making the request matches the `principal` defined in this policy statement, then this element matches.
+The `principal` element in a Cedar policy represents a user, service, or other identity that can make a request to perform an `action` on a `resource` in your application. If the principal making the request matches the `principal` defined in this policy statement, then this element matches. 
+
+We recommend not using roles, or groups, as principals because this prevents you from writing more specific policies in the future. For example, if the principal is a role you can't reference the `level` attribute of a `user` as in `principal.level >= 10`.
 
 The `principal` element must be present. If you specify only `principal` without an expression that constrains its scope, then the policy applies to *any* principal.
 
