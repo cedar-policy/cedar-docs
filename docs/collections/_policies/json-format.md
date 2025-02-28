@@ -169,7 +169,7 @@ The `op` key is required. The `op` object must have one of the following string 
     ```json
     "principal": {
         "op": "==",
-        "slot": { "?principal" }
+        "slot": "?principal"
     },
     ```
 
@@ -211,7 +211,7 @@ The `op` key is required. The `op` object must have one of the following string 
     ```json
     "principal": {
         "op": "in",
-        "slot": { "?principal" }
+        "slot": "?principal"
     },
     ```
 
@@ -277,7 +277,7 @@ The `op` key is required. The `op` object must have one of the following string 
         "op": "is",
         "entity_type": "User",
         "in": {
-            "slot": { "?principal" }
+            "slot": "?principal"
         }
     },
     ```
@@ -453,7 +453,7 @@ The `op` object must have one of the following string values:
     ```json
     "resource": {
         "op": "==",
-        "slot": { "?resource" }
+        "slot": "?resource"
     },
     ```
 
@@ -495,7 +495,7 @@ The `op` object must have one of the following string values:
     ```json
     "resource": {
         "op": "in",
-        "slot": { "?resource" }
+        "slot": "?resource"
     }
     ```
 
@@ -561,7 +561,7 @@ The `op` object must have one of the following string values:
         "op": "is",
         "entity_type": "file",
         "in": {
-            "slot": { "?resource" }
+            "slot": "?resource"
         }
     },
     ```
@@ -1177,7 +1177,7 @@ Here is the JSON representation of this policy set, plus a template-linked polic
             },
             "resource": {
                 "op": "in",
-                "slot": { "?resource" }
+                "slot": "?resource"
             },
             "conditions": []
         }
