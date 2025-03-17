@@ -126,7 +126,7 @@ principal is User in Group::"alice_friends"
 
 ### `action` {#term-parc-action}
 
-The `action` element in a Cedar policy is a list of the operations in your application for which this policy statement controls access. If the operation in the request matches one of the `action` items defined in this policy statement, then this element matches.
+The `action` element in a Cedar policy is a list of the operations in your application for which this policy statement controls access. Cedar policies can include one or more actions or action groups. If the operation in the request matches one of the `action` items defined in this policy statement, then this element matches.
 
 #### Examples of the `action` element {#term-parc-action-examples}
 {: .no_toc }
