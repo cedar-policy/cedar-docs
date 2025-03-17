@@ -100,7 +100,7 @@ A policy should check for an optional attribute's presence by using the [`has`](
 
 A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier (EID)](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section). For example, the action entity name of action declaration `viewPhoto` of the PhotoFlash application is `PhotoFlash::Action::"viewPhoto"` because `PhotoFlash::Action` is the fully-qualified action entity type.
 
-An action declaration specifies an action's membership relations with action groups, its applicability (with respect to principal and resource entity types, and the context shape).
+An action declaration specifies an action's membership in action groups and its applicability (with respect to principal and resource entity types, and the context shape).
 
 **Actions topics**
 * [Cedar schema format](../schema/human-readable-schema.html#schema-actions)

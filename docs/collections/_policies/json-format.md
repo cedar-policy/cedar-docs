@@ -367,7 +367,7 @@ The `op` object must have one of the following string values:
     Cedar policy line:
 
     ```cedar
-    action in [ Action::"readFile", Action::"writeFile", Action::"deleteFile"]
+    action in [ Action:: "ManageFiles", Action::"readFile", Action::"writeFile", Action::"deleteFile"]
     ```
 
     JSON representation
@@ -376,6 +376,7 @@ The `op` object must have one of the following string values:
     "action": {
         "op": "in",
         "entities": [
+            { "type": "Action", "id": "ManageFiles" }, // Action group
             { "type": "Action", "id": "readFile" },
             { "type": "Action", "id": "writeFile" },
             { "type": "Action", "id": "deleteFile" }

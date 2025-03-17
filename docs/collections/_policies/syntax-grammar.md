@@ -70,7 +70,7 @@ Principal ::= 'principal' [(['is' PATH] ['in' (Entity | '?principal')]) | ('==' 
 
 ## `Action` {#grammar-action}
 
-The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](../policies/syntax-operators.html#operator-equality) operator and an action entity, or [`in`](../policies/syntax-operators.html#operator-in) followed by an action entity or a [set](../policies/syntax-datatypes.html#datatype-set) of action entities.
+The `Action` element consists of the `action` keyword. If specified by itself, it matches any action. Optionally, it can be followed by either the [`==`](../policies/syntax-operators.html#operator-equality) operator and an action entity, or [`in`](../policies/syntax-operators.html#operator-in) followed by an action entity or a [set](../policies/syntax-datatypes.html#datatype-set) of action entities, known as an *action group*.
 
 ```
 Action ::= 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
