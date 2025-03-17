@@ -134,7 +134,7 @@ entity User in [Group] {
 
 The following action declaration defines the action `ViewDocument`. It has the following characteristics:
 
-+ It's a member of action group `ReadActions`
++ It's a member of `ReadActions` & `ExampleNS::Action::"Write"` action groups
 + It applies to principals of entity type `User` and `Public`
 + It applies to resources of entity type `Document`
 + It applies to context of record types `network: ipaddr` and `browser: String`.
@@ -150,7 +150,7 @@ action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
 };
 ```
 
-An action name is either an identifier or a string. The membership relation syntax of action declarations is like that of entity declarations, but parent action names can be strings, and entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the action `Write` in the example action declaration. It's declared in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
+An action name is either an identifier or a string. The membership relation syntax of action declarations is like that of entity declarations, but parent action names can be strings, and entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the parent action `Write` in the example action declaration. It's declared in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
 
