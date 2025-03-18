@@ -69,6 +69,8 @@ If you change a declared namespace in your schema you will need to change the en
 
 A collection of the `principal` and `resource` entity types supported by your application. An entity type name is a Cedar identifier. An entity type declaration specifies its membership relations with other entity types and its shape/attributes.
 
+Starting with Cedar version 4.3, we introduced enumerated entity types - a new category of entity types with predefined entity IDs (EIDs). That is, the Cedar validator will mark requests, policies, or entities as invalid if they contain entity literals of enumerated types whose EIDs are not specified in the schema. Note that EIDs of enumerated entity types cannot be empty lists in schemas. Entities of enumerated types cannot not have ancestors, attributes or entity tags. The Cedar validator also reports such violations.
+
 {: .important }
 >The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
 
