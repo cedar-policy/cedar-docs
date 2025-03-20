@@ -28,7 +28,7 @@ You can create a namespace that you want to associate with your declarations. Ad
 
 Alternatively, you can create a declaration without a namespace, for example `entity Bar;`. The names of declarations that lack a namespace are always referred to without qualification, for example `Bar`.
 
-You can annotation a declaration with namespace like `@doc("this is a Foo") namespace Foo { entity Bar; }`. However, you cannot annotate the empty namespace.
+You can annotate a namespace declaration: `@doc("this is a Foo") namespace Foo { entity Bar; }`. However, you cannot annotate the empty namespace.
 
 Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations.
 
