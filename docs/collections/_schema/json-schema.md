@@ -250,6 +250,12 @@ A record attribute has the same JSON format as the [entity `shape`'s record's at
         }
     }
 }
+"Group" : {
+    "enum": ["G1", "G2", "G3"],
+    "annotations": {
+        "doc": "Only three values of EIDs are valid for entities of type `Group`."
+    }
+}
 ```
 
 You can annotate `attribute`s of a `Record` type declaration by adding the `annotations` key, in parallel to other keys like `type`.
