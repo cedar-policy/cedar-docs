@@ -388,8 +388,8 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-01") < datetime("1970-01-02")                    //true
-datetime(resource.creationDate) < datetime("2024-10-15T11:35:00Z") //false
-datetime("1970-01-01T01:00:00Z") < 3600000                          //error - operator not allowed on non-datetime
+datetime(resource.creationDate) < datetime("2024-10-15T11:38:33Z") //false
+datetime("1970-01-01T01:00:00Z") < 3600000                         //error - operator not allowed on non-datetime
 ```
 
 ### `<` \(duration 'less than'\) {#operator-lessthan-duration}
@@ -404,7 +404,7 @@ If either operand is not a `duration` then evaluation (and validation) results i
 {: .no_toc }
 
 In the following examples, `//error` indicates both an evaluation and a validation error.
-Assume that `resource.retentionPeriod` is `"5d"`.
+Assume that `resource.retentionPeriod` is `"3d"`.
 
 ```cedar
 duration("3h30m") < duration("15000s")               //true
@@ -469,8 +469,8 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-01") <= datetime("1970-01-02")                    //true
-datetime(resource.creationDate) <= datetime("2024-10-15T11:35:00Z") //false
-datetime("1970-01-01T01:00:00Z") <= 3600000                          //error - operator not allowed on non-datetime
+datetime(resource.creationDate) <= datetime("2024-10-15T11:38:33Z") //true
+datetime("1970-01-01T01:00:00Z") <= 3600000                         //error - operator not allowed on non-datetime
 ```
 
 ### `<=` \(duration 'less than or equal'\) {#operator-lessthanorequal-duration}
@@ -485,11 +485,11 @@ If either operand is not a `duration` then evaluation (and validation) results i
 {: .no_toc }
 
 In the following examples, `//error` indicates both an evaluation and a validation error.
-Assume that `resource.retentionPeriod` is `"5d"`.
+Assume that `resource.retentionPeriod` is `"3d"`.
 
 ```cedar
 duration("3h30m") <= duration("15000s")               //true
-duration(resource.retentionPeriod) <= duration("72h") //false
+duration(resource.retentionPeriod) <= duration("72h") //true
 duration("1h") <= 3600000                             //error - operator not allowed on non-duration
 ```
 
@@ -549,7 +549,7 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-02") > datetime("1970-01-01")                    //true
-datetime(resource.creationDate) > datetime("2024-10-15T11:35:00Z") //true
+datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //true
 datetime("1970-01-01T01:00:00Z") > 3600000                         //error - operator not allowed on non-datetime
 ```
 
@@ -565,11 +565,11 @@ If either operand is not a `duration` then evaluation (and validation) results i
 {: .no_toc }
 
 In the following examples, `//error` indicates both an evaluation and a validation error.
-Assume that `resource.retentionPeriod` is `"5d"`.
+Assume that `resource.retentionPeriod` is `"3d"`.
 
 ```cedar
 duration("3h30m") > duration("10000s")                //true
-duration(resource.retentionPeriod) > duration("150h") //false
+duration(resource.retentionPeriod) > duration("72h")  //false
 duration("1h") > 3600000                              //error - operator not allowed on non-duration
 ```
 
@@ -631,7 +631,7 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-02") >= datetime("1970-01-01")                    //true
-datetime(resource.creationDate) >= datetime("2024-10-15T11:35:00Z") //true
+datetime(resource.creationDate) >= datetime("2024-10-15T11:38:33Z") //true
 datetime("1970-01-01T01:00:00Z") >= 3600000                         //error - operator not allowed on non-datetime
 ```
 
@@ -647,11 +647,11 @@ If either operand is not a `duration` then evaluation (and validation) results i
 {: .no_toc }
 
 In the following examples, `//error` indicates both an evaluation and a validation error.
-Assume that `resource.retentionPeriod` is `"5d"`.
+Assume that `resource.retentionPeriod` is `"3d"`.
 
 ```cedar
 duration("3h30m") >= duration("10000s")                //true
-duration(resource.retentionPeriod) >= duration("150h") //false
+duration(resource.retentionPeriod) >= duration("72h")  //true
 duration("1h") >= 3600000                              //error - operator not allowed on non-duration
 ```
 

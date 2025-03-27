@@ -127,10 +127,10 @@ Nested::Namespace::App::File::"myFile.txt"
 The remaining Cedar data types are introduced as *extension types*. Values of an extension type are introduced by calling a *constructor function* that takes a string as its parameter. Operations on extension types, aside from equality, use a function- or method-call syntax. Equality testing uses `==` as usual.
 
 As of now, Cedar supports the following extension types:
- - [decimal](#datatype-decimal)
- - [ipaddr](#datatype-ipaddr)
- - [datetime](#datatype-datetime)
- - [duration](#datatype-duration)
+  - [decimal](#datatype-decimal)
+  - [ipaddr](#datatype-ipaddr)
+  - [datetime](#datatype-datetime)
+  - [duration](#datatype-duration)
 
 While Cedar policies can _evaluate_ extension constructor functions and operations applied to _any_ expression, the policy validator will only _validate_ extension constructor and operation calls whose arguments are valid (for the extension type) _string literals_. We say more below.
 
