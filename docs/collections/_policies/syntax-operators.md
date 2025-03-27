@@ -214,6 +214,88 @@ ip("127.0.0.1") == "127.0.0.1"                //false – different types //Does
 ip("::1") == 1                                //false – different types //Doesn't validate
 ```
 
+### `datetime()` \(parse string and convert to datetime\) {#function-datetime}
+
+**Usage:** `datetime(<string>)`
+
+Function that parses the string and tries to convert it to type [datetime](syntax-datatypes.html#datatype-datetime). If the string doesn't represent a valid datetime value, it generates an error.
+
+To be interpreted successfully as a datetime value, the string must be of one of the forms:
+  - `"YYYY-MM-DD"` (date only)
+  - `"YYYY-MM-DDThh:mm:ssZ"` (UTC)
+  - `"YYYY-MM-DDThh:mm:ss.SSSZ"` (UTC with millisecond precision)
+  - `"YYYY-MM-DDThh:mm:ss(+/-)hhmm"` (With timezone offset in hours and minutes)
+  - `"YYYY-MM-DDThh:mm:ss.SSS(+/-)hhmm"` (With timezone offset in hours and minutes and millisecond precision)
+
+All formats must adhere to these additional restrictions:
+  - The month field (`MM`) must be in the range 01-12
+  - The day field (`DD`) must be in the range 01-31
+  - The hour field (`hh`) must be in the range 00-23
+  - The minute field (`mm`) must be in the range 00-59
+  - The seconds field (`ss`) must be in the range 00-59 (leap seconds are not supported)
+
+Note that the restrictions on the hour and minute fields also apply to timezone offsets.
+This implies that timezone offsets must have an absolute value less than 24 hours (i.e., between `-2359` and `+2359`).
+
+Cedar can properly evaluate `datetime(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `datetime(if true then "1970-01-01" else "2000-01-01")` will evaluate to the datetime equivalent to `datetime("1970-01-01")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+
+#### Examples:
+{: .no_toc }
+
+In the examples below, suppose `context.time` is `"2024-10-15T11:35:00Z"` and `context.date` is `"00011-12-13"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+datetime("2024-10-15")
+datetime("2024-10-15T11:35:00Z")
+datetime("2024-10-15T11:35:00.000Z")
+datetime("2024-10-15T11:35:00+0100")
+datetime("2024-10-15T11:35:00.000+0100")
+datetime(context.time)                   //Evaluates but does not validate (parameter not a string literal)
+datetime(context.date)                   //error - invalid format (five digits for years)
+datetime("2022-10-10 ")                  //error - trailing space
+datetime("2024-10-15Z")                  //error - Zulu code in date only format
+datetime("2024-10-15T11:38:02ZZ")        //error - double Zulu code
+datetime("2024-01-01T01:02")             //error - no seconds field nor timezone code
+datetime("2024-01-01T00:00:00")          //error - no timezone specified
+datetime("2016-12-31T23:59:60.000Z")     //error - leap second in seconds field
+```
+
+### `duration()` \(parse string and convert to duration\) {#function-duration}
+
+**Usage:** `duration(<string>)`
+
+Function that parses the string and tries to convert it to type [duration](syntax-datatypes.html#datatype-duration). If the string doesn't represent a valid duration value, it generates an error.
+
+To be interpreted successfully as a datetime value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
+- `d`: days
+- `h`: hours
+- `m`: minutes
+- `s`: seconds
+- `ms`: milliseconds
+
+Duration strings are required to be ordered from largest unit to smallest unit, and contain one quantity per unit. Units with zero quantity may be omitted.
+
+Cedar can properly evaluate `duration(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `duration(if true then "1h" else "50m")` will evaluate to the duration equivalent to `duration("1h")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+
+#### Examples:
+{: .no_toc }
+
+In the examples below, suppose `context.time` is `"12s340ms"` and `context.dur` is `"1d-1s"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+duration("2h30m")
+duration("-1d12h")
+duration("1h30m45s")
+duration(context.time)              //Evaluates but does not validate (parameter not a string literal)
+duration(context.dur)               //error - invalid format (minus sign on unit)
+duration("1d2h3m4s5ms ")            //error - trailing space
+duration("1d2h3m4s5ms6")            //error - trailing amount
+duration("d")                       //error - unit with no amount
+duration("1s1d")                    //error - invalid order
+duration("1s1s")                    //error - repeated units
+duration("1d9223372036854775807ms") //error - overflow
+```
+
 ## Comparison operators and functions {#operators-comparison}
 
 Use these operators to compare two values. An expression that uses one of these operators evaluates to a boolean `true` or `false`. You can then combine multiple expressions using the logical operators.
@@ -290,6 +372,46 @@ false < true          //error - operator not allowed on non-long
 [1, 2] < [47, 0]      //error - operator not allowed on non-long
 ```
 
+### `<` \(datetime 'less than'\) {#operator-lessthan-datetime}
+
+**Usage:** `<datetime> < <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically less than the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-01") < datetime("1970-01-02")                    //true
+datetime(resource.creationDate) < datetime("2024-10-15T11:35:00Z") //false
+datetime("1970-01-01T01:00:00Z") < 3600000                          //error - operator not allowed on non-datetime
+```
+
+### `<` \(duration 'less than'\) {#operator-lessthan-duration}
+
+**Usage:** `<duration> < <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically less than the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"5d"`.
+
+```cedar
+duration("3h30m") < duration("15000s")               //true
+duration(resource.retentionPeriod) < duration("72h") //false
+duration("1h") < 3600000                             //error - operator not allowed on non-duration
+```
+
 ### `.lessThan()` \(decimal 'less than'\) {#function-lessThan}
 
 **Usage:** `<decimal>.lessThan(<decimal>)`
@@ -331,6 +453,46 @@ false <= true          //error - operator not allowed on non-long
 [1, 2] <= [47, 0]      //error - operator not allowed on non-long
 ```
 
+### `<=` \(datetime 'less than or equal'\) {#operator-lessthanorequal-datetime}
+
+**Usage:** `<datetime> <= <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-01") <= datetime("1970-01-02")                    //true
+datetime(resource.creationDate) <= datetime("2024-10-15T11:35:00Z") //false
+datetime("1970-01-01T01:00:00Z") <= 3600000                          //error - operator not allowed on non-datetime
+```
+
+### `<=` \(duration 'less than or equal'\) {#operator-lessthanorequal-duration}
+
+**Usage:** `<duration> <= <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"5d"`.
+
+```cedar
+duration("3h30m") <= duration("15000s")               //true
+duration(resource.retentionPeriod) <= duration("72h") //false
+duration("1h") <= 3600000                             //error - operator not allowed on non-duration
+```
+
 ### `.lessThanOrEqual()` \(decimal 'less than or equal'\) {#function-lessThanOrEqual}
 
 **Usage:** `<decimal>.lessThanOrEqual(<decimal>)`
@@ -369,6 +531,46 @@ principal.age > 22     //false (assuming principal.age is 21)
 3 > "3"                //error - operand is a non-long
 false > true           //error - operands are not long integers
 "some" > "thing"       //error - operands are not long integers
+```
+
+### `>` \(datetime 'greater than'\) {#operator-greaterthan-datetime}
+
+**Usage:** `<datetime> > <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically greater than the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-02") > datetime("1970-01-01")                    //true
+datetime(resource.creationDate) > datetime("2024-10-15T11:35:00Z") //true
+datetime("1970-01-01T01:00:00Z") > 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `>` \(duration 'greater than'\) {#operator-greaterthan-duration}
+
+**Usage:** `<duration> > <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically greater than the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"5d"`.
+
+```cedar
+duration("3h30m") > duration("10000s")                //true
+duration(resource.retentionPeriod) > duration("150h") //false
+duration("1h") > 3600000                              //error - operator not allowed on non-duration
 ```
 
 ### `.greaterThan()` \(decimal 'greater than'\) {#function-greaterThan}
@@ -412,6 +614,46 @@ false >= true          //error - operands are not long integers
 "some" >= "thing"      //error - operands are not long integers
 ```
 As shown in the examples, evaluating an expression with `>=` when the operators are not both `long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `long`.
+
+### `>=` \(datetime 'greater than or equal'\) {#operator-greaterthanorequal-datetime}
+
+**Usage:** `<datetime> >= <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-02") >= datetime("1970-01-01")                    //true
+datetime(resource.creationDate) >= datetime("2024-10-15T11:35:00Z") //true
+datetime("1970-01-01T01:00:00Z") >= 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `>=` \(duration 'greater than or equal'\) {#operator-greaterthanorequal-duration}
+
+**Usage:** `<duration> >= <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"5d"`.
+
+```cedar
+duration("3h30m") >= duration("10000s")                //true
+duration(resource.retentionPeriod) >= duration("150h") //false
+duration("1h") >= 3600000                              //error - operator not allowed on non-duration
+```
 
 ### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\) {#function-greaterThanOrEqual}
 

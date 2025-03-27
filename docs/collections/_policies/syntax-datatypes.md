@@ -126,7 +126,11 @@ Nested::Namespace::App::File::"myFile.txt"
 
 The remaining Cedar data types are introduced as *extension types*. Values of an extension type are introduced by calling a *constructor function* that takes a string as its parameter. Operations on extension types, aside from equality, use a function- or method-call syntax. Equality testing uses `==` as usual.
 
-As of now Cedar supports two extension types: [decimal](#datatype-decimal) and [ipaddr](#datatype-ipaddr).
+As of now, Cedar supports the following extension types:
+ - [decimal](#datatype-decimal)
+ - [ipaddr](#datatype-ipaddr)
+ - [datetime](#datatype-datetime)
+ - [duration](#datatype-duration)
 
 While Cedar policies can _evaluate_ extension constructor functions and operations applied to _any_ expression, the policy validator will only _validate_ extension constructor and operation calls whose arguments are valid (for the extension type) _string literals_. We say more below.
 
@@ -162,3 +166,43 @@ ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
 ```
 
 Constructor calls such as `ip(context.addr)` and `ip(if context.addr like "145.*" then context.addr else "127.0.0.1")` can _evaluate_ properly, assuming `context.addr` is a string of the accepted format, but will not _validate_. To validate, the `ip()` constructor must be given a _string literal_. If calling `ip()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
+
+### datetime {#datatype-datetime}
+
+A value that represents an instant of time with millisecond precision.
+
+You specify values of extension type `datetime` using the [datetime() operator](../policies/syntax-operators.html#datetime-parse-string-and-convert-to-datetime). Here are some examples:
+
+```cedar
+datetime("2024-10-15")                   // a date only
+datetime("2024-10-15T11:35:00Z")         // a UTC datetime
+datetime("2024-10-15T11:35:00.000Z")     // a UTC datetime with millisecond precision
+datetime("2024-10-15T11:35:00+0100")     // a datetime with timezone offset
+datetime("2024-10-15T11:35:00.000+0100") // a datetime with timezone offset and millisecond precision
+```
+
+Internally, a `datetime` value stores the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) using a [`long`](#datatype-long) value. So its minimum and maximum representable values correspond to those of [`long`](#datatype-long). Note that `datetime` is a distinct type and cannot be used as a `long`.
+
+{: .warning }
+>If you exceed the range available for the `datetime` data type by attempting to construct or compute a `datetime` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+
+Constructor calls such as `datetime(context.time)` and `datetime(if context.time like "20*-*-*" then context.time else "2000-01-01")` can _evaluate_ properly, assuming `context.time` is a string of the accepted format, but will not _validate_. To validate, the `datetime()` constructor must be given a _string literal_. If calling `datetime()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
+
+### duration {#datatype-duration}
+
+A value that represents a duration of time with millisecond precision.
+
+You specify values of extension type `duration` using the [duration() operator](../policies/syntax-operators.html#duration-parse-string-and-convert-to-duration). Here are some examples:
+
+```cedar
+duration("2h30m")
+duration("-1d12h")
+duration("1h30m45s")
+```
+
+Internally, a `duration` value stores a duration in milliseconds using a [`long`](#datatype-long) value. So its minimum and maximum representable values correspond to those of [`long`](#datatype-long). Note that `duration` is a distinct type and cannot be used as a `long`.
+
+{: .warning }
+>If you exceed the range available for the `duration` data type by attempting to construct or compute a `duration` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+
+Constructor calls such as `duration(context.dur)` and `duration(if context.dur like "*h*s" then context.dur else "1h")` can _evaluate_ properly, assuming `context.dur` is a string of the accepted format, but will not _validate_. To validate, the `duration()` constructor must be given a _string literal_. If calling `duration()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.

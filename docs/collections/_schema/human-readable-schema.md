@@ -76,7 +76,7 @@ Cedar data types have corresponding schema types. The corresponding type names o
 
 An entity type or an extension type is specified by its name. The entity type name is an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are valid entity type names.
 
-An extension type name is an identifier. Currently, `ipaddr` and `decimal` are the only available extension type names. Since the release of version 3.1 of the Cedar language, the namespace `__cedar` is a reserved namespace. You can specify fully-qualified type names for primitive and extension types under the `__cedar` namespace. For example, `__cedar::ipaddr` uniquely identifies the `ipaddr` extension type.
+An extension type name is an identifier. See the list [here](../_policies/syntax-datatypes.md#extension-datatype-extension) for all the available extension type names. Since the release of version 3.1 of the Cedar language, the namespace `__cedar` is a reserved namespace. You can specify fully-qualified type names for primitive and extension types under the `__cedar` namespace. For example, `__cedar::ipaddr` uniquely identifies the `ipaddr` extension type.
 
 Format composite data type declarations as follows.
 
