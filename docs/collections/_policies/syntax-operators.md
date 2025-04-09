@@ -1391,6 +1391,190 @@ ip("192.168.0.75").isInRange(ip("192.168.0.1/24"))  //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/28"))  //false
 ip("1:2:3:4::").isInRange(ip("1:2:3:4::/48"))       //true
 ip("192.168.0.1").isInRange(ip("1:2:3:4::"))        //false
-ip("192.168.0.1").isInRange(1)                      //error - operand is not an ipaddr
+ip("192.168.0.1").isInRange(1)                      //error - operand is not an `ipaddr`
 context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is not an `ipaddr`
+```
+
+## Datetime functions {#functions-datetime}
+
+Use these functions to operate on [`datetime`](./syntax-datatypes.md#datetime-datatype-datetime) and [`duration`](./syntax-datatypes.md#duration-datatype-duration) values.
+
+### `.offset()` \(compute a datetime offset by a duration\) {#function-offset.title}
+
+**Usage:** `<datetime>.offset(<duration>)`
+
+Function that returns a new `datetime` value offset by the given `duration`.
+This function evaluates (and validates) to an error the first operand does not have `datetime` type or the second operand does not have `duration` type.
+The function evaluates to an error if the computation would exceed the representable range for the `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2024-10-15").offset(duration("1h"))            // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-15T00:18:00Z").offset(duration("42m")) // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-16T01:00:00Z").offset(duration("-1d")) // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-15T00:18:00Z").offset(duration(42))    // error - operand is not a `duration`
+context.foo.offset(duration("42m"))                      // error if `context.foo` is not a `datetime`
+```
+
+### `.durationSince()` \(compute difference between two datetimes\) {#function-durationSince.title}
+
+**Usage:** `<datetime>.durationSince(<datetime>)`
+
+Function that returns the difference between two `datetime` values as a `duration` value.
+This function evaluates (and validates) to an error if either operand does not have `datetime` type.
+The function evaluates to an error if the computation would exceed the representable range for the `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+
+```
+
+### `.toDate()` \(extract date portion as new datetime\) {#function-toDate.title}
+
+**Usage:** `<datetime>.toDate()`
+
+Function that returns a new `datetime` value resulting from truncating the receiver to the day, such that printing it would have `00:00:00` as the time.
+This function evaluates (and validates) to an error if receiver does not have `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2025-02-20T10:35:00Z").toDate()     // returns `datetime` equivalent to `datetime("2025-02-20")`
+datetime("2025-02-20T22:00:00-0500").toDate() // returns `datetime` equivalent to `datetime("2025-02-21")`
+duration("5h").toDate()                       // error - receiver is not a `datetime`
+context.foo.toDate()                          // error if `context.foo` is not a `datetime`
+```
+
+
+### `.toTime()` \(xtract time portion as duration\) {#function-toTime.title}
+
+**Usage:** `<datetime>.toTime()`
+
+Function that returns a new `duration` value resulting from removing days from the receiver, such that only milliseconds since [`toDate()`](#todate-compute-difference-between-two-datetimes-function-todatetitle) are left.
+This function evaluates (and validates) to an error if receiver does not have `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2025-02-20T10:35:00Z").toTime()     // returns `duration` equivalent to `duration("10h35m")`
+datetime("2025-02-20T10:35:00-0500").toTime() // returns `duration` equivalent to `duration("15h35m")`
+datetime("2025-02-20T22:00:00-0500").toTime() // returns `duration` equivalent to `duration("3h")`
+duration("5h").toTime()                       // error - receiver is not a `datetime`
+context.foo.toTime()                          // error if `context.foo` is not a `datetime`
+```
+
+### `.toMilliseconds` \(convert duration to milliseconds\) {#function-toMilliseconds.title}
+
+**Usage:** `<duration>.toMilliseconds()`
+
+Function that returns a `long` value with the amount of milliseconds in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toMilliseconds()      // returns `long` equal to 86400000
+duration("4s100ms").toMilliseconds() // returns `long` equal to 4100
+"4s100ms".toMilliseconds()           // error - receiver is not a `duration`
+context.foo.toMilliseconds()         // error if `context.foo` is not a `duration`
+```
+
+### `.toSeconds` \(convert duration to seconds\) {#function-toSeconds.title}
+
+**Usage:** `<duration>.toSeconds()`
+
+Function that returns a `long` value with the amount of seconds in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toSeconds()      // returns `long` equal to 86400
+duration("4s100ms").toSeconds() // returns `long` equal to 4
+duration("100ms").toSeconds()   // returns `long` equal to 0
+"4s100ms".toSeconds()           // error - receiver is not a `duration`
+context.foo.toSeconds()         // error if `context.foo` is not a `duration`
+```
+
+### `.toMinutes` \(convert duration to minutes\) {#function-toMinutes.title}
+
+**Usage:** `<duration>.toMinutes()`
+
+Function that returns a `long` value with the amount of minutes in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toMinutes()      // returns `long` equal to 1440
+duration("4m30s").toMinutes()   // returns `long` equal to 4
+duration("4m70s").toMinutes()   // returns `long` equal to 5
+duration("100ms").toMinutes()   // returns `long` equal to 0
+"4m100s".toMinutes()            // error - receiver is not a `duration`
+context.foo.toMinutes()         // error if `context.foo` is not a `duration`
+```
+
+### `.toHours` \(convert duration to hours\) {#function-toHours.title}
+
+**Usage:** `<duration>.toHours()`
+
+Function that returns a `long` value with the amount of hours in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toHours()      // returns `long` equal to 24
+duration("4h30m").toHours()   // returns `long` equal to 4
+duration("4h70m").toHours()   // returns `long` equal to 5
+duration("100ms").toHours()   // returns `long` equal to 0
+"4h100m".toHours()            // error - receiver is not a `duration`
+context.foo.toHours()         // error if `context.foo` is not a `duration`
+```
+
+### `.toDays` \(convert duration to days\) {#function-toDays.title}
+
+**Usage:** `<duration>.toDays()`
+
+Function that returns a `long` value with the amount of days in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toDays()      // returns `long` equal to 24
+duration("4d10h").toDays()   // returns `long` equal to 4
+duration("4d30h").toDays()   // returns `long` equal to 5
+duration("100ms").toDays()   // returns `long` equal to 0
+"4d100h".toDays()            // error - receiver is not a `duration`
+context.foo.toDays()         // error if `context.foo` is not a `duration`
 ```
