@@ -1459,7 +1459,7 @@ context.foo.toDate()                          // error if `context.foo` is not a
 
 **Usage:** `<datetime>.toTime()`
 
-Function that returns a new `duration` value resulting from removing days from the receiver, such that only milliseconds since [`toDate()`](#todate-compute-difference-between-two-datetimes-function-todatetitle) are left.
+Function that returns a new `duration` value resulting from removing days from the receiver, such that only the number of milliseconds since [`toDate()`](#todate-compute-difference-between-two-datetimes-function-todatetitle) are left.
 This function evaluates (and validates) to an error if receiver does not have `datetime` type.
 
 #### Examples:
