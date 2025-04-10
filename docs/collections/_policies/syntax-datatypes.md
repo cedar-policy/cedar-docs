@@ -127,45 +127,12 @@ Nested::Namespace::App::File::"myFile.txt"
 The remaining Cedar data types are introduced as *extension types*. Values of an extension type are introduced by calling a *constructor function* that takes a string as its parameter. Operations on extension types, aside from equality, use a function- or method-call syntax. Equality testing uses `==` as usual.
 
 As of now, Cedar supports the following extension types:
-  - [decimal](#datatype-decimal)
-  - [ipaddr](#datatype-ipaddr)
   - [datetime](#datatype-datetime)
+  - [decimal](#datatype-decimal)
   - [duration](#datatype-duration)
+  - [ipaddr](#datatype-ipaddr)
 
 While Cedar policies can _evaluate_ extension constructor functions and operations applied to _any_ expression, the policy validator will only _validate_ extension constructor and operation calls whose arguments are valid (for the extension type) _string literals_. We say more below.
-
-### decimal {#datatype-decimal}
-
-A value with both a whole number part and a decimal part of no more than four digits.
-
-You specify values of extension type `decimal` by using the [`decimal()` function](../policies/syntax-operators.html#decimal-parse-string-and-convert-to-decimal), e.g.,
-
-```cedar
-decimal("12345.1234")
-```
-
-(You can't specify a `decimal` as a simple literal.)
-
-A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
-
-{: .warning }
->If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
-
-Constructor calls such as `decimal(context.num)` and `decimal(if true then "100.01" else "1.01")` can _evaluate_ properly, assuming `context.num` is a string of the accepted format, but will not _validate_. To validate, the `decimal()` constructor must be given a _string literal_. If calling `decimal()` with the string literal would produce an overflow, the constructor call is also deemed invalid.
-
-### ipaddr {#datatype-ipaddr}
-
-A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
-
-You specify values of extension type `ipaddr` using the [ip() operator](../policies/syntax-operators.html#ip-parse-string-and-convert-to-ipaddr). Here are some examples:
-
-```cedar
-ip("192.168.1.100")    // a single IPv4 address
-ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
-ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
-```
-
-Constructor calls such as `ip(context.addr)` and `ip(if context.addr like "145.*" then context.addr else "127.0.0.1")` can _evaluate_ properly, assuming `context.addr` is a string of the accepted format, but will not _validate_. To validate, the `ip()` constructor must be given a _string literal_. If calling `ip()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
 
 ### datetime {#datatype-datetime}
 
@@ -188,6 +155,25 @@ Internally, a `datetime` value stores the number of milliseconds since `1970-01-
 
 Constructor calls such as `datetime(context.time)` and `datetime(if context.time like "20*-*-*" then context.time else "2000-01-01")` can _evaluate_ properly, assuming `context.time` is a string of the accepted format, but will not _validate_. To validate, the `datetime()` constructor must be given a _string literal_. If calling `datetime()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
 
+### decimal {#datatype-decimal}
+
+A value with both a whole number part and a decimal part of no more than four digits.
+
+You specify values of extension type `decimal` by using the [`decimal()` function](../policies/syntax-operators.html#decimal-parse-string-and-convert-to-decimal), e.g.,
+
+```cedar
+decimal("12345.1234")
+```
+
+(You can't specify a `decimal` as a simple literal.)
+
+A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
+
+{: .warning }
+>If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+
+Constructor calls such as `decimal(context.num)` and `decimal(if true then "100.01" else "1.01")` can _evaluate_ properly, assuming `context.num` is a string of the accepted format, but will not _validate_. To validate, the `decimal()` constructor must be given a _string literal_. If calling `decimal()` with the string literal would produce an overflow, the constructor call is also deemed invalid.
+
 ### duration {#datatype-duration}
 
 A value that represents a duration of time with millisecond precision.
@@ -206,3 +192,17 @@ Internally, a `duration` value stores a duration in milliseconds using a [`long`
 >If you exceed the range available for the `duration` data type by attempting to construct or compute a `duration` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
 Constructor calls such as `duration(context.dur)` and `duration(if context.dur like "*h*s" then context.dur else "1h")` can _evaluate_ properly, assuming `context.dur` is a string of the accepted format, but will not _validate_. To validate, the `duration()` constructor must be given a _string literal_. If calling `duration()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
+
+### ipaddr {#datatype-ipaddr}
+
+A value that represents an IP address. It can be either IPv4 or IPv6. The value can represent an individual address or a range of addresses, by adding a [CIDR suffix](https://wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation) (a slash `/` and an integer) after the address.
+
+You specify values of extension type `ipaddr` using the [ip() operator](../policies/syntax-operators.html#ip-parse-string-and-convert-to-ipaddr). Here are some examples:
+
+```cedar
+ip("192.168.1.100")    // a single IPv4 address
+ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
+ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
+```
+
+Constructor calls such as `ip(context.addr)` and `ip(if context.addr like "145.*" then context.addr else "127.0.0.1")` can _evaluate_ properly, assuming `context.addr` is a string of the accepted format, but will not _validate_. To validate, the `ip()` constructor must be given a _string literal_. If calling `ip()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.

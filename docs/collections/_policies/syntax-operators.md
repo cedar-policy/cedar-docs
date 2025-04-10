@@ -132,88 +132,6 @@ context.location like "s3:*"         //true
 "string*with*stars" like "string\*with\*stars"                 //true
 ```
 
-
-
-### `decimal()` \(parse string and convert to decimal\) {#function-decimal}
-
-**Usage:** `decimal(<string>)`
-
-Function that parses the string and tries to convert it to type [decimal](syntax-datatypes.html#datatype-decimal). If the string doesn't represent a valid decimal value, it generates an error.
-
-To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
-
-Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
-
-#### Examples:
-{: .no_toc }
-
-In the examples below, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
-
-```cedar
-decimal("1.0")
-decimal("-1.0")
-decimal("123.456")
-decimal("0.1234")
-decimal("-0.0123")
-decimal("55.1")
-decimal("00.000")
-decimal(context.time)            //Evaluates //Doesn't validate (parameter not a string literal)
-decimal(context.date)            //error - invalid format (not valid as parameter not a string literal)
-decimal("1234")                  //error - missing decimal
-decimal("1.0.")                  //error - stray period at end
-decimal("1.")                    //error - missing fractional part
-decimal(".1")                    //error - missing whole number part
-decimal("1.a")                   //error - invalid fractional part
-decimal("-.")                    //error - invalid format
-decimal("1000000000000000.0")    //error - overflow
-decimal("922337203685477.5808")  //error - overflow
-decimal("0.12345")               //error - too many fractional digits
-```
-
-### `ip()` \(parse string and convert to ipaddr\) {#function-ip}
-
-**Usage:** `ip(<string>)`
-
-Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then the `ip()` expression generates an error when evaluated.
-
-Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
-
-#### Examples:
-{: .no_toc }
-
-In the examples below, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
-
-```cedar
-ip("127.0.0.1")
-ip("::1")
-ip("127.0.0.1/24")
-ip("ffee::/64")
-ip("ff00::2")
-ip("::2")
-ip(context.addr)                    //Evaluates //Doesn't validate (parameter not a string literal)
-ip(context.time)                    //error - invalid format (not valid as parameter not a string literal)
-ip("380.0.0.1")                     //error – invalid IPv4 address
-ip("ab.ab.ab.ab")                   //error – invalid IPv4 address
-ip("127.0.0.1/8/24")                //error – invalid CIDR notation
-ip("fee::/64::1")                   //error – invalid IPv6 address
-ip("fzz::1")                        //error – invalid character in address
-ip([127,0,0,1])                     //error – invalid operand type
-"127.0.0.1".ip()                    //error – invalid call style
-```
-
-The following examples all evaluate correctly, but the last two do not validate as the validator requires `==` expressions to be applied to expressions of the same type (see the [discussion of `==`](#operator-equality) below).
-
-```cedar
-ip("127.0.0.1") == ip("127.0.0.1")            //true
-ip("192.168.0.1") == ip("8.8.8.8")            //false
-ip("192.168.0.1/24") == ip("8.8.8.8/8")       //false
-ip("192.168.0.1/24") == ip("192.168.0.8/24")  //false - different host address
-ip("127.0.0.1") == ip("::1")                  //false – different IP versions
-ip("127.0.0.1") == ip("192.168.0.1/24")       //false - address compared to range
-ip("127.0.0.1") == "127.0.0.1"                //false – different types //Doesn't validate
-ip("::1") == 1                                //false – different types //Doesn't validate
-```
-
 ### `datetime()` \(parse string and convert to datetime\) {#function-datetime}
 
 **Usage:** `datetime(<string>)`
@@ -260,6 +178,42 @@ datetime("2024-01-01T00:00:00")          //error - no timezone specified
 datetime("2016-12-31T23:59:60.000Z")     //error - leap second in seconds field
 ```
 
+### `decimal()` \(parse string and convert to decimal\) {#function-decimal}
+
+**Usage:** `decimal(<string>)`
+
+Function that parses the string and tries to convert it to type [decimal](syntax-datatypes.html#datatype-decimal). If the string doesn't represent a valid decimal value, it generates an error.
+
+To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
+
+Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+
+#### Examples:
+{: .no_toc }
+
+In the examples below, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+decimal("1.0")
+decimal("-1.0")
+decimal("123.456")
+decimal("0.1234")
+decimal("-0.0123")
+decimal("55.1")
+decimal("00.000")
+decimal(context.time)            //Evaluates //Doesn't validate (parameter not a string literal)
+decimal(context.date)            //error - invalid format (not valid as parameter not a string literal)
+decimal("1234")                  //error - missing decimal
+decimal("1.0.")                  //error - stray period at end
+decimal("1.")                    //error - missing fractional part
+decimal(".1")                    //error - missing whole number part
+decimal("1.a")                   //error - invalid fractional part
+decimal("-.")                    //error - invalid format
+decimal("1000000000000000.0")    //error - overflow
+decimal("922337203685477.5808")  //error - overflow
+decimal("0.12345")               //error - too many fractional digits
+```
+
 ### `duration()` \(parse string and convert to duration\) {#function-duration}
 
 **Usage:** `duration(<string>)`
@@ -294,6 +248,50 @@ duration("d")                       //error - unit with no amount
 duration("1s1d")                    //error - invalid order
 duration("1s1s")                    //error - repeated units
 duration("1d9223372036854775807ms") //error - overflow
+```
+
+### `ip()` \(parse string and convert to ipaddr\) {#function-ip}
+
+**Usage:** `ip(<string>)`
+
+Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then the `ip()` expression generates an error when evaluated.
+
+Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
+
+#### Examples:
+{: .no_toc }
+
+In the examples below, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+ip("127.0.0.1")
+ip("::1")
+ip("127.0.0.1/24")
+ip("ffee::/64")
+ip("ff00::2")
+ip("::2")
+ip(context.addr)                    //Evaluates //Doesn't validate (parameter not a string literal)
+ip(context.time)                    //error - invalid format (not valid as parameter not a string literal)
+ip("380.0.0.1")                     //error – invalid IPv4 address
+ip("ab.ab.ab.ab")                   //error – invalid IPv4 address
+ip("127.0.0.1/8/24")                //error – invalid CIDR notation
+ip("fee::/64::1")                   //error – invalid IPv6 address
+ip("fzz::1")                        //error – invalid character in address
+ip([127,0,0,1])                     //error – invalid operand type
+"127.0.0.1".ip()                    //error – invalid call style
+```
+
+The following examples all evaluate correctly, but the last two do not validate as the validator requires `==` expressions to be applied to expressions of the same type (see the [discussion of `==`](#operator-equality) below).
+
+```cedar
+ip("127.0.0.1") == ip("127.0.0.1")            //true
+ip("192.168.0.1") == ip("8.8.8.8")            //false
+ip("192.168.0.1/24") == ip("8.8.8.8/8")       //false
+ip("192.168.0.1/24") == ip("192.168.0.8/24")  //false - different host address
+ip("127.0.0.1") == ip("::1")                  //false – different IP versions
+ip("127.0.0.1") == ip("192.168.0.1/24")       //false - address compared to range
+ip("127.0.0.1") == "127.0.0.1"                //false – different types //Doesn't validate
+ip("::1") == 1                                //false – different types //Doesn't validate
 ```
 
 ## Comparison operators and functions {#operators-comparison}
