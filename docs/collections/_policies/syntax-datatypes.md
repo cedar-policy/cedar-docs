@@ -148,10 +148,12 @@ datetime("2024-10-15T11:35:00+0100")     // a datetime with timezone offset
 datetime("2024-10-15T11:35:00.000+0100") // a datetime with timezone offset and millisecond precision
 ```
 
-Internally, a `datetime` value stores the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) using a [`long`](#datatype-long) value. So its minimum and maximum representable values correspond to those of [`long`](#datatype-long). Note that `datetime` is a distinct type and cannot be used as a `long`.
+Internally, a `datetime` value stores the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) using a [`long`](#datatype-long) value. This allows for a theoretical range from -9223372036854775808 to 9223372036854775807 milliseconds.
+However, the string format restrictions on the `datetime` constructor limit the values that can be created directly. The earliest datetime that can be constructed is `datetime("0000-01-01T00:00:00+2359")` and the latest is `datetime("9999-12-31T23:59:59-2359")`.
+Values outside this range can only be reached using operators like [`offset`](../_policies/syntax-operators.md#offset-compute-a-datetime-offset-by-a-duration-function-offsettitle). Note that `datetime` is a distinct type and cannot be used as a `long`.
 
 {: .warning }
->If you exceed the range available for the `datetime` data type by attempting to construct or compute a `datetime` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+>If you exceed the range available for the `datetime` data type by attempting to compute a `datetime` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
 Constructor calls such as `datetime(context.time)` and `datetime(if context.time like "20*-*-*" then context.time else "2000-01-01")` can _evaluate_ properly, assuming `context.time` is a string of the accepted format, but will not _validate_. To validate, the `datetime()` constructor must be given a _string literal_. If calling `datetime()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
 
@@ -186,7 +188,8 @@ duration("-1d12h")
 duration("1h30m45s")
 ```
 
-Internally, a `duration` value stores a duration in milliseconds using a [`long`](#datatype-long) value. So its minimum and maximum representable values correspond to those of [`long`](#datatype-long). Note that `duration` is a distinct type and cannot be used as a `long`.
+Internally, a `duration` value stores a duration in milliseconds using a [`long`](#datatype-long) value. So a `duration` value can range from `duration("-9223372036854775808ms")` to `duration("9223372036854775807ms")`.
+Note that `duration` is a distinct type and cannot be used as a `long`.
 
 {: .warning }
 >If you exceed the range available for the `duration` data type by attempting to construct or compute a `duration` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
