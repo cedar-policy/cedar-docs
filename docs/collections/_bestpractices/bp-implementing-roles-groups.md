@@ -10,7 +10,7 @@ has_children: false
 
 We can extend the ‘role management using groups’ approach, and create a separate approver group for each set of resources: `Approver-France`, `Approver-Germany`, and `Approver-UK`.
 
-Each role is represented by a policy in the policy store, as  shown in the example below.
+Each role is represented by a policy in the policy store, as shown in the following example.
 
 ```cedar
 // Role to approve French timesheets

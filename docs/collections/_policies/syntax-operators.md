@@ -16,7 +16,7 @@ if (false) { return 1 == "hello"; } else { return true; }
 ```
 A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation]((validation.html#validation)) section for more information.
 
-When giving examples below, we will indicate whether the example evaluates properly (and to what), and also whether it validates. All expressions that fail to evaluate will also fail to validate, but not vice versa.
+When giving following examples, we will indicate whether the example evaluates properly (and to what), and also whether it validates. All expressions that fail to evaluate will also fail to validate, but not vice versa.
 
 <details open markdown="block">
   <summary>
@@ -160,7 +160,7 @@ Cedar can properly evaluate `datetime(e)` where `e` is any Cedar expression that
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.time` is `"2024-10-15T11:35:00Z"` and `context.date` is `"00011-12-13"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.time` is `"2024-10-15T11:35:00Z"` and `context.date` is `"00011-12-13"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 datetime("2024-10-15")
@@ -191,7 +191,7 @@ Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that 
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 decimal("1.0")
@@ -234,7 +234,7 @@ Cedar can properly evaluate `duration(e)` where `e` is any Cedar expression that
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.time` is `"12s340ms"` and `context.dur` is `"1d-1s"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.time` is `"12s340ms"` and `context.dur` is `"1d-1s"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 duration("2h30m")
@@ -261,7 +261,7 @@ Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evalu
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 ip("127.0.0.1")
@@ -312,7 +312,7 @@ While Cedar can _evaluate_ expressions `e1 == e2` when `e1` and `e2` have differ
 #### Examples:
 {: .no_toc }
 
-All of the examples below evaluate successfully, and are labeled with their evaluation result. Those examples that do not validate (the last two) are labeled as such.
+All of the following examples evaluate successfully, and are labeled with their evaluation result. Those examples that do not validate (the last two) are labeled as such.
 
 ```cedar
 1 == 1                          //true
@@ -704,7 +704,7 @@ when {
 
 The `>` comparison in this expression can only succeed if the  `principal` entity has a `level` attribute. If it doesn't, then `principal.level` sub-expression would evaluate to an error. The expression that is the first operand of `&&` uses the [`has`](#operator-has) operator to ensure that the `principal` entity does have such an attribute. If that evaluates to `false`, then the second operand to `&&` isn't evaluated.
 
-The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the examples below.
+The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the following examples.
 
 #### More Examples:
 {: .no_toc }
@@ -746,7 +746,7 @@ when {
 };
 ```
 
-The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the examples below.
+The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the following examples.
 
 #### More Examples:
 {: .no_toc }
