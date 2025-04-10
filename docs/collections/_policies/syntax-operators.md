@@ -16,7 +16,7 @@ if (false) { return 1 == "hello"; } else { return true; }
 ```
 A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation]((validation.html#validation)) section for more information.
 
-When giving examples below, we will indicate whether the example evaluates properly (and to what), and also whether it validates. All expressions that fail to evaluate will also fail to validate, but not vice versa.
+When giving following examples, we will indicate whether the example evaluates properly (and to what), and also whether it validates. All expressions that fail to evaluate will also fail to validate, but not vice versa.
 
 <details open markdown="block">
   <summary>
@@ -132,7 +132,51 @@ context.location like "s3:*"         //true
 "string*with*stars" like "string\*with\*stars"                 //true
 ```
 
+### `datetime()` \(parse string and convert to datetime\) {#function-datetime}
 
+**Usage:** `datetime(<string>)`
+
+Function that parses the string and tries to convert it to type [datetime](syntax-datatypes.html#datatype-datetime). If the string doesn't represent a valid datetime value, it generates an error.
+
+To be interpreted successfully as a datetime value, the string must be of one of the forms:
+  - `"YYYY-MM-DD"` (date only)
+  - `"YYYY-MM-DDThh:mm:ssZ"` (UTC)
+  - `"YYYY-MM-DDThh:mm:ss.SSSZ"` (UTC with millisecond precision)
+  - `"YYYY-MM-DDThh:mm:ss(+/-)hhmm"` (With timezone offset in hours and minutes)
+  - `"YYYY-MM-DDThh:mm:ss.SSS(+/-)hhmm"` (With timezone offset in hours and minutes and millisecond precision)
+
+All formats must adhere to these additional restrictions:
+  - The month field (`MM`) must be in the range 01-12
+  - The day field (`DD`) must be in the range 01-31
+  - The hour field (`hh`) must be in the range 00-23
+  - The minute field (`mm`) must be in the range 00-59
+  - The seconds field (`ss`) must be in the range 00-59 (leap seconds are not supported)
+
+Note that the restrictions on the hour and minute fields also apply to timezone offsets.
+This implies that timezone offsets must have an absolute value less than 24 hours (i.e., between `-2359` and `+2359`).
+
+Cedar can properly evaluate `datetime(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `datetime(if true then "1970-01-01" else "2000-01-01")` will evaluate to the datetime equivalent to `datetime("1970-01-01")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, suppose `context.time` is `"2024-10-15T11:35:00Z"` and `context.date` is `"00011-12-13"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+datetime("2024-10-15")
+datetime("2024-10-15T11:35:00Z")
+datetime("2024-10-15T11:35:00.000Z")
+datetime("2024-10-15T11:35:00+0100")
+datetime("2024-10-15T11:35:00.000+0100")
+datetime(context.time)                   //Evaluates but does not validate (parameter not a string literal)
+datetime(context.date)                   //error - invalid format (five digits for years)
+datetime("2022-10-10 ")                  //error - trailing space
+datetime("2024-10-15Z")                  //error - Zulu code in date only format
+datetime("2024-10-15T11:38:02ZZ")        //error - double Zulu code
+datetime("2024-01-01T01:02")             //error - no seconds field nor timezone code
+datetime("2024-01-01T00:00:00")          //error - no timezone specified
+datetime("2016-12-31T23:59:60.000Z")     //error - leap second in seconds field
+```
 
 ### `decimal()` \(parse string and convert to decimal\) {#function-decimal}
 
@@ -147,7 +191,7 @@ Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that 
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.time` is `"12.25"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 decimal("1.0")
@@ -170,6 +214,42 @@ decimal("922337203685477.5808")  //error - overflow
 decimal("0.12345")               //error - too many fractional digits
 ```
 
+### `duration()` \(parse string and convert to duration\) {#function-duration}
+
+**Usage:** `duration(<string>)`
+
+Function that parses the string and tries to convert it to type [duration](syntax-datatypes.html#datatype-duration). If the string doesn't represent a valid duration value, it generates an error.
+
+To be interpreted successfully as a datetime value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
+- `d`: days
+- `h`: hours
+- `m`: minutes
+- `s`: seconds
+- `ms`: milliseconds
+
+Duration strings are required to be ordered from largest unit to smallest unit, and contain one quantity per unit. Units with zero quantity may be omitted.
+
+Cedar can properly evaluate `duration(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `duration(if true then "1h" else "50m")` will evaluate to the duration equivalent to `duration("1h")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, suppose `context.time` is `"12s340ms"` and `context.dur` is `"1d-1s"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+
+```cedar
+duration("2h30m")
+duration("-1d12h")
+duration("1h30m45s")
+duration(context.time)              //Evaluates but does not validate (parameter not a string literal)
+duration(context.dur)               //error - invalid format (minus sign on unit)
+duration("1d2h3m4s5ms ")            //error - trailing space
+duration("1d2h3m4s5ms6")            //error - trailing amount
+duration("d")                       //error - unit with no amount
+duration("1s1d")                    //error - invalid order
+duration("1s1s")                    //error - repeated units
+duration("1d9223372036854775807ms") //error - overflow
+```
+
 ### `ip()` \(parse string and convert to ipaddr\) {#function-ip}
 
 **Usage:** `ip(<string>)`
@@ -181,7 +261,7 @@ Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evalu
 #### Examples:
 {: .no_toc }
 
-In the examples below, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
+In the following examples, suppose `context.addr` is `"12.25.27.15"` while `context.date` is `"12/27/91"`. Examples labeled `error` indicate both a validation and evaluation error. Unlabeled examples evaluate and validate correctly.
 
 ```cedar
 ip("127.0.0.1")
@@ -232,7 +312,7 @@ While Cedar can _evaluate_ expressions `e1 == e2` when `e1` and `e2` have differ
 #### Examples:
 {: .no_toc }
 
-All of the examples below evaluate successfully, and are labeled with their evaluation result. Those examples that do not validate (the last two) are labeled as such.
+All of the following examples evaluate successfully, and are labeled with their evaluation result. Those examples that do not validate (the last two) are labeled as such.
 
 ```cedar
 1 == 1                          //true
@@ -290,6 +370,46 @@ false < true          //error - operator not allowed on non-long
 [1, 2] < [47, 0]      //error - operator not allowed on non-long
 ```
 
+### `<` \(datetime 'less than'\) {#operator-lessthan-datetime}
+
+**Usage:** `<datetime> < <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically less than the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-01") < datetime("1970-01-02")                    //true
+datetime(resource.creationDate) < datetime("2024-10-15T11:38:33Z") //false
+datetime("1970-01-01T01:00:00Z") < 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `<` \(duration 'less than'\) {#operator-lessthan-duration}
+
+**Usage:** `<duration> < <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically less than the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"3d"`.
+
+```cedar
+duration("3h30m") < duration("15000s")               //true
+duration(resource.retentionPeriod) < duration("72h") //false
+duration("1h") < 3600000                             //error - operator not allowed on non-duration
+```
+
 ### `.lessThan()` \(decimal 'less than'\) {#function-lessThan}
 
 **Usage:** `<decimal>.lessThan(<decimal>)`
@@ -331,6 +451,46 @@ false <= true          //error - operator not allowed on non-long
 [1, 2] <= [47, 0]      //error - operator not allowed on non-long
 ```
 
+### `<=` \(datetime 'less than or equal'\) {#operator-lessthanorequal-datetime}
+
+**Usage:** `<datetime> <= <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-01") <= datetime("1970-01-02")                    //true
+datetime(resource.creationDate) <= datetime("2024-10-15T11:38:33Z") //true
+datetime("1970-01-01T01:00:00Z") <= 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `<=` \(duration 'less than or equal'\) {#operator-lessthanorequal-duration}
+
+**Usage:** `<duration> <= <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically less than or equal to the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"3d"`.
+
+```cedar
+duration("3h30m") <= duration("15000s")               //true
+duration(resource.retentionPeriod) <= duration("72h") //true
+duration("1h") <= 3600000                             //error - operator not allowed on non-duration
+```
+
 ### `.lessThanOrEqual()` \(decimal 'less than or equal'\) {#function-lessThanOrEqual}
 
 **Usage:** `<decimal>.lessThanOrEqual(<decimal>)`
@@ -369,6 +529,46 @@ principal.age > 22     //false (assuming principal.age is 21)
 3 > "3"                //error - operand is a non-long
 false > true           //error - operands are not long integers
 "some" > "thing"       //error - operands are not long integers
+```
+
+### `>` \(datetime 'greater than'\) {#operator-greaterthan-datetime}
+
+**Usage:** `<datetime> > <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically greater than the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-02") > datetime("1970-01-01")                    //true
+datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //true
+datetime("1970-01-01T01:00:00Z") > 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `>` \(duration 'greater than'\) {#operator-greaterthan-duration}
+
+**Usage:** `<duration> > <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically greater than the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"3d"`.
+
+```cedar
+duration("3h30m") > duration("10000s")                //true
+duration(resource.retentionPeriod) > duration("72h")  //false
+duration("1h") > 3600000                              //error - operator not allowed on non-duration
 ```
 
 ### `.greaterThan()` \(decimal 'greater than'\) {#function-greaterThan}
@@ -412,6 +612,46 @@ false >= true          //error - operands are not long integers
 "some" >= "thing"      //error - operands are not long integers
 ```
 As shown in the examples, evaluating an expression with `>=` when the operators are not both `long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `long`.
+
+### `>=` \(datetime 'greater than or equal'\) {#operator-greaterthanorequal-datetime}
+
+**Usage:** `<datetime> >= <datetime>`
+
+Binary operator that compares two `datetime` operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
+Note that `datetime` values store the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) and earlier dates are expressed using negative `datetime` values.
+If either operand is not a `datetime` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
+
+```cedar
+datetime("1970-01-02") >= datetime("1970-01-01")                    //true
+datetime(resource.creationDate) >= datetime("2024-10-15T11:38:33Z") //true
+datetime("1970-01-01T01:00:00Z") >= 3600000                         //error - operator not allowed on non-datetime
+```
+
+### `>=` \(duration 'greater than or equal'\) {#operator-greaterthanorequal-duration}
+
+**Usage:** `<duration> >= <duration>`
+
+Binary operator that compares two `duration` operands and evaluates to `true` if the left operand is numerically greater than or equal to the right operand.
+Note that `duration` values store a duration in milliseconds and negative `duration` values are possible.
+If either operand is not a `duration` then evaluation (and validation) results in an error.
+
+#### Examples:
+{: .no_toc }
+
+In the following examples, `//error` indicates both an evaluation and a validation error.
+Assume that `resource.retentionPeriod` is `"3d"`.
+
+```cedar
+duration("3h30m") >= duration("10000s")                //true
+duration(resource.retentionPeriod) >= duration("72h")  //true
+duration("1h") >= 3600000                              //error - operator not allowed on non-duration
+```
 
 ### `.greaterThanOrEqual()` \(decimal 'greater than or equal'\) {#function-greaterThanOrEqual}
 
@@ -464,7 +704,7 @@ when {
 
 The `>` comparison in this expression can only succeed if the  `principal` entity has a `level` attribute. If it doesn't, then `principal.level` sub-expression would evaluate to an error. The expression that is the first operand of `&&` uses the [`has`](#operator-has) operator to ensure that the `principal` entity does have such an attribute. If that evaluates to `false`, then the second operand to `&&` isn't evaluated.
 
-The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the examples below.
+The description of `&&` so far has been from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 && e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. However, the validator _sometimes_ is able to take short-circuiting into account. We will elaborate when considering the following examples.
 
 #### More Examples:
 {: .no_toc }
@@ -506,7 +746,7 @@ when {
 };
 ```
 
-The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the examples below.
+The description so far is from the perspective of _evaluation_. From the perspective of policy _validation_, the situation is a little different. In general, the validator will reject any expression `e1 || e2` that would evaluate to an error due to either `e1` or `e2` not having `boolean` type. The validator _sometimes_ is able to take short-circuiting into account, as discussed using the following examples.
 
 #### More Examples:
 {: .no_toc }
@@ -1149,6 +1389,190 @@ ip("192.168.0.75").isInRange(ip("192.168.0.1/24"))  //true
 ip("192.168.0.75").isInRange(ip("192.168.0.1/28"))  //false
 ip("1:2:3:4::").isInRange(ip("1:2:3:4::/48"))       //true
 ip("192.168.0.1").isInRange(ip("1:2:3:4::"))        //false
-ip("192.168.0.1").isInRange(1)                      //error - operand is not an ipaddr
+ip("192.168.0.1").isInRange(1)                      //error - operand is not an `ipaddr`
 context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is not an `ipaddr`
+```
+
+## Datetime functions {#functions-datetime}
+
+Use these functions to operate on [`datetime`](./syntax-datatypes.md#datetime-datatype-datetime) and [`duration`](./syntax-datatypes.md#duration-datatype-duration) values.
+
+### `.offset()` \(compute a datetime offset by a duration\) {#function-offset.title}
+
+**Usage:** `<datetime>.offset(<duration>)`
+
+Function that returns a new `datetime` value offset by the given `duration`.
+This function evaluates (and validates) to an error the first operand does not have `datetime` type or the second operand does not have `duration` type.
+The function evaluates to an error if the computation would exceed the representable range for the `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2024-10-15").offset(duration("1h"))            // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-15T00:18:00Z").offset(duration("42m")) // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-16T01:00:00Z").offset(duration("-1d")) // returns `datetime` equivalent to `datetime("2024-10-15T01:00:00Z")`
+datetime("2024-10-15T00:18:00Z").offset(duration(42))    // error - operand is not a `duration`
+context.foo.offset(duration("42m"))                      // error if `context.foo` is not a `datetime`
+```
+
+### `.durationSince()` \(compute difference between two datetimes\) {#function-durationSince.title}
+
+**Usage:** `<datetime>.durationSince(<datetime>)`
+
+Function that returns the difference between two `datetime` values as a `duration` value.
+This function evaluates (and validates) to an error if either operand does not have `datetime` type.
+The function evaluates to an error if the computation would exceed the representable range for the `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+
+```
+
+### `.toDate()` \(extract date portion as new datetime\) {#function-toDate.title}
+
+**Usage:** `<datetime>.toDate()`
+
+Function that returns a new `datetime` value resulting from truncating the receiver to the day, such that printing it would have `00:00:00` as the time.
+This function evaluates (and validates) to an error if receiver does not have `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2025-02-20T10:35:00Z").toDate()     // returns `datetime` equivalent to `datetime("2025-02-20")`
+datetime("2025-02-20T22:00:00-0500").toDate() // returns `datetime` equivalent to `datetime("2025-02-21")`
+duration("5h").toDate()                       // error - receiver is not a `datetime`
+context.foo.toDate()                          // error if `context.foo` is not a `datetime`
+```
+
+
+### `.toTime()` \(xtract time portion as duration\) {#function-toTime.title}
+
+**Usage:** `<datetime>.toTime()`
+
+Function that returns a new `duration` value resulting from removing days from the receiver, such that only the number of milliseconds since [`toDate()`](#todate-compute-difference-between-two-datetimes-function-todatetitle) are left.
+This function evaluates (and validates) to an error if receiver does not have `datetime` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+datetime("2025-02-20T10:35:00Z").toTime()     // returns `duration` equivalent to `duration("10h35m")`
+datetime("2025-02-20T10:35:00-0500").toTime() // returns `duration` equivalent to `duration("15h35m")`
+datetime("2025-02-20T22:00:00-0500").toTime() // returns `duration` equivalent to `duration("3h")`
+duration("5h").toTime()                       // error - receiver is not a `datetime`
+context.foo.toTime()                          // error if `context.foo` is not a `datetime`
+```
+
+### `.toMilliseconds` \(convert duration to milliseconds\) {#function-toMilliseconds.title}
+
+**Usage:** `<duration>.toMilliseconds()`
+
+Function that returns a `long` value with the amount of milliseconds in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toMilliseconds()      // returns `long` equal to 86400000
+duration("4s100ms").toMilliseconds() // returns `long` equal to 4100
+"4s100ms".toMilliseconds()           // error - receiver is not a `duration`
+context.foo.toMilliseconds()         // error if `context.foo` is not a `duration`
+```
+
+### `.toSeconds` \(convert duration to seconds\) {#function-toSeconds.title}
+
+**Usage:** `<duration>.toSeconds()`
+
+Function that returns a `long` value with the amount of seconds in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toSeconds()      // returns `long` equal to 86400
+duration("4s100ms").toSeconds() // returns `long` equal to 4
+duration("100ms").toSeconds()   // returns `long` equal to 0
+"4s100ms".toSeconds()           // error - receiver is not a `duration`
+context.foo.toSeconds()         // error if `context.foo` is not a `duration`
+```
+
+### `.toMinutes` \(convert duration to minutes\) {#function-toMinutes.title}
+
+**Usage:** `<duration>.toMinutes()`
+
+Function that returns a `long` value with the amount of minutes in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toMinutes()      // returns `long` equal to 1440
+duration("4m30s").toMinutes()   // returns `long` equal to 4
+duration("4m70s").toMinutes()   // returns `long` equal to 5
+duration("100ms").toMinutes()   // returns `long` equal to 0
+"4m100s".toMinutes()            // error - receiver is not a `duration`
+context.foo.toMinutes()         // error if `context.foo` is not a `duration`
+```
+
+### `.toHours` \(convert duration to hours\) {#function-toHours.title}
+
+**Usage:** `<duration>.toHours()`
+
+Function that returns a `long` value with the amount of hours in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toHours()      // returns `long` equal to 24
+duration("4h30m").toHours()   // returns `long` equal to 4
+duration("4h70m").toHours()   // returns `long` equal to 5
+duration("100ms").toHours()   // returns `long` equal to 0
+"4h100m".toHours()            // error - receiver is not a `duration`
+context.foo.toHours()         // error if `context.foo` is not a `duration`
+```
+
+### `.toDays` \(convert duration to days\) {#function-toDays.title}
+
+**Usage:** `<duration>.toDays()`
+
+Function that returns a `long` value with the amount of days in the receiver.
+This function evaluates (and validates) to an error if receiver does not have `duration` type.
+
+#### Examples:
+{: .no_toc }
+
+In the examples that follow, those labeled `//error` both evaluate and validate to an error.
+
+```cedar
+duration("1d").toDays()      // returns `long` equal to 24
+duration("4d10h").toDays()   // returns `long` equal to 4
+duration("4d30h").toDays()   // returns `long` equal to 5
+duration("100ms").toDays()   // returns `long` equal to 0
+"4d100h".toDays()            // error - receiver is not a `duration`
+context.foo.toDays()         // error if `context.foo` is not a `duration`
 ```

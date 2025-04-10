@@ -301,7 +301,7 @@ An `element` must contain a structure formatted according to the same rules as a
 {: .no_toc }
 
 For attributes of type `"Extension"`, you must also specify the `name` of the specific extension type.
-There are two extension types: `ipaddr` for IP address values, and `decimal` for decimal values.
+See the list [here](../_policies/syntax-datatypes.md#extension-datatype-extension) for all the available extension type names.
 For example, a `Network` entity may include the IP address of its gateway.
 
 ```json
