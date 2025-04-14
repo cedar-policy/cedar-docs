@@ -155,7 +155,7 @@ This example pulls together many of the features discussed in the previous secti
 
 For `uid` and `parents` it uses the implicit `__entity` escape rather than explicitly adding it. Of course, a full entities file should include entries for the two `UserGroup` entities which are referenced but not defined in this example.
 
-This example also demonstrates attribute values with entity types (`User`) and extension types (IP address `ip` and `decimal`), and uses the explicit `__entity` and `__extn` escapes for those. It does not rely on [schema-based parsing](#Schema-based parsing).
+This example also demonstrates attribute values with entity types (`User`) and extension types (IP address `ip` and `decimal`), and uses the explicit `__entity` and `__extn` escapes for those. It does not rely on [schema-based parsing](#schema-based-parsing).
 
 ```json
 [
