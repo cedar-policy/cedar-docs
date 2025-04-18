@@ -37,7 +37,7 @@ Annotations := {Annotations}
 Schema    := {Namespace}
 Namespace := (Annotations 'namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
-Entity    := Annotations 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';'
+Entity    := Annotations 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';' | Annotations 'entity' Idents 'enum' '[' STR+ ']' ';'
 Action    := Annotations 'action' Names ['in' RefOrRefs] [AppliesTo]';'
 TypeDecl  := Annotations 'type' TYPENAME '=' Type ';'
 Type      := Path | SetType | RecType
