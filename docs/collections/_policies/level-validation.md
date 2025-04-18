@@ -8,18 +8,18 @@ nav_order: 9
 {: .no_toc }
 
 Cedar [authorization requests](../auth/authorization.md) require evaluating policies given a `principal`, `action`, `resource`, `context`, and all entity data that could be relevant for that request.
-This may sound straight-forward at first, but it's not always obvious how to select the relevant entity data for an authorization request.
-If our only concern is always selecting all relevant data, then we can take the easiest option and always select _all_ entity data.
-It is always safe to include all entity data, but, for applications with a large amount of entity data, making all of it available might be too difficult or expensive.
+This may sound straight-forward at first, but it's not always obvious what entity data is actually relevant for a particular request.
+If our only concern is always selecting all relevant data, then we can take the easiest option and select _all_ entity data.
+It always safe to include all entity data, but, for applications with a large amount of entity data, using all of it for every request might be too difficult or expensive.
 
-Cedar provides policy level validation to help applications limit the amount of entity data required for authorization requests.
-Policy level validation is an extra validation stage performed after standard policy validation.
-Where policy validation aims to prevents mistakes in your policy logic without placing any undue restrictions on what policies you can write, level validation places additional restrictions on policies to make it easier to understand what entity data they could possibly need to access.
-
+Cedar provides level validation to help applications limit the amount of entity data required for authorization requests.
+Level validation is an extra validation stage performed after standard policy validation.
+Where policy validation aims to prevent mistakes in your policy logic without placing any undue restrictions on what policies you can write, level validation places additional restrictions on policies to make it easier to understand what entity data they could possibly need to access.
 When validating a policy at level `n`, policy level validation ensures that there is no chain of entity dereferencing operations longer than `n`.
 This guarantees that an entity will not be accessed unless it's reachable by traversing fewer than `n` entity attributes.
+
 All relevant entity data can then be collected by using a procedure called level-based slicing.
-Starting from the entities in the request (`principal`, `action`, `resource`, and any entities in the `context` record) and, repeating while the slicing level `n` is greater than `0`, gathering the data for these entities and recursively slicing starting from any entities in their attributes records from the currently selected entities.
+Starting from the entities in the request (`principal`, `action`, `resource`, and any entities in the `context` record), the slicing procedure gathers data for these entities and iteratively collects data for any entities referenced in their attributes.
 Using this slicing procedure guarantees an authorization request made using the sliced entity data will give the same result as an authorization request using all entity data.
 
 <details open markdown="block">
@@ -33,15 +33,15 @@ Using this slicing procedure guarantees an authorization request made using the 
 
 ## Understanding Level Validation {#level-validation}
 
-Cedar uses the concept of levels to control how deeply policies can access entity data by traversing entity attributes and tags.
+Cedar uses levels to control how deeply policies can access entity data through entity attributes and tags.
 Each level represents one step of attribute access from the root entities (`principal`, `action`, `resource`, and any entities referenced in the `context`).
 When validating at level `n`, a policy is not allowed to contain a chain of entity dereferencing operations longer than `n`, ensuring that all accessed entity data is reachable in `n` steps from the entity root.
+The slicing procedure can then select only the entities reachable in `n` or fewer steps, ignoring all other data.
 
 ### Restricted operations
 
-Level validation specifically restricts entity dereferencing expressions.
-An entity dereferencing expression is any expression that needs to access an entity's data.
-These operation may error or otherwise return an unexpected result when attempting to access the data for an entity that was not included in the authorization request.
+Level validation specifically restricts entity dereferencing expressions - operations that access an entity's data.
+These operations may fail or return unexpected results if they attempt to access data for entities not included in the authorization request, so they need to be restricted in order to be sure a policy doesn't depend on data that the slicing procedure won't collect.
 
 * **Entity Attribute operations**: Attribute access (`.`) and presence test (`has`) operations on entities require entity data to inspect the attributes of the target expression. These operations apply to records where they are not restricted by level validation.
 * **Tag operations**: Tag access (`getTag`) and presence test (`hasTag`) operations require entity data to inspect the tags of the target expression. These are binary operator, but level validation only restricts their first operand.
@@ -51,8 +51,8 @@ All other operations are unrestricted by level validation, needing only to follo
 
 ### Level 0 access
 
-At level 0, policies are restricted from applying any of the entity dereferencing operations on any entities.
-This ensure that policies don't access any entity data.
+Level 0 policies cannot use any entity dereferencing operations.
+This ensures that policies don't access any entity data.
 You can compare entities for equality and check their entity type, but you cannot access their attributes and tags or query the entity hierarchy using the `in` operator.
 Since the `context` is a record rather than an entity, it is possible to access context attributes.
 
@@ -71,7 +71,7 @@ Even a simple operation such as `principal in Group::"admins"` would be reported
 
 ### Level 1 access
 
-At level 1, policies can directly access the entity data for the root entities.
+At level 1, policies can directly access the entity data for the root entities, but cannot access data from entities referenced within those root entities.
 This means an attribute access or entity hierarchy query using `in` is allowed, but a more deeply nested chaining multiple entity attribute or tag access operations is not.
 
 In addition to the operations allowed at level 0, the following operations are allowed at level 1.
@@ -93,8 +93,8 @@ Levels three and higher continue to support more complex expressions formed by c
 
 ### Entity Literals
 
-All dereferencing expressions on entity literals When using level validation at any level.
-Entity literals are not represented anywhere the principal, action, resource or context of an authorization request so cannot be collected by the level-based slicing procedure.
+Level validation restricts all dereferencing expressions on entity literals, regardless of the validation level.
+Entity literals are not represented anywhere in the principal, action, resource or context of an authorization request so cannot be collected by the level-based slicing procedure.
 If level validation allowed access to attributes of entity literals, it would not be able to guarantee that data for that literal was selected during entity slicing, meaning that the authorization decision for a request depending on that entity could change.
 
 The following expressions are not accepted at any level because they deference an entity literal.
@@ -108,7 +108,7 @@ Doc::"my_doc" in principal.folder
 
 Level validation places a limit on how much entity data a policy can access.
 Given an authorization request, level-based entity slicing takes advantage of this limit to select a subset of the entity data that we know will contain all relevant data required for evaluating the request.
-The exact implementation of this procedure will depend on how your entity data is stored, so the Cedar library doesn't provide an implantation.
+The exact implementation of this procedure will depend on how your entity data is stored, so the Cedar library doesn't provide an implementation.
 If your entity data is stored in database, you will want to implement entity slicing using database queries to efficiently extract only the required entities without loading the full database into memory.
 
 The level-based entity slicing algorithm is an iterative procedure that works in general for slicing at any level, but an application which always validates and slices at a fixed level may not need to implement the fully general algorithm.
@@ -129,16 +129,7 @@ The general level-based slicing algorithm applicable at any level *n* starts fro
    - For each entity identifier in the *working set*
      - Lookup the corresponding entity data
      - Insert the entity data into the *slice*
-     - Insert into the *next working set* all entity identifier referenced by the attribute or tags in the *entity data*, 
+     - Insert into the *next working set* all entity identifiers referenced by the attribute or tags in the *entity data*
    - Set the *working set* to be equal to the *next working set* and continue iteration
 
-At the end of the procedure, the *slice* now contains the final set of entity data contains all the entity data that could possibly be accessed by policies validated at level *n*.
-
-## Limitations {#limitations}
-
-The slicing procedure selects all data for an entity, without considering how entities are used in any specific policies.
-If a particular attribute is never accessed by any policy, but is specified by the schema, level based entity slicing will always include that attribute.
-Similarly, it will always retrieve the set of ancestors for an entity even if the specific policies never use the `in` operator.
-
-Slicing at a level will always retrieve data for all entities reachable up to that level, even if the policies would validate at a lower level.
-To avoid fetching entity data that will never be accessed, be sure to validate policies at the lowest level you can.
+At the end of the procedure, the *slice* is now the final set of entity data, containing all the entity data that could possibly be accessed by policies validated at level *n*.
