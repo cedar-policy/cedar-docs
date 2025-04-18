@@ -83,7 +83,7 @@ resource.hasTag("level") && resource.getTag("level") > 4
 ```
 
 If all policies validate at level 1, then we know that policies only access the data for entities included immediately in the request.
-Unlike at level zero, we do need to collect _some_ entity data, but the process doesn't require gathering data for entities requiring even a single attribute access to reach.
+Unlike at level 0, we do need to collect _some_ entity data, but the process doesn't require gathering data for entities requiring even a single attribute access to reach.
 
 ### Higher level access
 
@@ -108,8 +108,31 @@ Doc::"my_doc" in principal.folder
 
 Level validation places a limit on how much entity data a policy can access.
 Given an authorization request, level-based entity slicing takes advantage of this limit to select a subset of the entity data that we know will contain all relevant data required for evaluating the request.
+The exact implementation of this procedure will depend on how your entity data is stored, so the Cedar library doesn't provide an implantation.
+If your entity data is stored in database, you will want to implement entity slicing using database queries to efficiently extract only the required entities without loading the full database into memory.
 
-todo: high level description of slicing algorithm
+The level-based entity slicing algorithm is an iterative procedure that works in general for slicing at any level, but an application which always validates and slices at a fixed level may not need to implement the fully general algorithm.
+For example, if all policies in an application validate at level 0, then the algorithm can be unrolled assuming slicing at level 0 which always results in selecting an empty set of entity data.
+In other words, no entity data is ever required if policies validate at level 0.
+
+If all policies validate at level 1, then the application would need to unroll 1 iteration of the procedure.
+This is accomplished by taking the exactly entity UIDs from the request (`principal`, `action`, `resource`, and any entities referenced in `context`) and retrieving their entity data.
+
+The general level-based slicing algorithm applicable at any level *n* starts from the entities in the request, and follows their attributes and tags to discover all entities reachable in *n* access operations.
+
+1. **Start with root entities**: Begin with a *working set* of entities identifiers initialized with the entities directly referenced in the request - the `principal`, `action`, `resource`, and any entities referenced in the `context`.
+
+2. **Initialize the entity slice**: Necessary data will be collected in the *slice* which is initially empty.
+
+3. **Iterative slicing process**: Repeat the following procedure *n* times, once for each level
+   - Initialize a new set, to be used as the *next working set*
+   - For each entity identifier in the *working set*
+     - Lookup the corresponding entity data
+     - Insert the entity data into the *slice*
+     - Insert into the *next working set* all entity identifier referenced by the attribute or tags in the *entity data*, 
+   - Set the *working set* to be equal to the *next working set* and continue iteration
+
+At the end of the procedure, the *slice* now contains the final set of entity data contains all the entity data that could possibly be accessed by policies validated at level *n*.
 
 ## Limitations {#limitations}
 
