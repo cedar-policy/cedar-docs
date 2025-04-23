@@ -126,9 +126,36 @@ Nested::Namespace::App::File::"myFile.txt"
 
 The remaining Cedar data types are introduced as *extension types*. Values of an extension type are introduced by calling a *constructor function* that takes a string as its parameter. Operations on extension types, aside from equality, use a function- or method-call syntax. Equality testing uses `==` as usual.
 
-As of now Cedar supports two extension types: [decimal](#datatype-decimal) and [ipaddr](#datatype-ipaddr).
+As of now, Cedar supports the following extension types:
+  - [datetime](#datatype-datetime)
+  - [decimal](#datatype-decimal)
+  - [duration](#datatype-duration)
+  - [ipaddr](#datatype-ipaddr)
 
 While Cedar policies can _evaluate_ extension constructor functions and operations applied to _any_ expression, the policy validator will only _validate_ extension constructor and operation calls whose arguments are valid (for the extension type) _string literals_. We say more below.
+
+### datetime {#datatype-datetime}
+
+A value that represents an instant of time with millisecond precision.
+
+You specify values of extension type `datetime` using the [datetime() operator](../policies/syntax-operators.html#datetime-parse-string-and-convert-to-datetime). Here are some examples:
+
+```cedar
+datetime("2024-10-15")                   // a date only
+datetime("2024-10-15T11:35:00Z")         // a UTC datetime
+datetime("2024-10-15T11:35:00.000Z")     // a UTC datetime with millisecond precision
+datetime("2024-10-15T11:35:00+0100")     // a datetime with timezone offset
+datetime("2024-10-15T11:35:00.000+0100") // a datetime with timezone offset and millisecond precision
+```
+
+Internally, a `datetime` value stores the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) using a [`long`](#datatype-long) value. This allows for a theoretical range from -9223372036854775808 to 9223372036854775807 milliseconds.
+However, the string format restrictions on the `datetime` constructor limit the values that can be created directly. The earliest datetime that can be constructed is `datetime("0000-01-01T00:00:00+2359")` and the latest is `datetime("9999-12-31T23:59:59-2359")`.
+Values outside this range can only be reached using operators like [`offset`](../_policies/syntax-operators.md#offset-compute-a-datetime-offset-by-a-duration-function-offsettitle). Note that `datetime` is a distinct type and cannot be used as a `long`.
+
+{: .warning }
+>If you exceed the range available for the `datetime` data type by attempting to compute a `datetime` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+
+Constructor calls such as `datetime(context.time)` and `datetime(if context.time like "20*-*-*" then context.time else "2000-01-01")` can _evaluate_ properly, assuming `context.time` is a string of the accepted format, but will not _validate_. To validate, the `datetime()` constructor must be given a _string literal_. If calling `datetime()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
 
 ### decimal {#datatype-decimal}
 
@@ -148,6 +175,26 @@ A `decimal` value can range from -922337203685477.5808 to 922337203685477.5807.
 >If you exceed the range available for the Decimal data type by supplying a string that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
 
 Constructor calls such as `decimal(context.num)` and `decimal(if true then "100.01" else "1.01")` can _evaluate_ properly, assuming `context.num` is a string of the accepted format, but will not _validate_. To validate, the `decimal()` constructor must be given a _string literal_. If calling `decimal()` with the string literal would produce an overflow, the constructor call is also deemed invalid.
+
+### duration {#datatype-duration}
+
+A value that represents a duration of time with millisecond precision.
+
+You specify values of extension type `duration` using the [duration() operator](../policies/syntax-operators.html#duration-parse-string-and-convert-to-duration). Here are some examples:
+
+```cedar
+duration("2h30m")
+duration("-1d12h")
+duration("1h30m45s")
+```
+
+Internally, a `duration` value stores a duration in milliseconds using a [`long`](#datatype-long) value. So a `duration` value can range from `duration("-9223372036854775808ms")` to `duration("9223372036854775807ms")`.
+Note that `duration` is a distinct type and cannot be used as a `long`.
+
+{: .warning }
+>If you exceed the range available for the `duration` data type by attempting to construct or compute a `duration` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.
+
+Constructor calls such as `duration(context.dur)` and `duration(if context.dur like "*h*s" then context.dur else "1h")` can _evaluate_ properly, assuming `context.dur` is a string of the accepted format, but will not _validate_. To validate, the `duration()` constructor must be given a _string literal_. If calling `duration()` with the string literal would produce an error due to the string literal being in an incorrect format, the constructor call is also deemed invalid.
 
 ### ipaddr {#datatype-ipaddr}
 
