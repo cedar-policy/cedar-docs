@@ -21,7 +21,7 @@ A Cedar *authorization request* asks the question "*Can this principal take this
 
 *P*, *A*, and *R* are [entity references](../overview/terminology.html#term-entity), while *C* is a record.
 
-Conceptually, you should imagine that the authorizer is able to consider *all* of your application's policies and entity data while evaluating a request. As a practical matter, making all policies and entity data available might be too difficult or too expensive. In that case, your application needs to determine which policies and entity data are *relevant* to properly handling the request.
+Conceptually, you should imagine that the authorizer is able to consider *all* of your application's policies and entity data while evaluating a request. As a practical matter, making all policies and entity data available might be too difficult or too expensive. In that case, your application needs to determine which policies and entity data are *relevant* to properly handling the request. One way to determine what entity data you need is [policy level validation and level based slicing](../policies/level-validation.md).
 
 ## Request authorization {#request-authorization}
 
