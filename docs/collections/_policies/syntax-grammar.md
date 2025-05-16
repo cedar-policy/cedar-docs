@@ -88,7 +88,7 @@ Resource ::= 'resource' [(['is' PATH] ['in' (Entity | '?resource')]) | ('==' (En
 
 ## `Condition` {#grammar-condition}
 
-A `Condition` consists of either the `when` or `unless` keyword followed by a Boolean expression surrounded by braces `{ }`. A `when` clause matches the request when the expression evaluates to `true`. An `unless` clause matches the request when the expression \(an [Expr](#grammar-expr) element\) evaluates to `false`.
+A `Condition` consists of either the `when` or `unless` keyword followed by a Bool expression surrounded by braces `{ }`. A `when` clause matches the request when the expression evaluates to `true`. An `unless` clause matches the request when the expression \(an [Expr](#grammar-expr) element\) evaluates to `false`.
 
 The parent [Policy](#grammar-policy) element can have zero or more `when` or `unless` clauses.
 

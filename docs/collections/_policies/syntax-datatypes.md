@@ -18,7 +18,7 @@ The Cedar policy language supports values and expressions of several possible da
 {:toc}
 </details>
 
-## Boolean {#datatype-boolean}
+## Bool {#datatype-bool}
 
 A value that is either `true` or `false`.
 
@@ -47,7 +47,7 @@ A collection of elements that can be of the same or different types. A set is co
 // an empty set
 [ ]
 
-// a set with a Boolean expression, a nested set, and a Boolean value
+// a set with a Bool expression, a nested set, and a Bool value
 [3<5, ["nested", "set"], true]
 ```
 

@@ -59,7 +59,7 @@ Notice that the `department` attribute has a string value, and the `jobLevel` at
 
 + JSON string --> [Cedar String](../policies/syntax-datatypes.html#datatype-string)
 + JSON integer --> [Cedar Long](../policies/syntax-datatypes.html#datatype-long)
-+ JSON boolean --> [Cedar Boolean](../policies/syntax-datatypes.html#datatype-boolean)
++ JSON boolean --> [Cedar Bool](../policies/syntax-datatypes.html#datatype-bool)
 + JSON list/array --> [Cedar Set](../policies/syntax-datatypes.html#datatype-set)
 + JSON object/map --> [Cedar Record](../policies/syntax-datatypes.html#datatype-record)
 

@@ -74,7 +74,7 @@ Note that if you omit attribute declarations, then entities of this type don't h
 
 Schema types can be used as right-hand side of an attribute or common type declaration.
 
-Cedar data types have corresponding schema types. The corresponding type names of Cedar primitive data types [Boolean](../policies/syntax-datatypes.html#datatype-boolean), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively.
+Cedar data types have corresponding schema types. The corresponding type names of Cedar primitive data types [Bool](../policies/syntax-datatypes.html#datatype-bool), [String](../policies/syntax-datatypes.html#datatype-string), [Long](../policies/syntax-datatypes.html#datatype-string) are `Bool`, `String`, `Long`, respectively.
 
 An entity type or an extension type is specified by its name. The entity type name is an identifier or identifiers separated by `::`. For example, both `User` and `ExampleCo::User` are valid entity type names.
 
