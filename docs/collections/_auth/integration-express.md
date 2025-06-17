@@ -40,11 +40,11 @@ npm i --save @cedar-policy/authorization-for-expressjs
 
 ### Step 2: Generate Cedar schema from your APIs
 
-A Cedar schema defines the authorization model for an application, including the entity types in the application and the actions users are allowed to take. Your policies are validated against this schema when you run the application.
+A Cedar [schema](../overview/terminology.html#term-schema) defines the authorization model for an application, including the entity types in the application and the actions users are allowed to take. We recommend defining a [namespace](../overview/terminology.html#term-namespaces) for your schema. In this example, we use YourNamespace. Your policies are validated against this schema when you run the application.
 
-The `authorization-for-expressjs` package can analyze the OpenAPI specification of your application and generate a Cedar schema. Specifically, the paths object is required in your specification.
+The `authorization-for-expressjs` package can analyze the [OpenAPI specification](https://swagger.io/specification/) of your application and generate a Cedar schema. Specifically, the paths object is required in your specification.
 
-If you don't have an OpenAPI spec, you can generate one using the tool of your choice. There are a number of open source libraries to do this for Express; you may need to add some code to your application, generate the OpenAPI spec, and then remove the code. Alternatively, some generative AI-based tools such as the Amazon Q Developer CLI are effective at generating OpenAPI spec documents.
+If you don't have an OpenAPI specification,  you can follow the quick instructions of the [express-openapi-generator](https://github.com/nklisch/express-openapi-generator) package to generate an OpenAPI specification.
 
 You can generate a Cedar schema by running, replacing `openapi.json` with the file of your schema and `YourNamespace` with the namespace of our choice:
 
@@ -87,7 +87,7 @@ permit (
 ```
 Note: If you specified an `operationId` in the OpenAPI specification, the action names defined in the Cedar Schema will use that `operationId` instead of the default `<HTTP Method> /<PATH>` format. In this case, ensure the naming of your Actions in your Cedar Policies matches the naming of your Actions in your Cedar Schema.
 
-For large applications with complex authorization policies, it can be challenging to analyze and audit the actual permissions provided by the many different policies. Cedar also provides the Cedar Analysis CLI to help developers perform policy analysis on their policies.
+For large applications with complex authorization policies, it can be challenging to analyze and audit the actual permissions provided by the many different policies. Cedar also provides the [Cedar Analysis CLI](https://github.com/cedar-policy/cedar-spec/tree/main/cedar-lean-cli) to help developers perform policy analysis on their policies.
 
 ### Step 4: Update the application code to call Cedar and authorize API access
 
