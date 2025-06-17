@@ -22,6 +22,3 @@ When added to your application, integrations do the following:
 2. Extract relevant authorization context from requests
 3. Determine authorization decisions using Cedar
 4. Enforce access control based on authorization results
-
-Cedar currently supports the following frameworks:  
-• [Express.js for Node.js applications](auth/integration-express)
