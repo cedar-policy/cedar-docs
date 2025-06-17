@@ -1,3 +1,11 @@
+---
+layout: default
+parent: Integrations
+title: Using Express
+nav_order: 1
+has_children: false
+---
+
 # Integrate Cedar with Express applications
 
 The Cedar Express integration provides a middleware-based approach to implementing authorization in your Express.js applications. With this integration, you can protect your API endpoints using fine-grained authorization policies without modifying your existing route handlers. The integration handles authorization checks automatically by intercepting requests, evaluating them against your defined policies, and ensuring that only authorized users can access protected resources.
