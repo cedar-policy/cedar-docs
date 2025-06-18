@@ -57,11 +57,12 @@ Name      := IDENT | STR
 Names     := Name {',' Name}
 Idents    := IDENT {',' IDENT}
 
-IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
-TYPENAME  := IDENT - RESERVED
+IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']* - RESERVED
+RESERVED  := 'true' | 'false' | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | 'is' | '__cedar'
+TYPENAME  := IDENT - TYPERESERVED
 STR       := Fully-escaped Unicode surrounded by '"'s
 PRIMTYPE  := 'Long' | 'String' | 'Bool'
 WHITESPC  := Unicode whitespace
 COMMENT   := '//' ~NEWLINE* NEWLINE
-RESERVED  := 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
+TYPERESERVED  := 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
 ```
