@@ -1432,7 +1432,11 @@ The function evaluates to an error if the computation would exceed the represent
 In the examples that follow, those labeled `//error` both evaluate and validate to an error.
 
 ```cedar
-
+datetime("2024-10-15T01:00:00Z").durationSince(datetime("2024-10-15"))     // returns `duration` equivalent to `duration("1h")`
+datetime("2024-10-14T23:18:00Z").durationSince(datetime("2024-10-15"))     // returns `duration` equivalent to `duration("-42m")`
+datetime("2024-10-16T00:00:00-0500").durationSince(datetime("2024-10-15")) // returns `duration` equivalent to `duration("1d5h")`
+datetime("2024-10-15T01:00:00Z").durationSince(2024-10-15)                 // error - operand is not a `datetime`
+context.foo.durationSince(datetime("2024-10-15"))                          // error if `context.foo` is not a `datetime`
 ```
 
 ### `.toDate()` \(extract date portion as new datetime\) {#function-toDate.title}
