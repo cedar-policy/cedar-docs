@@ -7,7 +7,7 @@ nav_order: 9
 # Cedar policy level validation {#level-validation}
 {: .no_toc }
 
-Cedar [authorization requests](../auth/authorization.md) require evaluating policies given a `principal`, `action`, `resource`, `context`, and all entity data that could be relevant for that request.
+Cedar [authorization requests](../auth/authorization.html) require evaluating policies given a `principal`, `action`, `resource`, `context`, and all entity data that could be relevant for that request.
 This may sound straight-forward at first, but it's not always obvious what entity data is actually relevant for a particular request.
 If our only concern is always selecting all relevant data, then we can take the easiest option and select _all_ entity data.
 It always safe to include all entity data, but, for applications with a large amount of entity data, using all of it for every request might be too difficult or expensive.
