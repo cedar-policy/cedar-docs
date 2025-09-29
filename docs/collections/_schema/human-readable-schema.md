@@ -172,13 +172,23 @@ Type names in the Cedar schema format can conflict with each other. For example,
 2. Type references are resolved in a priority order.
 3. To disambiguate extension and primitive types from others, the namespace `__cedar` is reserved. For example, `__cedar::Long` uniquely refers to Cedar primitive type `Long`.
 
-The priority order is
+### Type category resolution priority
+
+Within each namespace, type names are resolved according to this priority order:
 
 ```text
 common type > entity type > primitive/extension type
 ```
 
-A type name is resolved by checking if it is declared as a common type, then entity type, and finally a primitive or extension type. The following example demonstrates this rule.
+A type name is resolved by checking if it is declared as a common type, then entity type, and finally a primitive or extension type.
+
+### Reserved `__cedar` namespace
+
+To disambiguate extension and primitive types from user-defined types, the namespace `__cedar` is reserved. For example, `__cedar::Long` uniquely refers to Cedar primitive type `Long`, even if a user defines a common type or entity type named `Long`.
+
+### Examples
+
+The following example demonstrates these resolution rules:
 
 ```cedarschema
 namespace Demo {
@@ -215,9 +225,10 @@ namespace Demo {
 
 Common types and entity types can both be qualified with namespaces.
 We do not allow defining entity types or common types that would shadow definitions of other entity types or common types in the empty namespace.
+However, as shown above, you can override primitive and extension type names.
 For example, the following schema is *invalid*.
 
- ```cedarschema
+```cedarschema
 type id = {
   group: String,
   name: String,

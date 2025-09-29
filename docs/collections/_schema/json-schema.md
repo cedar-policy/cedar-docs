@@ -324,6 +324,26 @@ For example, a `Network` entity may include the IP address of its gateway.
 }
 ```
 
+Extension types can also be referenced by specifying the name directly as the `type` value:
+
+```json
+"Network": {
+    "shape": {
+        "type": "Record",
+        "attributes": {
+            "gateway": {
+                "type": "ipaddr"
+            }
+        }
+    }
+}
+```
+
+These forms are nearly equivalent, but differ in how they handle type name shadowing:
+
+- `{"type": "Extension", "name": "ipaddr"}` always refers to the `ipaddr` extension type
+- `{"type": "ipaddr"}` typically refers to the `ipaddr` extension type, but it will resolve to a user-defined common type named `ipaddr` if one exists
+
 #### `EntityOrCommon` {#schema-entitytypes-shape-entity-or-common}
 {: .no_toc }
 
