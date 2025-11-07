@@ -47,7 +47,7 @@ RecType   := '{' [AttrDecls] '}'
 AttrDecls := Annotations Name ['?'] ':' Type [',' | ',' AttrDecls]
 AppliesTo := 'appliesTo' '{' AppDecls '}'
 AppDecls  := ('principal' | 'resource') ':' EntOrTyps [',' | ',' AppDecls]
-           | 'context' ':' RecType [',' | ',' AppDecls]
+           | 'context' ':' (Path | RecType) [',' | ',' AppDecls]
 Path      := IDENT {'::' IDENT}
 Ref       := Path '::' STR | Name
 RefOrRefs := Ref | '[' [RefOrRefs] ']'
