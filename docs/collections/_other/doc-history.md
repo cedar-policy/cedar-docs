@@ -9,11 +9,7 @@ nav_order: 14
 
 ## History of the Cedar language
 
-The following table tracks changes to the Cedar language version. The language version is different from the SDK version (which corresponds to the `cedar-policy` version on [crates.io](https://crates.io/crates/cedar-policy)) because a breaking change for the Cedar Rust API may or may not be a breaking change for the Cedar language. S
-
-
-
-ee the [SDK changelog](https://github.com/cedar-policy/cedar/blob/main/cedar-policy/CHANGELOG.md) for details about what is included in different SDK versions. We recommend using the latest SDK version that supports your desired language version since later SDK versions may contain important bug fixes and improvements to usability.
+The following table tracks changes to the Cedar language version. The language version is different from the SDK version (which corresponds to the `cedar-policy` version on [crates.io](https://crates.io/crates/cedar-policy)) because a breaking change for the Cedar Rust API may or may not be a breaking change for the Cedar language. See the [SDK changelog](https://github.com/cedar-policy/cedar/blob/main/cedar-policy/CHANGELOG.md) for details about what is included in different SDK versions. We recommend using the latest SDK version that supports your desired language version since later SDK versions may contain important bug fixes and improvements to usability.
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
