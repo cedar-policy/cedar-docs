@@ -32,7 +32,7 @@ Tokens are defined using regular expressions:
 The grammar adopts the same string escaping rules as the [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
-Annotation := '@' IDENT '(' STR ')'
+Annotation := '@' ANYIDENT '(' STR ')'
 Annotations := {Annotations}
 Schema    := {Namespace}
 Namespace := (Annotations 'namespace' Path '{' {Decl} '}') | Decl
@@ -57,11 +57,13 @@ Name      := IDENT | STR
 Names     := Name {',' Name}
 Idents    := IDENT {',' IDENT}
 
-IDENT     := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
-TYPENAME  := IDENT - RESERVED
+ANYIDENT  := ['_''a'-'z''A'-'Z']['_''a'-'z''A'-'Z''0'-'9']*
+IDENT     := ANYIDENT - RESERVED
+RESERVED  := 'true' | 'false' | 'if' | 'then' | 'else' | 'in' | 'like' | 'has' | 'is' | '__cedar'
+TYPENAME  := IDENT - TYPERESERVED
 STR       := Fully-escaped Unicode surrounded by '"'s
 PRIMTYPE  := 'Long' | 'String' | 'Bool'
 WHITESPC  := Unicode whitespace
 COMMENT   := '//' ~NEWLINE* NEWLINE
-RESERVED  := 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
+TYPERESERVED  := 'Bool' | 'Boolean' | 'Entity' | 'Extension' | 'Long' | 'Record' | 'Set' | 'String'
 ```
