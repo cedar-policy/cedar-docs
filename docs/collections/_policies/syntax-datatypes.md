@@ -51,7 +51,7 @@ A collection of elements that can be of the same or different types. A set is co
 [3<5, ["nested", "set"], true]
 ```
 
-While all of the above sets can be _evaluated_ successfully, not all of them can be _validated_. In particular, Cedar's [policy validator](validation.html#validation) may flag some expressions as being type incorrect even though they can evaluate during an authorization request successfully (as is typical of most programming language type systems). For sets, the policy validator will only accept set literals in policies if (1) the set is non-empty, and (2) all of its elements have the same type. Thus, _only_ the second out of the above four sets can be validated in Cedar. Note that empty sets can appear in entities and/or the `context` record; the only restriction is their appearance as a literal in a Cedar policy.
+While all of the above sets can be _evaluated_ successfully, not all of them can be _validated_. In particular, Cedar's [policy validator](../validation.html#validation) may flag some expressions as being type incorrect even though they can evaluate during an authorization request successfully (as is typical of most programming language type systems). For sets, the policy validator will only accept set literals in policies if (1) the set is non-empty, and (2) all of its elements have the same type. Thus, _only_ the second out of the above four sets can be validated in Cedar. Note that empty sets can appear in entities and/or the `context` record; the only restriction is their appearance as a literal in a Cedar policy.
 
 
 ## Record {#datatype-record}
@@ -150,7 +150,7 @@ datetime("2024-10-15T11:35:00.000+0100") // a datetime with timezone offset and 
 
 Internally, a `datetime` value stores the number of milliseconds since `1970-01-01T00:00:00Z` (Unix epoch) using a [`long`](#datatype-long) value. This allows for a theoretical range from -9223372036854775808 to 9223372036854775807 milliseconds.
 However, the string format restrictions on the `datetime` constructor limit the values that can be created directly. The earliest datetime that can be constructed is `datetime("0000-01-01T00:00:00+2359")` and the latest is `datetime("9999-12-31T23:59:59-2359")`.
-Values outside this range can only be reached using operators like [`offset`](../_policies/syntax-operators.md#offset-compute-a-datetime-offset-by-a-duration-function-offsettitle). Note that `datetime` is a distinct type and cannot be used as a `long`.
+Values outside this range can only be reached using operators like [`offset`](../policies/syntax-operators.html#function-offset.title). Note that `datetime` is a distinct type and cannot be used as a `long`.
 
 {: .warning }
 >If you exceed the range available for the `datetime` data type by attempting to compute a `datetime` value that exceeds the allowable range, it results in an overflow error. A policy that results in an error is ignored, meaning that a Permit policy might unexpectedly fail to allow access, or a Forbid policy might unexpectedly fail to block access.

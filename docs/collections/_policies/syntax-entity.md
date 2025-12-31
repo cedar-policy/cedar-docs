@@ -81,7 +81,7 @@ Entities support the following operators in a Cedar policy:
 + **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
 + **Tag presence** &ndash; Using the [`.hasTag()` method](../policies/syntax-operators.html#operator-hasTag), you can determine that a tag is present before attempting to access its value. If you attempt to access a tag that doesn't exist for the specified entity, it generates an error.
 + **Tag access** &ndash; Using the [`.getTag()` method](../policies/syntax-operators.html#operator-getTag), you can retrieve the value of one of the entity's tags. The type of this
-value is defined in the [schema](..schema/schema.html).
+value is defined in the [schema](../schema/schema.html).
 
 ## Namespaces {#entity-namespace}
 
@@ -107,4 +107,4 @@ SomeEmployee["department"]
 SomePhoto["description"]
 ```
 
-An attribute resolves to a value of a [supported datatype](../policies/syntax-datatypes.html). The attribute can be referenced anywhere that a value of that datatype is valid.
+An attribute resolves to a value of a [supported datatype](syntax-datatypes.html). The attribute can be referenced anywhere that a value of that datatype is valid.
