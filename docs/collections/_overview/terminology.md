@@ -85,9 +85,9 @@ Entities have attributes that correspond to information that's known, such as in
 
 When creating entities, you should define the attributes that are useful to your scenario.
 
-When validating Cedar policies with a schema, the `Action` is treated specially, being reserved specifically for defining actions.
+When validating Cedar policies with a schema, the `Action` is treated specially, because the `Action` entity type is reserved specifically for defining actions.
 Action entities are fully defined in the schema and are the only entity type that can appear as the `action` variable in an authorization request.
-A schema also cannot define any attributes or tags for an action entity, though it may define parent entities.
+A schema also cannot define any attributes or tags for an action entity, though it may define parent entities (action groups), which must also have type `Action`.
 
 For more details about entities, see [Entities in Cedar](../policies/syntax-entity.html).
 
