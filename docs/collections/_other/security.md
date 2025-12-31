@@ -30,9 +30,13 @@ We, members of the Cedar development team, ensure Cedar’s correctness and secu
 
 1. **A formal model** implemented in Lean. Lean is an open-source programming language and theorem prover. The Lean model consists of executable definitions of Cedar’s components which represent the semantics of Cedar, and *properties* of those components. Lean verifies that the properties hold. It gives us confidence that our definition of the ground truth is correct.
 
-1. **A production authorization engine** written in Rust. We use only the safe subset of Rust, giving us memory safety, type safety, and data-race safety.
+![\[A formal model of Cedar\]](../../images/cedar-model.png)
 
-1. **A differential testing engine** that can test automatically that \#1 and \#2 have the same semantics. For more information about differential testing, see [How we built Cedar with automated reasoning and differential testing](https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing) on the *Amazon Science* blog.
+1. **A production authorization engine** written in Rust. We use only the safe subset of Rust, giving us memory safety, type safety, and data-race safety. We additionally use property based testing to check that the Rust implementation satisfies properties that would be difficult to prove in Lean, for example, that a policy parser and formatter roundtrip correctly.
+
+![\[Property based testing on Cedar\]](../../images/cedar-pbt.png)
+
+1. **A differential testing engine** that can test automatically that \#1 and \#2 have the same semantics, ensuring the properties proven about the model will also be true for the production implementation. For more information about differential testing, see [How we built Cedar with automated reasoning and differential testing](https://www.amazon.science/blog/how-we-built-cedar-with-automated-reasoning-and-differential-testing) on the *Amazon Science* blog.
 
 ![\[How Cedar is verified as correct and secure.\]](../../images/security-of-cedar.png)
 
