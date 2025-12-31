@@ -31,7 +31,7 @@ Using this slicing procedure guarantees an authorization request made using the 
 {:toc}
 </details>
 
-## Understanding Level Validation {#level-validation}
+## Understanding Level Validation {#understanding-level-validation}
 
 Cedar uses levels to control how deeply policies can access entity data through entity attributes and tags.
 Each level represents one step of attribute access from the root entities (`principal`, `action`, `resource`, and any entities referenced in the `context`).

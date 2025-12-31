@@ -36,7 +36,7 @@ The following table describes major documentation updates for Cedar.
 | Added [Cedar schema format](../schema/human-readable-schema.html) topic | February 21, 2024 |
 | Added [`is` operator](../policies/syntax-operators.html#operator-is) sub-topic | December 15, 2023 |
 | Added [Entities & context syntax](../auth/entities-syntax.html) topic | July 27, 2023 |
-| Added [Schema grammar](../schema/schema-grammar.html) topic | July 17, 2023 |
+| Added [Schema grammar](../schema/json-schema-grammar.html) topic | July 17, 2023 |
 | Added [JSON policy format](../policies/json-format.html) topic | July 14, 2023 |
 | Added [Best Practices](../overview/best-practices.html) topics | July 14, 2023 |
 | Initial release of the Cedar Policy Language Guide | May 10, 2023 |
