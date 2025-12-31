@@ -21,7 +21,7 @@ An entity in Cedar is a stored object that serves as the representation for [pri
 
 An entity in Cedar has the following components.
 
-+ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema). The Cedar language reserves the `__cedar` entity type, so this entity type, and all entity types with `__cedar` as a component, cannot be used.
++ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema). The schema assigns special meaning to the `Action` entity type, requiring the `action` variable in an authorization request to have `Action` type, and disallowing all attributes and tags on action entities.  The Cedar language reserves the `__cedar` entity type, so this entity type, and all entity types with `__cedar` as a component, cannot be used.
 + **An entity identifier \(EID\)** &ndash; The EID lets you reference a specific entity in your policy. The combination of entity type and an EID uniquely identifies an object for Cedar.
 
    {: .important }

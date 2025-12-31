@@ -197,7 +197,7 @@ forbid (
   resource
 )
 unless {
-  action.readOnly
+  action in Action::"readOnly"
 };
 ```
 This following example shows how you might create a policy that denies access to all resources that have a `private` attribute unless the principal has the `owner` attribute for the resource.

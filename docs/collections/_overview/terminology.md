@@ -72,20 +72,24 @@ For more information about creating and using policy templates, see [Cedar polic
 
 ## Entity {#term-entity}
 
-A [principal](../policies/syntax-policy.html#term-parc-principal), an [action](../policies/syntax-policy.html#term-parc-action), or a [resource](../policies/syntax-policy.html#term-parc-resource) that is part of your application are all represented in Cedar as *entities*. The shape of entities is defined in the [schema](../schema/schema.html) of your application
+A [principal](../policies/syntax-policy.html#term-parc-principal), an [action](../policies/syntax-policy.html#term-parc-action), or a [resource](../policies/syntax-policy.html#term-parc-resource) that is part of your application are all represented in Cedar as *entities*. Your actions and the *shape* of other entities are defined in the [schema](../schema/schema.html) for your application.
 
-Entities are referenced by their type and identifier, together called the entity's *unique identifier* (UID). For example, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers. The `Action` entity type is specially reserved for use with actions, but otherwise you can define whatever entity types are required by your application scenario.
+Entities are referenced by their type and identifier, together called the entity's *unique identifier* (UID). For example, `User::"jane"`, `Action::"ViewPhoto"`, and `UserGroup::"kevinFriends"` are all UIDs. Here, `User`, `UserGroup`, and `Action` are entity types, and `"jane"`, `"kevinFriends"`, and `"viewPhoto"` are entity identifiers.
 
-Entities have attributes that corespond to information that's known, such as information that's stored in a database. For example, an entity of type `Photo` might contain attributes like the following:
+Entities have attributes that correspond to information that's known, such as information that's stored in a database. For example, an entity of type `Photo` might contain attributes like the following:
 
 + A `name` \(a [string](../policies/syntax-datatypes.html#datatype-string)\)
-+ A `createdDate` \(a string containing a date\)
++ A `createdDate` \(a [DateTime](../policies/syntax-datatypes.html#datatype-datetime)\)
 + A `location` \(a [set](../policies/syntax-datatypes.html#datatype-set) of type [Decimal](../policies/syntax-datatypes.html#datatype-decimal) that represent coordinates\)
 + The `photographer` \(a reference to another entity representing the user who took the photo\).
 
 When creating entities, you should define the attributes that are useful to your scenario.
 
-For more details about entities, see [Entity](../policies/syntax-entity.html) in [Cedar syntax - elements of the policy language](../policies/syntax.html).
+When validating Cedar policies with a schema, the `Action` entity type is treated specially, because it is reserved specifically for defining actions.
+Action entities are fully defined in the schema and are the only entity type that can appear as the `action` variable in an authorization request.
+A schema also cannot define any attributes or tags for an action entity, though it may define parent entities (action groups), which must also have type `Action`.
+
+For more details about entities, see [Entities in Cedar](../policies/syntax-entity.html).
 
 ## Namespaces {#term-namespaces}
 
