@@ -13,7 +13,7 @@ The following table tracks changes to the Cedar language version. The language v
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
-| 4.4 | trailing commas in Cedar policies [rfc#71](https://github.com/cedar-policy/rfcs/blob/main/text/0071-trailing-commas.md) (only implements RFC 71 for policies, not schemas, in this release) | 4.5.0 - 4.8.2 | June 30, 2025
+| 4.4 | trailing commas in Cedar policies [rfc#71](https://github.com/cedar-policy/rfcs/blob/main/text/0071-trailing-commas.md) (only implements RFC 71 for policies, not schemas, in this release) | 4.5.0 - 4.9.0 | June 30, 2025
 | 4.3 | enumerated entity types [rfc#53](https://github.com/cedar-policy/rfcs/blob/main/text/0053-enum-entities.md) <br/> `datetime` extension [rfc#80](https://github.com/strongdm/cedar-rfcs/blob/datetime-rfc/text/0080-datetime-extension.md) <br/> entity slice validation [rfc#76](https://github.com/cedar-policy/rfcs/blob/main/text/0076-entity-slice-validation.md) | 4.4.0 - 4.4.2 | April 23, 2025
 | 4.2 | `isEmpty` operator [cedar#1358](https://github.com/cedar-policy/cedar/pull/1358) <br/> extended `has` operator [rfc#62](https://github.com/cedar-policy/rfcs/blob/main/text/0062-extended-has.md) <br/> `datetime` extension (experimental) [rfc#80](https://github.com/strongdm/cedar-rfcs/blob/datetime-rfc/text/0080-datetime-extension.md) <br/> schema annotations [rfc#48](https://github.com/cedar-policy/rfcs/blob/main/text/0048-schema-annotations.md) | 4.3.0 - 4.3.4 | January 21, 2025
 | 4.1 | Entity tags [rfc#82](https://github.com/cedar-policy/rfcs/blob/main/text/0082-entity-tags.md)<br/>Annotations without values [cedar#1231](https://github.com/cedar-policy/cedar/pull/1231) | 4.2.0 - 4.2.3 | October 7, 2024
