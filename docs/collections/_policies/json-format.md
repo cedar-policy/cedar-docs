@@ -885,7 +885,7 @@ JSON representation
 
 #### `.`, `has` {#JsonExpr-has}
 
-The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string or a non-empty list of identifiers.
 
 **Example for `.`**
 
@@ -903,6 +903,25 @@ JSON representation
         "Var": "context"
     },
     "attr": "something"
+}
+```
+
+**Example for `has`**
+
+Cedar policy line
+
+```cedar
+context has something.nested
+```
+
+JSON representation
+
+```json
+"has": {
+    "left": {
+        "Var": "context"
+    },
+    "attr": ["something", "nested"]
 }
 ```
 
