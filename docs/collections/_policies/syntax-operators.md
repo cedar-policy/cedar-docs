@@ -1459,7 +1459,7 @@ context.foo.toDate()                          // error if `context.foo` is not a
 ```
 
 
-### `.toTime()` \(xtract time portion as duration\) {#function-toTime.title}
+### `.toTime()` \(extract time portion as duration\) {#function-toTime.title}
 
 **Usage:** `<datetime>.toTime()`
 
