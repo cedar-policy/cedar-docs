@@ -613,7 +613,8 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Unknown`](#JsonExpr-Unknown)
 + [`!`, `neg`, and `isEmpty` operators](#JsonExpr-neg)
 + [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
-+ [`.`, `has`](#JsonExpr-has)
++ [`.`](#JsonExpr-member)
++ [`has`](#JsonExpr-has)
 + [`is`](#JsonExpr-is)
 + [`like`](#JsonExpr-like)
 + [`if-then-else`](#JsonExpr-if-then-else)
@@ -883,9 +884,10 @@ JSON representation
 ]
 ```
 
-#### `.`, `has` {#JsonExpr-has}
 
-The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string or a non-empty list of identifiers.
+#### `.` {#JsonExpr-member}
+
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
 
 **Example for `.`**
 
@@ -906,6 +908,11 @@ JSON representation
 }
 ```
 
+#### `has` {#JsonExpr-has}
+
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string or a non-empty list of identifiers.
+
+
 **Example for `has`**
 
 Cedar policy line
@@ -924,6 +931,24 @@ JSON representation
     "attr": ["something", "nested"]
 }
 ```
+
+or
+
+```cedar
+context has something
+```
+
+JSON representation
+
+```json
+"has": {
+    "left": {
+        "Var": "context"
+    },
+    "attr": "something"
+}
+```
+
 
 #### `is` {#JsonExpr-is}
 
