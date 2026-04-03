@@ -182,6 +182,8 @@ EntityOrCommon ::= '"type": "EntityOrCommon", "name": "' Name '"'
 
 ## `STR` {#grammar-schema-STR}
 
+The `STR` element uses the same string literal syntax as [Rust string literals](https://doc.rust-lang.org/reference/tokens.html#string-literals), supporting the following escape sequences: `\"`, `\\`, `\n`, `\r`, `\t`, `\0`, `\xHH` (2-digit ASCII hex escape), and `\u{...}` (1–6 digit Unicode escape).
+
 ```
 STR ::= Fully-escaped Unicode surrounded by '"'s
 ```
