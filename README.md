@@ -56,7 +56,7 @@ This project follows the [CNCF Code of Conduct](https://github.com/cncf/foundati
 
 ## Security issue notifications
 
-If you discover a potential security issue, please notify AWS Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public issue on GitHub.
+If you think you have discovered a security issue related to Cedar, **please write to us** at [cedar-policy-security@lists.cncf.io](mailto:cedar-policy-security@lists.cncf.io); do **NOT** open a public issue. See [SECURITY](SECURITY.md).
 
 ## License
 
