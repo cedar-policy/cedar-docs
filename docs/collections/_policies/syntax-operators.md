@@ -70,7 +70,7 @@ Functions use one of two styles of syntax:
   ```cedar
   firstOperand.function(secondOperand, thirdOperand, …)
 
-  // Evaluates to true if the any of the set member
+  // Evaluates to true if any of the set members
   // elements b, c, or d is an element of set a
   a.containsAny([b, c, d])
   ```
@@ -220,7 +220,7 @@ decimal("0.12345")               //error - too many fractional digits
 
 Function that parses the string and tries to convert it to type [duration](syntax-datatypes.html#datatype-duration). If the string doesn't represent a valid duration value, it generates an error.
 
-To be interpreted successfully as a datetime value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
+To be interpreted successfully as a duration value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
 - `d`: days
 - `h`: hours
 - `m`: minutes
@@ -547,7 +547,7 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-02") > datetime("1970-01-01")                    //true
-datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //true
+datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //false
 datetime("1970-01-01T01:00:00Z") > 3600000                         //error - operator not allowed on non-datetime
 ```
 
@@ -591,7 +591,7 @@ decimal("-1.23").greaterThan(decimal("-1.24"))  //true
 decimal("1.1").greaterThan(2)                   //error -- not a decimal operand
 ip("1.1.2.3").greaterThan(decimal("1.2"))       //error -- not a decimal operand
 ```
-The `greaterThan` function must take two `decimal` operands or else it will produce an error when evaluated, per the last two examples. The policy validator also rejects also any expression that attempts to call `greaterThan` on non-`decimal` values.
+The `greaterThan` function must take two `decimal` operands or else it will produce an error when evaluated, per the last two examples. The policy validator also rejects any expression that attempts to call `greaterThan` on non-`decimal` values.
 
 ### `>=` \(long integer 'greater than or equal'\) {#operator-greaterthanorequal}
 
@@ -611,7 +611,7 @@ principal.age >= 21    //true (assuming principal.age is 21)
 false >= true          //error - operands are not long integers
 "some" >= "thing"      //error - operands are not long integers
 ```
-As shown in the examples, evaluating an expression with `>=` when the operators are not both `long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `long`.
+As shown in the examples, evaluating an expression with `>=` when the operands are not both `long` numbers results in an error. The policy validator also rejects any expression that attempts to compare two values with `>=` that do not have type `long`.
 
 ### `>=` \(datetime 'greater than or equal'\) {#operator-greaterthanorequal-datetime}
 
@@ -695,7 +695,7 @@ The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Sho
 The following policy is satisfied only if the principal has the attribute `level` and the `level > 5`.
 
 ```cedar
-permit (principal, action == Action:"read", resource)
+permit (principal, action == Action::"read", resource)
 when {
     principal has level &&
     principal.level > 5
@@ -739,7 +739,7 @@ The second comparison in this expression will evaluate to a boolean only if the 
 The following policy allows if either `resource.owner == principal` or `resource.tag == "public"` is true.
 
 ```cedar
-permit (principal, action == Action:"read", resource)
+permit (principal, action == Action::"read", resource)
 when {
     resource.owner == principal ||
     resource.tag == "public"
@@ -760,7 +760,7 @@ false || 3                 //error (second operand not a boolean)
 (3 == 3) || 3              //Evaluates to true (due to short-circuiting) //Doesn't validate
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) && 3`.
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) || 3`.
 
 ### `!` \(NOT\) {#operator-not}
 
@@ -1124,7 +1124,7 @@ The validator will reject any `has` expression whose left-hand operand is not an
 
 **Usage:** `<entity>.hasTag(<expr>)`
 
-Method that evalutes to `true` if the entity on the left has a value defined for the tag name specified on the right. Unlike for attributes with [`has`](#operator-has), for tags the tag name may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
+Method that evaluates to `true` if the entity on the left has a value defined for the tag name specified on the right. Unlike for attributes with [`has`](#operator-has), for tags the tag name may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
 
 In all other respects, `.hasTag()` behaves similarly to [`has`](#operator-has) except that it
 operates on tags instead of attributes. (And only entities, not records, can have tags.)
@@ -1322,7 +1322,7 @@ context.foo.isIpv4()         //error if `context.foo` is not an `ipaddr`
 
 **Usage:** `<ipaddr>.isIpv6()`
 
-Function that evaluates to `true` if the receiver is an IPv6 address; evaluates (and validates) to an error if received does not have `ipaddr` type. This function takes no operand.
+Function that evaluates to `true` if the receiver is an IPv6 address; evaluates (and validates) to an error if receiver does not have `ipaddr` type. This function takes no operand.
 
 #### Examples:
 {: .no_toc }
@@ -1402,7 +1402,7 @@ Use these functions to operate on [`datetime`](./syntax-datatypes.html#datatype-
 **Usage:** `<datetime>.offset(<duration>)`
 
 Function that returns a new `datetime` value offset by the given `duration`.
-This function evaluates (and validates) to an error the first operand does not have `datetime` type or the second operand does not have `duration` type.
+This function evaluates (and validates) to an error if the first operand does not have `datetime` type or the second operand does not have `duration` type.
 The function evaluates to an error if the computation would exceed the representable range for the `datetime` type.
 
 #### Examples:
@@ -1573,7 +1573,7 @@ This function evaluates (and validates) to an error if receiver does not have `d
 In the examples that follow, those labeled `//error` both evaluate and validate to an error.
 
 ```cedar
-duration("1d").toDays()      // returns `long` equal to 24
+duration("1d").toDays()      // returns `long` equal to 1
 duration("4d10h").toDays()   // returns `long` equal to 4
 duration("4d30h").toDays()   // returns `long` equal to 5
 duration("100ms").toDays()   // returns `long` equal to 0

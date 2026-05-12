@@ -367,7 +367,7 @@ The `op` object must have one of the following string values:
     Cedar policy line:
 
     ```cedar
-    action in [ Action:: "ManageFiles", Action::"readFile", Action::"writeFile", Action::"deleteFile"]
+    action in [ Action::"ManageFiles", Action::"readFile", Action::"writeFile", Action::"deleteFile"]
     ```
 
     JSON representation
@@ -575,7 +575,7 @@ The value of this object is a JSON array of objects.  Each object in the array m
 
 The `kind` key must be either the string `when` or the string `unless`.
 
-The `body` key must be an [JsonExpr object](#JsonExpr-objects).
+The `body` key must be a [JsonExpr object](#JsonExpr-objects).
 
 **Example**
 
@@ -815,7 +815,7 @@ The value of this key is an object with a single key name, whose value is the na
 
 #### `!`, `neg`, and `isEmpty` operators {#JsonExpr-neg}
 
-The value of this key is an object with a single key argument, whose value is itself an [JsonExpr object](#JsonExpr-objects).
+The value of this key is an object with a single key argument, whose value is itself a [JsonExpr object](#JsonExpr-objects).
 
 **Example using `.` and `!`**
 
@@ -849,7 +849,7 @@ JSON representation
 
 #### Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag` {#JsonExpr-binary}
 
-The value for any of these keys is an object with keys `left` and `right`, which are each themselves an [JsonExpr object](#JsonExpr-objects).
+The value for any of these keys is an object with keys `left` and `right`, which are each themselves a [JsonExpr object](#JsonExpr-objects).
 
 **Example for `contains`**
 
@@ -887,7 +887,7 @@ JSON representation
 
 #### `.` {#JsonExpr-member}
 
-The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself a [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string.
 
 **Example for `.`**
 
@@ -910,7 +910,7 @@ JSON representation
 
 #### `has` {#JsonExpr-has}
 
-The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string or a non-empty list of identifiers.
+The value of one of these keys is an object with keys `left` and `attr`.  The left key is itself a [JsonExpr object](#JsonExpr-objects), while the `attr` key is a string or a non-empty list of identifiers.
 
 
 **Example for `has`**
@@ -953,7 +953,7 @@ JSON representation
 #### `is` {#JsonExpr-is}
 
 The value of this key is an object with the keys `left` and `entity_type`.
-The `left` key is itself an [JsonExpr object](#JsonExpr-objects), while the `entity_type` key is a string.
+The `left` key is itself a [JsonExpr object](#JsonExpr-objects), while the `entity_type` key is a string.
 The value may optionally have an `in` key which is also a JsonExpr object.
 
 **Example for `is`**
@@ -970,14 +970,14 @@ JSON representation
 "is": {
     "left": { "Var": "principal" },
     "entity_type": "User",
-    "in": {"Value": {"__entity": { "type": "Folder", "id": "Public" }}}
+    "in": {"Value": {"__entity": { "type": "Group", "id": "friends" }}}
 }
 ```
 
 #### `like` {#JsonExpr-like}
 
 The value of this key is an object with keys `left` and `pattern`.
-The left key is itself an [JsonExpr object](#JsonExpr-objects), while the `pattern` key is an array composed of pattern elements.
+The left key is itself a [JsonExpr object](#JsonExpr-objects), while the `pattern` key is an array composed of pattern elements.
 A pattern element can be one of either
   - the string `Wildcard`
   - an object with a single key `Literal`, whose value is a string
@@ -1003,7 +1003,7 @@ For instance, in the previous example, we could use up to four objects with `Lit
 
 #### `if-then-else` {#JsonExpr-if-then-else}
 
-The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves an [JsonExpr object](#JsonExpr-objects).
+The value of this key is an object with keys `if`, `then`, and `else`, each of which are themselves a [JsonExpr object](#JsonExpr-objects).
 
 **Example for if-then-else**
 
@@ -1062,7 +1062,7 @@ JSON representation
 
 #### `Set` {#JsonExpr-Set}
 
-The value of this key is a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).
+The value of this key is a JSON array of values, each of which is itself a [JsonExpr object](#JsonExpr-objects).
 
 **Example**
 
@@ -1098,7 +1098,7 @@ JSON representation
 ```json
 {
     "Record": {
-        "foo": { "Value": "spam" },
+        "something": { "Value": "spam" },
         "somethingelse": { "Value": false },
     }
 }
@@ -1106,7 +1106,7 @@ JSON representation
 
 #### Any other key {#JsonExpr-any-other-key}
 
-This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself an [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
+This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself a [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
 
 **Example for `decimal` function**
 
@@ -1264,7 +1264,7 @@ This field is a JSON array of template links. The JSON representation of a templ
 * `newId`
 * `values`
 
-`templateId` is the ID of the policy to be linked against. `new_id` is the ID of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
+`templateId` is the ID of the policy to be linked against. `newId` is the ID of the newly generated template-linked policy, and `values` is a mapping from slots (`?principal` or `?resource`) to entities.
 
 ## Convert Cedar policy format to JSON policy format using Java
 
