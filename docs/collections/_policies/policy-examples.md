@@ -73,7 +73,7 @@ permit(
   principal == User::"alice", 
   action in [PhotoflashRole::"viewer", Action::"edit"],
   resource in Album::"alice_vacation"
-)
+);
 ```
 ## Allows access for any entity {#allow-any}
 This following example shows how you might create a policy that allows any authenticated principal to view the album `alice_vacation`.
@@ -92,7 +92,7 @@ permit(
   resource in Account::"jane"
 );
 ```
-This following example shows how you might create a policy that allows the user `alice` to perform any action on resources in the album `jane_vaction`.
+This following example shows how you might create a policy that allows the user `alice` to perform any action on resources in the album `jane_vacation`.
 ```Cedar
 permit(
   principal == User::"alice", 
