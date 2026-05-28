@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Representing relationships
-nav_order: 4
+nav_order: 9
 ---
 
 # Best practice: Use attributes or templates to represent relationships
