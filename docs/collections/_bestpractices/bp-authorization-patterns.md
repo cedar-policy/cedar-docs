@@ -84,28 +84,15 @@ For more on this pattern, see [Compound authorization is normal](../bestpractice
 
 ## Building entity slices
 
-Each authorization pattern determines the code you write to fetch your entity slice and call `IsAuthorized`. For each action signature there is a different slice, which can seem overwhelming at first — until you recognize the repeating structure.
+Each call to `IsAuthorized` requires a single entity slice — the list of entities (with their attributes and parent relationships) that the authorization engine needs to evaluate policies. The entity slice you send depends on which authorization pattern the request follows.
 
-### The principal subslice
+While each request has one combined entity slice, you can think of it as composed of reusable parts:
 
-Every `IsAuthorized` call includes what you can think of as the **principal subslice**: the principal entity and its parents (team, org, tenant, etc.). This subslice is the same regardless of which API is called, and it can be cached for performance.
+**The principal slice** is the portion of the entity slice that represents the principal and its parents (roles, groups, tenant, etc.). This portion is relatively stable - a user doesn't change roles or groups that often, and never changes tenant. This means you can get the result once and cache for a while in order to improve performance. More importantly, the _code_ to fetch the principal slice for a particular user is fixed. Given a user id, you need to fetch that user from the db, then fetch that user's roles, then fetch that user's tenant, then convert all three to cedar entity format. The function that does this can be thought of a reusable building block to build the parent hierarchy for the User type.
 
-```
-// The principal subslice is always the same for a given user
-App::User::"alice" → parents: [App::Team::"design", App::Org::"acme", App::Tenant::"acme-corp"]
-```
+**The resource slice** is the portion that represents the resource and its parents (containers, tenant, etc.). This varies depending on the resource type and the specific resource being accessed. For example, if the resource being targeted by the request is a `Tenant`, then no db query might be necessary (the request contains the tenant id). But if the resource being targeted by the request is `EmailMessage` you might need to fetch the `EmailCampaign` that the message belongs to, and the tenant that this campaign is under.
 
-The principal subslice code is entirely reusable for account management actions too — for example, when a user is viewing or changing another user's roles. In that case, the *other user* is the resource, and their subslice is generated the same way as a principal subslice.
-
-### The resource subslice
-
-Every resource type has its own subslice pattern. For example, the `EmailCampaign` subslice might be:
-
-1. Fetch the campaign from the database.
-2. Read `campaign.organizationId` and fetch that organization.
-3. Read `organization.tenantId` and fetch that tenant.
-
-In practice, your application just needs a helper that performs these joins in one fetch and maps the nested result to normalized Cedar entity format.
+To build the full entity slice for any request, you fetch the principal slice, fetch the resource slice, and merge them together. The authorization pattern tells you what the resource slice looks like.
 
 ### Composing slices
 
@@ -113,8 +100,414 @@ When an authorization request comes in:
 
 1. Map the HTTP request to a Cedar action.
 2. Once you know the action and principal type, you know the resource type — if you're following the best practice of [mapping actions to the business domain](../bestpractices/bp-map-actions.html), each action should be specific to one resource type.
-3. Fetch the principal subslice (likely cached).
-4. Fetch the resource subslice for that resource type.
-5. Combine them into the entity slice and call `IsAuthorized`.
+3. Fetch the principal slice (might be cached).
+4. Fetch the resource slice for that resource type and specific resource.
+5. Merge them into the final entity slice and call `IsAuthorized`.
 
-Each subslice is buildable and testable independently. The total number of subslice implementations you need equals the number of distinct resource types in your schema — not the number of API endpoints.
+Each slice builder is usable and testable independently. The total number of resource slice builder implementations you need depends on the number of distinct resource types in your schema and the access patterns available for each. In general, you will have significantly fewer resource slices than API endpoints.
+
+## Case study: Email marketing platform
+
+This section walks through a complete example showing how authorization patterns map to entity slices for each action in an application.
+
+### The schema
+
+Consider an email marketing platform with the following Cedar schema:
+
+```cedar
+namespace EmailApp {
+    entity Tenant = {
+        planTier: String,
+        maxUsers: Long
+    };
+
+    entity Role = {};
+
+    entity User in [Role, Tenant] = {
+        email: String,
+        displayName: String
+    };
+
+    entity EmailCampaign in [Tenant] = {
+        name: String,
+        status: String
+    };
+
+    entity EmailMessage in [EmailCampaign, Tenant] = {
+        subject: String,
+        recipientCount: Long
+    };
+
+    action createEmailCampaign appliesTo { principal: [User], resource: [Tenant] };
+    action getEmailCampaign appliesTo { principal: [User], resource: [EmailCampaign] };
+    action updateEmailCampaign appliesTo { principal: [User], resource: [EmailCampaign] };
+    action deleteEmailCampaign appliesTo { principal: [User], resource: [EmailCampaign] };
+    action listEmailCampaigns appliesTo { principal: [User], resource: [Tenant] };
+
+    action createEmailMessage appliesTo { principal: [User], resource: [EmailCampaign] };
+    action getEmailMessage appliesTo { principal: [User], resource: [EmailMessage] };
+    action updateEmailMessage appliesTo { principal: [User], resource: [EmailMessage] };
+    action deleteEmailMessage appliesTo { principal: [User], resource: [EmailMessage] };
+    action listEmailMessages appliesTo { principal: [User], resource: [EmailCampaign] };
+}
+```
+
+### The principal slice
+
+For every request in this application, the principal slice is constructed in the same way. Given a user `alice` who belongs to the `admin` role in tenant `acme`:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::User", "id": "alice" },
+        "attrs": { "email": "alice@acme.com", "displayName": "Alice" },
+        "parents": [
+            { "type": "EmailApp::Role", "id": "admin" },
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Role", "id": "admin" },
+        "attrs": {},
+        "parents": []
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": { "planTier": "enterprise", "maxUsers": 100 },
+        "parents": []
+    }
+]
+```
+
+This slice is fetched once and reused for several authorization requests for `alice`, with a cache policy that depends on the application's specific needs.
+
+
+### EmailCampaign actions
+
+#### createEmailCampaign
+
+**Pattern:** Resource creation — the resource is the tenant.
+
+**HTTP request:**
+```
+POST /tenants/acme/campaigns
+{ "name": "Spring Sale" }
+```
+
+**Resource slice:** Just the tenant. In this application, we've modeled some attributes for the tenant entity in the schema. Because of that, it's presumed we need to fetch the tenant from the db (if there are attributes modeled in the schema it should be because they're relevant to authorization).
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"createEmailCampaign"
+resource  = EmailApp::Tenant::"acme"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": { "planTier": "enterprise", "maxUsers": 100 },
+        "parents": []
+    }
+]
+```
+
+In an application where the Tenant's attributes are not relevant to authorization, we wouldn't need to fetch the tenant from the DB. We would just construct a cedar entity with empty attributes like so: 
+```json
+[
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "tenantIdFromUdlParams" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+#### listEmailCampaigns
+
+**Pattern:** Resource listing — the resource is the tenant.
+
+**HTTP request:**
+```
+GET /tenants/acme/campaigns
+```
+
+**Resource slice:** Just the tenant. Same slice-building logic as above.
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"listEmailCampaigns"
+resource  = EmailApp::Tenant::"acme"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": { "planTier": "enterprise", "maxUsers": 100 },
+        "parents": []
+    }
+]
+```
+
+Note that this action named `"listEmailCampaigns"` is implied to be specific to this tenant. An equally suitable action name might be `"listEmailCampaignsForTenant"`.
+
+#### getEmailCampaign, updateEmailCampaign, deleteEmailCampaign
+
+**Pattern:** Single-resource read/update/delete — the resource is the campaign.
+
+**HTTP requests:**
+```
+GET /campaigns/campaign-001
+PUT /campaigns/campaign-001
+DELETE /campaigns/campaign-001
+```
+
+**Resource slice:** The campaign entity and its parent tenant.
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"getEmailCampaign"
+resource  = EmailApp::EmailCampaign::"campaign-001"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+        "attrs": { "name": "Spring Sale", "status": "draft" },
+        "parents": [
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+### EmailMessage actions
+
+#### createEmailMessage
+
+**Pattern:** Resource creation — the resource is the parent campaign (the container the message will belong to).
+
+**HTTP request:**
+```
+POST /campaigns/campaign-001/messages
+{ "subject": "Don't miss our sale!", "recipientCount": 5000 }
+```
+
+**Resource slice:** The campaign and its parent tenant.
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"createEmailMessage"
+resource  = EmailApp::EmailCampaign::"campaign-001"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+        "attrs": { "name": "Spring Sale", "status": "draft" },
+        "parents": [
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+#### listEmailMessages
+
+**Pattern:** Resource listing — the resource is the parent campaign. Same slice-building logic as above.
+
+**HTTP request:**
+```
+GET /campaigns/campaign-001/messages
+```
+
+**Resource slice:** The campaign and its parent tenant.
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"listEmailMessages"
+resource  = EmailApp::EmailCampaign::"campaign-001"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+        "attrs": { "name": "Spring Sale", "status": "draft" },
+        "parents": [
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+Note that it is implied that this action named `"listEmailMessages"` is specific to a campaign. An equally suitable action name might be `"listEmailMessagesForCampaign"`.
+
+#### getEmailMessage, updateEmailMessage
+
+**Pattern:** Single-resource read/update/delete — the resource is the message.
+
+**HTTP requests:**
+```
+GET /messages/msg-042
+PUT /messages/msg-042
+```
+
+**Resource slice:** The message entity and its parents (campaign, tenant).
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"getEmailMessage"
+resource  = EmailApp::EmailMessage::"msg-042"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::EmailMessage", "id": "msg-042" },
+        "attrs": { "subject": "Don't miss our sale!", "recipientCount": 5000 },
+        "parents": [
+            { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+        "attrs": { "name": "Spring Sale", "status": "active" },
+        "parents": [
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+Note that in this case, the resource slice for an `EmailMessage` is composable with the resource slice for the `EmailCampaign`. This may allow for code simplification in some cases.
+
+#### deleteEmailMessage
+
+**Pattern:** This is a single cedar action, but it actually corresponds to a batch-delete endpoint. The user selects one or more messages and deletes them at once. This requires composite authorization: one authorization check per message. It's modeled as a single action in Cedar, but the API models it as a batch action.
+
+**HTTP request:**
+```
+DELETE /messages?messagelist=msg-043,msg-044,msg-045
+```
+
+**Resource slice:** For each message in the list, you need the message entity and its parents. You then issue one authorization call per message.
+
+**IsAuthorized request (per message):**
+
+```
+// For each message in the list, authorize:
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"deleteEmailMessage"
+resource  = EmailApp::EmailMessage::"msg-043"   // ...repeated for msg-044, msg-045
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice for each message is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::EmailMessage", "id": "msg-043" },
+        "attrs": { "subject": "Welcome email", "recipientCount": 1000 },
+        "parents": [
+            { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::EmailCampaign", "id": "campaign-001" },
+        "attrs": { "name": "Spring Sale", "status": "active" },
+        "parents": [
+            { "type": "EmailApp::Tenant", "id": "acme" }
+        ]
+    },
+    {
+        "uid": { "type": "EmailApp::Tenant", "id": "acme" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+We can make performance optimizations in this case. For example, we might allow batch-deleting only if all the emails belong to the same campaign. We can then fetch all the email messages in parallel, then validate that they all belong to the same campaign id, then only fetch the campaign and tenant one time.
+
+If the request comes in trying to delete three messages and the request is valid, we will call cedar three times. Each response tells you which specific messages the principal is authorized to delete — your application can then proceed with only those deletions, or reject the entire request if any are denied.
+
+### Summary
+
+| HTTP endpoint | Authorization pattern | Slices fetched |
+|---|---|---|
+| `POST /tenants/:id/campaigns` | Resource creation | principalSlice + tenantSlice |
+| `GET /tenants/:id/campaigns` | Resource listing | principalSlice + tenantSlice |
+| `GET /campaigns/:id` | Single-resource RUD | principalSlice + emailCampaignSlice |
+| `PUT /campaigns/:id` | Single-resource RUD | principalSlice + emailCampaignSlice |
+| `DELETE /campaigns/:id` | Single-resource RUD | principalSlice + emailCampaignSlice |
+| `POST /campaigns/:id/messages` | Resource creation | principalSlice + emailCampaignSlice |
+| `GET /campaigns/:id/messages` | Resource listing | principalSlice + emailCampaignSlice |
+| `GET /messages/:id` | Single-resource RUD | principalSlice + emailMessageSlice |
+| `PUT /messages/:id` | Single-resource RUD | principalSlice + emailMessageSlice |
+| `DELETE /messages?messagelist=...` | Batch RUD | principalSlice + emailMessageSlice (per message) |
+
+This application has **10 HTTP endpoints** but only **4 slice builders**:
+
+1. `principalSlice` — fetches the user, their roles, and their tenant
+2. `tenantSlice` — fetches the tenant
+3. `emailCampaignSlice` — fetches the campaign and its parent tenant (can potentially reuse tenantSlice)
+4. `emailMessageSlice` — fetches the message, its parent campaign, and the tenant (can potentially reuse emailCampaignSlice)
+
+Every authorization request in the application is composed by combining the principal slice with one of the three resource slices. The authorization pattern determines which resource slice to use.

@@ -19,17 +19,48 @@ nav_order: 3
 
 When designing your authorization model, the actions you define should be business actions, not API actions. `POST` and `GET` should not be defined as actions, instead focus on actions your users perform. For example, a support technician may perform the `CreateSupportCase`, `ListSupportCase`, and `ViewSupportCase` actions.
 
-## Why generic actions are problematic
+## Why generic actions are a bad practice
 
-When you define generic actions like `GET`, `POST`, `View`, `Edit`, or `Delete` that apply to many resource types, you make it difficult to write well-scoped policies. A generic `View` action might have 50 different resource types in its `appliesTo` list. This forces you to choose between two bad options:
+Consider this schema:
+
+```cedar
+namespace ProjectApp {
+    entity User = {};
+
+    entity Project = {};
+    entity Task = {};
+    entity TaskComment = {};
+    entity Sprint = {};
+    entity Epic = {};
+
+    action Create appliesTo {
+        principal: [User],
+        resource: [Project, Task, TaskComment, Sprint, Epic]
+    };
+    action View appliesTo {
+        principal: [User],
+        resource: [Project, Task, TaskComment, Sprint, Epic]
+    };
+    action Update appliesTo {
+        principal: [User],
+        resource: [Project, Task, TaskComment, Sprint, Epic]
+    };
+    action Delete appliesTo {
+        principal: [User],
+        resource: [Project, Task, TaskComment, Sprint, Epic]
+    };
+}
+```
+
+When you define generic actions like `Create`, `View`, `Update`, or `Delete` that apply to many resource types, you make it difficult to write well-scoped policies. This generic `View` action has 5 different resource types in its `appliesTo` list. This nudges you to choose between two bad options:
 
 **Option 1: Overly broad permissions.** A policy that grants `View` without constraining the resource grants access to *all* resource types that `View` applies to. Any time a user gets `View` access to one kind of resource, they get it for everything.
 
 ```cedar
 // Grants View access to ALL resource types — documents, projects, dashboards, etc.
 permit(
-    principal == App::User::"alice",
-    action == App::Action::"View",
+    principal == ProjectApp::User::"alice",
+    action == ProjectApp::Action::"View",
     resource
 );
 ```
@@ -39,8 +70,8 @@ permit(
 ```cedar
 // Fragile — relies on attribute presence to infer resource type
 permit(
-    principal == App::User::"alice",
-    action == App::Action::"View",
+    principal == ProjectApp::User::"alice",
+    action == ProjectApp::Action::"View",
     resource
 )
 when {
@@ -49,45 +80,67 @@ when {
 };
 ```
 
-This is fragile, hard to analyze, and defeats the purpose of having a typed schema. It also prevents the authorization engine from indexing policies efficiently, since the resource scope is unconstrained. See [When possible, populate the policy scope](../bestpractices/bp-populate-policy-scope.html) for more on why this matters.
+This is fragile, hard to analyze, and largely defeats the purpose of having a typed schema. It also prevents the authorization engine from indexing policies efficiently, since the resource scope is unconstrained. See [When possible, populate the policy scope](../bestpractices/bp-populate-policy-scope.html) for more on why this matters.
 
 ## Define actions per resource type
 
-Instead of generic actions, define business-specific actions that each apply to exactly one resource type:
+Instead of generic actions, define business-specific actions that each map exactly to one action a user of your app can take. 
 
 ```cedar
-// Each action maps to one resource type — clean, indexable, easy to reason about
-permit(
-    principal == App::User::"alice",
-    action == App::Action::"ViewProject",
-    resource == App::Project::"proj-123"
-);
+namespace ProjectApp {
+    entity User = {};
 
-permit(
-    principal == App::User::"alice",
-    action == App::Action::"ViewDashboard",
-    resource in App::Dashboard::"all"
-);
+    entity Project = {};
+    entity Task = {};
+    entity TaskComment = {};
+    entity Sprint = {};
+    entity Epic = {};
+
+    // Project actions
+    action CreateProject appliesTo {
+        principal: [User],
+        resource: [Project]
+    };
+    action ViewProject appliesTo {
+        principal: [User],
+        resource: [Project]
+    };
+    action UpdateProject appliesTo {
+        principal: [User],
+        resource: [Project]
+    };
+    action DeleteProject appliesTo {
+        principal: [User],
+        resource: [Project]
+    };
+
+    // Task actions
+    action CreateTask appliesTo {
+        principal: [User],
+        resource: [Task]
+    };
+    action ViewTask appliesTo {
+        principal: [User],
+        resource: [Task]
+    };
+    action UpdateTask appliesTo {
+        principal: [User],
+        resource: [Task]
+    };
+    action DeleteTask appliesTo {
+        principal: [User],
+        resource: [Task]
+    };
+    // ... omitted actions for TaskComment, Sprint, Epic
+}
 ```
 
-In the second policy, `App::Dashboard::"all"` is a **synthetic group** — it doesn't need to correspond to a real object in your application. You simply include it as a parent of every dashboard entity when you make an authorization request. This gives you a way to write policies that apply to all dashboards without leaving the resource scope unconstrained. See [When possible, populate the policy scope](../bestpractices/bp-populate-policy-scope.html#mistake-no-resource) for more on synthetic resource groups.
-
-### Using the `is` clause as an alternative
-
-You can also constrain the resource by type using the `is` clause:
+This will allow you to write more specific, more concise policies like:
 
 ```cedar
 permit(
-    principal == App::User::"alice",
-    action == App::Action::"ViewDashboard",
-    resource is App::Dashboard
+    principal == ProjectApp::User::"alice",
+    action == ProjectApp::Action::"ViewProject",
+    resource is ProjectApp::Project
 );
 ```
-
-This accomplishes the same thing as `resource in App::Dashboard::"all"` — it ensures the policy only applies to dashboard resources — without requiring you to set up a synthetic group. Use whichever approach fits your policy storage model: the `is` clause is simpler when you just need type-level scoping, while synthetic groups are useful when you also want to grant access to specific subsets of resources via hierarchy.
-
-With this approach:
-- Each policy can fully populate the scope (principal, action, and resource).
-- The authorization engine evaluates only the policies relevant to the specific action being requested.
-- Permissions are easy to reason about — granting `ViewProject` access has no effect on dashboards or documents.
-- You can use [action groups](../overview/terminology.html#term-action-group) to bundle related actions when needed (e.g., `App::Action::"financeActions"` containing actions for both `Transaction` and `FinancialStatement` types - `App::Action::"ViewTransaction"`, `App::Action::"CreateTransaction"`, `App::Action::"UpdateTransaction"`, `App::Action::"ViewFinancialStatement"`, `App::Action::"CreateFinancialStatement"`, `App::Action::"UpdateFinancialStatement"`).

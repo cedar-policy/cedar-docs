@@ -75,22 +75,31 @@ By modeling the role as a group entity that users are members of, you populate t
 
 ### Mistake 2: Thinking there is no resource you can name {#mistake-no-resource}
 
-A common mistake is to leave the `resource` scope empty because you believe there is no specific resource to reference. In practice, you can always constrain the resource. At a minimum, you can use `resource is NS::ResourceType` to constrain by type. Beyond that, you can use **synthetic resource groups** to name a resource in your policies.
+A common mistake is to leave the `resource` scope empty because you believe there is no specific resource to reference. In practice, you can always constrain the resource — and doing so allows you to segment/index your policy storage by resource type, which reduces the number of policies that need to be fetched and evaluated at authorization time.
 
-A synthetic resource group is an entity you create to represent "all resources of this type." Every specific resource of that type lists the synthetic group as a parent. This gives you two options:
+#### The `is` clause
 
-1. **Grant access to all resources of a type** — reference the synthetic group directly.
-2. **Grant access to a specific resource** — reference the specific resource entity, which has the synthetic group as a parent.
-
-**Example: Synthetic resource group**
-
-Given an action that applies to resources of type `Instrument`:
+The simplest way to constrain the resource is with the `is` clause, which restricts the policy to a specific entity type:
 
 ```cedar
 permit(
-    principal == Platform::User::"user-123",
-    action == Platform::Action::"activateInstrument",
-    resource == Platform::Instrument::"inst-456"
+    principal == App::User::"alice",
+    action == App::Action::"ViewDashboard",
+    resource is App::Dashboard
+);
+```
+
+This policy will only match when the resource in the authorization request is of type `App::Dashboard`. The authorization engine can use this constraint to skip this policy entirely for requests involving other resource types. That is, this policy doesn't even need to be fetched if the resource is not of type `App::Dashboard`.
+
+#### Synthetic resource groups
+
+For more granular control, you can use **synthetic resource groups**. A synthetic resource group is an entity you create to represent "all resources of this type." It doesn't correspond to a real object in your application — you simply include it as a parent of every resource of that type when you make an authorization request.
+
+```cedar
+permit(
+    principal == App::User::"alice",
+    action == App::Action::"ViewDashboard",
+    resource in App::Dashboard::"all"
 );
 ```
 
@@ -99,31 +108,29 @@ The entities you send in the authorization request include both the specific res
 ```json
 [
     {
-        "uid": { "type": "Platform::Instrument", "id": "inst-456" },
+        "uid": { "type": "App::Dashboard", "id": "dashboard-42" },
         "attrs": {},
         "parents": [
-            { "type": "Platform::Instrument", "id": "all" }
+            { "type": "App::Dashboard", "id": "all" }
         ]
     },
     {
-        "uid": { "type": "Platform::Instrument", "id": "all" },
+        "uid": { "type": "App::Dashboard", "id": "all" },
         "attrs": {},
         "parents": []
     }
 ]
 ```
 
-To grant access to all instruments, reference the synthetic group:
+Synthetic groups are useful when you want to grant access to specific subsets of resources via hierarchy. For example, you can grant access to a single dashboard by referencing it directly, or to all dashboards by referencing the synthetic group — both using the `in` operator.
 
-```cedar
-permit(
-    principal == Platform::User::"user-123",
-    action == Platform::Action::"activateInstrument",
-    resource in Platform::Instrument::"all"
-);
-```
+#### Why this matters for performance
 
-**Modeling tenancy with resource hierarchy**
+Both the `is` clause and synthetic resource groups allow a policy store to **segment and index policies by resource type**. When an authorization request comes in for a specific resource, the engine only needs to fetch and evaluate policies that could possibly apply to that specific request — not every policy in the store. In a large application with thousands of policies, this segmentation is critical for keeping authorization fast.
+
+Prefer the `is` clause for simplicity. Use synthetic resource groups when you need hierarchical resource groupings beyond just type-level scoping (e.g., granting access to all resources within a tenant, or all dashboards within a project).
+
+#### Modeling tenancy with resource hierarchy
 
 If your application is multitenant, you can model tenancy as a parent-child relationship rather than a string attribute checked in a `when` clause. This enables cross-tenant management scenarios where one user has access across multiple tenants:
 
