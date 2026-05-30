@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Meta-permissions
-nav_order: 10
+nav_order: 14
 ---
 
 # Design: Implement meta-permissions as policies

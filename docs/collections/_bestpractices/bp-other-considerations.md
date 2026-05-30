@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Other considerations
-nav_order: 13
+nav_order: 17
 ---
 
 # Best practice: Consider other reasons to query authorization

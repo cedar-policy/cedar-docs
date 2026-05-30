@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Permissions
-nav_order: 3
+nav_order: 8
 ---
 
 # Best practice: Prefer fine-grained permissions in the model and aggregate permissions in the user interface
