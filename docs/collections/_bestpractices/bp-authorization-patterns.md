@@ -84,7 +84,7 @@ For more on this pattern, see [Compound authorization is normal](../bestpractice
 
 ### Open endpoints
 
-A principal performing an action that isn't scoped to any specific resource or container. For example, `Login`, `Signup`, or `ResetPassword`.
+A principal performing an action that isn't scoped to any specific resource or container. For example, `Login`, `Signup`, or `ResetPassword`. The principal's identity is not trusted — the caller may be unauthenticated or presenting unverified credentials.
 
 These endpoints don't operate on a user-owned resource — they're entry points to the application itself. The resource in the authorization request is the **application** (or service) entity.
 
