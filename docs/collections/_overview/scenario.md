@@ -44,7 +44,7 @@ permit (
 );
 ```
 
-Any action that isn't explicitly permitted is denied. You can also choose to *always* deny some actions as a matter of service-wide security or design constraints, even if a user explicitly tries to allow those actions. For example, the following policy ensures that no user other than the owner of the account that contains the resource can perform any action if that resource is tagged `private`. The following policy doesn't specify any specific principal, action, or resource. The policy matches *any* request automatically and denies access if either the `when` or `unless` expressions evaluate to `true` for that request.
+Any action that isn't explicitly permitted is denied. You can also choose to *always* deny some actions as a matter of service-wide security or design constraints, even if a user explicitly tries to allow those actions. For example, the following policy ensures that no user other than the owner of the account that contains the resource can perform any action if that resource is tagged `private`. The following policy doesn't specify any specific principal, action, or resource. The policy matches *any* request automatically and denies access if the `when`  expression evaluates to `true` and `unless` expressions evaluate to `false` for that request.
 
 ```cedar
 // Only the owner can access any resource tagged "private"
