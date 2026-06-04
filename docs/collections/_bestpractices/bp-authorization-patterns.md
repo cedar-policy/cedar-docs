@@ -82,6 +82,34 @@ Another example is moving a file from one folder to another — this requires au
 For more on this pattern, see [Compound authorization is normal](../bestpractices/bp-compound-auth.html).
 
 
+### Open endpoints
+
+A principal performing an action that isn't scoped to any specific resource or container. For example, `Login`, `Signup`, or `ResetPassword`. The principal's identity is not trusted — the caller may be unauthenticated or presenting unverified credentials.
+
+These endpoints don't operate on a user-owned resource — they're entry points to the application itself. The resource in the authorization request is the **application** (or service) entity.
+
+```
+principal = App::User::"alice"
+action    = App::Action::"Login"
+resource  = App::Application::"myApp"
+```
+
+This pattern is useful when you want Cedar policies to control access to the application as a whole — for example, restricting login to users whose accounts are in good standing, or limiting signup to specific email domains.
+
+### Implicit-scope endpoints
+
+A principal performing an action where the resource is implicitly derived from the principal itself. For example, `GetDashboardData`, `GetMyProfile`, or `ListMyNotifications`.
+
+These endpoints don't accept a resource identifier in the request — the business logic extracts the user from the JWT and returns data scoped to that user. Since the resource is implicit in the principal, you model the action's resource type as the **application** entity, same as open endpoints.
+
+```
+principal = App::User::"alice"
+action    = App::Action::"GetDashboardData"
+resource  = App::Application::"myApp"
+```
+
+This pattern is useful when the endpoint's access control question is simply "is this principal allowed to use this feature?" rather than "is this principal allowed to access this specific resource?"
+
 ## Building entity slices
 
 Each call to `IsAuthorized` requires a single entity slice — the list of entities (with their attributes and parent relationships) that the authorization engine needs to evaluate policies. The entity slice you send depends on which authorization pattern the request follows.
@@ -138,6 +166,12 @@ namespace EmailApp {
         recipientCount: Long
     };
 
+    entity Application = {};
+
+    action login appliesTo { principal: [User], resource: [Application] };
+    action signup appliesTo { principal: [User], resource: [Application] };
+    action getDashboardData appliesTo { principal: [User], resource: [Application] };
+
     action createEmailCampaign appliesTo { principal: [User], resource: [Tenant] };
     action getEmailCampaign appliesTo { principal: [User], resource: [EmailCampaign] };
     action updateEmailCampaign appliesTo { principal: [User], resource: [EmailCampaign] };
@@ -181,6 +215,76 @@ For every request in this application, the principal slice is constructed in the
 
 This slice is fetched once and reused for several authorization requests for `alice`, with a cache policy that depends on the application's specific needs.
 
+
+### Open endpoint actions
+
+#### login, signup
+
+**Pattern:** Open endpoint — the resource is the application itself.
+
+**HTTP requests:**
+```
+POST /login
+{ "email": "alice@acme.com", "password": "..." }
+
+POST /signup
+{ "email": "bob@newcorp.com", "displayName": "Bob" }
+```
+
+**Resource slice:** Just the application entity. The application entity is a synthetic entity — it doesn't correspond to a database record, so no fetch is needed. You simply construct it in code with a fixed identifier.
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"login"
+resource  = EmailApp::Application::"emailApp"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::Application", "id": "emailApp" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
+
+#### getDashboardData
+
+**Pattern:** Implicit-scope endpoint — the resource is the application. The data returned is scoped to the calling user, but the resource identifier is not part of the request.
+
+**HTTP request:**
+```
+GET /dashboard-data
+```
+
+**Resource slice:** Just the application entity (synthetic, no DB fetch).
+
+**IsAuthorized request:**
+
+```
+principal = EmailApp::User::"alice"
+action    = EmailApp::Action::"getDashboardData"
+resource  = EmailApp::Application::"emailApp"
+entities  = principalSlice + resourceSlice
+```
+
+Where the resource slice is:
+
+```json
+[
+    {
+        "uid": { "type": "EmailApp::Application", "id": "emailApp" },
+        "attrs": {},
+        "parents": []
+    }
+]
+```
 
 ### EmailCampaign actions
 
@@ -492,6 +596,9 @@ If the request comes in trying to delete three messages and the request is valid
 
 | HTTP endpoint | Authorization pattern | Slices fetched |
 |---|---|---|
+| `POST /login` | Open endpoint | principalSlice + applicationSlice |
+| `POST /signup` | Open endpoint | principalSlice + applicationSlice |
+| `GET /dashboard-data` | Implicit-scope endpoint | principalSlice + applicationSlice |
 | `POST /tenants/:id/campaigns` | Resource creation | principalSlice + tenantSlice |
 | `GET /tenants/:id/campaigns` | Resource listing | principalSlice + tenantSlice |
 | `GET /campaigns/:id` | Single-resource RUD | principalSlice + emailCampaignSlice |
@@ -503,11 +610,12 @@ If the request comes in trying to delete three messages and the request is valid
 | `PUT /messages/:id` | Single-resource RUD | principalSlice + emailMessageSlice |
 | `DELETE /messages?messagelist=...` | Batch RUD | principalSlice + emailMessageSlice (per message) |
 
-This application has **10 HTTP endpoints** but only **4 slice builders**:
+This application has **13 HTTP endpoints** but only **5 slice builders**:
 
 1. `principalSlice` — fetches the user, their roles, and their tenant
-2. `tenantSlice` — fetches the tenant
-3. `emailCampaignSlice` — fetches the campaign and its parent tenant (can potentially reuse tenantSlice)
-4. `emailMessageSlice` — fetches the message, its parent campaign, and the tenant (can potentially reuse emailCampaignSlice)
+2. `applicationSlice` — a synthetic entity constructed in code (no DB fetch needed)
+3. `tenantSlice` — fetches the tenant
+4. `emailCampaignSlice` — fetches the campaign and its parent tenant (can potentially reuse tenantSlice)
+5. `emailMessageSlice` — fetches the message, its parent campaign, and the tenant (can potentially reuse emailCampaignSlice)
 
 Every authorization request in the application is composed by combining the principal slice with one of the three resource slices. The authorization pattern determines which resource slice to use.
