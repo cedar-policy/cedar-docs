@@ -71,7 +71,7 @@ This following example shows how you might create a policy that allows permissio
 ```Cedar
 permit(
   principal == User::"alice", 
-  action in [PhotoflashRole::"viewer", Action::"edit"],
+  action in [Photoflash::Role::"viewer", Action::"edit"],
   resource in Album::"alice_vacation"
 );
 ```
