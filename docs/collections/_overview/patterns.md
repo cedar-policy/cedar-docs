@@ -153,15 +153,15 @@ If we group audits by country then we can create a membership policy for each co
 ```cedar
 permit ( 
   principal in Role::"ComplianceOfficerCanada", 
-   action in [Action::"approveAudit"],
+   action in Action::"approveAudit",
    resource in AuditGroup::"AUDITS_CANADA"
-) ;
+);
 
 permit ( 
   principal in Role::"ComplianceOfficerUSA", 
-  action in [Action::"approveAudit"],
+  action in Action::"approveAudit",
   resource in AuditGroup::"AUDITS_USA"
-) ;
+);
 ```
 
 However, this approach may not scale well, leading to an explosion in the number of roles the organization has to manage if they operate in many countries. 
@@ -170,11 +170,11 @@ A third approach is to create a role-associated attribute. This is an attribute 
 ```cedar
 permit ( 
   principal in Role::"ComplianceOfficer", 
-   action in [Action::"approveAudit"],
+   action in Action::"approveAudit",
    resource is Audit) 
 when {
  principal has complianceOfficerCountries &&
- resource.country in principal.complianceOfficerCountries 
+ principal.complianceOfficerCountries.contains(resource.country)
 }; 
 ```
 
@@ -241,7 +241,7 @@ when {
   resource has viewingUsers && principal in resource.viewingUsers 
 }
 unless { 
-  resource has isPrivate and resource.isPrivate 
+  resource has isPrivate && resource.isPrivate
 };
 ```
 
@@ -281,7 +281,7 @@ permit (
 // public access policy - constrained membership 
 permit ( 
   principal in UserGroup::"rootUserGroup", 
-  action in [Action::"viewList"]
+  action in Action::"viewList",
   resource is List ) 
 when {
  resource has isPublic && resource.isPublic

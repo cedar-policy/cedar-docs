@@ -57,21 +57,21 @@ permit(
   resource in Album::"alice_vacation"
 );
 ```
-This following example shows how you might create a policy that allows permissions for the user `alice` in the album `alice_vacation`, where `admin` is a group defined in the schema hierarchy that contains the permissions to view, edit, and delete a photo.
+This following example shows how you might create a policy that allows permissions for the user `alice` in the album `alice_vacation`, where `admin_actions` is a group of actions defined in the schema that contains the actions to view, edit, and delete a photo.
 
 ```Cedar
 permit(
   principal == User::"alice", 
-  action in Photoflash::Role::"admin", 
+  action in Action::"admin_actions",
   resource in Album::"alice_vacation"
 );
 ```
-This following example shows how you might create a policy that allows permissions for the user `alice` in the album `alice_vacation`, where `viewer` is a group defined in the schema hierarchy that contains the permission to view and comment on a photo. The user `alice` is also granted the `edit` permission by the second action listed in the policy.
+This following example shows how you might create a policy that allows permissions for the user `alice` in the album `alice_vacation`, where `viewer_actions` is a group of actions defined in the schema that contains the actions to view and comment on a photo. The user `alice` is also granted the `edit` permission by the second action listed in the policy.
 
 ```Cedar
 permit(
   principal == User::"alice", 
-  action in [Photoflash::Role::"viewer", Action::"edit"],
+  action in [Action::"viewer_actions", Action::"edit"],
   resource in Album::"alice_vacation"
 );
 ```
@@ -101,7 +101,7 @@ permit(
 );
 ```
 ## Allows access for attributes of an entity (ABAC) {#allow-abac}
-Attribute-based access control (ABAC) is an authorization strategy that defines permissions based on attributes. Cedar allows attributes to be attached to principals, actions, and resources. These attributes can then be referenced within the `when` and `unless` clauses of policies that evaluate the attributes of the principals, actions, and resources that make up the context of the request.
+Attribute-based access control (ABAC) is an authorization strategy that defines permissions based on attributes. Cedar allows attributes to be attached to principals, resources, and request context. These can then be referenced within a policy's `when` or `unless` clause to have authorization depend on attribute values.
 
 This following example shows how you might create a policy that allows any principal in the `HardwareEngineering` department with a job level of greater than or equal to 5 to view and list photos in the album `device_prototypes`.
 ```Cedar
@@ -126,26 +126,28 @@ when {
   resource.fileType == "JPEG"
 };
 ```
-Actions have *context attributes*. You must pass these attributes in the `context` of an authorization request. This following example shows how you might create a policy that allows the user `alice` to perform any `readOnly` action. You can also set an `appliesTo` property for actions in your schema. This specifies valid actions for a resource when you want to ensure that, for example, users can only attempt to authorize `ViewPhoto` for a resource of type `PhotoFlash::Photo`.
+An authorization request can also include a *context* with its own attributes. This following example shows how you might create a policy that allows the user `alice` to delete any resource, but only for requests made with multi-factor authentication.
 ```Cedar
 permit(
-  principal == PhotoFlash::User::"alice",
-  action,
+  principal == User::"alice",
+  action in Action::"delete",
   resource
 ) when { 
-    context has readOnly && 
-    context.readOnly == true 
+    context has authentication.usedMFA &&
+    context.authentication.usedMFA
 };
 ```
-A better way to set the properties of actions in your schema, however, is to arrange them into functional action groups. For example, you can create an action named `ReadOnlyPhotoAccess` and set `PhotoFlash::Action::"ViewPhoto"` to be a member of `ReadOnlyPhotoAccess` as an action group. This following example shows how you might create a policy that grants Alice access to the read-only actions in that group.
+The attributes available in the context are defined for each action in the [`appliesTo`](../schema/schema.html#schema-actions) property for that action in your schema.
+
+The context usually contains information that changes with each request. If you have properties of actions that are consistent across all requests, a better approach is to arrange those actions into functional action groups. For example, you can create an action named `ReadOnlyPhotoAccess` and set `Action::"ViewPhoto"` to be a member of `ReadOnlyPhotoAccess` as an action group. This following example shows how you might create a policy that grants Alice access to the read-only actions in that group. Other actions added to this group will automatically be authorized by this policy.
 ```Cedar
 permit(
-  principal == PhotoFlash::User::"alice",
-  action in PhotoFlash::Action::"ReadOnlyPhotoAccess",
+  principal == User::"alice",
+  action in Action::"ReadOnlyPhotoAccess",
   resource
 );
 ```
-This following example shows how you might create a policy that allows all principals to perform any action on resources for which they have `owner` attribute.
+This following example shows how you might create a policy that allows all principals to perform any action on resources for which they are the `owner`.
 ```Cedar
 permit(
   principal,
@@ -156,7 +158,7 @@ when {
   principal == resource.owner
 };
 ```
-This following example shows how you might create a policy that allows any principal to view any resource if the `department` attribute for the principal matches the `department` attribute of the resource.
+This following example shows how you might create a policy that allows any principal to view any resource if the `department` attribute for the principal matches the `department` attribute of the resource's owner.
 
 **Note**: If an entity doesn't have an attribute mentioned in a policy condition, then the policy will be ignored when making an authorization decision and evaluation of that policy fails for that entity. For example, any principal that does not have a `department` attribute cannot be granted access to any resource by this policy. 
 
@@ -188,8 +190,7 @@ If a policy contains `forbid` for the effect of the policy, it constrains permis
 
 **Note**: During authorization, if both a `permit` and `forbid` policy are enforced, the `forbid` takes precedence.
 
-This following example shows how you might create a policy that denies the user `alice` from performing all actions except `readOnly` on any resource.
-
+Revisiting the earlier action group example, we can instead write a policy that denies access _unless_ the action is a `ReadOnlyPhotoAccess` action. This is not equivalent to the original policy. Because `forbid` overrides `permit`, Alice will never be authorized to perform any other actions.
 ```Cedar
 forbid (
   principal == User::"alice",
@@ -197,7 +198,7 @@ forbid (
   resource
 )
 unless {
-  action in Action::"readOnly"
+  action in Action::"ReadOnlyPhotoAccess"
 };
 ```
 This following example shows how you might create a policy that denies access to all resources that have a `private` attribute unless the principal has the `owner` attribute for the resource.

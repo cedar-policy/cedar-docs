@@ -249,7 +249,7 @@ A record attribute has the same JSON format as the [entity `shape`'s record's at
             }
         }
     }
-}
+},
 "Group" : {
     "enum": ["G1", "G2", "G3"],
     "annotations": {
@@ -529,10 +529,10 @@ Returning to our motivating example, we can define a record type called `ReusedC
     }
 }
 ```
-When referencing the attributes of a `commonType` object, you can reference the attributes directly. As an example, take the `view` action from the above schema. It is of `type` `ReusedContent`, which is defined as a `commonTypes` object. The following is how you would reference the `is_authenticated` attribute:
+When referencing the attributes of a `commonType` object, you can reference the attributes directly. As an example, take the `view` action from the above schema. It is of `type` `ReusedContext`, which is defined as a `commonTypes` object. The following is how you would reference the `is_authenticated` attribute:
 
-```json
-context.is_authenticated == "True"
+```cedar
+context.is_authenticated
 ```
 
 We can also use type names defined in `commonTypes` within definitions in the `entityTypes` section. As a simple example, here we define a type `name` as a `String`, and then use the type (twice) in the `User` entity type's `attributes` specifications:

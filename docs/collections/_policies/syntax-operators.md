@@ -1096,7 +1096,7 @@ context.addr has country && context.addr.country == "US "    //false
 
 However, consider the case where `context` does not have the `addr` sub-record at all:
 
-```cedar
+```json
 "context": {
     "role": ["admin", "user"]
 }

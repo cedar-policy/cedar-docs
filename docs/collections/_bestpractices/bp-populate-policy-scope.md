@@ -68,7 +68,7 @@ permit(
     principal in App::Role::"analyst",
     action == App::Action::"ViewReport",
     resource
-)
+);
 ```
 
 By modeling the role as a group entity that users are members of, you populate the principal scope. The authorization engine can index on this and skip the policy entirely for principals who are not in the `analyst` group.
