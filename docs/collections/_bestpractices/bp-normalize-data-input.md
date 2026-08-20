@@ -13,7 +13,7 @@ As a result, application owners should format data prior to passing it into the 
 
 ```json
 {
-  "url": "https://example.com/path/to/page?name=alice&amp;color=red"
+  "url": "https://example.com/path/to/page?name=alice&color=red"
 }
 ```
 
@@ -24,11 +24,12 @@ The information should be pre-formatted into something more accessible by policy
   "url": {
     "transport": "https",
     "host": "example.com",
-    "path": "/path/to/page"
+    "path": "/path/to/page",
     "queryParams": {
       "name": "alice",
       "color": "red"
     }
+  }
 }
 ```
 
@@ -36,7 +37,7 @@ Special attention should be paid to the normalization of strings. For example, c
 
 ```json
 {
-  "url": "https://EXAMPLE.COM////path/to/page?name=alice&amp;color=red"
+  "url": "https://EXAMPLE.COM////path/to/page?name=alice&color=red"
 }
 ```
 

@@ -540,7 +540,7 @@ The `op` object must have one of the following string values:
         "op": "is",
         "entity_type": "file",
         "in": {
-            "entity": { "type": "Folder", "id": "Public" }
+            "entity": { "type": "folder", "id": "Public" }
         }
     }
     ```
@@ -1051,7 +1051,7 @@ JSON representation
                                 "attr": "email"
                             }
                         },
-                        "pattern": "*@amazon.com"
+                        "pattern": ["Wildcard", { "Literal": "@amazon.com" }]
                     }
                 }
             }

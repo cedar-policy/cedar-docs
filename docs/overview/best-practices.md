@@ -1,6 +1,6 @@
 ---
 layout: forward
-target: \.\./bestpractices/bp-naming-conventions.html
+target: ../bestpractices/bp-overview.html
 ---
 
 
