@@ -12,6 +12,7 @@ COPY docs/Gemfile docs/Gemfile.lock ./
 RUN bundle install
 
 COPY --chown=jekyll:jekyll docs/ ./
+RUN chown jekyll:jekyll /site
 
 USER jekyll
 
