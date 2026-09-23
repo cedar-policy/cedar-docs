@@ -286,7 +286,7 @@ The `op` key is required. The `op` object must have one of the following string 
 
 The `action` object is required.
 
-The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
+The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key [`entity`](#entity) or [`entities`](#entities).
 
 #### `op`
 
@@ -566,6 +566,42 @@ The `op` object must have one of the following string values:
         }
     },
     ```
+
+### Entity and slot values
+
+The `principal`, `action`, and `resource` objects use the `entity`, `slot`, and `entities` keys to refer to entities and template slots.
+
+#### `entity`
+
+The value of this key is an object with the keys `type` and `id`, both strings.
+
+```json
+"entity": { "type": "User", "id": "12UA45" }
+```
+
+The `type` key is the entity type name, including any namespace such as `Namespace::Type`. The `id` key is the entity identifier. Cedar also accepts the explicit escaped form `{ "__entity": { "type": ..., "id": ... } }`, which is equivalent.
+
+#### `slot`
+
+The value of this key is one of the [slot](#JsonExpr-Slot) strings `?principal` or `?resource`.
+`?principal` can only be used in the `principal` scope and `?resource` in the `resource` scope.
+A policy that contains a slot is a template and is not itself a valid Cedar policy until the slot is filled in by a [template link](#templatelinks).
+
+```json
+"slot": "?principal"
+```
+
+#### `entities`
+
+The value of this key is a JSON array of objects, each with the keys `type` and `id` as described for [`entity`](#entity).
+Only the `action` object uses this key, with the `in` operator.
+
+```json
+"entities": [
+    { "type": "Action", "id": "readFile" },
+    { "type": "Action", "id": "writeFile" }
+]
+```
 
 ### conditions
 
