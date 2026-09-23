@@ -189,6 +189,13 @@ This example also demonstrates attribute values with entity types (`User`) and e
 The `context` input parameter is used to provide details specific to a request, such as the date and time the request was sent, the IP address the request originated from, or whether the user was authenticated using a multi-factor authentication device.
 
 Each entry in this list represents a single piece of context information for the request. Construct each entry in this list using the same syntax as the [`attrs`](#attrs) for entities documented previously in this topic. Context is a record with key and value pairs for each entry.
+For example, this JSON object defines a context with the attribute `authnMfa`.
+
+```json
+{
+    "authnMfa": true
+}
+```
 
 Just as in [`attrs`](#attrs), the `__entity` and `__extn` escapes can be explicitly shown or left implicit, as shown in the following example.
 

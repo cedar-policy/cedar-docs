@@ -1,10 +1,3 @@
----
-layout: default
-title: Integrations
-nav_order: 12
-has_children: true
----
-
 # Integrations with Cedar
 
 Cedar integrations help you implement fine-grained authorization in your applications while minimizing code and following framework-specific best practices. These integrations provide middleware components and 

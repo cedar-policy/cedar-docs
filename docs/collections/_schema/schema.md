@@ -146,9 +146,13 @@ type commonContext = {
     timestamp: Long
 };
 action view appliesTo {
+    principal: User,
+    resource: File,
     context: commonContext
 };
 action upload appliesTo {
+    principal: User,
+    resource: Server,
     context: commonContext
 };
 ```

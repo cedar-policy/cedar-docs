@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Avoid mutable identifiers
-nav_order: 11
+nav_order: 15
 ---
 
 # Security requirement: Avoid mutable identifiers in policies

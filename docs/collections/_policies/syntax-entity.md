@@ -21,7 +21,7 @@ An entity in Cedar is a stored object that serves as the representation for [pri
 
 An entity in Cedar has the following components.
 
-+ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema). The Cedar language reserves the `__cedar` entity type, so this entity type, and all entity types with `__cedar` as a component, cannot be used.
++ **An entity type** &ndash; The type determines which attributes are required or supported for entities of that type. Examples include things like `User`, `Photo`, `Album`, `Group`, or `Account`. Define entity types as part of your application's [schema](../overview/terminology.html#term-schema). The schema assigns special meaning to the `Action` entity type, requiring the `action` variable in an authorization request to have `Action` type, and disallowing all attributes and tags on action entities.  The Cedar language reserves the `__cedar` entity type, so this entity type, and all entity types with `__cedar` as a component, cannot be used.
 + **An entity identifier \(EID\)** &ndash; The EID lets you reference a specific entity in your policy. The combination of entity type and an EID uniquely identifies an object for Cedar.
 
    {: .important }
@@ -81,7 +81,7 @@ Entities support the following operators in a Cedar policy:
 + **Attribute access** &ndash; Using the `.` operator, you can retrieve the value of one of the entity's attributes using the syntax `entityName.attributeName`. You can define the attributes supported by your entities as part of the [schema](../schema/schema.html).
 + **Tag presence** &ndash; Using the [`.hasTag()` method](../policies/syntax-operators.html#operator-hasTag), you can determine that a tag is present before attempting to access its value. If you attempt to access a tag that doesn't exist for the specified entity, it generates an error.
 + **Tag access** &ndash; Using the [`.getTag()` method](../policies/syntax-operators.html#operator-getTag), you can retrieve the value of one of the entity's tags. The type of this
-value is defined in the [schema](..schema/schema.html).
+value is defined in the [schema](../schema/schema.html).
 
 ## Namespaces {#entity-namespace}
 
@@ -107,4 +107,4 @@ SomeEmployee["department"]
 SomePhoto["description"]
 ```
 
-An attribute resolves to a value of a [supported datatype](../policies/syntax-datatypes.html). The attribute can be referenced anywhere that a value of that datatype is valid.
+An attribute resolves to a value of a [supported datatype](syntax-datatypes.html). The attribute can be referenced anywhere that a value of that datatype is valid.

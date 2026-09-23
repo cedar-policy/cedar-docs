@@ -60,8 +60,8 @@ Scope ::= Principal ',' Action ',' Resource
 
 The `Principal` element consists of the `principal` keyword. If specified by itself, the policy statement matches *any* principal.
 
-Optionally, the keyword can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../_policies/syntax-operators.html#operator-is) operator.
-An `is` operator may appear together with an `in` operators, but not an `==` operator.
+Optionally, the keyword can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../policies/syntax-operators.html#operator-is) operator.
+An `is` operator may appear together with an `in` operator, but not an `==` operator.
 The `in` and `==` operators are followed by either an `Entity`, or the `?principal` placeholder when used in a policy template.
 
 ```
@@ -78,8 +78,8 @@ Action ::= 'action' [( '==' Entity | 'in' ('[' EntList ']' | Entity) )]
 
 ## `Resource` {#grammar-resource}
 
-The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../_policies/syntax-operators.html#operator-is) operator.
-An `is` operator may appear together with an `in` operators, but not an `==` operator.
+The `Resource` consists of the `resource` keyword. If specified by itself, it matches any resource. Optionally, it can be followed by either the [`in`](../policies/syntax-operators.html#operator-in), [`==`](../policies/syntax-operators.html#operator-equality), or [`is`](../policies/syntax-operators.html#operator-is) operator.
+An `is` operator may appear together with an `in` operator, but not an `==` operator.
 The `in` and `==` operators are followed by either an `Entity`, or the `?resource` placeholder when used in a policy template.
 
 ```
@@ -231,6 +231,8 @@ IDENT ::= ANYIDENT - RESERVED
 ```
 STR ::= Fully-escaped Unicode surrounded by '"'s
 ```
+
+The `STR` element uses the same string literal syntax as [Rust string literals](https://doc.rust-lang.org/reference/tokens.html#string-literals), supporting the following escape sequences: `\"`, `\\`, `\n`, `\r`, `\t`, `\0`, `\xHH` (2-digit ASCII hex escape), and `\u{...}` (1–6 digit Unicode escape).
 
 ## `PAT` {#grammar-pat}
 

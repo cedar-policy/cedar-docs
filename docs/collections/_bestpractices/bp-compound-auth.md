@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Compound authorization
-nav_order: 2
+nav_order: 7
 ---
 
 # Best practice: Compound authorization is normal

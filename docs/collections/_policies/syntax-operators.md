@@ -10,11 +10,11 @@ nav_order: 4
 
 This topic describes the built-in operators and functions that you can use to build your expressions using the Cedar policy language.
 
-Not all expressions that you can _evaluate_ will necessarily _validate_ when using Cedar's [policy validator](validation.html#validation). This situation is similar to that of most programming languages. For example, in Java the following code does not type check, even though executing it will never result in an error.
+Not all expressions that you can _evaluate_ will necessarily _validate_ when using Cedar's [policy validator](../validation.html#validation). This situation is similar to that of most programming languages. For example, in Java the following code does not type check, even though executing it will never result in an error.
 ```java
 if (false) { return 1 == "hello"; } else { return true; }
 ```
-A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation]((validation.html#validation)) section for more information.
+A key difference between Java and Cedar is that Java typechecking is _mandatory_ -- you cannot run a Java program that does not typecheck -- whereas for Cedar policy validation is _optional_ -- it is still possible to evaluate policies that do not validate. This allows you to get up and running with Cedar faster, and to write more expressive policies, if need be. Of course, the restrictions imposed by validation come with the benefit that valid policies are sure not to exhibit most kinds of evaluation error. See the [policy validation](../validation.html#validation) section for more information.
 
 When giving following examples, we will indicate whether the example evaluates properly (and to what), and also whether it validates. All expressions that fail to evaluate will also fail to validate, but not vice versa.
 
@@ -70,7 +70,7 @@ Functions use one of two styles of syntax:
   ```cedar
   firstOperand.function(secondOperand, thirdOperand, …)
 
-  // Evaluates to true if the any of the set member
+  // Evaluates to true if any of the set members
   // elements b, c, or d is an element of set a
   a.containsAny([b, c, d])
   ```
@@ -155,7 +155,7 @@ All formats must adhere to these additional restrictions:
 Note that the restrictions on the hour and minute fields also apply to timezone offsets.
 This implies that timezone offsets must have an absolute value less than 24 hours (i.e., between `-2359` and `+2359`).
 
-Cedar can properly evaluate `datetime(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `datetime(if true then "1970-01-01" else "2000-01-01")` will evaluate to the datetime equivalent to `datetime("1970-01-01")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+Cedar can properly evaluate `datetime(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `datetime(if true then "1970-01-01" else "2000-01-01")` will evaluate to the datetime equivalent to `datetime("1970-01-01")`. However, Cedar's [policy validator](../validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
 
 #### Examples:
 {: .no_toc }
@@ -186,7 +186,7 @@ Function that parses the string and tries to convert it to type [decimal](syntax
 
 To be interpreted successfully as a decimal value, the string must contain a decimal separator \(`.`\) and at least one digit before and at least one digit after the separator. There can be no more than 4 digits after the separator. The value must be within the valid range of the decimal type, from `-922337203685477.5808` to `922337203685477.5807`.
 
-Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+Cedar can properly evaluate `decimal(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `decimal(if true then "1.1" else "2.1")` will evaluate to the decimal number `1.1`. However, Cedar's [policy validator](../validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
 
 #### Examples:
 {: .no_toc }
@@ -220,7 +220,7 @@ decimal("0.12345")               //error - too many fractional digits
 
 Function that parses the string and tries to convert it to type [duration](syntax-datatypes.html#datatype-duration). If the string doesn't represent a valid duration value, it generates an error.
 
-To be interpreted successfully as a datetime value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
+To be interpreted successfully as a duration value, the string must be a concatenated sequence of quantity-unit pairs where the quantity part is a natural number and the unit is one of the following:
 - `d`: days
 - `h`: hours
 - `m`: minutes
@@ -229,7 +229,7 @@ To be interpreted successfully as a datetime value, the string must be a concate
 
 Duration strings are required to be ordered from largest unit to smallest unit, and contain one quantity per unit. Units with zero quantity may be omitted.
 
-Cedar can properly evaluate `duration(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `duration(if true then "1h" else "50m")` will evaluate to the duration equivalent to `duration("1h")`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
+Cedar can properly evaluate `duration(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `duration(if true then "1h" else "50m")` will evaluate to the duration equivalent to `duration("1h")`. However, Cedar's [policy validator](../validation.html#validation) only permits `e` to be a _string literal_ that will not result in an error or overflow.
 
 #### Examples:
 {: .no_toc }
@@ -256,7 +256,7 @@ duration("1d9223372036854775807ms") //error - overflow
 
 Function that parses the string and attempts to convert it to type `ipaddr`. If the string doesn't represent a valid IP address or range, then the `ip()` expression generates an error when evaluated.
 
-Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](validation.html#validation) only permits `e` to be a _string literal_.
+Cedar can properly evaluate `ip(e)` where `e` is any Cedar expression that evaluates to a valid string. For example, the expression `ip(if true then "1.1.1.1/24" else "2.1.1.1/32")` will evaluate to the IP address `1.1.1.1/24`. However, Cedar's [policy validator](../validation.html#validation) only permits `e` to be a _string literal_.
 
 #### Examples:
 {: .no_toc }
@@ -547,7 +547,7 @@ Assume that `resource.creationDate` is `"2024-10-15T11:38:33Z"`.
 
 ```cedar
 datetime("1970-01-02") > datetime("1970-01-01")                    //true
-datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //true
+datetime(resource.creationDate) > datetime("2024-10-15T11:38:33Z") //false
 datetime("1970-01-01T01:00:00Z") > 3600000                         //error - operator not allowed on non-datetime
 ```
 
@@ -591,7 +591,7 @@ decimal("-1.23").greaterThan(decimal("-1.24"))  //true
 decimal("1.1").greaterThan(2)                   //error -- not a decimal operand
 ip("1.1.2.3").greaterThan(decimal("1.2"))       //error -- not a decimal operand
 ```
-The `greaterThan` function must take two `decimal` operands or else it will produce an error when evaluated, per the last two examples. The policy validator also rejects also any expression that attempts to call `greaterThan` on non-`decimal` values.
+The `greaterThan` function must take two `decimal` operands or else it will produce an error when evaluated, per the last two examples. The policy validator also rejects any expression that attempts to call `greaterThan` on non-`decimal` values.
 
 ### `>=` \(long integer 'greater than or equal'\) {#operator-greaterthanorequal}
 
@@ -611,7 +611,7 @@ principal.age >= 21    //true (assuming principal.age is 21)
 false >= true          //error - operands are not long integers
 "some" >= "thing"      //error - operands are not long integers
 ```
-As shown in the examples, evaluating an expression with `>=` when the operators are not both `long` numbers results in an error. The policy validator also rejects also any expression that attempts to compare two values with `>=` that do not have type `long`.
+As shown in the examples, evaluating an expression with `>=` when the operands are not both `long` numbers results in an error. The policy validator also rejects any expression that attempts to compare two values with `>=` that do not have type `long`.
 
 ### `>=` \(datetime 'greater than or equal'\) {#operator-greaterthanorequal-datetime}
 
@@ -695,7 +695,7 @@ The `&&` operator uses [short circuit evaluation](https://wikipedia.org/wiki/Sho
 The following policy is satisfied only if the principal has the attribute `level` and the `level > 5`.
 
 ```cedar
-permit (principal, action == Action:"read", resource)
+permit (principal, action == Action::"read", resource)
 when {
     principal has level &&
     principal.level > 5
@@ -739,7 +739,7 @@ The second comparison in this expression will evaluate to a boolean only if the 
 The following policy allows if either `resource.owner == principal` or `resource.tag == "public"` is true.
 
 ```cedar
-permit (principal, action == Action:"read", resource)
+permit (principal, action == Action::"read", resource)
 when {
     resource.owner == principal ||
     resource.tag == "public"
@@ -760,7 +760,7 @@ false || 3                 //error (second operand not a boolean)
 (3 == 3) || 3              //Evaluates to true (due to short-circuiting) //Doesn't validate
 ```
 
-As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) && 3`.
+As mentioned above, validation _sometimes_ is able to account for short-circuiting behavior, but not always. In particular, the validator will accept `true || 3` but not `(3 == 3) || 3`.
 
 ### `!` \(NOT\) {#operator-not}
 
@@ -807,7 +807,7 @@ if !true then "hello" else "goodbye"  //"goodbye"
 
 The `if` operator returns its evaluated second argument if the first argument evaluates to `true`, else it returns the evaluated third argument.
 
-The `if` operator requires its first argument to be a boolean, i.e., to evaluate to either `true` or `false`. If it does not, the `if` evaluates to an error. The second and third arguments can have any type; to be compatible with [validation](validation.,html), both arguments usually must have the _same_ type, but sometimes the validator is able to take `if`'s short-circuiting behavior into account; more details below.
+The `if` operator requires its first argument to be a boolean, i.e., to evaluate to either `true` or `false`. If it does not, the `if` evaluates to an error. The second and third arguments can have any type; to be compatible with [validation](../validation.html), both arguments usually must have the _same_ type, but sometimes the validator is able to take `if`'s short-circuiting behavior into account; more details below.
 
 In the following policy, the `when` condition is `true` if both `principal.numberOfLaptops < 5` and `principal.jobLevel > 6` are `true`.
 
@@ -1096,7 +1096,7 @@ context.addr has country && context.addr.country == "US "    //false
 
 However, consider the case where `context` does not have the `addr` sub-record at all:
 
-```cedar
+```json
 "context": {
     "role": ["admin", "user"]
 }
@@ -1124,7 +1124,7 @@ The validator will reject any `has` expression whose left-hand operand is not an
 
 **Usage:** `<entity>.hasTag(<expr>)`
 
-Method that evalutes to `true` if the entity on the left has a value defined for the tag name specified on the right. Unlike for attributes with [`has`](#operator-has), for tags the tag name may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
+Method that evaluates to `true` if the entity on the left has a value defined for the tag name specified on the right. Unlike for attributes with [`has`](#operator-has), for tags the tag name may be any (string-typed) expression, and does not have to be a string literal. Evaluation (and validation) produces an error if `<entity>` is not an entity or if `<expr>` does not evaluate to a string.
 
 In all other respects, `.hasTag()` behaves similarly to [`has`](#operator-has) except that it
 operates on tags instead of attributes. (And only entities, not records, can have tags.)
@@ -1322,7 +1322,7 @@ context.foo.isIpv4()         //error if `context.foo` is not an `ipaddr`
 
 **Usage:** `<ipaddr>.isIpv6()`
 
-Function that evaluates to `true` if the receiver is an IPv6 address; evaluates (and validates) to an error if received does not have `ipaddr` type. This function takes no operand.
+Function that evaluates to `true` if the receiver is an IPv6 address; evaluates (and validates) to an error if receiver does not have `ipaddr` type. This function takes no operand.
 
 #### Examples:
 {: .no_toc }
@@ -1395,14 +1395,14 @@ context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is 
 
 ## Datetime functions {#functions-datetime}
 
-Use these functions to operate on [`datetime`](./syntax-datatypes.md#datetime-datatype-datetime) and [`duration`](./syntax-datatypes.md#duration-datatype-duration) values.
+Use these functions to operate on [`datetime`](./syntax-datatypes.html#datatype-datetime) and [`duration`](./syntax-datatypes.html#datatype-duration) values.
 
 ### `.offset()` \(compute a datetime offset by a duration\) {#function-offset.title}
 
 **Usage:** `<datetime>.offset(<duration>)`
 
 Function that returns a new `datetime` value offset by the given `duration`.
-This function evaluates (and validates) to an error the first operand does not have `datetime` type or the second operand does not have `duration` type.
+This function evaluates (and validates) to an error if the first operand does not have `datetime` type or the second operand does not have `duration` type.
 The function evaluates to an error if the computation would exceed the representable range for the `datetime` type.
 
 #### Examples:
@@ -1432,7 +1432,11 @@ The function evaluates to an error if the computation would exceed the represent
 In the examples that follow, those labeled `//error` both evaluate and validate to an error.
 
 ```cedar
-
+datetime("2024-10-15T01:00:00Z").durationSince(datetime("2024-10-15"))     // returns `duration` equivalent to `duration("1h")`
+datetime("2024-10-14T23:18:00Z").durationSince(datetime("2024-10-15"))     // returns `duration` equivalent to `duration("-42m")`
+datetime("2024-10-16T00:00:00-0500").durationSince(datetime("2024-10-15")) // returns `duration` equivalent to `duration("1d5h")`
+datetime("2024-10-15T01:00:00Z").durationSince(2024-10-15)                 // error - operand is not a `datetime`
+context.foo.durationSince(datetime("2024-10-15"))                          // error if `context.foo` is not a `datetime`
 ```
 
 ### `.toDate()` \(extract date portion as new datetime\) {#function-toDate.title}
@@ -1455,11 +1459,11 @@ context.foo.toDate()                          // error if `context.foo` is not a
 ```
 
 
-### `.toTime()` \(xtract time portion as duration\) {#function-toTime.title}
+### `.toTime()` \(extract time portion as duration\) {#function-toTime.title}
 
 **Usage:** `<datetime>.toTime()`
 
-Function that returns a new `duration` value resulting from removing days from the receiver, such that only the number of milliseconds since [`toDate()`](#todate-compute-difference-between-two-datetimes-function-todatetitle) are left.
+Function that returns a new `duration` value resulting from removing days from the receiver, such that only the number of milliseconds since [`toDate()`](#function-toDate.title) are left.
 This function evaluates (and validates) to an error if receiver does not have `datetime` type.
 
 #### Examples:
@@ -1569,7 +1573,7 @@ This function evaluates (and validates) to an error if receiver does not have `d
 In the examples that follow, those labeled `//error` both evaluate and validate to an error.
 
 ```cedar
-duration("1d").toDays()      // returns `long` equal to 24
+duration("1d").toDays()      // returns `long` equal to 1
 duration("4d10h").toDays()   // returns `long` equal to 4
 duration("4d30h").toDays()   // returns `long` equal to 5
 duration("100ms").toDays()   // returns `long` equal to 0

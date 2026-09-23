@@ -52,11 +52,11 @@ In addition to written content, we really appreciate new examples and code sampl
 
 ## Code of conduct
 
-This project has adopted the [Amazon Open Source Code of Conduct](https://aws.github.io/code-of-conduct). For more information, see the [Code of Conduct FAQ](https://aws.github.io/code-of-conduct-faq) or contact [opensource-codeofconduct@amazon.com](mailto:opensource-codeofconduct@amazon.com) with any additional questions or comments.
+This project follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md). For more information, see the [Code of Conduct FAQ](https://www.cncf.io/conduct/faq/) or contact [conduct@cncf.io](mailto:conduct@cncf.io) with any additional questions or comments.
 
 ## Security issue notifications
 
-If you discover a potential security issue, please notify AWS Security via our [vulnerability reporting page](http://aws.amazon.com/security/vulnerability-reporting/). Please do **not** create a public issue on GitHub.
+If you think you have discovered a security issue related to Cedar, **please write to us** at [cedar-policy-security@lists.cncf.io](mailto:cedar-policy-security@lists.cncf.io); do **NOT** open a public issue. See [SECURITY](SECURITY.md).
 
 ## License
 
