@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Resource containers
-nav_order: 5
+nav_order: 10
 ---
 
 # Best practice: Every resource lives in a container

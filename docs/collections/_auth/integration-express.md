@@ -152,12 +152,12 @@ The Cedar authorizer requires user groups and attributes to authorize requests. 
 async function principalEntityFetcher(req) {
     const user = req.user;   // it's common practice for the authn middleware to store the user info from the decoded token here
     const userGroups = user["groups"].map(userGroupId => ({
-        type: 'PetStoreApp::UserGroup',
+        type: 'YourNamespace::UserGroup',
         id: userGroupId       
     }));
     return {
         uid: {
-            type: 'PetStoreApp::User',
+            type: 'YourNamespace::User',
             id: user.sub
         },
         attrs: {

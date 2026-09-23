@@ -32,8 +32,8 @@ Tokens are defined using regular expressions:
 The grammar adopts the same string escaping rules as the [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
-Annotation := '@' IDENT '(' STR ')'
-Annotations := {Annotations}
+Annotation := '@' IDENT ['(' STR ')']
+Annotations := {Annotation}
 Schema    := {Namespace}
 Namespace := (Annotations 'namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
@@ -50,7 +50,8 @@ AppDecls  := ('principal' | 'resource') ':' EntOrTyps [',' | ',' AppDecls]
            | 'context' ':' (Path | RecType) [',' | ',' AppDecls]
 Path      := IDENT {'::' IDENT}
 Ref       := Path '::' STR | Name
-RefOrRefs := Ref | '[' [RefOrRefs] ']'
+Refs      := Ref {',' Ref}
+RefOrRefs := Ref | '[' Refs ']'
 EntTypes  := Path {',' Path}
 EntOrTyps := EntType | '[' [EntTypes] ']'
 Name      := IDENT | STR

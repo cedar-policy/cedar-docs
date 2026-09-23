@@ -204,7 +204,7 @@ You specify values of extension type `ipaddr` using the [ip() operator](../polic
 
 ```cedar
 ip("192.168.1.100")    // a single IPv4 address
-ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.0.0)
+ip("10.50.0.0/24")     // an IPv4 range with a 24-bit subnet mask (255.255.255.0)
 ip("1:2:3:4::/48")     // an IPv6 range with a 48-bit subnet mask
 ```
 
