@@ -376,13 +376,15 @@ The `op` object must have one of the following string values:
     "action": {
         "op": "in",
         "entities": [
-            { "type": "Action", "id": "ManageFiles" }, // Action group
+            { "type": "Action", "id": "ManageFiles" },
             { "type": "Action", "id": "readFile" },
             { "type": "Action", "id": "writeFile" },
             { "type": "Action", "id": "deleteFile" }
         ]
     }
     ```
+
+    In this example, `Action::"ManageFiles"` is an action group.
 
 ### `resource`
 
@@ -748,14 +750,14 @@ JSON representation
                     "Set": [
                         { "Value": 1 },
                         { "Value": 2 },
-                        { "Value": "something" },
+                        { "Value": "something" }
                     ]
                 },
                 "right": {
                     "Set": [
                         { "Value": 4 },
                         { "Value": 5 },
-                        { "Value": "otherthing" },
+                        { "Value": "otherthing" }
                     ]
                 }
             }
@@ -783,7 +785,7 @@ JSON representation
                 "left": {
                     "Record": {
                         "something": { "Value": "spam" },
-                        "otherthing": { "Value": false },
+                        "otherthing": { "Value": false }
                     }
                 },
                 "right": {
@@ -1115,7 +1117,7 @@ JSON representation
     "Set": [
         { "Value": 1 },
         { "Value": 2 },
-        { "Value": "something" },
+        { "Value": "something" }
     ]
 }
 ```
@@ -1135,7 +1137,7 @@ JSON representation
 {
     "Record": {
         "something": { "Value": "spam" },
-        "somethingelse": { "Value": false },
+        "somethingelse": { "Value": false }
     }
 }
 ```
