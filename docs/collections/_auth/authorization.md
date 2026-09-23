@@ -90,7 +90,7 @@ Here's how the Cedar authorizer evaluates a policy *y* with respect to a *PARC* 
 
 If all three steps evaluate to `true`, then *y* matches the request. Otherwise it does not. (Cedar's design ensures that none of these three steps can possibly evaluate to `error`.)
 
-If *y* matches the request, the authorizer evaluates the request's conditions *Conds(y)* in order. The authorizer binds the `principal`, `action`, `resource`, and `context` variables to the *PARC* values when we do so. If all of the `when` conditions evaluate to `true`, and all of the `unless` conditions evaluate to `false`, then policy *y* satisfies the request, and the final evaluation result is `true`. If evaluating any condition expression yields `error` then policy evaluation halts at that point (any remaining conditions are skipped), and `error` is returned as the final result. Otherwise, `false` is returned.
+If *y* matches the request, the authorizer evaluates the request's conditions *Conds(y)* in order. The authorizer binds the `principal`, `action`, `resource`, and `context` variables to the *PARC* values when we do so. A condition is *satisfied* or *not satisfied*: a `when` condition is satisfied when its expression evaluates to `true`; an `unless` condition is satisfied when its expression evaluates to `false`. Evaluation stops at the first condition that is not satisfied, and the authorizer returns `false` for policy *y* without evaluating the remaining conditions. If a condition evaluation yields `error`, the authorizer returns `error` and does not evaluate the remaining conditions. If every condition is satisfied, then policy *y* satisfies the request, and the authorizer returns `true`.
 
 ## Detailed Example {#policy-evaluation-example}
 
@@ -113,9 +113,9 @@ The Cedar authorizer evaluates each of the four policies against this request.
 + **P1** – Jane can perform any action on photo `vacation.jpg`.
 
   ```cedar
-  permit ( 
-      principal == User::"jane", 
-      action, 
+  permit (
+      principal == User::"jane",
+      action,
       resource == Photo::"vacation.jpg"
   );
   ```
