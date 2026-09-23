@@ -648,7 +648,6 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Value`](#JsonExpr-Value)
 + [`Var`](#JsonExpr-Var)
 + [`Slot`](#JsonExpr-Slot)
-+ [`unknown`](#JsonExpr-Unknown)
 + [`!`, `neg`, and `isEmpty` operators](#JsonExpr-neg)
 + [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
 + [`.`](#JsonExpr-member)
@@ -847,47 +846,6 @@ JSON representation
 
 The value of this key is one of the strings `?principal` or `?resource` and act as placeholders in [policy templates](templates.html). Currently, policies containing this are not valid Cedar.
 
-#### `unknown` {#JsonExpr-Unknown}
-
-{: .warning }
->`unknown` is not part of the default JSON policy format. It is only available when Cedar is built with the experimental `partial-eval` feature, which is off by default and is expected to be deprecated. Do not rely on this form in policies you intend to use with a default build.
-
-`unknown` is the extension function used to represent an unknown value for partial evaluation, so it follows the same form as [any other extension function](#JsonExpr-any-other-key): the value is a JSON array of arguments, each itself a [JsonExpr object](#JsonExpr-objects). The single argument is a `Value` holding the name of the unknown as a string. These values may appear in the JSON rendering of residuals.
-
-**Example**
-
-Cedar policy line:
-
-```cedar
-when { context.something == unknown("x") };
-```
-
-JSON representation
-
-```json
-"conditions": [
-    {
-        "kind": "when",
-        "body": {
-            "==": {
-                "left": {
-                    ".": {
-                        "left": {
-                            "Var": "context"
-                        },
-                        "attr": "something"
-                    }
-                },
-                "right": {
-                    "unknown": [
-                        { "Value": "x" }
-                    ]
-                }
-            }
-        }
-    }
-]
-```
 
 #### `!`, `neg`, and `isEmpty` operators {#JsonExpr-neg}
 
