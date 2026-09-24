@@ -1,4 +1,4 @@
-FROM ruby:3.3
+FROM ruby:3
 
 # The github-pages gem needs to know the repo it's building for
 ENV PAGES_REPO_NWO=cedar-policy/cedar-docs
