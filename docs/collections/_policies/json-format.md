@@ -286,7 +286,7 @@ The `op` key is required. The `op` object must have one of the following string 
 
 The `action` object is required.
 
-The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key `[entity](#entity)` or `[entities](#entities)`.
+The value of this object must include an object with the key `op`, and depending on the value of `op`, an object with the key [`entity`](#entity) or [`entities`](#entities).
 
 #### `op`
 
@@ -376,13 +376,15 @@ The `op` object must have one of the following string values:
     "action": {
         "op": "in",
         "entities": [
-            { "type": "Action", "id": "ManageFiles" }, // Action group
+            { "type": "Action", "id": "ManageFiles" },
             { "type": "Action", "id": "readFile" },
             { "type": "Action", "id": "writeFile" },
             { "type": "Action", "id": "deleteFile" }
         ]
     }
     ```
+
+    In this example, `Action::"ManageFiles"` is an action group.
 
 ### `resource`
 
@@ -567,6 +569,42 @@ The `op` object must have one of the following string values:
     },
     ```
 
+### Entity and slot values
+
+The `principal`, `action`, and `resource` objects use the `entity`, `slot`, and `entities` keys to refer to entities and template slots.
+
+#### `entity`
+
+The value of this key is an object with the keys `type` and `id`, both strings.
+
+```json
+"entity": { "type": "User", "id": "12UA45" }
+```
+
+The `type` key is the entity type name, including any namespace such as `Namespace::Type`. The `id` key is the entity identifier. Cedar also accepts the explicit escaped form `{ "__entity": { "type": ..., "id": ... } }`, which is equivalent.
+
+#### `slot`
+
+The value of this key is one of the [slot](#JsonExpr-Slot) strings `?principal` or `?resource`.
+`?principal` can only be used in the `principal` scope and `?resource` in the `resource` scope.
+A policy that contains a slot is a template and is not itself a valid Cedar policy until the slot is filled in by a [template link](#templatelinks).
+
+```json
+"slot": "?principal"
+```
+
+#### `entities`
+
+The value of this key is a JSON array of objects, each with the keys `type` and `id` as described for [`entity`](#entity).
+Only the `action` object uses this key, with the `in` operator.
+
+```json
+"entities": [
+    { "type": "Action", "id": "readFile" },
+    { "type": "Action", "id": "writeFile" }
+]
+```
+
 ### conditions
 
 The `conditions` object is required.
@@ -610,7 +648,6 @@ An JsonExpr object is an object with a single key that is any of the following.
 + [`Value`](#JsonExpr-Value)
 + [`Var`](#JsonExpr-Var)
 + [`Slot`](#JsonExpr-Slot)
-+ [`Unknown`](#JsonExpr-Unknown)
 + [`!`, `neg`, and `isEmpty` operators](#JsonExpr-neg)
 + [Binary operators: `==`, `!=`, `in`, `<`, `<=`, `>`, `>=`, `&&`, `||`, `+`, `-`, `*`, `contains`, `containsAll`, `containsAny`, `hasTag`, `getTag`](#JsonExpr-binary)
 + [`.`](#JsonExpr-member)
@@ -712,14 +749,14 @@ JSON representation
                     "Set": [
                         { "Value": 1 },
                         { "Value": 2 },
-                        { "Value": "something" },
+                        { "Value": "something" }
                     ]
                 },
                 "right": {
                     "Set": [
                         { "Value": 4 },
                         { "Value": 5 },
-                        { "Value": "otherthing" },
+                        { "Value": "otherthing" }
                     ]
                 }
             }
@@ -747,7 +784,7 @@ JSON representation
                 "left": {
                     "Record": {
                         "something": { "Value": "spam" },
-                        "otherthing": { "Value": false },
+                        "otherthing": { "Value": false }
                     }
                 },
                 "right": {
@@ -809,9 +846,6 @@ JSON representation
 
 The value of this key is one of the strings `?principal` or `?resource` and act as placeholders in [policy templates](templates.html). Currently, policies containing this are not valid Cedar.
 
-#### `Unknown` {#JsonExpr-Unknown}
-
-The value of this key is an object with a single key name, whose value is the name of the unknown. This is used for partial-evaluation.  In particular, these values may appear in the JSON rendering of residuals.
 
 #### `!`, `neg`, and `isEmpty` operators {#JsonExpr-neg}
 
@@ -1079,7 +1113,7 @@ JSON representation
     "Set": [
         { "Value": 1 },
         { "Value": 2 },
-        { "Value": "something" },
+        { "Value": "something" }
     ]
 }
 ```
@@ -1099,7 +1133,7 @@ JSON representation
 {
     "Record": {
         "something": { "Value": "spam" },
-        "somethingelse": { "Value": false },
+        "somethingelse": { "Value": false }
     }
 }
 ```
