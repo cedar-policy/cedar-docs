@@ -132,6 +132,8 @@ The `Primitive` element describes
 Primitive ::= '"type":' ('"Long"' | '"String"' | '"Boolean"' | TYPENAME)
 ```
 
+`"Bool"` is accepted as an alias for `"Boolean"`. It is matched by the `TYPENAME` alternative above (as a reference to the built-in type Cedar names `Bool` internally) and denotes the same boolean primitive.
+
 ## `Set` {#grammar-schema-Set}
 
 The `Set` element describes
@@ -171,6 +173,8 @@ The `Extension` element describes
 ```
 Extension ::= '"type": "Extension", "name": "' Name '"'
 ```
+
+An extension type may also be referenced by name through the `TYPENAME` alternative of `Primitive`, as in `'"type": "ipaddr"'`. The built-in extension type names (`ipaddr`, `decimal`, `datetime`, `duration`) are always available to reference this way and denote the same types as the explicit `Extension` form.
 
 ## `EntityOrCommon` {#grammar-schema-EntityOrCommon}
 

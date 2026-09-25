@@ -220,6 +220,8 @@ You can choose to explicitly declare that an attribute is mandatory by including
 
 Attributes' `type` components can be `"String"`, `"Long"`, `"Boolean"`, `"Record"`, `"Set"`, `"Entity"`, `"Extension"`, `"EntityOrCommon"`, or a common type name. The first three require no further information to be specified, the next five are described below, and the last is described in the [`commonTypes` section](#schema-commonTypes).
 
+The boolean primitive can also be written as `{"type": "Bool"}`, which Cedar treats as identical to `{"type": "Boolean"}`. `Bool` is the name Cedar uses internally, so tools that resolve a Cedar-format schema to JSON (for example, the [schema_str_to_json_with_resolved_types()](https://docs.rs/cedar-policy/latest/cedar_policy/fn.schema_str_to_json_with_resolved_types.html) function) emit `{"type": "Bool"}` for boolean attributes.
+
 #### `Record` {#schema-entitytypes-shape-record}
 {: .no_toc }
 
@@ -323,6 +325,11 @@ For example, a `Network` entity may include the IP address of its gateway.
     }
 }
 ```
+
+You can also refer to an extension type by naming it directly in the `type` field, as in `{"type": "ipaddr"}`.
+This is the common type reference form (see the [`commonTypes` section](#schema-commonTypes)); the built-in extension type names (`ipaddr`, `decimal`, `datetime`, and `duration`) are always available to reference this way.
+Cedar treats `{"type": "ipaddr"}` and `{"type": "Extension", "name": "ipaddr"}` as the same type.
+Tools that resolve a Cedar-format schema to JSON (for example, the [schema_str_to_json_with_resolved_types()](https://docs.rs/cedar-policy/latest/cedar_policy/fn.schema_str_to_json_with_resolved_types.html) function) emit the `{"type": "ipaddr"}` form.
 
 #### `EntityOrCommon` {#schema-entitytypes-shape-entity-or-common}
 {: .no_toc }
