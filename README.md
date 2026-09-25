@@ -4,6 +4,33 @@ This repository hosts the markdown source files for the Cedar Policy Language Re
 
 Current live site: https://docs.cedarpolicy.com
 
+## Running the site locally
+
+Build the image once:
+
+```bash
+docker build -t cedar-docs .
+```
+
+**Live edit mode** — mount your working copy, so edits under `docs/` rebuild
+automatically. Refresh the browser to see your changes:
+
+```bash
+docker run --rm -p 4000:4000 -v "$PWD/docs:/site" cedar-docs
+```
+
+**Standalone** — serve the copy baked into the image, with no mount:
+
+```bash
+docker run --rm -p 4000:4000 cedar-docs
+```
+
+Either way, open http://localhost:4000. Generated output is written inside the
+container, so `docs/` stays clean.
+
+Alternatively, with Ruby installed, run `bundle install && bundle exec jekyll serve`
+from the `docs/` directory.
+
 ## We want your feedback about this documentation
 Our goal is to help you get everything you can from Cedar. If this guide helps you to do that, then let us know. If the guide isn't helping you, then we want to hear from you so we can address the issue. Submit a [GitHub issue](https://github.com/cedar-policy/cedar-docs/issues) or submit a [pull request](https://github.com/cedar-policy/cedar-docs/pulls). That sends your comments directly to the writers of this guide. We review every submission, looking for opportunities to improve the documentation. Thank you in advance for your help!
 
@@ -61,6 +88,3 @@ If you think you have discovered a security issue related to Cedar, **please wri
 ## License
 
 This project is licensed under the Apache-2.0 License. See the [LICENSE](https://github.com/cedar-policy/cedar-docs/blob/main/LICENSE) file for this project's licensing. We will ask you to confirm the licensing of your contribution. We may ask you to sign a [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) for larger changes.
-
-
-
