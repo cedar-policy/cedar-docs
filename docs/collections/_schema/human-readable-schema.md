@@ -20,7 +20,7 @@ This topic describes the Cedar schema format.
 
 ## Schema format {#schema-format}
 
-A schema consists of zero or more namespaces, each of which contains declarations of three types --- *Entity Type Declaration*, *Action Declaration*, and *Common Type Declaration*. These declarations define entity types and actions, and common types that define types that can be referenced by the Entity Type and Action Declarations. Declarations are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
+A schema consists of zero or more namespaces, each of which contains three kinds of declaration --- *Entity Type Definition*, *Action Definition*, and *Common Type Declaration*. These define the entity types and actions of your application, and the common types that entity type and action definitions can reference. Declarations are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
 
 ## Namespace {#schema-namespace}
 
@@ -30,11 +30,11 @@ Alternatively, you can create a declaration without a namespace, for example `en
 
 You can annotate a namespace declaration: `@doc("this is a Foo") namespace Foo { entity Bar; }`. However, you cannot annotate the empty namespace.
 
-Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations. For more details about name shadowing, see [Name Shadowing](name-shadowing.html).
+Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type definitions.
 
 ## Entity type {#schema-entityTypes}
 
-The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have four attributes:
+The following entity type definition specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have four attributes:
 
 + `personalGroup` of type `Group`
 + `delegate` of type `User`
@@ -61,15 +61,15 @@ external entity Team in [Organization];
 external entity Organization;
 ```
 
-Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
+Note that in the Cedar schema format, unlike in the JSON schema format, you can define multiple entity types that share the same definition using a single definition. For example, `entity UserA, UserB, UserC` defines entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
 
-You can annotate an entity type declaration by prepending annotations like `@doc("user entity") entity User ...`.
+You can annotate an entity type by prepending annotations like `@doc("user entity") entity User ...`.
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
 Set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`. The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`. Entities with one parent type don't require brackets, for example `entity User in UserGroup`.
 
-The membership relation declaration is optional. If you don't create this declaration, the declared entity type doesn't have any parent entity types.
+The membership relation declaration is optional. If you don't create this declaration, the entity type doesn't have any parent entity types.
 
 ### Shape {#schema-entitytypes-shape}
 
@@ -129,7 +129,7 @@ You can annotate a record attribute declaration by prepending annotations like `
 
 A set type declaration consists of keyword `Set` and an element type surrounded by angle brackets (`<>`).
 
-For example, `Set<Long>` is a set type made up of values of type `Long`. Another example of the use of `Set` types is give above, for the `List` entity declaration. Finally, another example is this entity declaration for `User`, whose `blocked` attribute is a set of `User`s.
+For example, `Set<Long>` is a set type made up of values of type `Long`. Another example of the use of `Set` types is give above, for the `List` entity definition. Finally, another example is this entity definition for `User`, whose `blocked` attribute is a set of `User`s.
 
 ```cedarschema
 entity User in [Group] {
@@ -141,7 +141,7 @@ entity User in [Group] {
 
 ## Actions {#schema-actions}
 
-The following action declaration defines the action `ViewDocument`. It has the following characteristics:
+The following action definition specifies the action `ViewDocument`. It has the following characteristics:
 
 + It's a member of `ReadActions` & `ExampleNS::Action::"Write"` action groups
 + It applies to principals of entity type `User` and `Public`
@@ -160,7 +160,7 @@ action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
 external action ReadActions;
 ```
 
-An action name is either an identifier or a string. The membership relation syntax of action declarations is like that of entity declarations, but parent action names can be strings, and entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the parent action `Write` in the example action declaration. It's declared in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
+An action name is either an identifier or a string. The membership relation syntax of action definitions is like that of entity type definitions, but parent action names can be strings, and entity type names must be identifiers. If a parent action belongs to another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the parent action `Write` in the example action definition. It's defined in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
 
@@ -170,13 +170,13 @@ Until one does, this schema cannot be used to validate policies or to validate a
 
 An external action declaration must list all of the action's ancestors.
 This is stricter than for an external entity type, whose declared parent types need only be ancestors of the definition.
-For more information, see [Schema linking](linking.html).
+For more information, see [Schema linking](schema-linking.html).
 
-You can annotate an action declaration by prepending annotations like `@doc("view document") action ViewDocument ...`.
+You can annotate an action by prepending annotations like `@doc("view document") action ViewDocument ...`.
 
 ## Common types {#schema-commonTypes}
 
-Like in the JSON schema format, Cedar schema syntax allows for declarations of common types so that entity type declarations can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
+Like in the JSON schema format, Cedar schema syntax allows for declarations of common types so that entity type definitions can use them to avoid error-prone duplication. The syntax of common type declarations is similar to defining type aliases in most programming languages: `type <Id> = <Type>` . The `Type` is a schema type, including common types and types containing them. So, there is a chance there could be cycles in common type declarations: for instance, `type A = Set<B>; type B = {"a" : A};`. In these cases, the Cedar schema parser will report an error.
 
 You can annotate a common type declaration by prepending annotations like `@doc("B is a record") type B = {"a" : A};`.
 

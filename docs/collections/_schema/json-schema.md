@@ -138,7 +138,7 @@ This type name is qualified by its [namespace](#schema-namespace) to form a full
 
 ### `memberOfTypes` {#schema-entitytypes-memberOf}
 
-Specifies a list of entity types that can be direct parents of entities of this type. Values in this list must be valid entity type names declared in the schema. If the `memberOfTypes` element is empty or not defined, then entities of that entity type can't have any parents in the entity hierarchy. The following example shows that an entity of type `User` can have parents of type `UserGroup`.
+Specifies a list of entity types that can be direct parents of entities of this type. Values in this list must be valid entity type names defined or declared in the schema. If the `memberOfTypes` element is empty or not defined, then entities of that entity type can't have any parents in the entity hierarchy. The following example shows that an entity of type `User` can have parents of type `UserGroup`.
 
 ```json
 "entityTypes": {
