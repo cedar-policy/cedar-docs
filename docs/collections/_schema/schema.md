@@ -71,6 +71,12 @@ A collection of the `principal` and `resource` entity types supported by your ap
 
 Starting with Cedar version 4.3, we introduced enumerated entity types - a new category of entity types with predefined entity IDs (EIDs). That is, the Cedar validator will mark requests, policies, or entities as invalid if they contain entity literals of enumerated types whose EIDs are not specified in the schema. Note that EIDs of enumerated entity types cannot be empty lists in schemas. Entities of enumerated types cannot not have ancestors, attributes or entity tags. The Cedar validator also reports such violations.
 
+Starting with Cedar version 4.6, we introduced external entity types.
+This allows Cedar to declare entity types without defining them.
+Schemas that contain external entity types cannot be used to validate policies, but can be used to validate requests and entities.
+Schemas can resolve their external declarations by *linking* to other schemas with concrete entity type declarations. 
+For more information about schema linking, see [Schema Linking](linking.html).
+
 {: .important }
 >The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
 
@@ -103,6 +109,11 @@ A policy should check for an optional attribute's presence by using the [`has`](
 A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier (EID)](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section). For example, the action entity name of action declaration `viewPhoto` of the PhotoFlash application is `PhotoFlash::Action::"viewPhoto"` because `PhotoFlash::Action` is the fully-qualified action entity type.
 
 An action declaration specifies an action's membership in action groups and its applicability (with respect to principal and resource entity types, and the context shape).
+
+Starting with Cedar version 4.6, we introduced external actions.
+Similar to the case of external entity types, external actions can be
+resolved by *linking* to actions defined from other schemas.
+For more information about schema linking, see [Schema Linking](linking.html).
 
 **Actions topics**
 * [Cedar schema format](../schema/human-readable-schema.html#schema-actions)

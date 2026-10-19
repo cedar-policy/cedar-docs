@@ -30,17 +30,21 @@ Alternatively, you can create a declaration without a namespace, for example `en
 
 You can annotate a namespace declaration: `@doc("this is a Foo") namespace Foo { entity Bar; }`. However, you cannot annotate the empty namespace.
 
-Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations.
+Multiple `namespace` declarations with the same names are disallowed. This rule also applies to the inner declarations like entity type declarations. For more details about name shadowing, see [Name Shadowing](name-shadowing.html).
 
 ## Entity type {#schema-entityTypes}
 
-The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have three attributes:
+The following entity type declaration specifies an entity type `User` , whose parent entity type is `Group`. Entities of type `User` have four attributes:
 
 + `personalGroup` of type `Group`
 + `delegate` of type `User`
 + `blocked` of type `Set<User>`
++ `team` of type `Team`
 
 The attribute `delegate` is optional, as indicated by the `?` after the attribute name. Entity type `Group` is an enumerated entity. EIDs of entities of this type can only be `G1`, `G2`, and `G3`.
+
+Entity types `Team` and `Organization` are declared `external`, which means that this schema uses them without defining them. 
+While external entity types do not have bodies, they can declare parent types as long as the parent is not an enum entity type.
 
 Finally, entities of type `User` have string-typed `tags`, which means that `User`s may have any number of tags, with any names, where the value associated with each tag is a `String`.
 
@@ -49,9 +53,12 @@ entity User in [Group] {
     personalGroup: Group,
     delegate?: User,
     blocked: Set<User>,
+    team: Team,
 } tags String;
 @doc("Only three values of EIDs are valid for entities of type `Group`.")
 entity Group enum ["G1", "G2", "G3"];
+external entity Team in [Organization];
+external entity Organization;
 ```
 
 Note that in the Cedar schema format, unlike in the JSON schema format, you can declare multiple entity types that share the same definition using a single declaration. For example, `entity UserA, UserB, UserC` declares entity types `UserA`, `UserB`, and `UserC` that all have the same membership relations and shapes.
@@ -150,11 +157,20 @@ action ViewDocument in [ReadActions, ExampleNS::Action::"Write"] appliesTo {
         browser: String
     }
 };
+external action ReadActions;
 ```
 
 An action name is either an identifier or a string. The membership relation syntax of action declarations is like that of entity declarations, but parent action names can be strings, and entity type names must be identifiers. If a parent action is declared in another namespace, its name must be a *fully-qualified action entity name*. This is illustrated by the parent action `Write` in the example action declaration. It's declared in the namespace `ExampleNS` with the fully-qualified name  `ExampleNS::Action::"Write"`.
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
+
+The action `ReadActions` is declared `external`.
+Another schema supplies what it applies to.
+Until one does, this schema cannot be used to validate policies or to validate a request for `ReadActions` itself.
+
+An external action declaration must list all of the action's ancestors.
+This is stricter than for an external entity type, whose declared parent types need only be ancestors of the definition.
+For more information, see [Schema linking](linking.html).
 
 You can annotate an action declaration by prepending annotations like `@doc("view document") action ViewDocument ...`.
 
