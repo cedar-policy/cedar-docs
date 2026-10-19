@@ -13,6 +13,7 @@ The following table tracks changes to the Cedar language version. The language v
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
+| 4.6 | added `external` entity types and actions and add schema linking [rfc#116](https://github.com/cedar-policy/rfcs/blob/main/text/0116-entity-validation-schema-fragments.md), [cedar#2615](https://github.com/cedar-policy/cedar/pull/2615) | 4.14.0 | October 17, 2026
 | 4.5 | extended `has` operator in policy JSON format [cedar#1889](https://github.com/cedar-policy/cedar/issues/1889) | 4.10.0 - 4.13.0 | April 23, 2026
 | 4.4 | trailing commas in Cedar policies [rfc#71](https://github.com/cedar-policy/rfcs/blob/main/text/0071-trailing-commas.md) (only implements RFC 71 for policies, not schemas, in this release) | 4.5.0 - 4.9.1 | June 30, 2025
 | 4.3 | enumerated entity types [rfc#53](https://github.com/cedar-policy/rfcs/blob/main/text/0053-enum-entities.md) <br/> `datetime` extension [rfc#80](https://github.com/strongdm/cedar-rfcs/blob/datetime-rfc/text/0080-datetime-extension.md) <br/> entity slice validation [rfc#76](https://github.com/cedar-policy/rfcs/blob/main/text/0076-entity-slice-validation.md) | 4.4.0 - 4.4.2 | April 23, 2025
