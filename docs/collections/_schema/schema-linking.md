@@ -86,7 +86,7 @@ entity User {
 };
 ```
 
-A declaration that no schema defines stays `external`.
+external declarations stay external when none of the linked schemas define it.
 
 **`Documents` schema**
 
@@ -118,7 +118,7 @@ entity Folder {
 };
 ```
 
-An external action is resolved the same way. A declaration carries only the action's parents, and the definition supplies its `appliesTo` and context.
+An external action is resolved the same way.
 
 **`Readers` schema**
 
@@ -177,7 +177,7 @@ external entity Folder in [Account, Team];
 ```
 
 To avoid unsound validation behavior caused by linking,
-schema linking requires the ancestors of every *defined* entity type to remain exactly as they were.
+schema linking requires the ancestors of every *defined* entity type to remain unchanged after linking.
 
 In the following example, `Document` is defined with `Folder` as its only ancestor. The `Shares` schema then places an `Account` above `Folder`, which would make `Account` an ancestor of `Document` as well. That would change a definition, so the link fails.
 
@@ -197,7 +197,7 @@ external entity Folder in Account;
 
 ## Linking actions with ancestors {#linking-ancestors-actions}
 
-Unlike the case of entity types, sound linking of external actions requires the ancestors of an external action to match exactly those of the action it links to.
+Unlike the case of entity types, when linking schemas, all declarations of the same action must declare the same ancestors.
 
 For example, linking the following schemas results in an error because the parents of `viewDocument` do not match.
 

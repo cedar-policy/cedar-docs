@@ -20,7 +20,8 @@ This topic describes the Cedar schema format.
 
 ## Schema format {#schema-format}
 
-A schema consists of zero or more namespaces, each of which contains three kinds of declaration --- *Entity Type Definition*, *Action Definition*, and *Common Type Declaration*. These define the entity types and actions of your application, and the common types that entity type and action definitions can reference. Declarations are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
+A schema consists of zero or more namespaces, each of which contains three kinds of definition --- *Entity Type Definition*, *Action Definition*, and *Common Type Declaration*. These define the entity types and actions of your application, and the common types that entity type and action definitions can reference. Definitions are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
+Starting from version 4.6, schemas also additionally support *declarations* of entity types and actions.
 
 ## Namespace {#schema-namespace}
 
@@ -67,9 +68,10 @@ You can annotate an entity type by prepending annotations like `@doc("user entit
 
 ### Membership relations {#schema-entitytypes-memberOf}
 
-Set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`. The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`. Entities with one parent type don't require brackets, for example `entity User in UserGroup`.
-
-The membership relation declaration is optional. If you don't create this declaration, the entity type doesn't have any parent entity types.
+Entity types may declare membership relation.
+To declare membership relation, set an entity to be a member of another with `in <EntityTypes>` after `entity <EntityName>`.
+The `EntityTypes` declaration can be a list of entity type names surrounded by brackets (`[]`) and delimited by commas `,`, for example `entity User in [UserGroup1, UserGroup2]`.
+Entities with one parent type don't require brackets, for example `entity User in UserGroup`.
 
 ### Shape {#schema-entitytypes-shape}
 

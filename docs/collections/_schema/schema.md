@@ -55,7 +55,7 @@ A namespace declaration contains three types of declarations, appearing in any o
 + [actions](#schema-actions)
 + [common types](#schema-commonTypes) (optional)
 
-You define the types of your application's principal and resource entities via entity type definitions, and its actions via action definitions. Optionally, you can define type names in common type declarations and reference those names as types in other places in the schema. For example, a common practice is to name a shared record type in this way and refer it, e.g., in entity attribute declarations.
+You define the types of your application's principal and resource entities via entity type definitions, and its actions via action definitions. Optionally, you can define type names in common type definitions and reference those names as types in other places in the schema. For example, a common practice is to name a shared record type in this way and refer it, e.g., in entity attribute declarations.
 
 Definitions (e.g. entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referenced in qualified or unqualified forms within the same namespace. For example, you can only reference the entity type `Table` defined in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
 
