@@ -20,7 +20,7 @@ This topic describes the Cedar schema format.
 
 ## Schema format {#schema-format}
 
-A schema consists of zero or more namespaces, each of which contains three kinds of definition --- *Entity Type Definition*, *Action Definition*, and *Common Type Declaration*. These define the entity types and actions of your application, and the common types that entity type and action definitions can reference. Definitions are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
+A schema consists of zero or more namespaces, each of which contains three kinds of definition --- *Entity Type Definition*, *Action Definition*, and *Common Type Definition*. These define the entity types and actions of your application, and the common types that entity type and action definitions can reference. Definitions are delimited by `;` characters. Note that in the Cedar schema format, unlike in the JSON schema format, you can write Cedar-style comments.
 Starting from version 4.6, schemas also additionally support *declarations* of entity types and actions.
 
 ## Namespace {#schema-namespace}
@@ -166,9 +166,9 @@ An action name is either an identifier or a string. The membership relation synt
 
 The `appliesTo` construct specifies an action's applicability. It is a record of three keys: `principal`, `resource` , and `context`  that the action applies to. Without the `appliesTo` construct in your schema, the actions do not apply to any principals, resources, or contexts. If the `appliesTo` construct is used, the `principal` and `resource` keys are required and must be an entity type or a non-empty list of entity types. The `context` value is optional, but must be a record. Its absence defaults to an empty record.
 
-The action `ReadActions` is declared `external`.
-Another schema supplies what it applies to.
-Until one does, this schema cannot be used to validate policies or to validate a request for `ReadActions` itself.
+The action `ReadActions` is declared as an `external` action.
+It's applicability is supplied by another schema to which it links.
+This schema cannot be used to validate policies or to validate a request for `ReadActions` itself until it is linked to another schema that defines `ReadActions`.
 
 An external action declaration must list all of the action's ancestors.
 This is stricter than for an external entity type, whose declared parent types need only be ancestors of the definition.
