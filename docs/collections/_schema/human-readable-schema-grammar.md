@@ -32,13 +32,16 @@ Tokens are defined using regular expressions:
 The grammar adopts the same string escaping rules as the [Cedar policy grammar](../policies/syntax-grammar.html).
 
 ```
-Annotation := '@' ANYIDENT '(' STR ')'
-Annotations := {Annotations}
+Annotation := '@' ANYIDENT ['(' STR ')']
+Annotations := {Annotation}
 Schema    := {Namespace}
 Namespace := (Annotations 'namespace' Path '{' {Decl} '}') | Decl
 Decl      := Entity | Action | TypeDecl
-Entity    := Annotations 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';' | Annotations 'entity' Idents 'enum' '[' STR+ ']' ';'
-Action    := Annotations 'action' Names ['in' RefOrRefs] [AppliesTo]';'
+Entity    := Annotations 'entity' Idents ['in' EntOrTyps] [['='] RecType] ['tags' Type] ';' 
+           | Annotations 'entity' Idents 'enum' '[' STR {',' STR} ']' ';' 
+           | Annotations 'external' 'entity' Idents ['in' EntOrTyps] ';'
+Action    := Annotations 'action' Names ['in' RefOrRefs] [AppliesTo] ';' 
+           | Annotations 'external' 'action' Names ['in' RefOrRefs] ';'
 TypeDecl  := Annotations 'type' TYPENAME '=' Type ';'
 Type      := Path | SetType | RecType
 EntType   := Path

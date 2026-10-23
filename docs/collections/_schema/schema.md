@@ -44,7 +44,7 @@ Both schema formats implement the same ideas, which we detail as follows. We the
 
 ## Namespace {#schema-namespace}
 
-A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types declared within it. The name of a namespace consists of identifiers separated by double colons (`::`).
+A [namespace](../overview/terminology.html#term-namespaces) declaration identifies and defines a scope for all entity types, actions, and common types defined within it. The name of a namespace consists of identifiers separated by double colons (`::`).
 
 {: .important }
 >The namespace name cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments. It also may not include the reserved `__cedar` identifier.
@@ -55,9 +55,9 @@ A namespace declaration contains three types of declarations, appearing in any o
 + [actions](#schema-actions)
 + [common types](#schema-commonTypes) (optional)
 
-You define the types of your application's principal and resource entities via entity type declarations, and its actions via action declarations. Optionally, you can define type names in common type declarations and reference those names as types in other places in the schema. For example, a common practice is to name a shared record type in this way and refer it, e.g., in entity attribute declarations.
+You define the types of your application's principal and resource entities via entity type definitions, and its actions via action definitions. Optionally, you can define type names in common type definitions and reference those names as types in other places in the schema. For example, a common practice is to name a shared record type in this way and refer it, e.g., in entity attribute declarations.
 
-Declarations (e.g. entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referenced in qualified or unqualified forms within the same namespace. For example, you can only reference the entity type `Table` declared in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
+Definitions (e.g. entity types) of a namespace must be qualified with its name to be referred in other namespaces. They can be referenced in qualified or unqualified forms within the same namespace. For example, you can only reference the entity type `Table` defined in the namespace `ExampleCo::Database1` as `ExampleCo::Database1::Table` in the namespace `ExampleCo::Database2`.
 
 If you change a declared namespace in your schema you will need to change the entity types appearing in your policies and/or in other namespaces declared in your schema to instead reference the changed namespace.
 
@@ -67,9 +67,15 @@ If you change a declared namespace in your schema you will need to change the en
 
 ## Entity types {#schema-entityTypes}
 
-A collection of the `principal` and `resource` entity types supported by your application. An entity type name is a Cedar identifier. An entity type declaration specifies its membership relations with other entity types and its shape/attributes.
+A collection of the `principal` and `resource` entity types supported by your application. An entity type name is a Cedar identifier. An entity type definition specifies its membership relations with other entity types and its shape/attributes.
 
 Starting with Cedar version 4.3, we introduced enumerated entity types - a new category of entity types with predefined entity IDs (EIDs). That is, the Cedar validator will mark requests, policies, or entities as invalid if they contain entity literals of enumerated types whose EIDs are not specified in the schema. Note that EIDs of enumerated entity types cannot be empty lists in schemas. Entities of enumerated types cannot not have ancestors, attributes or entity tags. The Cedar validator also reports such violations.
+
+Starting with Cedar version 4.6, we introduced external entity types.
+This allows Cedar to declare entity types without defining them.
+Schemas that contain external entity types cannot be used to validate policies, but can be used to validate requests and entities.
+Schemas can resolve their external declarations by *linking* to other schemas with concrete entity type definitions. 
+For more information about schema linking, see [Schema Linking](schema-linking.html).
 
 {: .important }
 >The entity type name must be normalized and cannot include any embedded whitespace, such as spaces, newlines, control characters, or comments.
@@ -100,9 +106,14 @@ A policy should check for an optional attribute's presence by using the [`has`](
 
 ## Actions {#schema-actions}
 
-A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier (EID)](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section). For example, the action entity name of action declaration `viewPhoto` of the PhotoFlash application is `PhotoFlash::Action::"viewPhoto"` because `PhotoFlash::Action` is the fully-qualified action entity type.
+A collection of the `Action` entities usable as actions in authorization requests submitted by your application. The action name is an [entity identifier (EID)](../policies/syntax-entity.html#entity-overview) (rather than an entity type, as in the entity type section). For example, the action entity name of action definition `viewPhoto` of the PhotoFlash application is `PhotoFlash::Action::"viewPhoto"` because `PhotoFlash::Action` is the fully-qualified action entity type.
 
-An action declaration specifies an action's membership in action groups and its applicability (with respect to principal and resource entity types, and the context shape).
+An action definition specifies an action's membership in action groups and its applicability (with respect to principal and resource entity types, and the context shape).
+
+Starting with Cedar version 4.6, we introduced external actions.
+Similar to the case of external entity types, external actions can be
+resolved by *linking* to actions defined from other schemas.
+For more information about schema linking, see [Schema Linking](schema-linking.html).
 
 **Actions topics**
 * [Cedar schema format](../schema/human-readable-schema.html#schema-actions)
