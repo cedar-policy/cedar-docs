@@ -1373,9 +1373,9 @@ context.foo.isMulticast()      //error if `context.foo` is not an `ipaddr`
 
 ### `.isInRange()` \(test for inclusion in IP address range\) {#function-isInRange.title}
 
-**Usage:** `<ipaddr>.isInRange(<ipaddr>)`
+**Usage:** `<ipaddr>.isInRange(<ipaddr>, ...)`
 
-Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within the range specified by the operand. This function evaluates (and validates) to an error if either operand does not have `ipaddr` type.
+Function that evaluates to `true` if the receiver is an IP address or a range of addresses that fall completely within *any* of the ranges specified by the operands. This function takes one or more operands. It evaluates (and validates) to an error if any operand does not have `ipaddr` type, or if no operand is given.
 
 #### Examples:
 {: .no_toc }
@@ -1391,6 +1391,11 @@ ip("1:2:3:4::").isInRange(ip("1:2:3:4::/48"))       //true
 ip("192.168.0.1").isInRange(ip("1:2:3:4::"))        //false
 ip("192.168.0.1").isInRange(1)                      //error - operand is not an `ipaddr`
 context.foo.isInRange(ip("192.168.0.1/24"))         //error if `context.foo` is not an `ipaddr`
+ip("192.168.0.75").isInRange(ip("10.0.0.0/8"), ip("192.168.0.1/24"))  //true
+ip("8.8.8.8").isInRange(ip("10.0.0.0/8"), ip("192.168.0.1/24"))       //false
+ip("1:2:3:4::").isInRange(ip("192.168.0.1/24"), ip("1:2:3:4::/48"))   //true
+ip("192.168.0.1").isInRange(ip("192.168.0.1/24"), 1)                  //error - operand is not an `ipaddr`
+ip("192.168.0.1").isInRange()                                         //error - no operand
 ```
 
 ## Datetime functions {#functions-datetime}
