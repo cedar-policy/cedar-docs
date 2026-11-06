@@ -1140,7 +1140,7 @@ JSON representation
 
 #### Any other key {#JsonExpr-any-other-key}
 
-This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself a [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`.
+This key is treated as the name of an extension function or method.  The value must be a JSON array of values, each of which is itself a [JsonExpr object](#JsonExpr-objects).  Note that for method calls, the method receiver is the first argument.  For example, for `a.isInRange(b)`, the first argument is for `a` and the second argument is for `b`. For `a.isInRange(b, c)`, the arguments are `a`, `b`, and `c`, in that order.
 
 **Example for `decimal` function**
 
