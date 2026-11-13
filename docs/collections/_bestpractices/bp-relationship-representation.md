@@ -92,6 +92,8 @@ The following are the corresponding policies:
     resource in principal.authorizedSignatoryOnAccounts
   };
 ```
+Note that the `in` operator applies down through the hierarchy and so these policies also grant permission to act on any descendants of the accounts contained in the conditional attribute. 
+
 ## Template-based relationships {#template-based}
 If the relationship between resources exists solely for the purpose of permissions management then it’s appropriate to store this relationship as a template-linked policy, or template. You can also think of these templates as roles that are assigned on a specific resource.
 
