@@ -1,0 +1,20 @@
+// Light variant of the awsstyle color scheme. Selected with the theme toggle
+// in the page header (see _includes/header_custom.html).
+
+//############ Body ############
+
+$link-color: #4B7A0A;
+$body-background-color: #FFFFFF;
+$body-heading-color: #16191F;
+$body-text-color: #414D5C;
+$sidebar-color: #F9F9F9;
+$border-color: #D5DBDB;
+
+$aws-body-text-color: #414D5C;
+$aws-heading-color: #16191F;
+$aws-inline-code-background: rgba(0, 28, 36, 0.06);
+$aws-nav-category-color: #545B64;
+$aws-nav-link-color: #414D5C;
+$aws-nav-active-color: #B35A00;
+
+@import "awsstyle/base";

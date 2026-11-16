@@ -3,3 +3,59 @@
 <script src="/js/highlight.min.js"></script>
 <script src="/js/hljs-cedar.min.js"></script>
 <script>hljs.registerLanguage("cedar", hljsCedar);hljs.registerLanguage("cedarschema", hljsCedarschema);hljs.highlightAll();</script>
+<script>
+  /* Light/dark theme: dark is the default; the visitor's choice is kept in localStorage. */
+  (function () {
+    var themeStylesheets = {
+      dark: "{{ '/assets/css/just-the-docs-default.css' | relative_url }}",
+      light: "{{ '/assets/css/just-the-docs-awsstyle-light.css' | relative_url }}"
+    };
+
+    function storedTheme() {
+      try {
+        var theme = window.localStorage.getItem("cedar-docs-theme");
+        return theme === "light" ? "light" : "dark";
+      } catch (e) {
+        return "dark";
+      }
+    }
+
+    function currentTheme() {
+      return document.documentElement.getAttribute("data-theme") || "dark";
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      var link = document.querySelector('link[rel="stylesheet"][href$="just-the-docs-default.css"], link[rel="stylesheet"][href$="just-the-docs-awsstyle-light.css"]');
+      if (link && link.getAttribute("href") !== themeStylesheets[theme]) {
+        link.setAttribute("href", themeStylesheets[theme]);
+      }
+    }
+
+    function updateToggle() {
+      var button = document.getElementById("theme-toggle");
+      if (!button) { return; }
+      var next = currentTheme() === "light" ? "dark" : "light";
+      button.textContent = next === "light" ? "Light mode" : "Dark mode";
+      button.setAttribute("aria-label", "Switch to " + next + " mode");
+    }
+
+    applyTheme(storedTheme());
+
+    document.addEventListener("DOMContentLoaded", function () {
+      var button = document.getElementById("theme-toggle");
+      if (!button) { return; }
+      updateToggle();
+      button.addEventListener("click", function () {
+        var next = currentTheme() === "light" ? "dark" : "light";
+        applyTheme(next);
+        try {
+          window.localStorage.setItem("cedar-docs-theme", next);
+        } catch (e) {
+          /* Storage can be unavailable (e.g. private browsing); the choice just won't persist. */
+        }
+        updateToggle();
+      });
+    });
+  })();
+</script>
