@@ -13,6 +13,7 @@ The following table tracks changes to the Cedar language version. The language v
 
 | Cedar<br/>Version | Description | Cedar SDK<br/>Version(s) | Date |
 | --- | --- | --- | --- |
+| 4.7 | stabilized the variadic `isInRange` operator [rfc#99](https://github.com/cedar-policy/rfcs/blob/main/text/0099-ip-is-in-range-list.md), [cedar#2676](https://github.com/cedar-policy/cedar/pull/2676) | 4.15.0 | November 16, 2026
 | 4.6 | added `external` entity types and actions and add schema linking [rfc#116](https://github.com/cedar-policy/rfcs/blob/main/text/0116-entity-validation-schema-fragments.md), [cedar#2615](https://github.com/cedar-policy/cedar/pull/2615) | 4.14.0 - 4.14.1 | October 17, 2026
 | 4.5 | extended `has` operator in policy JSON format [cedar#1889](https://github.com/cedar-policy/cedar/issues/1889) | 4.10.0 - 4.13.0 | April 23, 2026
 | 4.4 | trailing commas in Cedar policies [rfc#71](https://github.com/cedar-policy/rfcs/blob/main/text/0071-trailing-commas.md) (only implements RFC 71 for policies, not schemas, in this release) | 4.5.0 - 4.9.1 | June 30, 2025
