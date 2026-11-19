@@ -45,7 +45,8 @@ The following entity type definition specifies an entity type `User` , whose par
 The attribute `delegate` is optional, as indicated by the `?` after the attribute name. Entity type `Group` is an enumerated entity. EIDs of entities of this type can only be `G1`, `G2`, and `G3`.
 
 Entity types `Team` and `Organization` are declared `external`, which means that this schema uses them without defining them. 
-While external entity types do not have bodies, they can declare parent types as long as the parent is not an enum entity type.
+External entity declarations do not have bodies, but they can list parent types, including enumerated entity types.
+For an example, see [Linking entity types with ancestors](schema-linking.html#linking-ancestors).
 
 Finally, entities of type `User` have string-typed `tags`, which means that `User`s may have any number of tags, with any names, where the value associated with each tag is a `String`.
 

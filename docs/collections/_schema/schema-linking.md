@@ -150,6 +150,30 @@ action viewDocument appliesTo {
 };
 ```
 
+## Linking enumerated entity types {#linking-enums}
+
+Enumerated entity type definitions can be merged across partial schemas.
+Unlike ordinary entity types, an enumerated entity type cannot be declared `external` and resolved by linking.
+Each definition of the enumerated entity type must provide its possible EIDs.
+
+When multiple schemas define the same enumerated entity type, their possible EIDs must agree.
+The EIDs are compared as a set, so the definitions may list the values in different orders:
+
+**First schema**
+
+```cedarschema
+entity DocumentType enum ["contract", "invoice"];
+```
+
+**Second schema**
+
+```cedarschema
+entity DocumentType enum ["invoice", "contract"];
+```
+
+If the definitions contain different possible EIDs, linking fails with an enum values mismatch error.
+For example, `enum ["contract"]` cannot be linked with `enum ["invoice"]`.
+
 ## Linking entity types with ancestors {#linking-ancestors}
 
 External entity types may declare parents, and linking combines them.
@@ -194,6 +218,25 @@ entity Document in Folder;
 external entity Account;
 external entity Folder in Account;
 ```
+
+An external entity type can have an enumerated entity type as a parent or ancestor.
+For example, the following partial schemas link successfully because both define `Group` with the same EIDs and the definition of `User` preserves its declared parent:
+
+**First schema**
+
+```cedarschema
+entity Group enum ["admins", "readers"];
+external entity User in Group;
+```
+
+**Second schema**
+
+```cedarschema
+entity Group enum ["admins", "readers"];
+entity User in Group;
+```
+
+The linked schema defines `User` as a member of `Group`. `Group` is the enumerated parent, not the definition that resolves `external entity User`.
 
 ## Linking actions with ancestors {#linking-ancestors-actions}
 
