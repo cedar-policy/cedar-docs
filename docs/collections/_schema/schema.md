@@ -74,7 +74,7 @@ Starting with Cedar version 4.3, we introduced enumerated entity types - a new c
 Starting with Cedar version 4.6, we introduced external entity types.
 This allows Cedar to declare entity types without defining them.
 Schemas that contain external entity types cannot be used to validate policies, but can be used to validate requests and entities.
-Schemas can resolve their external declarations by *linking* to other schemas with concrete entity type definitions. 
+Schemas can resolve their external declarations by *linking* to other schemas with concrete, non-enumerated entity type definitions.
 For more information about schema linking, see [Schema Linking](schema-linking.html).
 
 {: .important }
